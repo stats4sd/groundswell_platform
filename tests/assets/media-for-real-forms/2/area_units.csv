@@ -1,0 +1,4 @@
+﻿id,unit_type_id,unit_type_name,name,name_rate,name_en,conversion_rate
+1,1,area,HA,HA (1 HA = 1 HA),HA,1
+2,1,area,acres,Acres (1 Acre = 0.4 Hectares),acres,0.404686
+3,1,area,square metres,Metres-Squared (1m2 = 0.0001 Hectares),square metres,0.0001

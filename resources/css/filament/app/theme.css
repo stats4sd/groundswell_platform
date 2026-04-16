@@ -1,0 +1,583 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@config 'tailwind.config.js';
+
+:root {
+    --green: #5fa35a;
+    --lightgreen: #f8fff5;
+    --blue: #3FA9F5;
+    --dark-blue: #296fa1;
+    --orange: #EB5A45;
+    --danger: #EB5A45;
+    --dark-orange: #c3432f;
+    --light-orange: #F4A69B;
+    --light-grey: #F2F2F8;
+    --shadowgrey: #989898;
+    --hyellow: #FFC84F;
+  }
+body {
+    @apply font-montserrat text-sm ;
+}
+
+body:has(#surveydash) {
+    @apply !bg-gray-100;
+}
+
+body:has(#languages),.actionblock {
+    h1 {
+        @apply font-extrabold text-5xl;
+    }
+h2{
+        @apply font-light text-2xl;
+    }
+    h3 {
+        @apply text-black font-bold text-lg }
+
+}
+.surveystepshead {
+    @apply mx-auto container !grid xl:px-12;
+}
+.instructionsvid {
+    @apply float-right;
+}
+h4 {
+    @apply text-base font-bold uppercase;
+}
+
+
+h1 {
+    @apply font-extrabold text-5xl;
+}
+h2 {
+    @apply font-light text-2xl;
+}
+h3 {
+    @apply text-black font-bold text-lg }
+h5 {
+    @apply text-black font-bold  mt-4;
+}
+
+h6 {
+    @apply text-green text-base font-semibold uppercase;
+}
+
+.surveyblocks {
+    @apply container !bg-white shadow-xl mb-32;
+}
+
+button {
+    @apply font-semibold !text-xs text-white  !rounded-full duration-200;
+    text-transform: uppercase ;
+
+}
+.fi-btn {
+    @apply rounded-full uppercase duration-200;
+    font-size: 0.75rem;
+}
+.fi-btn-color-orange:hover {
+    @apply bg-dark-orange;
+}
+.fi-btn-color-blue:hover {
+    @apply bg-dark-blue;
+}
+.greensection {
+    @apply flex-none bg-green text-white text-xl font-extrabold flex flex-row lg:flex-col lg:w-52 2xl:w-64  lg:h-72 items-center justify-center px-4 py-8 lg:py-0 relative;
+}
+.whitesection {
+    @apply bg-white px-4  lg:py-0 lg:py-6 lg:h-72 flex flex-grow w-full lg:w-52 xl:w-64 2xl:w-80;
+}
+.whitesection h2 {
+    @apply !text-base;
+}
+.whiteborderbox {
+    @apply border-b lg:border-b-0 lg:border-r border-gray-300 w-full;
+}
+.whitecard {
+@apply relative min-w-40  lg:mx-auto text-xs h-full w-full px-4 xl:px-8 flex flex-row flex-grow lg:flex-col py-8 lg:py-0;
+h3 {
+    @apply text-base;
+}
+}
+
+.dashdescdiv {
+    @apply w-2/4 lg:w-full ml-4 lg:ml-0 ;
+}
+
+.dashbuttondiv {
+    @apply text-center lg:absolute lg:inset-x-0 lg:bottom-2  w-2/4 pl-20 lg:pl-0 lg:w-full ;
+}
+.buttona{
+    @apply bg-blue font-semibold text-xs text-white py-2 px-4 rounded-full  duration-200;
+    text-transform: uppercase;
+    .fi-btn-icon {
+        @apply !text-white;}
+}
+.buttona:hover {
+    @apply shadow-none bg-dark-blue ;
+    text-decoration: none !important;
+}
+.buttona:disabled.outline-none {
+    @apply !ring-0 !bg-gray-200 !text-gray-600;
+    cursor: not-allowed;
+}
+
+.buttona span:hover {
+    text-decoration: none !important;
+}
+
+.buttonb{
+    @apply bg-orange font-semibold text-xs text-white py-2 px-4 rounded-full  duration-200;
+    text-transform: uppercase;
+}
+.buttonb:hover {
+    @apply shadow-none bg-dark-orange;
+}
+
+
+.actionblock .buttona,.actionblock .buttonb {
+    @apply text-sm;
+}
+.hover-effect {
+    transition: all 0.2s ease-in-out;
+}
+
+.hover-effect:hover {
+    @apply shadow-lg scale-105;
+}
+
+.fi-header-heading {
+    @apply text-green font-extrabold text-left text-4xl pt-4;
+}
+
+.fi-header-subheading {
+    @apply  text-xl;
+}
+
+.fi-breadcrumbs {
+    @apply text-sm;
+}
+
+.fi-modal-close-overlay{
+    @apply   -left-1/3 -top-2/3;
+    width: 200vw !important;
+    height: 200vh !important;
+    overflow: hidden;
+}
+.fi-modal-heading {
+    @apply !text-lg !font-bold text-green;
+}
+
+.rounded-3xl {
+    border-radius: 1.5rem;
+}
+.container {
+    display: block;
+    justify-content: revert;
+    align-items: revert;
+    background-color: revert;
+    border-bottom: none;
+}
+.actionblockborder
+{
+    margin-left: 8rem;
+    margin-right: 5rem;
+    border-color: #bbbbbb;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.actionblock:last-child .actionblockborder
+{
+    border-color: white !important;
+
+}
+.completebar {
+    @apply md:h-16 h-max bg-gray-900 text-center fixed  w-screen bottom-0 -left-0 pt-4;
+}
+
+.tabbuttons {
+    @apply bg-green text-white;
+}
+.tabbuttons h3 {
+    @apply text-white;
+}
+.lisptabs:hover {
+    @apply bg-green text-white;
+    h3 {@apply text-white;}
+}
+.lisptabs-desc {
+    @apply hidden lg:block ;
+}
+
+
+
+.lispboxinactive {
+    @apply bg-gray-50 border-l-4 border-gray-50;
+}
+
+.lispboxinactive:hover {
+    @apply bg-gray-50 border-l-4 border-green text-green;
+}
+.lispboxinactive {
+    @apply bg-gray-50 border-l-4 border-gray-50;
+}
+
+.lispboxselected {
+    @apply bg-green border-l-4 border-green  text-white;
+}
+
+button:disabled {
+    /*background-color: #e0dfdf;*/
+    /*color: rgb(93, 93, 93);*/
+    cursor: not-allowed;
+    border: none;
+}
+
+button:disabled:hover {
+    /*background-color: #e0dfdf;*/
+    /*color: rgb(93, 93, 93);*/
+    cursor: not-allowed;
+    border: none;
+}
+
+#globalindicators {
+    button {
+        width: 8rem;
+        span {
+            font-size: 0.75rem !important;
+                }
+            }
+
+
+    /* div,table,tr,td {
+        border-radius: 0%;
+        border: none;
+        box-shadow: none !important;
+    }
+
+
+
+
+    thead {
+        display: none;
+    }
+    .divide-y {
+        border: none;
+    }
+    td.fi-ta-cell {
+        border-bottom: 1px solid #dddddd;
+    }
+
+
+    .fi-ta-group-header {
+    @apply bg-green border-none mb-1;
+    border-radius: 0%;
+    border: none;
+    h4 {@apply text-white font-bold py-3 ;
+    }
+    .fi-ta-group-header>.fi-ta-cell{
+        @apply bg-green border-none;
+
+    }} */
+}
+/* .fi-ta,div,th,td,table,tbody, tr fi-ta-group-header {
+    @apply ring-0 shadow-none;
+    --tw-ring-color: transparent;
+    border: none !important;
+    border-radius: 0px;
+        tr fi-ta-group-header{
+@apply divide-none;
+    }
+    thead,.fi-ta-header-cell {
+        height: 0px;
+        padding: 0px;
+    }
+} */
+.warningbox {
+    @apply bg-orange w-3/4 mx-auto rounded-3xl p-6 text-white;
+    a {
+        text-transform: uppercase;
+        @apply bg-orange border border-white text-white font-semibold duration-200;
+    }
+    a:hover {
+        @apply bg-white text-orange;
+    }
+}
+.uploadedindicatorstable th button {
+padding-left: 0px ;
+}
+
+.fi-main:has(.fi-resource-list-records-page) {
+    @apply 2xl:max-w-[80%] xl:px-12;
+}
+
+.fi-main .fi-page-sub-navigation-sidebar-ctn {
+    @apply w-60;
+}
+
+
+.success-row td  {
+    @apply !bg-lightgreen;
+}
+
+
+/*!* Remove grey background on some button *!*/
+/*button:disabled.outline-none {*/
+/*    background-color: transparent !important;*/
+/*    color: var(--green) !important;*/
+/*}*/
+
+.fi-ta-ctn {
+    @apply !rounded-none;
+}
+
+/* For complex repeater items in forms; make the borders around each item more clear */
+ .fi-fo-repeater-item {
+    @apply border-2 border-green;
+}
+
+
+/* For 'inline repeater' elements, hide the defuault border, ring and shadow around items - to make the repeated fields look like they are 'in line' with the other fields and not a separate section of the form.
+    The intention is that these 'inline repeater' elements have a pre-set number of repeats. The user should not be able to add or remove elements, so to the user it should be not visible that this is a 'repeating' section at all.
+*/
+.fi-fo-repeater.inline-repeater * {
+    @apply border-none;
+}
+
+.inline-repeater .fi-fo-repeater-item-content {
+    @apply px-0;
+}
+.inline-repeater .fi-fo-repeater-item {
+    @apply ring-0 shadow-none;
+}
+
+.lisp-global-indicators .fi-ta-header-cell {
+    @apply hidden;
+}
+
+.lisp-global-indicators .fi-ta-actions-header-cell {
+    @apply hidden;
+}
+
+
+.dropdown_tables {
+   .fi-ta-header,.fi-ta-header-toolbar {
+    @apply shadow-none ring-0 !border-none divide-none py-0;
+   }
+   .fi-ta-reorder-indicator {
+    @apply border;
+   }
+
+
+.fi-ta-ctn{
+    @apply shadow-none ring-0 border-b ;
+margin: 0.5rem 1rem 3rem 1rem;
+.translations_viewedit {
+    @apply ml-4;
+    span {
+    @apply !text-xs ;
+}
+}
+}
+}
+
+.dropdown_tables .fi-ta-header .fi-ta-actions:has(> .add_questions_btn) {
+    @apply py-0 my-0 h-0;
+   .add_questions_btn {
+    @apply  shadow-none;
+}
+.add_questions_btn:hover {
+    background-color: var(--dark-orange);
+}
+}
+.dropdown_tables .fi-ta-text-item svg {
+@apply mr-2;
+}
+.dropdown_tables .fi-ta-content {
+    @apply border-x ;
+}
+.translation-modal button {
+    margin-left: 0.6rem;
+}
+
+
+.fi-ta-header-cell-label {
+    text-transform: none !important;
+}
+
+/* affects all table-repeaters - come back if it breaks anything i guess :) */
+.table-repeater-container {
+    @apply !rounded-none;
+    --tw-ring-color: rgba(9, 9, 11, 0.11);
+    .table-repeater-header-column {
+        @apply !text-sm font-semibold py-3 ;
+    }
+    td {
+        @apply py-4;
+    }
+}
+
+
+fieldset {
+    @apply !p-0 !border-none;
+    legend {
+        @apply !text-base !font-semibold mt-2 mb-4 ;
+    }
+}
+
+[class^="fi-section"] {
+    @apply border-none ring-0 shadow-none;
+    h3 {
+        @apply !text-base !font-semibold;
+    }
+}
+.fi-section-header-heading {
+    @apply border-none ring-0 shadow-none;
+}
+.fi-section-header {
+    @apply pb-0;
+}
+
+.fi-topbar-item-button {
+    border-radius: 9999px;
+}
+.indicator {
+    @apply bg-gray-50 !rounded-none ;
+
+    .fi-section-header {
+        @apply pb-4 ;
+
+    }
+    h3 {
+        @apply !text-sm;
+    font-weight: 400 !important;
+
+    }
+.fi-section-content {
+   @apply px-4 pt-0 pb-2;
+}
+}
+.draggable {
+    @apply bg-green rounded-none text-white;
+    .fi-section-header {
+        @apply pb-4 !text-white;
+
+    }
+    h3 {
+        @apply !text-sm text-white !font-semibold;
+
+    }
+    .fi-icon-btn-icon {
+        @apply !text-white;
+    }
+    .fi-section-content {
+        padding: 0.1px 1rem;
+    background-color: #ffffffe1;
+
+    .indicator_questions {
+        @apply px-4 pt-0 pb-2 my-4 text-black;
+    }
+    }
+}
+.draggable.indicator:hover {
+    @apply text-white shadow-lg;
+}
+
+.indicator_questions {
+@apply pr-6  ml-6 pl-4 mb-3 font-light;
+
+   border-left: 3px solid var(--green);
+   overflow-wrap: anywhere;
+}
+
+.full-width {
+    position: relative;
+    right: 50%;
+    left: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    max-width: 100vw;
+    width: 100vw;
+}
+.instruction_sidebar:hover {
+padding-right: 2rem;
+transition:  100ms ease-in-out;
+background-color: #83be7f;
+cursor: pointer;
+}
+.instruction_sidebar .fi-btn-icon {
+height: 1.7rem;
+width: 1.7rem;
+margin-right: 0.5rem;
+}
+
+.fi-modal-slide-over-window {
+
+.fi-modal-header {
+    @apply !border-none mx-8;
+}
+.fi-modal-heading {
+    @apply !text-xl uppercase;
+}
+.fi-btn {
+    @apply buttonb mx-auto shadow-none !ring-0 border-none;
+}
+}
+
+.instructions_list {
+    margin-left: 30px;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    li {
+        @apply my-1;
+    }
+}
+.instructions_note {
+    @apply rounded-xl py-6 px-9 my-6;
+    padding: 20px 30px;
+    background-color: #5fa35a2b;
+
+}
+.results-summary {
+    .fi-section {
+        @apply bg-gray-100;
+    }
+    .fi-section-content {
+        @apply pt-2;
+    }
+}
+.add_questions_modal {
+    @apply py-4 px-8;
+    .fi-modal-footer-actions {
+        @apply justify-end
+    }
+    .fi-fo-field-wrp-label {
+        @apply capitalize;
+    }
+}
+
+/* Messy button workaround */
+button.text-white span {
+    color: white !important;
+
+}
+
+button.font-normal span {
+    font-weight: 500 !important;
+}
+
+div:has(> .fi-page-sub-navigation-sidebar-ctn) {
+    @apply bg-white p-16 shadow-xl;
+}
+
+
+/** PUBLIC DASHBOARD STYLES **/
+
+.public-map {
+    height: 30vh;
+}
+
+@media only screen and (max-width: 500px) {
+    .public-map {
+        height: 50vh;
+    }
+}

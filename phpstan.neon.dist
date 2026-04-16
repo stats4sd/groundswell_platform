@@ -1,0 +1,16 @@
+parameters:
+
+    level: 4
+    paths:
+        - app
+
+    excludePaths:
+        - tests/*
+    tmpDir: build/phpstan
+    checkOctaneCompatibility: true
+    checkModelProperties: true
+    noUnnecessaryCollectionCallOnly: ['count', 'first']
+    noEnvCallsOutsideOfConfig: false
+    ignoreErrors:
+        - '#Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition::constrained\(\)#'
+        - '#Access to an undefined property [a-zA-Z\\_]+::\$form.#'

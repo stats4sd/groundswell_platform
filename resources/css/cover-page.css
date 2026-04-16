@@ -1,0 +1,152 @@
+/* Hide global search in top header  */
+.fi-topbar .fi-global-search {
+    display: none;
+}
+
+/* Set default padding top+sides for full-screen explore pages */
+.fi-main {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.fi-page.explore-page>section {
+    padding-top: 0 !important;
+}
+
+/* counteract the padding settings for normal pages */
+.fi-page:not(.explore-page) {
+    @apply px-4 md:px-6 lg:px-8;
+}
+
+.fi-page:not(.explore-page)>section {
+    @apply py-8;
+}
+
+/* beta notice on front-page */
+.explore-page .beta-notice {
+    @apply bg-gray-800 text-white;
+}
+
+:root {
+    --darkgreen: #134D50;
+    --turquoisegreen: #00A48D;
+    --brightblue: #2FA7DE;
+    --yellowgreen: #E4E053;
+    --lightgrey:#F6F7F7;
+}
+
+
+.bg-darkgreen {
+    background-color: var(--darkgreen);
+}
+
+.bg-turquoisegreen {
+    background-color: var(--turquoisegreen);
+}
+
+.bg-brightblue {
+    background-color: var(--brightblue);
+}
+
+.bg-yellowgreen {
+    background-color: var(--yellowgreen);
+}
+
+.bg-lightgrey {
+    background-color: var(--lightgrey);
+}
+
+.text-darkgreen {
+    color: var(--darkgreen);
+}
+
+.text-turquoisegreen {
+    color: var(--turquoisegreen);
+}
+
+.text-brightblue {
+    color: var(--brightblue);
+}
+
+.category-card {
+    @apply bg-yellowgreen text-darkgreen p-6 flex flex-col justify-end rounded-lg text-left h-28;
+}
+
+.explore-card {
+    @apply text-white p-6 rounded-lg shadow-lg w-80 flex flex-col relative;
+  }
+
+  @media (max-width: 1024px) {
+    .explore-card {
+      @apply w-3/4;
+    }
+  }
+
+.explore-card-button {
+    @apply block mx-auto p-2 px-4 mb-4;
+}
+
+.transparent-white-button {
+    @apply bg-transparent text-white rounded-lg border border-white
+}
+
+.hover-effect {
+    transition: all 0.2s ease-in-out;
+}
+
+.hover-effect:hover {
+    @apply shadow-lg scale-105;
+}
+
+.rounded-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+}
+
+.grey-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    background-color: #E5E7EB;
+    color: black;
+}
+
+.rounded-button.border-black {
+    border: 2px solid black;
+}
+
+.card {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    background-color: white;
+}
+
+.explore-page .fi-input {
+    @apply py-3 pl-4;
+}
+
+.fi-input-wrp-icon {
+    display: none;
+}
+
+#sidebar {
+    right: 0;
+    z-index: 30;
+}
+
+#overlay {
+    z-index: 20;
+}
+
+.transition-transform {
+    transition: transform 0.3s ease-in-out;
+}

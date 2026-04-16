@@ -1,0 +1,9 @@
+[submodule "packages/filament-odk-link"]
+	path = packages/filament-odk-link
+	url = git@github.com:stats4sd/filament-odk-link.git
+[submodule "packages/filament-team-management"]
+	path = packages/filament-team-management
+	url = git@github.com:stats4sd/filament-team-management.git
+[submodule "packages/--force"]
+	path = packages/--force
+	url = git@github.com:stats4sd/filament-team-management.git

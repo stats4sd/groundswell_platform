@@ -1,0 +1,3 @@
+﻿id,unit_type_id,unit_type_name,name,name_rate,name_en,conversion_rate
+7,3,fert,KG,KG,KG,1
+8,3,fert,litres,litres,Litres,1

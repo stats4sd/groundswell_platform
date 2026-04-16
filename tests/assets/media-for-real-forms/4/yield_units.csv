@@ -1,0 +1,4 @@
+﻿id,unit_type_id,unit_type_name,name,name_rate,name_en,conversion_rate
+4,2,weight,KG,KG (1 KG = 1KG),KG,1
+5,2,weight,lb,lbs (1lbs = 0.45KG),lb,0.453592
+6,2,weight,tonnes,Tonnes (1 Tonne = 1000 KG),tonnes,1000
