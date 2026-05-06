@@ -1,3 +1,3 @@
 <div>
-    @dump($submission->content)
+    {{-- TODO: add submission summary --}}
 </div>
