@@ -4,17 +4,17 @@ use App\Models\Team;
 
 describe('App panel routes load for authenticated team member', function () {
 
-    //££
-    return;
-    //££
-
     beforeEach(function () {
         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
+        // Team::withoutEvents suppresses the 'created' boot hook, which normally creates localContextModuleVersion.
+        // Pages like ContextQuestions call $team->localContextModuleVersion->load(...) and fatal-error if it is null.
+        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
         $this->user = createAppUser($this->team);
     });
 
     // Custom pages
 
+/*
     test('survey dashboard loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/survey-dashboard")
@@ -38,18 +38,26 @@ describe('App panel routes load for authenticated team member', function () {
             ->get("/app/{$this->team->id}/data-collection-index")
             ->assertOk();
     });
-
+*/
     test('data analysis index loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/data-analysis-index")
             ->assertOk();
     });
 
+
+
     test('context questions loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/context-questions")
             ->assertOk();
     });
+
+
+    //££
+    return;
+    //££
+    
 
     test('survey locations index loads', function () {
         $this->actingAs($this->user)
@@ -62,6 +70,9 @@ describe('App panel routes load for authenticated team member', function () {
             ->get("/app/{$this->team->id}/survey-languages-index")
             ->assertOk();
     });
+
+
+
 
     test('survey country loads', function () {
         $this->actingAs($this->user)
