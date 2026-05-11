@@ -14,7 +14,6 @@ describe('App panel routes load for authenticated team member', function () {
 
     // Custom pages
 
-/*
     test('survey dashboard loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/survey-dashboard")
@@ -38,26 +37,18 @@ describe('App panel routes load for authenticated team member', function () {
             ->get("/app/{$this->team->id}/data-collection-index")
             ->assertOk();
     });
-*/
+
     test('data analysis index loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/data-analysis-index")
             ->assertOk();
     });
 
-
-
     test('context questions loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/context-questions")
             ->assertOk();
     });
-
-
-    //££
-    return;
-    //££
-    
 
     test('survey locations index loads', function () {
         $this->actingAs($this->user)
@@ -71,9 +62,6 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
-
-
-
     test('survey country loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/survey-country")
@@ -85,6 +73,13 @@ describe('App panel routes load for authenticated team member', function () {
             ->get("/app/{$this->team->id}/survey-translations")
             ->assertOk();
     });
+
+
+    //££
+    return;
+    //££
+    
+
 
     test('lisp index loads', function () {
         $this->actingAs($this->user)
