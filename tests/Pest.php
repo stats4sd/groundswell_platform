@@ -45,3 +45,38 @@ function something()
 {
     // ..
 }
+
+pest()->beforeEach(function () {
+    app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+})->in('Feature');
+
+function createSuperAdmin(): \App\Models\User
+{
+    Http::fake();
+    $user = \App\Models\User::factory()->create();
+    $user->roles()->attach(\Spatie\Permission\Models\Role::where('name', 'Super Admin')->first());
+    $user->load('roles', 'permissions');
+    return $user;
+}
+
+function createAppUser(\App\Models\Team $team): \App\Models\User
+{
+    Http::fake();
+    $user = \App\Models\User::factory()->create();
+    \App\Models\TeamMembership::withoutEvents(fn () => $user->teams()->attach($team->id));
+    $user->latest_team_id = $team->id;
+    $user->save();
+    return $user;
+}
+
+function createProgramAdmin(\Stats4sd\FilamentTeamManagement\Models\Program $program): \App\Models\User
+{
+    Http::fake();
+    $user = \App\Models\User::factory()->create();
+    $user->roles()->attach(\Spatie\Permission\Models\Role::where('name', 'Program Admin')->first());
+    $user->load('roles', 'permissions');
+    $user->programs()->attach($program->id);
+    $user->latest_program_id = $program->id;
+    $user->save();
+    return $user;
+}
