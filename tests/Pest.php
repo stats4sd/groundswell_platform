@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Http;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -67,6 +69,23 @@ function createAppUser(\App\Models\Team $team): \App\Models\User
     $user->latest_team_id = $team->id;
     $user->save();
     return $user;
+}
+
+function withAdminPanel(): void
+{
+    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
+}
+
+function withAppTenant(\App\Models\Team $team): void
+{
+    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('app'));
+    \Filament\Facades\Filament::setTenant($team);
+}
+
+function withProgramTenant(\Stats4sd\FilamentTeamManagement\Models\Program $program): void
+{
+    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('program'));
+    \Filament\Facades\Filament::setTenant($program);
 }
 
 function createProgramAdmin(\Stats4sd\FilamentTeamManagement\Models\Program $program): \App\Models\User
