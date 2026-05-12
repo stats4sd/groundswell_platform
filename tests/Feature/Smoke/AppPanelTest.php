@@ -74,13 +74,6 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
-
-    //££
-    return;
-    //££
-    
-
-
     test('lisp index loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/lisp-index")
@@ -104,7 +97,7 @@ describe('App panel routes load for authenticated team member', function () {
             ->get("/app/{$this->team->id}/pilot-index")
             ->assertOk();
     });
-
+    
     test('place adaptations index loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/place-adaptations-index")
