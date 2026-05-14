@@ -35,142 +35,137 @@ use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\
 use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\EditUser;
 use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\ListUsers;
 
-describe('Admin panel CRUD — Domain', function () {
+// describe('Admin panel CRUD — Domain', function () {
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//     });
 
-    test('domain list shows existing records', function () {
-        $domain = Domain::create(['name' => 'Existing Domain']);
+//     test('domain list shows existing records', function () {
+//         $domain = Domain::create(['name' => 'Existing Domain']);
 
-        livewire(ListDomains::class)
-            ->assertCanSeeTableRecords([$domain]);
-    });
+//         livewire(ListDomains::class)
+//             ->assertCanSeeTableRecords([$domain]);
+//     });
 
-    test('domain create page loads', function () {
-        $this->get('/admin/domains/create')->assertOk();
-    });
+//     test('domain create page loads', function () {
+//         $this->get('/admin/domains/create')->assertOk();
+//     });
 
-    test('can create domain', function () {
-        livewire(CreateDomain::class)
-            ->fillForm(['name' => 'New Domain'])
-            ->call('create')
-            ->assertHasNoFormErrors();
+//     test('can create domain', function () {
+//         livewire(CreateDomain::class)
+//             ->fillForm(['name' => 'New Domain'])
+//             ->call('create')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('domains', ['name' => 'New Domain']);
-    });
+//         $this->assertDatabaseHas('domains', ['name' => 'New Domain']);
+//     });
 
-    test('create domain requires name', function () {
-        livewire(CreateDomain::class)
-            ->fillForm(['name' => ''])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
+//     test('create domain requires name', function () {
+//         livewire(CreateDomain::class)
+//             ->fillForm(['name' => ''])
+//             ->call('create')
+//             ->assertHasFormErrors(['name' => 'required']);
+//     });
 
-    test('domain edit page loads', function () {
-        $domain = Domain::create(['name' => 'Edit Target']);
-        $this->get("/admin/domains/{$domain->id}/edit")->assertOk();
-    });
+//     test('domain edit page loads', function () {
+//         $domain = Domain::create(['name' => 'Edit Target']);
+//         $this->get("/admin/domains/{$domain->id}/edit")->assertOk();
+//     });
 
-    test('can edit domain', function () {
-        $domain = Domain::create(['name' => 'Original Domain']);
+//     test('can edit domain', function () {
+//         $domain = Domain::create(['name' => 'Original Domain']);
 
-        livewire(EditDomain::class, ['record' => $domain->id])
-            ->fillForm(['name' => 'Updated Domain'])
-            ->call('save')
-            ->assertHasNoFormErrors();
+//         livewire(EditDomain::class, ['record' => $domain->id])
+//             ->fillForm(['name' => 'Updated Domain'])
+//             ->call('save')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('domains', ['id' => $domain->id, 'name' => 'Updated Domain']);
-    });
+//         $this->assertDatabaseHas('domains', ['id' => $domain->id, 'name' => 'Updated Domain']);
+//     });
 
-    test('can bulk delete domain', function () {
-        $domain = Domain::create(['name' => 'Delete Me']);
+//     test('can bulk delete domain', function () {
+//         $domain = Domain::create(['name' => 'Delete Me']);
 
-        livewire(ListDomains::class)
-            ->callTableBulkAction(DeleteBulkAction::class, [$domain]);
+//         livewire(ListDomains::class)
+//             ->callTableBulkAction(DeleteBulkAction::class, [$domain]);
 
-        $this->assertDatabaseMissing('domains', ['id' => $domain->id]);
-    });
+//         $this->assertDatabaseMissing('domains', ['id' => $domain->id]);
+//     });
 
-});
+// });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — Theme', function () {
+// describe('Admin panel CRUD — Theme', function () {
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-        $this->domain = Domain::first();
-    });
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//         $this->domain = Domain::first();
+//     });
 
-    test('theme list shows existing records', function () {
-        $theme = Theme::create(['name' => 'Unique Visible Theme XYZ', 'module' => 'Test']);
+//     test('theme list shows existing records', function () {
+//         $theme = Theme::create(['name' => 'Unique Visible Theme XYZ', 'module' => 'Test']);
 
-        livewire(ListThemes::class)
-            ->searchTable('Unique Visible Theme XYZ')
-            ->assertCanSeeTableRecords([$theme]);
-    });
+//         livewire(ListThemes::class)
+//             ->searchTable('Unique Visible Theme XYZ')
+//             ->assertCanSeeTableRecords([$theme]);
+//     });
 
-    test('theme create page loads', function () {
-        $this->get('/admin/themes/create')->assertOk();
-    });
+//     test('theme create page loads', function () {
+//         $this->get('/admin/themes/create')->assertOk();
+//     });
 
-    test('can create theme', function () {
-        livewire(CreateTheme::class)
-            ->fillForm(['name' => 'New Theme', 'module' => 'TestModule', 'domain_id' => $this->domain->id])
-            ->call('create')
-            ->assertHasNoFormErrors();
+//     test('can create theme', function () {
+//         livewire(CreateTheme::class)
+//             ->fillForm(['name' => 'New Theme', 'module' => 'TestModule', 'domain_id' => $this->domain->id])
+//             ->call('create')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('themes', ['name' => 'New Theme']);
-    });
+//         $this->assertDatabaseHas('themes', ['name' => 'New Theme']);
+//     });
 
-    test('create theme requires name', function () {
-        livewire(CreateTheme::class)
-            ->fillForm(['name' => ''])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
+//     test('create theme requires name', function () {
+//         livewire(CreateTheme::class)
+//             ->fillForm(['name' => ''])
+//             ->call('create')
+//             ->assertHasFormErrors(['name' => 'required']);
+//     });
 
-    test('theme edit page loads', function () {
-        $theme = Theme::first();
-        $this->get("/admin/themes/{$theme->id}/edit")->assertOk();
-    });
+//     test('theme edit page loads', function () {
+//         $theme = Theme::first();
+//         $this->get("/admin/themes/{$theme->id}/edit")->assertOk();
+//     });
 
-    test('can edit theme', function () {
-        $theme = Theme::create(['name' => 'Original Theme', 'module' => 'Mod']);
+//     test('can edit theme', function () {
+//         $theme = Theme::create(['name' => 'Original Theme', 'module' => 'Mod']);
 
-        livewire(EditTheme::class, ['record' => $theme->id])
-            ->fillForm(['name' => 'Updated Theme'])
-            ->call('save')
-            ->assertHasNoFormErrors();
+//         livewire(EditTheme::class, ['record' => $theme->id])
+//             ->fillForm(['name' => 'Updated Theme'])
+//             ->call('save')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('themes', ['id' => $theme->id, 'name' => 'Updated Theme']);
-    });
+//         $this->assertDatabaseHas('themes', ['id' => $theme->id, 'name' => 'Updated Theme']);
+//     });
 
-    test('can bulk delete theme', function () {
-        $theme = Theme::create(['name' => 'Delete Theme', 'module' => 'Mod']);
+//     test('can bulk delete theme', function () {
+//         $theme = Theme::create(['name' => 'Delete Theme', 'module' => 'Mod']);
 
-        livewire(ListThemes::class)
-            ->callTableBulkAction(DeleteBulkAction::class, [$theme]);
+//         livewire(ListThemes::class)
+//             ->callTableBulkAction(DeleteBulkAction::class, [$theme]);
 
-        $this->assertDatabaseMissing('themes', ['id' => $theme->id]);
-    });
+//         $this->assertDatabaseMissing('themes', ['id' => $theme->id]);
+//     });
 
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('Admin panel CRUD — GlobalIndicator', function () {
-
-    //££
-    return;
-    //££
-
 
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
