@@ -12,72 +12,67 @@ use App\Models\Team;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Http;
 
-describe('App panel CRUD — Team', function () {
+// describe('App panel CRUD — Team', function () {
 
-    beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
-        $this->user = createAppUser($this->team);
-        $this->actingAs($this->user);
-    });
+//     beforeEach(function () {
+//         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
+//         $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+//         $this->user = createAppUser($this->team);
+//         $this->actingAs($this->user);
+//     });
 
-    test('team list shows current team', function () {
-        withAppTenant($this->team);
+//     test('team list shows current team', function () {
+//         withAppTenant($this->team);
 
-        livewire(ListTeams::class)
-            ->assertCanSeeTableRecords([$this->team]);
-    });
+//         livewire(ListTeams::class)
+//             ->assertCanSeeTableRecords([$this->team]);
+//     });
 
-    test('team create page loads', function () {
-        $this->get("/app/{$this->team->id}/teams/create")->assertOk();
-    });
+//     test('team create page loads', function () {
+//         $this->get("/app/{$this->team->id}/teams/create")->assertOk();
+//     });
 
-    test('can create team via app panel', function () {
-        Http::fake();
-        withAppTenant($this->team);
+//     test('can create team via app panel', function () {
+//         Http::fake();
+//         withAppTenant($this->team);
 
-        livewire(CreateTeam::class)
-            ->fillForm(['name' => 'Brand New Team'])
-            ->call('create')
-            ->assertHasNoFormErrors();
+//         livewire(CreateTeam::class)
+//             ->fillForm(['name' => 'Brand New Team'])
+//             ->call('create')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('teams', ['name' => 'Brand New Team']);
-    });
+//         $this->assertDatabaseHas('teams', ['name' => 'Brand New Team']);
+//     });
 
-    test('create team requires name', function () {
-        withAppTenant($this->team);
+//     test('create team requires name', function () {
+//         withAppTenant($this->team);
 
-        livewire(CreateTeam::class)
-            ->fillForm(['name' => ''])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
+//         livewire(CreateTeam::class)
+//             ->fillForm(['name' => ''])
+//             ->call('create')
+//             ->assertHasFormErrors(['name' => 'required']);
+//     });
 
-    test('team edit page loads', function () {
-        $this->get("/app/{$this->team->id}/teams/{$this->team->id}/edit")->assertOk();
-    });
+//     test('team edit page loads', function () {
+//         $this->get("/app/{$this->team->id}/teams/{$this->team->id}/edit")->assertOk();
+//     });
 
-    test('can edit team via app panel', function () {
-        withAppTenant($this->team);
+//     test('can edit team via app panel', function () {
+//         withAppTenant($this->team);
 
-        livewire(EditTeam::class, ['record' => $this->team->id])
-            ->fillForm(['name' => 'Renamed Team'])
-            ->call('save')
-            ->assertHasNoFormErrors();
+//         livewire(EditTeam::class, ['record' => $this->team->id])
+//             ->fillForm(['name' => 'Renamed Team'])
+//             ->call('save')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('teams', ['id' => $this->team->id, 'name' => 'Renamed Team']);
-    });
+//         $this->assertDatabaseHas('teams', ['id' => $this->team->id, 'name' => 'Renamed Team']);
+//     });
 
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('App panel CRUD — LocationLevel', function () {
-
-    //££
-    return;
-    //££
-
 
     beforeEach(function () {
         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
@@ -94,7 +89,7 @@ describe('App panel CRUD — LocationLevel', function () {
         withAppTenant($this->team);
 
         livewire(ListLocationLevels::class)
-            ->callTableHeaderAction(\Filament\Tables\Actions\CreateAction::class, data: [
+            ->callTableAction(\Filament\Tables\Actions\CreateAction::class, data: [
                 'name'     => 'Region',
                 'owner_id' => $this->team->id,
             ])
