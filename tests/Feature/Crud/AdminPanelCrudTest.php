@@ -109,9 +109,10 @@ describe('Admin panel CRUD — Theme', function () {
     });
 
     test('theme list shows existing records', function () {
-        $theme = Theme::create(['name' => 'Visible Theme', 'module' => 'Test']);
+        $theme = Theme::create(['name' => 'Unique Visible Theme XYZ', 'module' => 'Test']);
 
         livewire(ListThemes::class)
+            ->searchTable('Unique Visible Theme XYZ')
             ->assertCanSeeTableRecords([$theme]);
     });
 
