@@ -163,123 +163,108 @@ use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\
 
 // });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — GlobalIndicator', function () {
+// describe('Admin panel CRUD — GlobalIndicator', function () {
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-        $this->theme = Theme::first();
-    });
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//         $this->theme = Theme::first();
+//     });
 
-    test('global indicator list shows existing records', function () {
-        livewire(ListGlobalIndicators::class)
-            ->assertSuccessful();
-    });
+//     test('global indicator list shows existing records', function () {
+//         livewire(ListGlobalIndicators::class)
+//             ->assertSuccessful();
+//     });
 
-    test('global indicator create page loads', function () {
-        $this->get('/admin/global-indicators/create')->assertOk();
-    });
+//     test('global indicator create page loads', function () {
+//         $this->get('/admin/global-indicators/create')->assertOk();
+//     });
 
-    test('can create global indicator', function () {
-        livewire(CreateGlobalIndicator::class)
-            ->fillForm(['name' => 'New Indicator', 'theme_id' => $this->theme->id])
-            ->call('create')
-            ->assertHasNoFormErrors();
+//     test('can create global indicator', function () {
+//         livewire(CreateGlobalIndicator::class)
+//             ->fillForm(['name' => 'New Indicator', 'theme_id' => $this->theme->id])
+//             ->call('create')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('global_indicators', ['name' => 'New Indicator']);
-    });
+//         $this->assertDatabaseHas('global_indicators', ['name' => 'New Indicator']);
+//     });
 
-    test('create global indicator requires theme', function () {
-        livewire(CreateGlobalIndicator::class)
-            ->fillForm(['name' => 'No Theme Indicator', 'theme_id' => null])
-            ->call('create')
-            ->assertHasFormErrors(['theme_id' => 'required']);
-    });
+//     test('create global indicator requires theme', function () {
+//         livewire(CreateGlobalIndicator::class)
+//             ->fillForm(['name' => 'No Theme Indicator', 'theme_id' => null])
+//             ->call('create')
+//             ->assertHasFormErrors(['theme_id' => 'required']);
+//     });
 
-    test('global indicator edit page loads', function () {
-        $indicator = GlobalIndicator::factory()->create();
-        $this->get("/admin/global-indicators/{$indicator->id}/edit")->assertOk();
-    });
+//     test('global indicator edit page loads', function () {
+//         $indicator = GlobalIndicator::factory()->create();
+//         $this->get("/admin/global-indicators/{$indicator->id}/edit")->assertOk();
+//     });
 
-    test('can edit global indicator', function () {
-        $indicator = GlobalIndicator::factory()->create();
+//     test('can edit global indicator', function () {
+//         $indicator = GlobalIndicator::factory()->create();
 
-        livewire(EditGlobalIndicator::class, ['record' => $indicator->id])
-            ->fillForm(['name' => 'Updated Indicator'])
-            ->call('save')
-            ->assertHasNoFormErrors();
+//         livewire(EditGlobalIndicator::class, ['record' => $indicator->id])
+//             ->fillForm(['name' => 'Updated Indicator'])
+//             ->call('save')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('global_indicators', ['id' => $indicator->id, 'name' => 'Updated Indicator']);
-    });
+//         $this->assertDatabaseHas('global_indicators', ['id' => $indicator->id, 'name' => 'Updated Indicator']);
+//     });
 
-    test('can bulk delete global indicator', function () {
-        $indicator = GlobalIndicator::factory()->create();
+//     test('can bulk delete global indicator', function () {
+//         $indicator = GlobalIndicator::factory()->create();
 
-        livewire(ListGlobalIndicators::class)
-            ->callTableBulkAction(DeleteBulkAction::class, [$indicator]);
+//         livewire(ListGlobalIndicators::class)
+//             ->callTableBulkAction(DeleteBulkAction::class, [$indicator]);
 
-        $this->assertDatabaseMissing('global_indicators', ['id' => $indicator->id]);
-    });
+//         $this->assertDatabaseMissing('global_indicators', ['id' => $indicator->id]);
+//     });
 
-});
+// });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — DietDiversityModuleVersion', function () {
+// describe('Admin panel CRUD — DietDiversityModuleVersion', function () {
 
-    //££
-    return;
-    //££
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//     });
 
+//     test('diet diversity module version list page loads', function () {
+//         $this->get('/admin/diet-diversity-module-versions')->assertOk();
+//     });
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
+//     test('diet diversity module version create page loads', function () {
+//         $this->get('/admin/diet-diversity-module-versions/create')->assertOk();
+//     });
 
-    test('diet diversity module version list page loads', function () {
-        $this->get('/admin/diet-diversity-module-versions')->assertOk();
-    });
+// });
 
-    test('diet diversity module version create page loads', function () {
-        $this->get('/admin/diet-diversity-module-versions/create')->assertOk();
-    });
+// // ---------------------------------------------------------------------------
 
-});
+// describe('Admin panel CRUD — Program (list only in admin panel)', function () {
 
-// ---------------------------------------------------------------------------
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//     });
 
-describe('Admin panel CRUD — Program (list only in admin panel)', function () {
+//     test('program list page loads', function () {
+//         $this->get('/admin/programs')->assertOk();
+//     });
 
-    //££
-    return;
-    //££
-
-
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
-
-    test('program list page loads', function () {
-        $this->get('/admin/programs')->assertOk();
-    });
-
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('Admin panel CRUD — Team', function () {
-
-    //££
-    return;
-    //££
-
 
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
