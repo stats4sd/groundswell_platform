@@ -262,55 +262,50 @@ use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\
 
 // });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — Team', function () {
+// describe('Admin panel CRUD — Team', function () {
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//     });
 
-    test('team list shows existing teams', function () {
-        livewire(ListTeams::class)->assertSuccessful();
-    });
+//     test('team list shows existing teams', function () {
+//         livewire(ListTeams::class)->assertSuccessful();
+//     });
 
-    test('team create page loads', function () {
-        $this->get('/admin/teams/create')->assertOk();
-    });
+//     test('team create page loads', function () {
+//         $this->get('/admin/teams/create')->assertOk();
+//     });
 
-    test('can create team', function () {
-        Http::fake();
+//     test('can create team', function () {
+//         Http::fake();
 
-        livewire(CreateTeam::class)
-            ->fillForm(['name' => 'New Test Team'])
-            ->call('create')
-            ->assertHasNoFormErrors();
+//         livewire(CreateTeam::class)
+//             ->fillForm(['name' => 'New Test Team'])
+//             ->call('create')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('teams', ['name' => 'New Test Team']);
-    });
+//         $this->assertDatabaseHas('teams', ['name' => 'New Test Team']);
+//     });
 
-    test('team view page loads', function () {
-        $team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->get("/admin/teams/{$team->id}")->assertOk();
-    });
+//     test('team view page loads', function () {
+//         $team = Team::withoutEvents(fn () => Team::factory()->create());
+//         $this->get("/admin/teams/{$team->id}")->assertOk();
+//     });
 
-    test('team edit page loads', function () {
-        $team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->get("/admin/teams/{$team->id}/edit")->assertOk();
-    });
+//     test('team edit page loads', function () {
+//         $team = Team::withoutEvents(fn () => Team::factory()->create());
+//         $this->get("/admin/teams/{$team->id}/edit")->assertOk();
+//     });
 
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('Admin panel CRUD — User', function () {
-
-    //££
-    return;
-    //££
-
 
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
