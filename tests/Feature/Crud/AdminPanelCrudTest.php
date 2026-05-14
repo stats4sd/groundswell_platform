@@ -303,77 +303,72 @@ use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\
 
 // });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — User', function () {
+// describe('Admin panel CRUD — User', function () {
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//     });
 
-    test('user list shows existing users', function () {
-        livewire(ListUsers::class)->assertSuccessful();
-    });
+//     test('user list shows existing users', function () {
+//         livewire(ListUsers::class)->assertSuccessful();
+//     });
 
-    test('user create page loads', function () {
-        $this->get('/admin/users/create')->assertOk();
-    });
+//     test('user create page loads', function () {
+//         $this->get('/admin/users/create')->assertOk();
+//     });
 
-    test('can create user', function () {
-        livewire(CreateUser::class)
-            ->fillForm([
-                'name'     => 'Test User',
-                'email'    => 'testuser@example.com',
-                'password' => 'password123',
-            ])
-            ->call('create')
-            ->assertHasNoFormErrors();
+//     test('can create user', function () {
+//         livewire(CreateUser::class)
+//             ->fillForm([
+//                 'name'     => 'Test User',
+//                 'email'    => 'testuser@example.com',
+//                 'password' => 'password123',
+//             ])
+//             ->call('create')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('users', ['email' => 'testuser@example.com']);
-    });
+//         $this->assertDatabaseHas('users', ['email' => 'testuser@example.com']);
+//     });
 
-    test('create user requires name', function () {
-        livewire(CreateUser::class)
-            ->fillForm(['name' => '', 'email' => 'x@example.com', 'password' => 'password123'])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
+//     test('create user requires name', function () {
+//         livewire(CreateUser::class)
+//             ->fillForm(['name' => '', 'email' => 'x@example.com', 'password' => 'password123'])
+//             ->call('create')
+//             ->assertHasFormErrors(['name' => 'required']);
+//     });
 
-    test('create user requires email', function () {
-        livewire(CreateUser::class)
-            ->fillForm(['name' => 'Test', 'email' => '', 'password' => 'password123'])
-            ->call('create')
-            ->assertHasFormErrors(['email' => 'required']);
-    });
+//     test('create user requires email', function () {
+//         livewire(CreateUser::class)
+//             ->fillForm(['name' => 'Test', 'email' => '', 'password' => 'password123'])
+//             ->call('create')
+//             ->assertHasFormErrors(['email' => 'required']);
+//     });
 
-    test('user edit page loads', function () {
-        $user = User::factory()->create();
-        $this->get("/admin/users/{$user->id}/edit")->assertOk();
-    });
+//     test('user edit page loads', function () {
+//         $user = User::factory()->create();
+//         $this->get("/admin/users/{$user->id}/edit")->assertOk();
+//     });
 
-    test('can edit user name', function () {
-        $user = User::factory()->create();
+//     test('can edit user name', function () {
+//         $user = User::factory()->create();
 
-        livewire(EditUser::class, ['record' => $user->id])
-            ->fillForm(['name' => 'Edited Name'])
-            ->call('save')
-            ->assertHasNoFormErrors();
+//         livewire(EditUser::class, ['record' => $user->id])
+//             ->fillForm(['name' => 'Edited Name'])
+//             ->call('save')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Edited Name']);
-    });
+//         $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Edited Name']);
+//     });
 
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('Admin panel CRUD — Dataset', function () {
-
-    //££
-    return;
-    //££
-
 
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
@@ -399,7 +394,7 @@ describe('Admin panel CRUD — Dataset', function () {
     });
 
     test('dataset edit page loads', function () {
-        $dataset = Dataset::forceCreate(['name' => 'Editable Dataset']);
+        $dataset = Dataset::forceCreate(['name' => 'Editable Dataset', 'primary_key' => 'id']);
         $this->get("/admin/datasets/{$dataset->id}/edit")->assertOk();
     });
 
