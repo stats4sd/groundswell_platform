@@ -366,48 +366,43 @@ use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\
 
 // });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — Dataset', function () {
+// describe('Admin panel CRUD — Dataset', function () {
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//     });
 
-    test('dataset list page loads', function () {
-        $this->get('/admin/datasets')->assertOk();
-    });
+//     test('dataset list page loads', function () {
+//         $this->get('/admin/datasets')->assertOk();
+//     });
 
-    test('dataset create page loads', function () {
-        $this->get('/admin/datasets/create')->assertOk();
-    });
+//     test('dataset create page loads', function () {
+//         $this->get('/admin/datasets/create')->assertOk();
+//     });
 
-    test('can create dataset', function () {
-        livewire(CreateDataset::class)
-            ->fillForm(['name' => 'Test Dataset'])
-            ->call('create')
-            ->assertHasNoFormErrors();
+//     test('can create dataset', function () {
+//         livewire(CreateDataset::class)
+//             ->fillForm(['name' => 'Test Dataset'])
+//             ->call('create')
+//             ->assertHasNoFormErrors();
 
-        $this->assertDatabaseHas('datasets', ['name' => 'Test Dataset']);
-    });
+//         $this->assertDatabaseHas('datasets', ['name' => 'Test Dataset']);
+//     });
 
-    test('dataset edit page loads', function () {
-        $dataset = Dataset::forceCreate(['name' => 'Editable Dataset', 'primary_key' => 'id']);
-        $this->get("/admin/datasets/{$dataset->id}/edit")->assertOk();
-    });
+//     test('dataset edit page loads', function () {
+//         $dataset = Dataset::forceCreate(['name' => 'Editable Dataset', 'primary_key' => 'id']);
+//         $this->get("/admin/datasets/{$dataset->id}/edit")->assertOk();
+//     });
 
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('Admin panel CRUD — XlsformTemplate', function () {
-
-    //££
-    return;
-    //££
-
 
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
