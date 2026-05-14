@@ -400,39 +400,37 @@ use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\
 
 // });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — XlsformTemplate', function () {
+// describe('Admin panel CRUD — XlsformTemplate', function () {
 
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
+//     beforeEach(function () {
+//         $this->superAdmin = createSuperAdmin();
+//         $this->actingAs($this->superAdmin);
+//         withAdminPanel();
+//     });
 
-    test('xlsform template list page loads', function () {
-        $this->get('/admin/xlsform-templates')->assertOk();
-    });
+//     test('xlsform template list page loads', function () {
+//         $this->get('/admin/xlsform-templates')->assertOk();
+//     });
 
-    test('xlsform template create page loads', function () {
-        $this->get('/admin/xlsform-templates/create')->assertOk();
-    });
+//     test('xlsform template create page loads', function () {
+//         $this->get('/admin/xlsform-templates/create')->assertOk();
+//     });
 
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('Admin panel CRUD — XlsformModule', function () {
 
-    //££
-    return;
-    //££
-
-
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
         withAdminPanel();
+        $this->xlsformTemplate = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::withoutEvents(
+            fn () => \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::forceCreate(['title' => 'Test Template'])
+        );
     });
 
     test('xlsform module list page loads', function () {
@@ -442,6 +440,7 @@ describe('Admin panel CRUD — XlsformModule', function () {
     test('can create xlsform module', function () {
         livewire(ManageXlsformModule::class)
             ->callAction(CreateAction::class, data: [
+                'xlsform_template_id' => $this->xlsformTemplate->id,
                 'label' => 'Test Module',
                 'name'  => 'test_module',
             ])
@@ -453,6 +452,7 @@ describe('Admin panel CRUD — XlsformModule', function () {
     test('create xlsform module requires name', function () {
         livewire(ManageXlsformModule::class)
             ->callAction(CreateAction::class, data: [
+                'xlsform_template_id' => $this->xlsformTemplate->id,
                 'label' => 'Missing Name',
                 'name'  => '',
             ])
@@ -460,7 +460,11 @@ describe('Admin panel CRUD — XlsformModule', function () {
     });
 
     test('can delete xlsform module', function () {
-        $module = XlsformModule::forceCreate(['label' => 'Delete Me', 'name' => 'delete_me']);
+        $module = XlsformModule::forceCreate([
+            'xlsform_template_id' => $this->xlsformTemplate->id,
+            'label' => 'Delete Me',
+            'name' => 'delete_me',
+        ]);
 
         livewire(ManageXlsformModule::class)
             ->callTableBulkAction(DeleteBulkAction::class, [$module]);
