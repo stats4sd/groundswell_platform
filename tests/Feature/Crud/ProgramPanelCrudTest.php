@@ -9,10 +9,6 @@ use Stats4sd\FilamentTeamManagement\Models\Program;
 
 describe('Program panel CRUD — Program', function () {
 
-    //££
-    return;
-    //££
-
     beforeEach(function () {
         $this->program = Program::create(['name' => 'Test Program']);
         $this->programAdmin = createProgramAdmin($this->program);
