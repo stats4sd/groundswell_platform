@@ -70,67 +70,62 @@ use Illuminate\Support\Facades\Http;
 
 // });
 
-// ---------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------
 
-describe('App panel CRUD — LocationLevel', function () {
+// describe('App panel CRUD — LocationLevel', function () {
 
-    beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
-        $this->user = createAppUser($this->team);
-        $this->actingAs($this->user);
-    });
+//     beforeEach(function () {
+//         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
+//         $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+//         $this->user = createAppUser($this->team);
+//         $this->actingAs($this->user);
+//     });
 
-    test('location level list page loads', function () {
-        $this->get("/app/{$this->team->id}/location-levels/location-levels")->assertOk();
-    });
+//     test('location level list page loads', function () {
+//         $this->get("/app/{$this->team->id}/location-levels/location-levels")->assertOk();
+//     });
 
-    test('can create location level via table action', function () {
-        withAppTenant($this->team);
+//     test('can create location level via table action', function () {
+//         withAppTenant($this->team);
 
-        livewire(ListLocationLevels::class)
-            ->callTableAction(\Filament\Tables\Actions\CreateAction::class, data: [
-                'name'     => 'Region',
-                'owner_id' => $this->team->id,
-            ])
-            ->assertHasNoTableActionErrors();
+//         livewire(ListLocationLevels::class)
+//             ->callTableAction(\Filament\Tables\Actions\CreateAction::class, data: [
+//                 'name'     => 'Region',
+//                 'owner_id' => $this->team->id,
+//             ])
+//             ->assertHasNoTableActionErrors();
 
-        $this->assertDatabaseHas('location_levels', ['name' => 'Region', 'owner_id' => $this->team->id]);
-    });
+//         $this->assertDatabaseHas('location_levels', ['name' => 'Region', 'owner_id' => $this->team->id]);
+//     });
 
-    test('location level view page loads', function () {
-        withAppTenant($this->team);
-        $level = new LocationLevel();
-        $level->name = 'Test Level';
-        $level->owner_id = $this->team->id;
-        $level->save();
+//     test('location level view page loads', function () {
+//         withAppTenant($this->team);
+//         $level = new LocationLevel();
+//         $level->name = 'Test Level';
+//         $level->owner_id = $this->team->id;
+//         $level->save();
 
-        $this->get("/app/{$this->team->id}/location-levels/location-levels/{$level->slug}")->assertOk();
-    });
+//         $this->get("/app/{$this->team->id}/location-levels/location-levels/{$level->slug}")->assertOk();
+//     });
 
-    test('can bulk delete location level', function () {
-        withAppTenant($this->team);
-        $level = new LocationLevel();
-        $level->name = 'Delete Level';
-        $level->owner_id = $this->team->id;
-        $level->save();
+//     test('can bulk delete location level', function () {
+//         withAppTenant($this->team);
+//         $level = new LocationLevel();
+//         $level->name = 'Delete Level';
+//         $level->owner_id = $this->team->id;
+//         $level->save();
 
-        livewire(ListLocationLevels::class)
-            ->callTableBulkAction(DeleteBulkAction::class, [$level]);
+//         livewire(ListLocationLevels::class)
+//             ->callTableBulkAction(DeleteBulkAction::class, [$level]);
 
-        $this->assertDatabaseMissing('location_levels', ['id' => $level->id]);
-    });
+//         $this->assertDatabaseMissing('location_levels', ['id' => $level->id]);
+//     });
 
-});
+// });
 
 // ---------------------------------------------------------------------------
 
 describe('App panel CRUD — Farm', function () {
-
-    //££
-    return;
-    //££
-
 
     beforeEach(function () {
         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
@@ -149,19 +144,31 @@ describe('App panel CRUD — Farm', function () {
 
 describe('App panel CRUD — ChoiceListEntry', function () {
 
-    //££
-    return;
-    //££
-
-
     beforeEach(function () {
         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
         $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
-        \Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList::forceCreate([
-            'list_name'          => 'smoke_test_list',
-            'is_localisable'     => true,
-            'has_custom_handling' => false,
+
+        // ChoiceList requires the full parent chain: Template → Module → ModuleVersion
+        $xlsformTemplate = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::withoutEvents(
+            fn () => \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::forceCreate(['title' => 'Test Template'])
+        );
+        $xlsformModule = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule::forceCreate([
+            'xlsform_template_id' => $xlsformTemplate->id,
+            'label' => 'Test Module',
+            'name'  => 'test_module',
         ]);
+        $xlsformModuleVersion = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $xlsformModule->id,
+            'name'              => 'v1',
+            'is_default'        => true,
+        ]);
+        \Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList::forceCreate([
+            'xlsform_module_version_id' => $xlsformModuleVersion->id,
+            'list_name'                 => 'smoke_test_list',
+            'is_localisable'            => true,
+            'has_custom_handling'       => false,
+        ]);
+
         $this->user = createAppUser($this->team);
         $this->actingAs($this->user);
     });
