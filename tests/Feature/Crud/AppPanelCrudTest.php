@@ -14,11 +14,6 @@ use Illuminate\Support\Facades\Http;
 
 describe('App panel CRUD — Team', function () {
 
-    //££
-    return;
-    //££
-
-
     beforeEach(function () {
         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
         $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
