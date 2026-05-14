@@ -12,116 +12,116 @@ use App\Models\Team;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Http;
 
-// describe('App panel CRUD — Team', function () {
+describe('App panel CRUD — Team', function () {
 
-//     beforeEach(function () {
-//         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-//         $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
-//         $this->user = createAppUser($this->team);
-//         $this->actingAs($this->user);
-//     });
+    beforeEach(function () {
+        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
+        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        $this->user = createAppUser($this->team);
+        $this->actingAs($this->user);
+    });
 
-//     test('team list shows current team', function () {
-//         withAppTenant($this->team);
+    test('team list shows current team', function () {
+        withAppTenant($this->team);
 
-//         livewire(ListTeams::class)
-//             ->assertCanSeeTableRecords([$this->team]);
-//     });
+        livewire(ListTeams::class)
+            ->assertCanSeeTableRecords([$this->team]);
+    });
 
-//     test('team create page loads', function () {
-//         $this->get("/app/{$this->team->id}/teams/create")->assertOk();
-//     });
+    test('team create page loads', function () {
+        $this->get("/app/{$this->team->id}/teams/create")->assertOk();
+    });
 
-//     test('can create team via app panel', function () {
-//         Http::fake();
-//         withAppTenant($this->team);
+    test('can create team via app panel', function () {
+        Http::fake();
+        withAppTenant($this->team);
 
-//         livewire(CreateTeam::class)
-//             ->fillForm(['name' => 'Brand New Team'])
-//             ->call('create')
-//             ->assertHasNoFormErrors();
+        livewire(CreateTeam::class)
+            ->fillForm(['name' => 'Brand New Team'])
+            ->call('create')
+            ->assertHasNoFormErrors();
 
-//         $this->assertDatabaseHas('teams', ['name' => 'Brand New Team']);
-//     });
+        $this->assertDatabaseHas('teams', ['name' => 'Brand New Team']);
+    });
 
-//     test('create team requires name', function () {
-//         withAppTenant($this->team);
+    test('create team requires name', function () {
+        withAppTenant($this->team);
 
-//         livewire(CreateTeam::class)
-//             ->fillForm(['name' => ''])
-//             ->call('create')
-//             ->assertHasFormErrors(['name' => 'required']);
-//     });
+        livewire(CreateTeam::class)
+            ->fillForm(['name' => ''])
+            ->call('create')
+            ->assertHasFormErrors(['name' => 'required']);
+    });
 
-//     test('team edit page loads', function () {
-//         $this->get("/app/{$this->team->id}/teams/{$this->team->id}/edit")->assertOk();
-//     });
+    test('team edit page loads', function () {
+        $this->get("/app/{$this->team->id}/teams/{$this->team->id}/edit")->assertOk();
+    });
 
-//     test('can edit team via app panel', function () {
-//         withAppTenant($this->team);
+    test('can edit team via app panel', function () {
+        withAppTenant($this->team);
 
-//         livewire(EditTeam::class, ['record' => $this->team->id])
-//             ->fillForm(['name' => 'Renamed Team'])
-//             ->call('save')
-//             ->assertHasNoFormErrors();
+        livewire(EditTeam::class, ['record' => $this->team->id])
+            ->fillForm(['name' => 'Renamed Team'])
+            ->call('save')
+            ->assertHasNoFormErrors();
 
-//         $this->assertDatabaseHas('teams', ['id' => $this->team->id, 'name' => 'Renamed Team']);
-//     });
+        $this->assertDatabaseHas('teams', ['id' => $this->team->id, 'name' => 'Renamed Team']);
+    });
 
-// });
+});
 
-// // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-// describe('App panel CRUD — LocationLevel', function () {
+describe('App panel CRUD — LocationLevel', function () {
 
-//     beforeEach(function () {
-//         $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-//         $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
-//         $this->user = createAppUser($this->team);
-//         $this->actingAs($this->user);
-//     });
+    beforeEach(function () {
+        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
+        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        $this->user = createAppUser($this->team);
+        $this->actingAs($this->user);
+    });
 
-//     test('location level list page loads', function () {
-//         $this->get("/app/{$this->team->id}/location-levels/location-levels")->assertOk();
-//     });
+    test('location level list page loads', function () {
+        $this->get("/app/{$this->team->id}/location-levels/location-levels")->assertOk();
+    });
 
-//     test('can create location level via table action', function () {
-//         withAppTenant($this->team);
+    test('can create location level via table action', function () {
+        withAppTenant($this->team);
 
-//         livewire(ListLocationLevels::class)
-//             ->callTableAction(\Filament\Tables\Actions\CreateAction::class, data: [
-//                 'name'     => 'Region',
-//                 'owner_id' => $this->team->id,
-//             ])
-//             ->assertHasNoTableActionErrors();
+        livewire(ListLocationLevels::class)
+            ->callTableAction(\Filament\Tables\Actions\CreateAction::class, data: [
+                'name'     => 'Region',
+                'owner_id' => $this->team->id,
+            ])
+            ->assertHasNoTableActionErrors();
 
-//         $this->assertDatabaseHas('location_levels', ['name' => 'Region', 'owner_id' => $this->team->id]);
-//     });
+        $this->assertDatabaseHas('location_levels', ['name' => 'Region', 'owner_id' => $this->team->id]);
+    });
 
-//     test('location level view page loads', function () {
-//         withAppTenant($this->team);
-//         $level = new LocationLevel();
-//         $level->name = 'Test Level';
-//         $level->owner_id = $this->team->id;
-//         $level->save();
+    test('location level view page loads', function () {
+        withAppTenant($this->team);
+        $level = new LocationLevel();
+        $level->name = 'Test Level';
+        $level->owner_id = $this->team->id;
+        $level->save();
 
-//         $this->get("/app/{$this->team->id}/location-levels/location-levels/{$level->slug}")->assertOk();
-//     });
+        $this->get("/app/{$this->team->id}/location-levels/location-levels/{$level->slug}")->assertOk();
+    });
 
-//     test('can bulk delete location level', function () {
-//         withAppTenant($this->team);
-//         $level = new LocationLevel();
-//         $level->name = 'Delete Level';
-//         $level->owner_id = $this->team->id;
-//         $level->save();
+    test('can bulk delete location level', function () {
+        withAppTenant($this->team);
+        $level = new LocationLevel();
+        $level->name = 'Delete Level';
+        $level->owner_id = $this->team->id;
+        $level->save();
 
-//         livewire(ListLocationLevels::class)
-//             ->callTableBulkAction(DeleteBulkAction::class, [$level]);
+        livewire(ListLocationLevels::class)
+            ->callTableBulkAction(DeleteBulkAction::class, [$level]);
 
-//         $this->assertDatabaseMissing('location_levels', ['id' => $level->id]);
-//     });
+        $this->assertDatabaseMissing('location_levels', ['id' => $level->id]);
+    });
 
-// });
+});
 
 // ---------------------------------------------------------------------------
 
