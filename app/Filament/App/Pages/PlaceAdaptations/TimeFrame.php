@@ -30,6 +30,11 @@ class TimeFrame extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.app.pages.place-adaptations.time-frame';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view adapt time frame');
+    }
+
     protected ?string $heading = 'Survey Testing - Adapt Time Frame';
 
     // protected ?string $subheading = 'Specify the time frame for your survey';
@@ -68,12 +73,16 @@ class TimeFrame extends Page implements HasForms, HasTable
             ->schema([
                 TextInput::make('time_frame')
                     ->live()
+                    ->disabled(fn () => !auth()->user()->can('maintain adapt time frame'))
                     ->afterStateUpdated(fn(self $livewire) => $livewire->saveData()),
             ]);
     }
 
     public function saveData(): void
     {
+        if (!auth()->user()->can('maintain adapt time frame')) {
+            abort(403);
+        }
 
         $this->team->update($this->form->getState());
 
