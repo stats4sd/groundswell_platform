@@ -41,6 +41,8 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public bool $canSave = false;
 
+    public bool $canMaintain = false;
+
     public function mount()
     {
         $this->form->fill($this->locale->toArray());
@@ -81,7 +83,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
                                     ->collection('xlsform_template_translation_files')
                                     ->filterMediaUsing(fn(Collection $media) => $media->where('custom_properties.xlsform_template_id', $xlsformTemplate->id))
                                     ->customProperties(['xlsform_template_id' => $xlsformTemplate->id])
-                                    ->visible(fn() => $this->locale->is_editable)
+                                    ->visible(fn() => $this->locale->is_editable && $this->canMaintain)
                                     ->live()
                                     ->label(fn($state) => count($state) === 0
                                         ? "Upload completed {$xlsformTemplate->title} translation file"
@@ -103,6 +105,9 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public function submit(): void
     {
+        if (!$this->canMaintain) {
+            abort(403);
+        }
 
         $this->form->getState();
         $this->form->saveRelationships();
@@ -146,6 +151,10 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public function duplicate(): void
     {
+        if (!$this->canMaintain) {
+            abort(403);
+        }
+
         // copy this locale as a new locale model
         $newRecord = $this->locale->replicate();
         $newRecord->description = $this->locale->languageLabel . ' - duplicated';

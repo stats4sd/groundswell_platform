@@ -26,6 +26,11 @@ class SurveyTranslations extends Page
     /** @var Collection<Language> */
     public Collection $languages;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view survey translations');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
@@ -51,7 +56,12 @@ class SurveyTranslations extends Page
         return Action::make('markComplete')
             ->label('MARK AS COMPLETE')
             ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->visible(fn () => auth()->user()->can('maintain survey translations'))
             ->action(function () {
+                if (!auth()->user()->can('maintain survey translations')) {
+                    abort(403);
+                }
+
                 HelperService::getCurrentOwner()->update([
                     'languages_complete' => 1,
                 ]);
@@ -65,7 +75,12 @@ class SurveyTranslations extends Page
         return Action::make('markIncomplete')
             ->label('MARK AS INCOMPLETE')
             ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->visible(fn () => auth()->user()->can('maintain survey translations'))
             ->action(function () {
+                if (!auth()->user()->can('maintain survey translations')) {
+                    abort(403);
+                }
+
                 HelperService::getCurrentOwner()->update([
                     'languages_complete' => 0,
                 ]);
