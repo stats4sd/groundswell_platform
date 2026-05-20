@@ -16,10 +16,14 @@ use App\Policies\ProgramPolicy;
 use App\Policies\TeamPolicy;
 use App\Policies\ThemePolicy;
 use App\Policies\UserPolicy;
+use App\Policies\XlsformModulePolicy;
 use App\Policies\XlsformModuleVersionPolicy;
+use App\Policies\XlsformTemplatePolicy;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 use Stats4sd\FilamentTeamManagement\Models\Program;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
@@ -61,7 +65,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Team::class, TeamPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(ChoiceList::class, ChoiceListPolicy::class);
+        Gate::policy(XlsformModule::class, XlsformModulePolicy::class);
         Gate::policy(XlsformModuleVersion::class, XlsformModuleVersionPolicy::class);
+        Gate::policy(XlsformTemplate::class, XlsformTemplatePolicy::class);
         Gate::policy(Dataset::class, DatasetPolicy::class);
 
         // Enable migrations in subfolders
