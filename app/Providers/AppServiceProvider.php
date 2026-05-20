@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Models\Holpa\Domain;
+use App\Models\Holpa\GlobalIndicator;
 use App\Policies\DomainPolicy;
+use App\Policies\GlobalIndicatorPolicy;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\View\View;
@@ -39,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
         // Explicit policy registrations for models outside the App\Models namespace,
         // since Laravel's auto-discovery won't match them by convention.
         Gate::policy(Domain::class, DomainPolicy::class);
+        Gate::policy(GlobalIndicator::class, GlobalIndicatorPolicy::class);
 
         // Enable migrations in subfolders
         $migrationsPath = database_path('migrations');
