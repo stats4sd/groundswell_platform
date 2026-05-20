@@ -10,10 +10,12 @@ use App\Models\Team;
 use App\Models\User;
 use App\Policies\DomainPolicy;
 use App\Policies\GlobalIndicatorPolicy;
+use App\Policies\ChoiceListPolicy;
 use App\Policies\ProgramPolicy;
 use App\Policies\TeamPolicy;
 use App\Policies\ThemePolicy;
 use App\Policies\UserPolicy;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentTeamManagement\Models\Program;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
@@ -54,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Program::class, ProgramPolicy::class);
         Gate::policy(Team::class, TeamPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(ChoiceList::class, ChoiceListPolicy::class);
 
         // Enable migrations in subfolders
         $migrationsPath = database_path('migrations');
