@@ -2,16 +2,19 @@
 
 namespace App\Providers;
 
-use App\Filament\App\Pages\SurveyDashboard;
 use App\Models\Holpa\Domain;
 use App\Models\Holpa\GlobalIndicator;
 use App\Models\Holpa\Theme;
+use App\Models\SampleFrame\Farm;
+use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use App\Models\User;
-use App\Policies\DomainPolicy;
-use App\Policies\GlobalIndicatorPolicy;
 use App\Policies\ChoiceListPolicy;
 use App\Policies\DatasetPolicy;
+use App\Policies\DomainPolicy;
+use App\Policies\FarmPolicy;
+use App\Policies\GlobalIndicatorPolicy;
+use App\Policies\LocationLevelPolicy;
 use App\Policies\ProgramPolicy;
 use App\Policies\TeamPolicy;
 use App\Policies\ThemePolicy;
@@ -19,18 +22,15 @@ use App\Policies\UserPolicy;
 use App\Policies\XlsformModulePolicy;
 use App\Policies\XlsformModuleVersionPolicy;
 use App\Policies\XlsformTemplatePolicy;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 use Stats4sd\FilamentTeamManagement\Models\Program;
-use Filament\Support\Facades\FilamentView;
-use Filament\View\PanelsRenderHook;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -69,6 +69,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(XlsformModuleVersion::class, XlsformModuleVersionPolicy::class);
         Gate::policy(XlsformTemplate::class, XlsformTemplatePolicy::class);
         Gate::policy(Dataset::class, DatasetPolicy::class);
+        Gate::policy(LocationLevel::class, LocationLevelPolicy::class);
+        Gate::policy(Farm::class, FarmPolicy::class);
 
         // Enable migrations in subfolders
         $migrationsPath = database_path('migrations');
@@ -76,7 +78,5 @@ class AppServiceProvider extends ServiceProvider
         $paths = array_merge([$migrationsPath], $directories);
 
         $this->loadMigrationsFrom($paths);
-
     }
-
 }

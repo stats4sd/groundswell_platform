@@ -83,10 +83,21 @@ class ContextQuestions extends Page implements HasActions, HasForms, HasTable
 
     protected static bool $shouldRegisterNavigation = false;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view context questions');
+    }
+
     public function table(Table $table): Table
     {
         $locales = $this->team->locales;
-        return $this->customModuleQuestionTable($table, $locales, $this->xlsformModuleVersion);
+        $table = $this->customModuleQuestionTable($table, $locales, $this->xlsformModuleVersion);
+
+        if (!auth()->user()->can('maintain context questions')) {
+            return $table->headerActions([])->actions([]);
+        }
+
+        return $table;
     }
 
 
