@@ -28,10 +28,13 @@ class AppServiceProvider extends ServiceProvider
         // unguard all models at once, so that filament-odk-link package XlsformTemplate model can be created successfully
         Model::unguard();
 
-        // Implicitly grant "Super Admin" role all permissions
+        // Implicitly grant "Super Admin" role and "Global Viewer" role all permissions.
+        // This allows both roles to enter Admin Panel.
+
+        // "view" permissions and "maintain" permissions of each CRUD panel will be controlled in Policy classes.
         // This works in the app by using gate-related functions like auth()->user->can() and @can()
         Gate::before(function ($user, $ability) {
-            return $user->hasRole('Super Admin') ? true : null;
+            return $user->hasRole('Super Admin') || $user->hasRole('Global Viewer') ? true : null;            
         });
 
         // Enable migrations in subfolders
