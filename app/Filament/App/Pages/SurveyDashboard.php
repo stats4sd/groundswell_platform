@@ -19,6 +19,11 @@ class SurveyDashboard extends Page
 
     protected static ?string $title = 'Holpa Survey Dashboard'; // set to empty because the dashboard has a custom header
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view survey dashboard');
+    }
+
     public Team $team;
 
     public function getHeader(): ?View
