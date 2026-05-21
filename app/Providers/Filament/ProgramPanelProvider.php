@@ -20,7 +20,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stats4sd\FilamentTeamManagement\Filament\App\Pages\RegisterProgram;
-use Stats4sd\FilamentTeamManagement\Filament\Program\Pages\Dashboard;
+use App\Filament\Program\Pages\Dashboard;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\CheckIfProgramAdmin;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\SetLatestProgramMiddleware;
 use Stats4sd\FilamentTeamManagement\Models\Program;
