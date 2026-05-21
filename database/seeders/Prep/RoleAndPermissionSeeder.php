@@ -100,6 +100,7 @@ class RoleAndPermissionSeeder extends Seeder
             ['name' => 'view monitor data collection'],
             ['name' => 'maintain monitor data collection'],
             ['name' => 'view download data'],
+            ['name' => 'maintain download data'],
         ];
 
 
@@ -212,6 +213,7 @@ class RoleAndPermissionSeeder extends Seeder
             'view monitor data collection',
             'maintain monitor data collection',
             'view download data',
+            'maintain download data',
         ]);
 
         // assign permissions to Program Viewer role
@@ -299,6 +301,7 @@ class RoleAndPermissionSeeder extends Seeder
             'view monitor data collection',
             'maintain monitor data collection',
             'view download data',
+            'maintain download data',
         ]);
     }
 }
