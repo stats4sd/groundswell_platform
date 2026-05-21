@@ -27,6 +27,11 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
 
     protected $listeners = ['refreshPage' => '$refresh'];
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view download data');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
@@ -53,7 +58,12 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
         return Action::make('markComplete')
             ->label('MARK AS COMPLETE')
             ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->visible(fn () => auth()->user()->can('maintain download data'))
             ->action(function () {
+                if (!auth()->user()->can('maintain download data')) {
+                    abort(403);
+                }
+
                 $team = HelperService::getCurrentOwner();
                 $team->data_analysis_progress = 'complete';
                 $team->save();
@@ -67,7 +77,12 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
         return Action::make('markIncomplete')
             ->label('MARK AS INCOMPLETE')
             ->extraAttributes(['class' => 'buttona block md:inline-block mb-6 md:mb-0 max-w-sm mx-auto'])
+            ->visible(fn () => auth()->user()->can('maintain download data'))
             ->action(function () {
+                if (!auth()->user()->can('maintain download data')) {
+                    abort(403);
+                }
+
                 $team = HelperService::getCurrentOwner();
                 $team->data_analysis_progress = 'not_started';
                 $team->save();
