@@ -4,7 +4,7 @@
         Place custom questions in survey
     </div>
 
-    <div class="text-black pb-4 mb-9">
+    <div class="text-brown pb-4 mb-9">
         To add your custom questions into the survey, drag and drop each item into the correct place in the list on the right. Updates to the module ordering will be saved automatically. Once you have finished arranging your custom questions, click "Confirm Ordering" to finalize the order and add your custom questions to the surveys for testing. If you need to reset the order at any time, click "Reset Ordering" to revert to the default ordering (this will remove your local indicator modules from the survey forms).
     </div>
     <div class="grid grid-cols-2 gap-4">
@@ -60,7 +60,7 @@
                 <span>( {{ $xlsform->xlsformModuleVersions->count() }} modules )</span>
                 <br/>
                 @if($xlsform->xlsformModuleVersions->count() > 111)
-                    <div class="text-sm italic text-gray-600 pb-2">
+                    <div class="text-sm italic text-brown pb-2">
                         (Tip: This form has many modules. Scroll the list below to see them all.)
                     </div>
                 @endif

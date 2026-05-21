@@ -52,7 +52,7 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
     {
         return Action::make('markComplete')
             ->label('MARK AS COMPLETE')
-            ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
             ->action(function () {
                 $team = HelperService::getCurrentOwner();
                 $team->data_analysis_progress = 'complete';
@@ -66,7 +66,7 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
     {
         return Action::make('markIncomplete')
             ->label('MARK AS INCOMPLETE')
-            ->extraAttributes(['class' => 'buttona block md:inline-block mb-6 md:mb-0 max-w-sm mx-auto'])
+            ->extraAttributes(['class' => 'buttonbrown block md:inline-block mb-6 md:mb-0 max-w-sm mx-auto'])
             ->action(function () {
                 $team = HelperService::getCurrentOwner();
                 $team->data_analysis_progress = 'not_started';

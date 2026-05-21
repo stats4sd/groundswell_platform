@@ -52,7 +52,7 @@
 @else
 
     @if(isset($data['iteration']))
-        <div class="col-span-12 px-12 py-4 bg-light-grey text-black font-bold"
+        <div class="col-span-12 px-12 py-4 bg-light-grey text-brown font-bold"
         >
             {{ $data['label'] ?? $data['name'] }} - {{ $data['iteration'] }} of {{ $data['count'] }}
         </div>
@@ -60,7 +60,7 @@
     @else
 
         @if($sectionLabel = $surveyRows->where('name', $key)->first()?->defaultLabel?->text)
-            <div class="col-span-12 px-12 py-4 bg-blue text-black text-lg font-bold">
+            <div class="col-span-12 px-12 py-4 bg-blue text-brown text-lg font-bold">
                 {{ $sectionLabel }}
             </div>
         @endif

@@ -14,14 +14,15 @@ export default {
             colors: {
                 'green': 'var(--green)',
                 'blue': 'var(--blue)',
-                'dark-blue': 'var(--dark-blue)',
+                // 'dark-blue': 'var(--dark-blue)',
                 'orange': 'var(--orange)',
                 'dark-orange': 'var(--dark-orange)',
                 'light-grey': 'var(--light-grey)',
                 'grey': 'var(--grey)',
                 'lightgreen': 'var(--lightgreen)',
                 'hyellow': 'var(--hyellow)',
-                'light-orange': 'var(--light-orange)'
+                'light-orange': 'var(--light-orange)',
+                'brown': 'var(--brown)'
             },
             fontFamily: {
                 montserrat: ['"Montserrat"', "sans-serif"],

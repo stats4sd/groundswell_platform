@@ -4,7 +4,7 @@
     </div>
 
 
-    <div class="text-black pb-6">
+    <div class="text-brown pb-6">
         On this page, please add the locally relevant indicators that you identified during the LISP workshop. You may either upload the indicators as an Excel file using the provided
         <a href="{{ url('files/HOLPA_indicator_template.xlsx') }}">template</a>, or enter each indicator manually into the table below.
     </div>

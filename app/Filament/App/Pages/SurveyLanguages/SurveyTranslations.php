@@ -50,7 +50,7 @@ class SurveyTranslations extends Page
     {
         return Action::make('markComplete')
             ->label('MARK AS COMPLETE')
-            ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
             ->action(function () {
                 HelperService::getCurrentOwner()->update([
                     'languages_complete' => 1,
@@ -64,7 +64,7 @@ class SurveyTranslations extends Page
     {
         return Action::make('markIncomplete')
             ->label('MARK AS INCOMPLETE')
-            ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
             ->action(function () {
                 HelperService::getCurrentOwner()->update([
                     'languages_complete' => 0,

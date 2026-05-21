@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ $title ?? 'HOLPA' }}</title>
+    <title>{{ $title ?? 'Groundswell International Survey Tool' }}</title>
 
     @filamentStyles
     @vite('resources/css/filament/app/theme.css')

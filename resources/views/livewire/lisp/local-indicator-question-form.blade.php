@@ -6,7 +6,7 @@
         </div>
         <div class="self-end ">
 
-            <button class="text-black text-nowrap flex items-center justify-between" wire:click="$toggle('expanded')">
+            <button class="text-brown text-nowrap flex items-center justify-between" wire:click="$toggle('expanded')">
                 @if($expanded)
                 <x-heroicon-o-chevron-up class="h-6 font-bold text-lg pe-4" />Hide Questions
                 @else

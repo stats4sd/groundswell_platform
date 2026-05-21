@@ -3,7 +3,7 @@
        MATCH WITH EXISTING GLOBAL INDICATORS
     </div>
 
-    <div class="text-black pb-4 mb-9">
+    <div class="text-brown pb-4 mb-9">
         Here, you can browse through the list of core and optional indicators already present in the global HOLPA survey. If your indicators match up to the ones already available, you can add them easily by matching them. Select an indicator on the left and see if an appropriate match is available on the right.
     </div>
 

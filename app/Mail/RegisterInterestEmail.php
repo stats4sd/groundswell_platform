@@ -27,7 +27,7 @@ class RegisterInterestEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'HOLPA Online Platform: Form Submitted',
+            subject: 'Groundswell International Survey Tool: Form Submitted',
         );
     }
 

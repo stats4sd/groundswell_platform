@@ -17,7 +17,7 @@ class SurveyDashboard extends Page
 
     protected static ?string $navigationLabel = 'Survey Dashboard';
 
-    protected static ?string $title = 'Holpa Survey Dashboard'; // set to empty because the dashboard has a custom header
+    protected static ?string $title = 'Survey Dashboard'; // set to empty because the dashboard has a custom header
 
     public Team $team;
 

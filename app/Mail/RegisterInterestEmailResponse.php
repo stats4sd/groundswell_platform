@@ -29,7 +29,7 @@ class RegisterInterestEmailResponse extends Mailable
         return new Envelope(
             from: config('mail.from.address'),
             to: $this->data['email'],
-            subject: 'HOLPA Online Tool - Thank you for your interest',
+            subject: 'Groundswell International Survey Tool - Thank you for your interest',
         );
     }
 

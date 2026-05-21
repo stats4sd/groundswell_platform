@@ -111,7 +111,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
                                 <h3 class="mb-2">Survey Country and Languages</h3>
-                                <p class="text-gray-600 mb-4">Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template.
+                                <p class="mb-4">Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template.
                                 </p>
                             </div>
                             <div class="dashbuttondiv">
@@ -173,7 +173,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
                                 <h3 class="mb-2">Survey Locations</h3>
-                                <p class="text-gray-600 mb-4">Add the details of the farms you will visit, to allow the enumerators to carry out data collection.</p>
+                                <p class="mb-4">Add the details of the farms you will visit, to allow the enumerators to carry out data collection.</p>
                             </div>
                             <div class="dashbuttondiv">
                                 @if ($team->sampling_progress === 'not_started')
@@ -235,7 +235,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                             <div class=" whitecard ">
                                 <div class="dashdescdiv">
                                     <h3 class="mb-2">Place-based adaptations</h3>
-                                    <p class="text-gray-600 mb-4">Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location.</p>
+                                    <p class="mb-4">Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location.</p>
                                 </div>
                                 <div class="dashbuttondiv">
                                     @if ($team->pba_progress === 'not_started')
@@ -272,7 +272,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                             <div class=" whitecard ">
                                 <div class="dashdescdiv">
                                     <h3 class="mb-2">Localisation: LISP</h3>
-                                    <p class="text-gray-600 mb-4">The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool.</p>
+                                    <p class="mb-4">The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool.</p>
                                 </div>
                                 <div class="dashbuttondiv">
                                     @if ($team->lisp_progress === 'not_started')
@@ -308,7 +308,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
                                 <h3 class="mb-2">Localisation: Pilot</h3>
-                                <p class="text-gray-600 mb-4">Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators.
+                                <p class="mb-4">Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators.
                                 </p>
                             </div>
                             <div class="dashbuttondiv">
@@ -360,7 +360,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
                                 <h3 class="mb-2">Data collection</h3>
-                                <p class="text-gray-600 mb-4">View and manage the survey and incoming data.</p>
+                                <p class="mb-4">View and manage the survey and incoming data.</p>
                             </div>
                             <div class="dashbuttondiv">
                                 @if ($team->data_collection_progress === 'not_started')
@@ -382,7 +382,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 inline" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                         </svg>
-                                        <span class="ml-1 inline text-xs font-semibold">COMPLETE</span>
+                                        <span class="text-brown ml-1 inline text-xs font-semibold">COMPLETE</span>
                                     </div>
                                 @endif
                                 <a href="{{ \App\Filament\App\Pages\DataCollection\DataCollectionIndex::getUrl() }}" class="buttona">
@@ -408,7 +408,7 @@ use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
                                 <h3 class="mb-2">Download data</h3>
-                                <p class="text-gray-600 mb-4">Download data to conduct data analysis.</p>
+                                <p class="mb-4">Download data to conduct data analysis.</p>
                             </div>
                             <div class="dashbuttondiv">
                                 <a href="{{ DataAnalysisIndex::getUrl() }}" class="buttona">

@@ -10,7 +10,7 @@
         </div>
         <div class="md:self-end  md:w-1/3 md:flex justify-end mt-5 sm:mt-0">
 
-            <button class=" text-nowrap flex text-black  items-center !text-sm justify-between " wire:click="$toggle('expanded')">
+            <button class=" text-nowrap flex text-brown items-center !text-sm justify-between " wire:click="$toggle('expanded')">
                 Select Translation
                 @if($expanded)
                 <x-heroicon-o-chevron-up class="h-6 ml-4 font-bold text-lg " />
