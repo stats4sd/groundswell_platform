@@ -46,8 +46,7 @@ class ProgramPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
-            // to include "My Program" filament resource from package stats4sd/filament-team-management
-            ->discoverResources(in: app_path('../vendor/stats4sd/filament-team-management/src/Filament/Program/Resources'), for: 'Stats4sd\\FilamentTeamManagement\\Filament\\Program\\Resources')
+            ->discoverResources(in: app_path('Filament/Program/Resources'), for: 'App\\Filament\\Program\\Resources')
             ->discoverPages(in: app_path('Filament/Program/Pages'), for: 'App\\Filament\\Program\\Pages')
             ->pages([
                 Dashboard::class,
