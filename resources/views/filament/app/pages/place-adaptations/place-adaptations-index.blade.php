@@ -9,7 +9,7 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
 <x-filament-panels::page class="px-10 h-full">
 
     <x-instructions-sidebar>
-        <x-slot:heading>Instructions</x-slot:heading>
+        <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
 
             {{-- <div class="pr-4 content-center  mx-auto my-4">

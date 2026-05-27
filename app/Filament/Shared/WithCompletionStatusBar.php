@@ -10,7 +10,7 @@ trait WithCompletionStatusBar
     public function markCompleteAction(): Action
     {
         return Action::make('markComplete')
-            ->label('MARK AS COMPLETE')
+            ->label(fn () => t('MARK AS COMPLETE'))
             ->color('gray')
             ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block fi-ac-action-no-style'])
             ->action(function () {
@@ -24,7 +24,7 @@ trait WithCompletionStatusBar
     public function markIncompleteAction(): Action
     {
         return Action::make('markIncomplete')
-            ->label('MARK AS INCOMPLETE')
+            ->label(fn () => t('MARK AS INCOMPLETE'))
             ->color('gray')
             ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block fi-ac-action-no-style'])
             ->action(function () {

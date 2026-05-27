@@ -1,11 +1,11 @@
 <div>
 
     <div class="text-lg font-bold text-green pb-4 uppercase">
-        Place custom questions in survey
+        {{ t("Place custom questions in survey") }}
     </div>
 
     <div class="text-brown pb-4 mb-9">
-        To add your custom questions into the survey, drag and drop each item into the correct place in the list on the right. Updates to the module ordering will be saved automatically. Once you have finished arranging your custom questions, click "Confirm Ordering" to finalize the order and add your custom questions to the surveys for testing. If you need to reset the order at any time, click "Reset Ordering" to revert to the default ordering (this will remove your local indicator modules from the survey forms).
+        {{ t("To add your custom questions into the survey, drag and drop each item into the correct place in the list on the right. Updates to the module ordering will be saved automatically. Once you have finished arranging your custom questions, click \"Confirm Ordering\" to finalize the order and add your custom questions to the surveys for testing. If you need to reset the order at any time, click \"Reset Ordering\" to revert to the default ordering (this will remove your local indicator modules from the survey forms).") }}
     </div>
     <div class="grid grid-cols-2 gap-4">
 
@@ -16,7 +16,7 @@
 
         >
 
-            <span class="text-base font-semibold ">Local Indicator Questions</span>
+            <span class="text-base font-semibold ">{{ t("Local Indicator Questions") }}</span>
             <br/>
 
             <div x-data
@@ -56,12 +56,12 @@
         >
             @foreach($xlsforms as $xlsform)
 
-                <span class="text-base font-semibold  ">{{ $xlsform->title }}</span>
-                <span>( {{ $xlsform->xlsformModuleVersions->count() }} modules )</span>
+                <span class="text-base font-semibold  ">{{ t("XLSForm") }}: {{ $xlsform->title }}</span>
+                <span>( {{ $xlsform->xlsformModuleVersions->count() }} {{ t("modules") }} )</span>
                 <br/>
                 @if($xlsform->xlsformModuleVersions->count() > 111)
                     <div class="text-sm italic text-brown pb-2">
-                        (Tip: This form has many modules. Scroll the list below to see them all.)
+                        {{ t("(Tip: This form has many modules. Scroll the list below to see them all.)") }}
                     </div>
                 @endif
 
@@ -106,7 +106,7 @@
             class="mt-4"
             color="warning"
         >
-            Reset Ordering
+            {{ t("Reset Ordering") }}
         </x-filament::button>
 
         <x-filament::button
@@ -114,7 +114,7 @@
             class="mt-4"
             color="success"
         >
-            Confirm Ordering
+            {{ t("Confirm Ordering") }}
         </x-filament::button>
     </div>
 </div>

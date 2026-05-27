@@ -25,6 +25,16 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
 
     protected ?string $heading = 'My Account';
 
+    public static function getNavigationLabel(): string
+    {
+        return t('My Account');
+    }
+
+    public function getHeading(): string
+    {
+        return t('My Account');
+    }
+
 
     /**
      * @throws \Exception

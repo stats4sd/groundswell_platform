@@ -13,7 +13,6 @@ use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -27,6 +26,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stats4sd\FilamentTeamManagement\Filament\App\Pages\RegisterTeam;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\SetLatestTeamMiddleware;
+use Tio\Laravel\Middleware\SetLocaleMiddleware;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -141,7 +141,11 @@ class AppPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 PanelsRenderHook::BODY_START,
-                fn () => view('filament.app.pages.info-panels.team-without-xlsform'),
+                fn () => view('filament.app.pages.info-panels.team-without-xlsform')
+            )
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn() => view('languageSelector'),
             )
             ->middleware([
                 EncryptCookies::class,
@@ -153,31 +157,32 @@ class AppPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SetLocaleMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
             ->navigationItems([
                 NavigationItem::make()
-                    ->label(__('Survey Dashboard'))
+                    ->label(fn() => t('Survey Dashboard'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('survey-dashboard')),
                 NavigationItem::make()
-                    ->label(__('Admin Panel'))
+                    ->label(fn() => t('Admin Panel'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('admin'))
                     ->visible(fn () => auth()->user()->can('access admin panel')),
                 NavigationItem::make()
-                    ->label(__('Program Admin Panel'))
+                    ->label(fn() => t('Program Admin Panel'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('program'))
                     ->visible(fn () => auth()->user()->can('access program admin panel')),
                 NavigationItem::make()
-                ->label(__('My Team'))
+                ->label(fn() => t('My Team'))
                 ->icon('heroicon-o-home')
                 ->url(fn() => ViewTeam::getUrl(['record' => Filament::getTenant()])),
                 NavigationItem::make()
-                ->label(__('Download User Guide'))
+                ->label(fn() => t('Download User Guide'))
                 ->icon('heroicon-o-arrow-down-tray')
                 ->url('#'),
             ])

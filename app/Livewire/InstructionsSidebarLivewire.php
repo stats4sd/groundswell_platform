@@ -32,7 +32,7 @@ class InstructionsSidebarLivewire extends Component implements HasActions, HasFo
     public function showInstructionsAction(): Action
     {
         return Action::make('showInstructions')
-            ->label('Instructions')
+            ->label(t('Instructions'))
             ->icon('heroicon-o-information-circle')
             ->extraAttributes(['class' => '!shadow-none !font-bold pl-4 pr-8 py-6 !text-sm '])
             ->color('none')

@@ -24,6 +24,7 @@ use Stats4sd\FilamentTeamManagement\Filament\Program\Pages\Dashboard;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\CheckIfProgramAdmin;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\SetLatestProgramMiddleware;
 use Stats4sd\FilamentTeamManagement\Models\Program;
+use Tio\Laravel\Middleware\SetLocaleMiddleware;
 
 class ProgramPanelProvider extends PanelProvider
 {
@@ -61,6 +62,10 @@ class ProgramPanelProvider extends PanelProvider
                 PanelsRenderHook::SIDEBAR_NAV_START,
                 fn () => view('filament-team-management::program-admin-panel-title'),
             )
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn() => view('languageSelector'),
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -71,6 +76,7 @@ class ProgramPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SetLocaleMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -78,7 +84,7 @@ class ProgramPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make()
-                    ->label(__('Return to Front end'))
+                    ->label(fn() => t('Return to Front end'))
                     ->icon('heroicon-o-home')
                     ->url(url('/app')),
             ])

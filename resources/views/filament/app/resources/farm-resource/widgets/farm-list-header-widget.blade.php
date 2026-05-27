@@ -1,6 +1,6 @@
 <x-filament-widgets::widget>
 <x-instructions-sidebar>
-        <x-slot:heading>Instructions</x-slot:heading>
+        <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
 
             {{-- <div class="pr-4 content-center  mx-auto my-4">

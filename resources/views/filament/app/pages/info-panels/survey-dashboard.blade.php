@@ -4,7 +4,7 @@
     <div class="container mx-auto xl:px-32">
 
         <!-- Heading -->
-        <h1 class="text-green  text-left  mb-12">HOLPA Survey Dashboard</h1>
+        <h1 class="text-green  text-left  mb-12">{{ t("HOLPA Survey Dashboard") }}</h1>
 
         <!-- Content -->
         <div class="grid grid-cols-6 md:grid-cols-2 gap-6 mb-14">
@@ -16,13 +16,13 @@
 
             <!-- Instructions -->
             <div class="rounded-md">
-                <h2 class="text-green mb-4">Instructions</h2>
-                <p class="text-brown mb-2">This is the HOLPA survey builder dashboard, designed to support and facilitate the customisation and delivery of the HOLPA survey, and allow teams to collect and manage HOLPA survey data.
-                    <a href="/#what-is-holpa" class="font-semibold text-blue hover:text-dark-blue">Find out more about HOLPA here. </a>
+                <h2 class="text-green mb-4">{{ t("Instructions") }}</h2>
+                <p class="text-brown mb-2">{{ t("This is the HOLPA survey builder dashboard, designed to support and facilitate the customisation and delivery of the HOLPA survey, and allow teams to collect and manage HOLPA survey data.") }}
+                    <a href="/#what-is-holpa" class="font-semibold text-blue hover:text-dark-blue">{{ t("Find out more about HOLPA here.") }} </a>
                 <p class="text-brown mb-8">
-                    The dashboard below sets out the tasks required to prepare and deliver the survey, tracks your progress, and will support you with customising and implementing the survey.
-                    The sections do not have to be completed in order (although making certain changes, such as adding another language, may require reviewing some sections). Changes can be made at any point, even if a section has already been marked as complete.
-                    You can mark each section as complete to help you keep track. </p>
+                    {{ t("The dashboard below sets out the tasks required to prepare and deliver the survey, tracks your progress, and will support you with customising and implementing the survey.") }}
+                    {{ t("The sections do not have to be completed in order (although making certain changes, such as adding another language, may require reviewing some sections). Changes can be made at any point, even if a section has already been marked as complete.") }}
+                    {{ t("You can mark each section as complete to help you keep track.") }} </p>
 
 
                 <!-- <div class="text-center">

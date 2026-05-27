@@ -13,7 +13,7 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
 
     <x-instructions-sidebar>
 
-        <x-slot:heading>Instructions</x-slot:heading>
+        <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
             {{-- <div class="pr-4 content-center mx-auto my-4">
             <iframe class="rounded-3xl" src="https://www.youtube.com/embed/TODO_ADD_VIDEO_ID" style="width: 560px; height: 315px;" frameborder="0" allowfullscreen></iframe>
