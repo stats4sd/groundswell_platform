@@ -2,8 +2,6 @@
 
 namespace Database\Seeders\Test;
 
-use App\Models\Holpa\GlobalIndicator;
-use App\Models\Holpa\LocalIndicator;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Contracts\Container\BindingResolutionException;

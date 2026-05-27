@@ -7,32 +7,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-27T12:39:58+00:00\n"
-"PO-Revision-Date: 2026-05-27 12:39+0000\n"
+"POT-Creation-Date: 2026-05-27T14:53:47+00:00\n"
+"PO-Revision-Date: 2026-05-27 14:53+0000\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
-
-#: app\Filament\Admin\Resources\ThemeResource.php:28
-#: app\Filament\Admin\Resources\ThemeResource.php:49
-msgid "Module"
-msgstr ""
-
-#: app\Filament\Admin\Resources\ThemeResource.php:31
-#: app\Filament\Admin\Resources\ThemeResource.php:53
-msgid "Domain"
-msgstr ""
-
-#: app\Filament\Admin\Resources\ThemeResource.php:34
-#: app\Filament\Admin\Resources\ThemeResource.php:45
-#: app\Filament\App\Resources\TeamResource.php:37
-#: app\Filament\App\Resources\TeamResource.php:51
-#: resources\views\emails\register-interest-email.blade.php:5
-msgid "Name"
-msgstr "Nombre"
-
-#: app\Filament\Admin\Resources\ThemeResource.php:57
-msgid "# Global indicators"
-msgstr ""
 
 #: app\Filament\App\Pages\Auth\EditProfile.php:30
 #: app\Filament\App\Pages\Auth\EditProfile.php:35
@@ -176,6 +154,12 @@ msgstr ""
 #: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:50
 msgid "Updated At"
 msgstr ""
+
+#: app\Filament\App\Resources\TeamResource.php:37
+#: app\Filament\App\Resources\TeamResource.php:51
+#: resources\views\emails\register-interest-email.blade.php:5
+msgid "Name"
+msgstr "Nombre"
 
 #: app\Filament\App\Resources\TeamResource.php:41
 msgid "Description"
@@ -1416,15 +1400,15 @@ msgid "Customise details for questions and answer options to ensure the survey i
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:294
-msgid "Localisation: LISP"
+msgid "Localisation: Optional Modules"
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:295
-msgid "The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool."
+msgid "Add optionals modules to the survey."
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:332
-msgid "Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators."
+msgid "Conduct a pilot run of the survey, both for quality control of the customised survey and training of enumerators."
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:342
@@ -1632,11 +1616,26 @@ msgstr ""
 msgid "Survey Tool"
 msgstr ""
 
+#: resources\views\livewire\cover-page.blade.php:87
+#: resources\views\livewire\cover-page.blade.php:182
+msgid "Log in"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:106
+#: resources\views\livewire\cover-page.blade.php:158
+msgid "Surveys"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:107
+msgid "Read more about the surveys."
+msgstr ""
+
 #: resources\views\livewire\cover-page.blade.php:110
 msgid "Find out more"
 msgstr ""
 
 #: resources\views\livewire\cover-page.blade.php:119
+#: resources\views\livewire\cover-page.blade.php:170
 msgid "Online Tool"
 msgstr ""
 
@@ -1644,20 +1643,49 @@ msgstr ""
 msgid "An online interface to help you tailor the surveys to your context and conduct a survey."
 msgstr ""
 
-#: resources\views\livewire\cover-page.blade.php:136
-msgid "Learn More"
+#: resources\views\livewire\cover-page.blade.php:123
+msgid "Read more"
 msgstr ""
 
-#: resources\views\livewire\cover-page.blade.php:182
-msgid "Log in"
-msgstr ""
-
+#: resources\views\livewire\cover-page.blade.php:132
 #: resources\views\livewire\cover-page.blade.php:200
 msgid "Results"
 msgstr "Resultados"
 
+#: resources\views\livewire\cover-page.blade.php:133
+msgid "Results from previous implementations."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:136
+msgid "Learn More"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:140
+msgid "Previous Surveys"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:160
+msgid "Groundswell International develops and implements surveys to support data collection, learning, monitoring, and evaluation across a range of programmes and contexts. Surveys can be adapted to different projects, stakeholder groups, and implementation settings, enabling teams to collect meaningful and context-specific information to support decision-making, reporting, and programme improvement. The survey approach supports flexible digital data collection, customised indicators, and streamlined analysis workflows, helping teams manage and interpret data efficiently across multiple locations and activities."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:172
+msgid "Teams wishing to implement Groundswell International surveys can request access to the online platform designed to support the setup, customisation, deployment, and management of surveys across different contexts."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:175
+msgid "The platform guides users through the process of adapting survey modules, configuring indicators, implementing data collection activities, and accessing results and reporting features."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:178
+msgid "For more information, or to register your interest in using the platform, please use the links below. Existing users can log in using their account credentials."
+msgstr ""
+
 #: resources\views\livewire\cover-page.blade.php:201
 msgid "The tool has been applied across multiple countries and programme contexts. Results dashboards and country reports enable users to explore findings, compare indicators, and visualise trends across implementations."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:203
+msgid "View Dashboard"
 msgstr ""
 
 #: resources\views\livewire\lisp\custom-module-ordering.blade.php:4

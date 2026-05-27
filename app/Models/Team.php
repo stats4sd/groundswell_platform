@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Holpa\LocalIndicator;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
@@ -121,8 +120,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('local_indicators')
-            ->singleFile();
 
         $this->addMediaCollection('custom_questions')
             ->singleFile();
@@ -154,12 +151,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     public function teamMemberships(): HasMany
     {
         return $this->hasMany(TeamMembership::class);
-    }
-
-    /** @return HasMany<LocalIndicator, $this> */
-    public function localIndicators(): HasMany
-    {
-        return $this->hasMany(LocalIndicator::class);
     }
 
     /** @return BelongsTo<Country, $this> */
@@ -276,8 +267,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
                 if ($this->lisp_complete) {
                     return 'complete';
                 }
-
-                return $this->localIndicators()->exists() ? 'in_progress' : 'not_started';
 
             }
         );
