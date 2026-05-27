@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\SurveyRow;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
 class DietDiversity extends Page implements HasForms, HasTable
@@ -102,6 +103,14 @@ class DietDiversity extends Page implements HasForms, HasTable
             $moduleVersion = XlsformModuleVersion::where('is_default', 1)
                 ->whereHas('xlsformModule', fn ($query) => $query->where('name', 'diet_diversity'))
                 ->first();
+        }
+
+        // add a null guard to prevent error if team has no country and no default module configured
+        if (!$moduleVersion) {
+            return $table
+                ->query(fn () => SurveyRow::query()->whereRaw('1 = 0'))
+                ->paginated(false)
+                ->columns([]);
         }
 
         return $table

@@ -7,6 +7,7 @@ use App\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\App\Resources\SubmissionResource;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Collection;
 
 class ListSubmissions extends ListRecords
 {
@@ -15,6 +16,22 @@ class ListSubmissions extends ListRecords
     protected ?string $heading = 'Test Submissions';
 
     protected static string $view = 'filament.app.resources.submission-resource.pages.view-submission';
+
+    /** @var Collection<SurveyRow> */
+    public Collection $surveyRows;
+
+    /** @var Collection<Collection> */
+    public Collection $surveyRowData;
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        // a quick temporary workaround to avoid error occurred
+        // TODO: find actual data for surveyRows and surveyRowData
+        $this->surveyRows = collect();
+        $this->surveyRowData = collect();
+    }
 
     public function getBreadcrumbs(): array
     {
