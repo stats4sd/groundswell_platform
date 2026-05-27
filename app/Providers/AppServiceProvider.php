@@ -11,6 +11,7 @@ use App\Models\Team;
 use App\Models\User;
 use App\Policies\ChoiceListPolicy;
 use App\Policies\DatasetPolicy;
+use App\Policies\DatasetVariablePolicy;
 use App\Policies\DomainPolicy;
 use App\Policies\FarmPolicy;
 use App\Policies\GlobalIndicatorPolicy;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
@@ -69,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(XlsformModuleVersion::class, XlsformModuleVersionPolicy::class);
         Gate::policy(XlsformTemplate::class, XlsformTemplatePolicy::class);
         Gate::policy(Dataset::class, DatasetPolicy::class);
+        Gate::policy(DatasetVariable::class, DatasetVariablePolicy::class);
         Gate::policy(LocationLevel::class, LocationLevelPolicy::class);
         Gate::policy(Farm::class, FarmPolicy::class);
 
