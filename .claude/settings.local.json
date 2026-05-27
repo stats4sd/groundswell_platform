@@ -1,12 +1,13 @@
 {
   "permissions": {
     "allow": [
-        "Bash(php artisan *)",
-        "Bash(grep *)",
-        "Bash(xargs grep -l *')",
-        "Bash(vendor/bin/phpstan --version)",
-        "Bash(vendor/bin/pest --version)",
-        "Bash(vendor/bin/phpstan analyse *)"
+      "Bash(php artisan *)",
+      "Bash(grep *)",
+      "Bash(xargs grep -l *')",
+      "Bash(vendor/bin/phpstan --version)",
+      "Bash(vendor/bin/pest --version)",
+      "Bash(vendor/bin/phpstan analyse *)",
+      "Bash(xargs ls -la)"
     ]
   }
 }
