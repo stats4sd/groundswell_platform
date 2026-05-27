@@ -102,7 +102,6 @@ describe('Admin panel CRUD — Theme', function () {
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
         withAdminPanel();
-        $this->domain = Domain::first();
     });
 
     test('theme list shows existing records', function () {
@@ -119,7 +118,7 @@ describe('Admin panel CRUD — Theme', function () {
 
     test('can create theme', function () {
         livewire(CreateTheme::class)
-            ->fillForm(['name' => 'New Theme', 'module' => 'TestModule', 'domain_id' => $this->domain->id])
+            ->fillForm(['name' => 'New Theme', 'module' => 'TestModule', 'domain_id' => Domain::first()->id])
             ->call('create')
             ->assertHasNoFormErrors();
 
@@ -167,8 +166,9 @@ describe('Admin panel CRUD — GlobalIndicator', function () {
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
-        withAdminPanel();
+
         $this->theme = Theme::first();
+        withAdminPanel();
     });
 
     test('global indicator list shows existing records', function () {

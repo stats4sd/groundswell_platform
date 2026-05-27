@@ -18,3 +18,5 @@ parameters:
         - '#Access to an undefined property [a-zA-Z\\_]+::\$form.#'
         - message: '#Call to protected method .+ of class Illuminate\\Foundation\\Testing\\TestCase#'
           path: tests/*
+        - '#Call to an undefined method Illuminate\\Testing\\TestResponse::assertSeeLivewire\(\)#'
+
