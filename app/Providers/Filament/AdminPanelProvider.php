@@ -21,6 +21,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stats4sd\FilamentOdkLink\OdkLinkAdmin;
 use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\CheckIfAdmin;
+use Tio\Laravel\Middleware\SetLocaleMiddleware;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -51,6 +52,10 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::SIDEBAR_NAV_START,
                 fn () => view('filament-team-management::admin-panel-title'),
             )
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn() => view('languageSelector'),
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -61,13 +66,14 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SetLocaleMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
                 CheckIfAdmin::class,
             ])->navigationItems([
                 NavigationItem::make()
-                    ->label(__('Return to Front end'))
+                    ->label(fn() => t('Return to Front end'))
                     ->icon('heroicon-o-home')
                     ->url(url('/app'))
                     ->sort(1),
