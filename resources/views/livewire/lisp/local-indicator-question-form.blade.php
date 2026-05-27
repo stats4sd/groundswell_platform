@@ -8,9 +8,9 @@
 
             <button class="text-brown text-nowrap flex items-center justify-between" wire:click="$toggle('expanded')">
                 @if($expanded)
-                <x-heroicon-o-chevron-up class="h-6 font-bold text-lg pe-4" />Hide Questions
+                <x-heroicon-o-chevron-up class="h-6 font-bold text-lg pe-4" />{{ t("Hide Questions") }}
                 @else
-                <x-heroicon-o-chevron-down class="h-6 font-bold text-lg pe-4" />Show Questions
+                <x-heroicon-o-chevron-down class="h-6 font-bold text-lg pe-4" />{{ t("Show Questions") }}
                 @endif
             </button>
         </div>

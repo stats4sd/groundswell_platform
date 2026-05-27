@@ -10,6 +10,7 @@ use Filament\Support\Enums\MaxWidth;
 class SurveyLanguagesIndex extends Page
 {
     use WithCompletionStatusBar;
+
     public string $completionProp = 'languages_complete';
 
     protected static string $view = 'filament.app.pages.survey-languages.survey-languages-index';
@@ -22,11 +23,21 @@ class SurveyLanguagesIndex extends Page
 
     protected $listeners = ['refreshPage' => '$refresh'];
 
+    public function getTitle(): string
+    {
+        return t('Survey Languages');
+    }
+
+    public function getSummary(): string
+    {
+        return t('Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template.');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            static::getUrl() => static::getTitle(),
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            static::getUrl() => $this->getTitle(),
         ];
     }
 

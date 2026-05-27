@@ -21,6 +21,16 @@ class SurveyDashboard extends Page
 
     public Team $team;
 
+    public static function getNavigationLabel(): string
+    {
+        return t('Survey Dashboard');
+    }
+
+    public function getTitle(): string
+    {
+        return t('Survey Dashboard');
+    }
+
     public function getHeader(): ?View
     {
         return view('components.survey-dashboard-header');

@@ -17,7 +17,7 @@ class GlobalIndicatorResource extends Resource
     protected static ?string $model = GlobalIndicator::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
-    protected static ?string $navigationGroup = 'HOLPA Indicators';
+    protected static ?string $navigationGroup = 'Indicators';
 
     // protected static ?int $navigationSort = 3;
 

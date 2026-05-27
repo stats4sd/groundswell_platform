@@ -53,8 +53,8 @@ class ContextQuestions extends Page implements HasActions, HasForms, HasTable
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            SurveyLocationsIndex::getUrl() => 'Survey locations',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLocationsIndex::getUrl() => t('Survey locations'),
             static::getUrl() => static::getTitle(),
         ];
     }

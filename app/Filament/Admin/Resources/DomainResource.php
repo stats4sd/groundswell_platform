@@ -15,7 +15,7 @@ class DomainResource extends Resource
     protected static ?string $model = Domain::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-    protected static ?string $navigationGroup = 'HOLPA Indicators';
+    protected static ?string $navigationGroup = 'Indicators';
     // protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
