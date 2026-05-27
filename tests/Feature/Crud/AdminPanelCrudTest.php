@@ -1,20 +1,16 @@
 <?php
 
-use function Pest\Livewire\livewire;
-
 use App\Filament\Admin\Resources\DomainResource\Pages\CreateDomain;
 use App\Filament\Admin\Resources\DomainResource\Pages\EditDomain;
 use App\Filament\Admin\Resources\DomainResource\Pages\ListDomains;
 use App\Filament\Admin\Resources\GlobalIndicatorResource\Pages\CreateGlobalIndicator;
 use App\Filament\Admin\Resources\GlobalIndicatorResource\Pages\EditGlobalIndicator;
 use App\Filament\Admin\Resources\GlobalIndicatorResource\Pages\ListGlobalIndicators;
+use App\Filament\Admin\Resources\TeamResource\Pages\CreateTeam;
+use App\Filament\Admin\Resources\TeamResource\Pages\ListTeams;
 use App\Filament\Admin\Resources\ThemeResource\Pages\CreateTheme;
 use App\Filament\Admin\Resources\ThemeResource\Pages\EditTheme;
 use App\Filament\Admin\Resources\ThemeResource\Pages\ListThemes;
-use App\Filament\Admin\Resources\TeamResource\Pages\CreateTeam;
-use App\Filament\Admin\Resources\TeamResource\Pages\ListTeams;
-use App\Filament\Admin\Resources\TeamResource\Pages\ViewTeam;
-use App\Filament\Admin\Resources\TeamResource\Pages\EditTeam;
 use App\Models\Holpa\Domain;
 use App\Models\Holpa\GlobalIndicator;
 use App\Models\Holpa\Theme;
@@ -24,22 +20,23 @@ use Filament\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\DatasetResource\Pages\CreateDataset;
-use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\DatasetResource\Pages\EditDataset;
-use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\DatasetResource\Pages\ListDatasets;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModuleResource\Pages\ManageXlsformModule;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModuleVersionResource\Pages\ManageXlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\CreateUser;
 use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\EditUser;
 use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\ListUsers;
+
+use function Pest\Livewire\livewire;
 
 describe('Admin panel CRUD — Domain', function () {
 
     beforeEach(function () {
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
+        $user = new User();
+
         withAdminPanel();
     });
 
@@ -324,8 +321,8 @@ describe('Admin panel CRUD — User', function () {
     test('can create user', function () {
         livewire(CreateUser::class)
             ->fillForm([
-                'name'     => 'Test User',
-                'email'    => 'testuser@example.com',
+                'name' => 'Test User',
+                'email' => 'testuser@example.com',
                 'password' => 'password123',
             ])
             ->call('create')
@@ -442,7 +439,7 @@ describe('Admin panel CRUD — XlsformModule', function () {
             ->callAction(CreateAction::class, data: [
                 'xlsform_template_id' => $this->xlsformTemplate->id,
                 'label' => 'Test Module',
-                'name'  => 'test_module',
+                'name' => 'test_module',
             ])
             ->assertHasNoActionErrors();
 
@@ -454,7 +451,7 @@ describe('Admin panel CRUD — XlsformModule', function () {
             ->callAction(CreateAction::class, data: [
                 'xlsform_template_id' => $this->xlsformTemplate->id,
                 'label' => 'Missing Name',
-                'name'  => '',
+                'name' => '',
             ])
             ->assertHasActionErrors(['name' => 'required']);
     });
@@ -488,7 +485,7 @@ describe('Admin panel CRUD — XlsformModuleVersion', function () {
         $this->xlsformModule = XlsformModule::forceCreate([
             'xlsform_template_id' => $xlsformTemplate->id,
             'label' => 'Test Module',
-            'name'  => 'test_module',
+            'name' => 'test_module',
         ]);
     });
 
@@ -500,14 +497,14 @@ describe('Admin panel CRUD — XlsformModuleVersion', function () {
         livewire(ManageXlsformModuleVersion::class)
             ->callAction(CreateAction::class, data: [
                 'xlsform_module_id' => $this->xlsformModule->id,
-                'name'              => 'v1',
-                'is_default'        => true,
+                'name' => 'v1',
+                'is_default' => true,
             ])
             ->assertHasNoActionErrors();
 
         $this->assertDatabaseHas('xlsform_module_versions', [
             'xlsform_module_id' => $this->xlsformModule->id,
-            'name'              => 'v1',
+            'name' => 'v1',
         ]);
     });
 

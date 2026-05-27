@@ -1,22 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php artisan *)",
-      "Read(//tmp/**)",
-      "Bash(grep 'protected static.*$model\\\\|getModel' /Users/dave/Sites/groundswell_platform/app/Filament/Admin/Resources/GlobalIndicatorResource.php)",
-      "Bash(grep 'protected static.*$model\\\\|getModel' /Users/dave/Sites/groundswell_platform/app/Filament/App/Clusters/Localisations/Resources/ChoiceListEntryResource.php)",
-      "Bash(grep 'protected static.*$model\\\\|getModel' /Users/dave/Sites/groundswell_platform/app/Filament/App/Clusters/LocationLevels/Resources/LocationLevelResource.php)",
-      "Bash(grep 'protected static.*$model\\\\|getModel' /Users/dave/Sites/groundswell_platform/app/Filament/App/Clusters/LocationLevels/Resources/FarmResource.php)",
-      "Bash(grep -r 'protected static.*slug\\\\|getSlug\\\\|$slug\\\\|->slug' /Users/dave/Sites/groundswell_platform/app/Filament '--include=*.php')",
-      "Bash(xargs grep -l 'getSlug\\\\|slug\\\\|$slug')",
-      "Bash(grep -rh 'protected static.*slug\\\\|getSlug\\\\|$slug' /Users/dave/Sites/groundswell_platform/app/Filament/App/Resources '--include=*.php')",
-      "Bash(grep -rh 'protected static string $navigationGroup\\\\|$navigationGroup\\\\|protected static.*model\\\\|getModel\\(\\)' /Users/dave/Sites/groundswell_platform/app/Filament/App/Resources '--include=*.php')",
-      "Bash(grep -i \"Resource.php$\")",
-      "Bash(grep -rh 'protected static string $slug\\\\b' /Users/dave/Sites/groundswell_platform/vendor/stats4sd/filament-odk-link/src/Filament/OdkAdmin '--include=*.php')",
-      "Bash(grep -rh 'protected static.*$slug\\\\|getSlug' /Users/dave/Sites/groundswell_platform/app/Filament/App/Clusters '--include=*.php')",
-      "Bash(grep -rh 'protected static.*$slug' /Users/dave/Sites/groundswell_platform/app/Filament/Admin/Resources '--include=*.php')",
-      "Bash(grep -rh 'protected static.*$slug' /Users/dave/Sites/groundswell_platform/vendor/stats4sd/filament-team-management/src/Filament '--include=*.php')",
-      "Bash(grep -rh 'protected static.*$slug' /Users/dave/Sites/groundswell_platform/vendor/stats4sd/filament-odk-link/src/Filament '--include=*.php')"
+        "Bash(php artisan *)",
+        "Bash(grep *)",
+        "Bash(xargs grep -l *')",
+        "Bash(vendor/bin/phpstan --version)",
+        "Bash(vendor/bin/pest --version)",
+        "Bash(vendor/bin/phpstan analyse *)"
     ]
   }
 }
