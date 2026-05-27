@@ -129,7 +129,8 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                     ->color('white')
                     ->label('View / Edit Translation')
                     ->modalHeading(fn (Locale $record) => 'View / Edit Translation for '.$record->language_label)
-                    ->modalContent(fn (Locale $record) => view('team-translation-review', [
+                    ->modalContent(fn (Locale $record) => view('
+                    team-translation-review', [
                         'locale' => $record,
                         'team' => $this->team,
                         'canMaintain' => auth()->user()->can('maintain survey translations'),

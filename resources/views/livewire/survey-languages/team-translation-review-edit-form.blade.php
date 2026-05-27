@@ -5,7 +5,7 @@
         <div class="my-4 flex justify-end">
             <button class="buttonb" wire:click="cancel">Cancel</button>
 
-            @if($canMaintain)
+            @can('maintain survey translations')
                 <button class="buttona" wire:click="duplicate">Duplicate</button>
 
                 @if($canSave)
