@@ -78,7 +78,7 @@
 
                                 <!-- Login Button -->
                                 <a 
-                                    href="{{ url('app") }}" 
+                                    href="{{ url('app') }}" 
                                     class="border-2 rounded-full px-6 py-2 text-white uppercase text-base font-semibold leading-none hover:bg-white hover:text-black transition text-center"
                                 >
                                     {{ t("Log in") }}
@@ -102,7 +102,7 @@
                             <h3 class="text-white uppercase text-lg lg:text-xl mb-4 lg:my-4">{{ t("Surveys") }}</h3>
                             <p class="mb-4 lg:mb-6">{{ t("Read more about the surveys.") }}</p>
                         </div>
-                        <a href="{{ url('#what-is-holpa") }}" class="button bg-orange hover:bg-white uppercase b-white border-2 rounded-full  px-4 py-2 text-white hover:text-orange font-semibold w-auto flex justify-center items-center text-center">
+                        <a href="{{ url('#what-is-holpa') }}" class="button bg-orange hover:bg-white uppercase b-white border-2 rounded-full  px-4 py-2 text-white hover:text-orange font-semibold w-auto flex justify-center items-center text-center">
                             {{ t("Find out more") }}
                         </a>
                     </div>
@@ -114,7 +114,7 @@
                             <h3 class=" text-white uppercase text-lg lg:text-xl mb-4 lg:my-4">{{ t("Online Tool") }}</h3>
                             <p class="mb-4 lg:mb-6">{{ t("An online interface to help you tailor the surveys to your context and conduct a survey.") }}</p>
                         </div>
-                        <a href="{{ url('#online-tool") }}" class="button bg-green hover:bg-white uppercase b-white border-2 rounded-full  px-4 py-2 text-white hover:text-green font-semibold w-auto flex justify-center items-center text-center">
+                        <a href="{{ url('#online-tool') }}" class="button bg-green hover:bg-white uppercase b-white border-2 rounded-full  px-4 py-2 text-white hover:text-green font-semibold w-auto flex justify-center items-center text-center">
                             {{ t("Read more") }}
                         </a>
                     </div>
@@ -126,10 +126,10 @@
                             <h3 class="text-white uppercase text-lg lg:text-xl mb-4 lg:my-4">{{ t("Results") }}</h3>
                             <p class="mb-4 lg:mb-6">{{ t("Results from previous implementations.") }}</p>
                         </div>
-                        <a href="{{ url('#results") }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white uppercase hover:text-blue font-semibold w-auto flex justify-center items-center text-center mb-4">
+                        <a href="{{ url('#results') }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white uppercase hover:text-blue font-semibold w-auto flex justify-center items-center text-center mb-4">
                             {{ t("Learn More") }}
                         </a>
-                        <a href="{{ url('results") }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full  px-4 py-2 text-white uppercase hover:text-blue font-semibold w-auto flex justify-center items-center text-center">
+                        <a href="{{ url('results') }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full  px-4 py-2 text-white uppercase hover:text-blue font-semibold w-auto flex justify-center items-center text-center">
                             {{ t("Previous Surveys") }}
                         </a>
                     </div>
@@ -167,7 +167,7 @@
                     {{ t("For more information, or to register your interest in using the platform, please use the links below. Existing users can log in using their account credentials.") }}
                 </p>
                 <div class="mt-8 place-content-center flex flex-row w-full">
-                    <a href="{{ url('app") }} " class="button uppercasere bg-blue hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white hover:text-blue font-semibold w-auto flex justify-center items-center text-center mx-2">{{ t("Log in") }}</a>
+                    <a href="{{ url('app') }} " class="button uppercasere bg-blue hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white hover:text-blue font-semibold w-auto flex justify-center items-center text-center mx-2">{{ t("Log in") }}</a>
                     {{ $this->registerInterestAction }}
                 </div>
             </div>
@@ -186,7 +186,7 @@
             <div class="col-span-1  flex-col px-16 place-content-center">
                 <h3 class="text-3xl mb-8">{{ t("Results") }}</h3>
                 <p class="mb-8">{{ t("The tool has been applied across multiple countries and programme contexts. Results dashboards and country reports enable users to explore findings, compare indicators, and visualise trends across implementations.") }}</p>
-                <a href="{{ url('results") }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white hover:text-blue uppercase font-semibold w-auto flex justify-center items-center text-center">
+                <a href="{{ url('results') }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white hover:text-blue uppercase font-semibold w-auto flex justify-center items-center text-center">
                     {{ t("View Dashboard") }}
                 </a>
                 </p>
