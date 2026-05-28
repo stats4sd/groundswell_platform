@@ -239,8 +239,8 @@ EOT;
                         <div class="whiteborderbox">
                             <div class=" whitecard ">
                                 <div class="dashdescdiv">
-                                    <h3 class="mb-2">{{ t("Localisation: LISP") }}</h3>
-                                    <p class="mb-4">{{ t("The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool.") }}</p>
+                                    <h3 class="mb-2">{{ t("Localisation: Optional Modules") }}</h3>
+                                    <p class="mb-4">{{ t("Add optionals modules to the survey.") }}</p>
                                 </div>
                                 <div class="dashbuttondiv">
                                     @if ($team->lisp_progress === 'not_started')
@@ -276,7 +276,7 @@ EOT;
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
                                 <h3 class="mb-2">{{ t("Localisation: Pilot") }}</h3>
-                                <p class="mb-4">{{ t("Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators.") }}
+                                <p class="mb-4">{{ t("Conduct a pilot run of the survey, both for quality control of the customised survey and training of enumerators.") }}
                                 </p>
                             </div>
                             <div class="dashbuttondiv">
