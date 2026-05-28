@@ -1,11 +1,11 @@
 <?php
 
-use function Pest\Livewire\livewire;
-
 use Stats4sd\FilamentTeamManagement\Filament\Program\Resources\ProgramResource\Pages\CreateProgram;
 use Stats4sd\FilamentTeamManagement\Filament\Program\Resources\ProgramResource\Pages\EditProgram;
 use Stats4sd\FilamentTeamManagement\Filament\Program\Resources\ProgramResource\Pages\ListPrograms;
 use Stats4sd\FilamentTeamManagement\Models\Program;
+
+use function Pest\Livewire\livewire;
 
 describe('Program panel CRUD — Program', function () {
 
@@ -19,6 +19,30 @@ describe('Program panel CRUD — Program', function () {
     test('program list shows current program', function () {
         livewire(ListPrograms::class)
             ->assertCanSeeTableRecords([$this->program]);
+    });
+
+    test('program edit page loads', function () {
+        $this->get("/program/{$this->program->id}/programs/{$this->program->id}/edit")->assertOk();
+    });
+
+    test('can edit program', function () {
+        livewire(EditProgram::class, ['record' => $this->program->id])
+            ->fillForm(['name' => 'Updated Program'])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $this->assertDatabaseHas('programs', ['id' => $this->program->id, 'name' => 'Updated Program']);
+    });
+});
+
+// Only admin users can create programs, so describe a different set of tests for 'create' operations:
+describe('Program panel CRUD - Admin User', function () {
+
+    beforeEach(function () {
+        $this->program = Program::create(['name' => 'Test Program']);
+        $this->superAdmin = createSuperAdmin();
+        $this->actingAs($this->superAdmin);
+        withProgramTenant($this->program);
     });
 
     test('program create page loads', function () {
@@ -40,18 +64,4 @@ describe('Program panel CRUD — Program', function () {
             ->call('create')
             ->assertHasFormErrors(['name' => 'required']);
     });
-
-    test('program edit page loads', function () {
-        $this->get("/program/{$this->program->id}/programs/{$this->program->id}/edit")->assertOk();
-    });
-
-    test('can edit program', function () {
-        livewire(EditProgram::class, ['record' => $this->program->id])
-            ->fillForm(['name' => 'Updated Program'])
-            ->call('save')
-            ->assertHasNoFormErrors();
-
-        $this->assertDatabaseHas('programs', ['id' => $this->program->id, 'name' => 'Updated Program']);
-    });
-
 });
