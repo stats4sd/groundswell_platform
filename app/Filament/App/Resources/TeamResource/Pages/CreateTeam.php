@@ -2,8 +2,8 @@
 
 namespace App\Filament\App\Resources\TeamResource\Pages;
 
+use App\Filament\App\Resources\TeamResource;
 use Filament\Resources\Pages\CreateRecord;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\TeamResource;
 
 class CreateTeam extends CreateRecord
 {

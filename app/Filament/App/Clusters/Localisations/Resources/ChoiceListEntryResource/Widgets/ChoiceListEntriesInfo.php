@@ -24,9 +24,17 @@ class ChoiceListEntriesInfo extends Widget
     public ChoiceList $choiceList;
 
     public function mount(): void
-    {
+    {   
+        // only find choice list by list name if list name is not empty
+        if ($this->choiceListName) {
+            $this->choiceList = ChoiceList::query()->where('list_name', $this->choiceListName)->first();
+        } else {
+            // when user click "ADD NEW" button, error occurred because $this->choiceList must not be accessed before initialization
 
-        $this->choiceList = ChoiceList::query()->where('list_name', $this->choiceListName)->first();
+            // TODO: initialise choice list
+            // Question: how to initialise choice list when choice list name is not available?
+            
+        }
 
         $this->refreshSurveyRows();
     }

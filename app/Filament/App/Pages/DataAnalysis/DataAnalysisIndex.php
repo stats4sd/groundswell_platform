@@ -3,6 +3,7 @@
 namespace App\Filament\App\Pages\DataAnalysis;
 
 use App\Filament\Actions\ExportDataAction;
+use App\Filament\Shared\WithCompletionStatusBar;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Services\HelperService;
 use Filament\Actions\Action;
@@ -18,6 +19,9 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
+    use WithCompletionStatusBar;
+
+    public string $completionProp = 'data_analysis_complete';
 
     protected static string $view = 'filament.app.pages.data-analysis.data-analysis-index';
 

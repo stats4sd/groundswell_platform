@@ -7,6 +7,7 @@ use App\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\App\Resources\SubmissionResource;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Collection;
 
 class ListSubmissions extends ListRecords
 {

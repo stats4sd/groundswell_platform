@@ -34,12 +34,18 @@ class ListChoiceListEntries extends ListRecords
         parent::mount();
 
         if (!$this->choiceListName) {
-            $this->choiceList = ChoiceList::where('is_localisable', true)
+            // choiceListName is not available, find the first choice list
+            $firstChoiceList = ChoiceList::where('is_localisable', true)
                 ->where('has_custom_handling', false)
                 ->first();
 
-            $this->choiceListName = $this->choiceList->list_name;
+            // if first choice list is existed
+            if ($firstChoiceList) {
+                $this->choiceList = $firstChoiceList;
+                $this->choiceListName = $this->choiceList->list_name;
+            }
         } else {
+            // choiceListName is available, use choice list name to find choice list
             $this->choiceList = ChoiceList::where('list_name', $this->choiceListName)->first();
         }
     }
