@@ -85,37 +85,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
             $owner->save();
         });
 
-        static::saved(static function (self $owner) {
-            // if the diet_diversity module is updated, add that module into the household survey
-            if ($owner->isDirty('diet_diversity_module_version_id')) {
-                $newModuleVersion = $owner->dietDiversityModuleVersion;
-
-                // Update all forms with the diet diversity module
-                $owner->xlsforms()
-                    ->with('xlsformModuleVersions.xlsformModule')
-                    // only edit forms with the diet diversity module
-                    ->whereHas('xlsformModuleVersions.xlsformModule', function (Builder $query) {
-                        $query->where('xlsform_modules.name', 'diet_diversity');
-                    })
-                    ->get()
-                    ->each(function (Xlsform $xlsform) use ($newModuleVersion) {
-
-                        // Identify and remove the current DD module version
-                        $currentDDModule = $xlsform->xlsformModuleVersions->filter(fn(XlsformModuleVersion $xlsformModuleVersion) => $xlsformModuleVersion->xlsformModule?->name === 'diet_diversity')->first();
-
-                        $order = $currentDDModule->pivot->order;
-                        $xlsform->xlsformModuleVersions()->detach($currentDDModule->id);
-
-                        // Attach the new module version with the same order value (so it is included in the same position)
-                        $xlsform->xlsformModuleVersions()->attach($newModuleVersion->id, ['order' => $order]);
-
-                        $xlsform->draft_needs_update = true;
-                        $xlsform->save();
-
-                    });
-            }
-
-        });
     }
 
     public function registerMediaCollections(): void
@@ -185,12 +154,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 
     // Customisations
 
-    /** @return BelongsTo<XlsformModuleVersion, $this> */
-    public function dietDiversityModuleVersion(): BelongsTo
-    {
-        return $this->belongsTo(XlsformModuleVersion::class, 'diet_diversity_module_version_id');
-    }
-
     /** @return HasOne<XlsformModuleVersion, $this> */
     public function localContextModuleVersion(): HasOne
     {
@@ -248,7 +211,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 
                 if (
                     $this->time_frame !== null ||
-                    $this->diet_diversity_module_version_id !== null ||
                     $this->choiceListEntries()->exists()
                 ) {
                     return 'in_progress';

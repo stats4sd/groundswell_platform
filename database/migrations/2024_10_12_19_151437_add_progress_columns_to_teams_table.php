@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->boolean('languages_complete')->after('diet_diversity_module_version_id')->default(0);
+            $table->boolean('languages_complete')->after('updated_at')->default(0);
             $table->boolean('sampling_complete')->after('languages_complete')->default(0);
             $table->boolean('pba_complete')->after('sampling_complete')->default(0);
             $table->boolean('lisp_complete')->after('pba_complete')->default(0);
