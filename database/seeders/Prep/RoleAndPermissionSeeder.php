@@ -13,11 +13,11 @@ class RoleAndPermissionSeeder extends Seeder
     public function run(): void
     {
         // create roles
-        $superAdminRole = Role::create(['name' => 'Super Admin']);
-        $globalViewerRole = Role::create(['name' => 'Global Viewer']);
-        $programAdminRole = Role::create(['name' => 'Program Admin']);
-        $programViewerRole = Role::create(['name' => 'Program Viewer']);
-        $teamAdminRole = Role::create(['name' => 'Team Admin']);
+        $superAdminRole = Role::updateOrCreate(['name' => 'Super Admin']);
+        $globalViewerRole = Role::updateOrCreate(['name' => 'Global Viewer']);
+        $programAdminRole = Role::updateOrCreate(['name' => 'Program Admin']);
+        $programViewerRole = Role::updateOrCreate(['name' => 'Program Viewer']);
+        $teamAdminRole = Role::updateOrCreate(['name' => 'Team Admin']);
 
 
         // create permissions
