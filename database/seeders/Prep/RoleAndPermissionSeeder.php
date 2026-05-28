@@ -104,9 +104,16 @@ class RoleAndPermissionSeeder extends Seeder
         ];
 
 
-        // create all permissions, assign all permissions to Super Admin role
+        // create permissions, then clear all role assignments before re-assigning below
+        // (prevents removed permissions from persisting across seeder runs)
+        foreach ([$superAdminRole, $globalViewerRole, $programAdminRole, $programViewerRole, $teamAdminRole] as $role) {
+            $role->syncPermissions([]);
+        }
+
+        // assign all permissions to Super Admin role
         // Super Admin = Admin Panel, Program Admin Panel, App Panel, with view permissions and maintain permissions
-        $superAdminRole->permissions()->createMany($permissions);
+        $superAdminRole->givePermissionTo(array_column($permissions, 'name'));
+
 
         // assign permissions to Global Viewer role
         // Global Viewer = Super Admin with view permissions, without maintain permissions
