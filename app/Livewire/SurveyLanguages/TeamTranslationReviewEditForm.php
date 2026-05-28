@@ -39,9 +39,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public Team $team;
 
-    public bool $canSave = false;
-
-    public bool $canMaintain = false;
+    protected bool $canSave = false;
 
     public function mount()
     {
@@ -105,7 +103,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public function submit(): void
     {
-        if (!$this->canMaintain) {
+        if (!auth()->user()->can('maintain survey translations')) {
             abort(403);
         }
 
@@ -151,7 +149,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public function duplicate(): void
     {
-        if (!$this->canMaintain) {
+        if (!auth()->user()->can('maintain survey translations')) {
             abort(403);
         }
 

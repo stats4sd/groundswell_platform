@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('xlsform_versions', function (Blueprint $table) {
-            $table->dropForeign(['xlsform_id']);
-            $table->foreign('xlsform_id')->references('id')->on('xlsforms')->cascadeOnDelete()->cascadeOnUpdate();
+        Schema::table('invites', function (Blueprint $table) {
+            $table->foreignId('program_id')->nullable()->constrained();
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('xlsform_versions', function (Blueprint $table) {
-            //
+        Schema::table('invites', function (Blueprint $table) {
+            $table->dropColumn('program_id');
         });
     }
 };

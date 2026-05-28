@@ -47,10 +47,6 @@ class UpdateXlsformVersionsFromOdkCentral extends Command
                 ->throw()
                 ->json();
 
-
-            dump($xlsform->owner->name . ' - ' . $xlsform->odk_id);
-            dump($versions);
-
             collect($versions)->each(function ($version) use ($xlsform) {
                 $versionName = $version['version'];
 

@@ -119,7 +119,7 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
             ])
             ->headerActions([
                 TableAction::make('test-on-odk-central')
-                    ->url(fn() => HelperService::getCurrentOwner()->odkProject->odk_url),
+                    ->url(fn() => HelperService::getCurrentOwner()->odkProject?->odk_url),
                 TableAction::make('pull-submissions')
                     ->label('Manually Get Submissions')
                     ->visible(fn () => auth()->user()->can('maintain initial pilot'))

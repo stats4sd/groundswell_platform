@@ -3,6 +3,7 @@
 namespace Database\Seeders\Prep;
 
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleAndPermissionSeeder extends Seeder
@@ -13,100 +14,110 @@ class RoleAndPermissionSeeder extends Seeder
     public function run(): void
     {
         // create roles
-        $superAdminRole = Role::create(['name' => 'Super Admin']);
-        $globalViewerRole = Role::create(['name' => 'Global Viewer']);
-        $programAdminRole = Role::create(['name' => 'Program Admin']);
-        $programViewerRole = Role::create(['name' => 'Program Viewer']);
-        $teamAdminRole = Role::create(['name' => 'Team Admin']);
+        $superAdminRole = Role::updateOrCreate(['name' => 'Super Admin']);
+        $globalViewerRole = Role::updateOrCreate(['name' => 'Global Viewer']);
+        $programAdminRole = Role::updateOrCreate(['name' => 'Program Admin']);
+        $programViewerRole = Role::updateOrCreate(['name' => 'Program Viewer']);
+        $teamAdminRole = Role::updateOrCreate(['name' => 'Team Admin']);
 
 
         // create permissions
         $permissions = [
-            ['name' => 'access admin panel'],
-            ['name' => 'access program admin panel'],
-            ['name' => 'view all programs'],
-            ['name' => 'view all teams'],
-            ['name' => 'view admin panel dashboard'],
-            ['name' => 'view programs'],
-            ['name' => 'maintain programs'],
-            ['name' => 'view teams'],
-            ['name' => 'maintain teams'],
-            ['name' => 'view users'],
-            ['name' => 'maintain users'],
-            ['name' => 'view domains'],
-            ['name' => 'maintain domains'],
-            ['name' => 'view global indicators'],
-            ['name' => 'maintain global indicators'],
-            ['name' => 'view themes'],
-            ['name' => 'maintain themes'],
-            ['name' => 'view diet diversity module versions'],
-            ['name' => 'maintain diet diversity module versions'],
-            ['name' => 'view datasets'],
-            ['name' => 'maintain datasets'],
-            ['name' => 'view xlsform modules'],
-            ['name' => 'maintain xlsform modules'],
-            ['name' => 'view xlsform module versions'],
-            ['name' => 'maintain xlsform module versions'],
-            ['name' => 'view xlsform templates'],
-            ['name' => 'maintain xlsform templates'],
-            ['name' => 'view choice lists'],
-            ['name' => 'maintain choice lists'],
-            ['name' => 'view program admin panel dashboard'],
-            ['name' => 'view my program'],
-            ['name' => 'maintain my program'],
-            ['name' => 'view survey dashboard'],
-            ['name' => 'view team selection box'],
-            ['name' => 'view my team'],
-            ['name' => 'maintain my team'],
-            ['name' => 'view download user guide'],
-            ['name' => 'view my account'],
-            ['name' => 'maintain my account'],
-            ['name' => 'view survey country and languages'],
-            ['name' => 'view select country and languages'],
-            ['name' => 'maintain select country and languages'],
-            ['name' => 'view survey translations'],
-            ['name' => 'maintain survey translations'],
-            ['name' => 'view survey locations'],
-            ['name' => 'view manage location levels'],
-            ['name' => 'maintain manage location levels'],
-            ['name' => 'view list of farms'],
-            ['name' => 'maintain list of farms'],
-            ['name' => 'view context questions'],
-            ['name' => 'maintain context questions'],
-            ['name' => 'view place-based adaptations'],
-            ['name' => 'view adapt time frame'],
-            ['name' => 'maintain adapt time frame'],
-            ['name' => 'view adapt diet quality module'],
-            ['name' => 'maintain adapt diet quality module'],
-            ['name' => 'view initial pilot'],
-            ['name' => 'maintain initial pilot'],
-            ['name' => 'view lisp'],
-            ['name' => 'view lisp workshop'],
-            ['name' => 'maintain lisp workshop'],
-            ['name' => 'view customise indicators'],
-            ['name' => 'view upload local indicators'],
-            ['name' => 'maintain upload local indicators'],
-            ['name' => 'view match with existing global indicators'],
-            ['name' => 'maintain match with existing global indicators'],
-            ['name' => 'view add custom survey questions'],
-            ['name' => 'maintain add custom survey questions'],
-            ['name' => 'view place custom questions in survey'],
-            ['name' => 'maintain place custom questions in survey'],
-            ['name' => 'view pilot'],
-            ['name' => 'maintain pilot'],
-            ['name' => 'view data collection'],
-            ['name' => 'view set up the survey'],
-            ['name' => 'maintain set up the survey'],
-            ['name' => 'view monitor data collection'],
-            ['name' => 'maintain monitor data collection'],
-            ['name' => 'view download data'],
-            ['name' => 'maintain download data'],
+            ['name' => 'access admin panel', 'guard_name' => 'web'],
+            ['name' => 'access program admin panel', 'guard_name' => 'web'],
+            ['name' => 'view all programs', 'guard_name' => 'web'],
+            ['name' => 'view all teams', 'guard_name' => 'web'],
+            ['name' => 'view admin panel dashboard', 'guard_name' => 'web'],
+            ['name' => 'view programs', 'guard_name' => 'web'],
+            ['name' => 'maintain programs', 'guard_name' => 'web'],
+            ['name' => 'view teams', 'guard_name' => 'web'],
+            ['name' => 'maintain teams', 'guard_name' => 'web'],
+            ['name' => 'view users', 'guard_name' => 'web'],
+            ['name' => 'maintain users', 'guard_name' => 'web'],
+            ['name' => 'view domains', 'guard_name' => 'web'],
+            ['name' => 'maintain domains', 'guard_name' => 'web'],
+            ['name' => 'view global indicators', 'guard_name' => 'web'],
+            ['name' => 'maintain global indicators', 'guard_name' => 'web'],
+            ['name' => 'view themes', 'guard_name' => 'web'],
+            ['name' => 'maintain themes', 'guard_name' => 'web'],
+            ['name' => 'view diet diversity module versions', 'guard_name' => 'web'],
+            ['name' => 'maintain diet diversity module versions', 'guard_name' => 'web'],
+            ['name' => 'view datasets', 'guard_name' => 'web'],
+            ['name' => 'maintain datasets', 'guard_name' => 'web'],
+            ['name' => 'view xlsform modules', 'guard_name' => 'web'],
+            ['name' => 'maintain xlsform modules', 'guard_name' => 'web'],
+            ['name' => 'view xlsform module versions', 'guard_name' => 'web'],
+            ['name' => 'maintain xlsform module versions', 'guard_name' => 'web'],
+            ['name' => 'view xlsform templates', 'guard_name' => 'web'],
+            ['name' => 'maintain xlsform templates', 'guard_name' => 'web'],
+            ['name' => 'view choice lists', 'guard_name' => 'web'],
+            ['name' => 'maintain choice lists', 'guard_name' => 'web'],
+            ['name' => 'view program admin panel dashboard', 'guard_name' => 'web'],
+            ['name' => 'view my program', 'guard_name' => 'web'],
+            ['name' => 'maintain my program', 'guard_name' => 'web'],
+            ['name' => 'view survey dashboard', 'guard_name' => 'web'],
+            ['name' => 'view team selection box', 'guard_name' => 'web'],
+            ['name' => 'view my team', 'guard_name' => 'web'],
+            ['name' => 'maintain my team', 'guard_name' => 'web'],
+            ['name' => 'view download user guide', 'guard_name' => 'web'],
+            ['name' => 'view my account', 'guard_name' => 'web'],
+            ['name' => 'maintain my account', 'guard_name' => 'web'],
+            ['name' => 'view survey country and languages', 'guard_name' => 'web'],
+            ['name' => 'view select country and languages', 'guard_name' => 'web'],
+            ['name' => 'maintain select country and languages', 'guard_name' => 'web'],
+            ['name' => 'view survey translations', 'guard_name' => 'web'],
+            ['name' => 'maintain survey translations', 'guard_name' => 'web'],
+            ['name' => 'view survey locations', 'guard_name' => 'web'],
+            ['name' => 'view manage location levels', 'guard_name' => 'web'],
+            ['name' => 'maintain manage location levels', 'guard_name' => 'web'],
+            ['name' => 'view list of farms', 'guard_name' => 'web'],
+            ['name' => 'maintain list of farms', 'guard_name' => 'web'],
+            ['name' => 'view context questions', 'guard_name' => 'web'],
+            ['name' => 'maintain context questions', 'guard_name' => 'web'],
+            ['name' => 'view place-based adaptations', 'guard_name' => 'web'],
+            ['name' => 'view adapt time frame', 'guard_name' => 'web'],
+            ['name' => 'maintain adapt time frame', 'guard_name' => 'web'],
+            ['name' => 'view adapt diet quality module', 'guard_name' => 'web'],
+            ['name' => 'maintain adapt diet quality module', 'guard_name' => 'web'],
+            ['name' => 'view initial pilot', 'guard_name' => 'web'],
+            ['name' => 'maintain initial pilot', 'guard_name' => 'web'],
+            ['name' => 'view lisp', 'guard_name' => 'web'],
+            ['name' => 'view lisp workshop', 'guard_name' => 'web'],
+            ['name' => 'maintain lisp workshop', 'guard_name' => 'web'],
+            ['name' => 'view customise indicators', 'guard_name' => 'web'],
+            ['name' => 'view upload local indicators', 'guard_name' => 'web'],
+            ['name' => 'maintain upload local indicators', 'guard_name' => 'web'],
+            ['name' => 'view match with existing global indicators', 'guard_name' => 'web'],
+            ['name' => 'maintain match with existing global indicators', 'guard_name' => 'web'],
+            ['name' => 'view add custom survey questions', 'guard_name' => 'web'],
+            ['name' => 'maintain add custom survey questions', 'guard_name' => 'web'],
+            ['name' => 'view place custom questions in survey', 'guard_name' => 'web'],
+            ['name' => 'maintain place custom questions in survey', 'guard_name' => 'web'],
+            ['name' => 'view pilot', 'guard_name' => 'web'],
+            ['name' => 'maintain pilot', 'guard_name' => 'web'],
+            ['name' => 'view data collection', 'guard_name' => 'web'],
+            ['name' => 'view set up the survey', 'guard_name' => 'web'],
+            ['name' => 'maintain set up the survey', 'guard_name' => 'web'],
+            ['name' => 'view monitor data collection', 'guard_name' => 'web'],
+            ['name' => 'view download data', 'guard_name' => 'web'],
+            ['name' => 'maintain download data', 'guard_name' => 'web'],
         ];
 
 
-        // create all permissions, assign all permissions to Super Admin role
+
+        Permission::upsert($permissions, ['name', 'guard_name']);
+
+
+        // create permissions, then clear all role assignments before re-assigning below
+        // (prevents removed permissions from persisting across seeder runs)
+        foreach ([$superAdminRole, $globalViewerRole, $programAdminRole, $programViewerRole, $teamAdminRole] as $role) {
+            $role->syncPermissions([]);
+        }
+
+        // assign all permissions to Super Admin role
         // Super Admin = Admin Panel, Program Admin Panel, App Panel, with view permissions and maintain permissions
-        $superAdminRole->permissions()->createMany($permissions);
+        $superAdminRole->givePermissionTo(array_column($permissions, 'name'));
+
 
         // assign permissions to Global Viewer role
         // Global Viewer = Super Admin with view permissions, without maintain permissions
@@ -212,7 +223,6 @@ class RoleAndPermissionSeeder extends Seeder
             'view set up the survey',
             'maintain set up the survey',
             'view monitor data collection',
-            'maintain monitor data collection',
             'view download data',
             'maintain download data',
         ]);
@@ -301,7 +311,6 @@ class RoleAndPermissionSeeder extends Seeder
             'view set up the survey',
             'maintain set up the survey',
             'view monitor data collection',
-            'maintain monitor data collection',
             'view download data',
             'maintain download data',
         ]);
