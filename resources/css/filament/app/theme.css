@@ -587,6 +587,7 @@ fieldset {
         @apply my-1;
     }
     @apply list-disc;
+
 }
 
 .instruction_panel h5 {
@@ -596,6 +597,10 @@ fieldset {
 .instruction_panel .fi-modal-content {
     @apply px-12;
     @apply gap-y-0 !important;
+}
+
+.instruction_panel p {
+    @apply mb-2;
 }
 
 .instructions_note {

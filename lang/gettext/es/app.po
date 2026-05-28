@@ -7,8 +7,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-27T12:39:58+00:00\n"
-"PO-Revision-Date: 2026-05-27 12:39+0000\n"
+"POT-Creation-Date: 2026-05-28T14:27:51+00:00\n"
+"PO-Revision-Date: 2026-05-28 14:27+0000\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
@@ -24,8 +24,8 @@ msgstr ""
 
 #: app\Filament\Admin\Resources\ThemeResource.php:34
 #: app\Filament\Admin\Resources\ThemeResource.php:45
-#: app\Filament\App\Resources\TeamResource.php:37
-#: app\Filament\App\Resources\TeamResource.php:51
+#: app\Filament\App\Resources\TeamResource.php:42
+#: app\Filament\App\Resources\TeamResource.php:56
 #: resources\views\emails\register-interest-email.blade.php:5
 msgid "Name"
 msgstr "Nombre"
@@ -39,71 +39,70 @@ msgstr ""
 msgid "My Account"
 msgstr "Mi cuenta"
 
-#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:51
-#: app\Filament\App\Pages\SurveyDashboard.php:26
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:56
 #: app\Filament\App\Pages\SurveyDashboard.php:31
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:45
-#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:39
-#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:37
-#: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:56
-#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:43
-#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:27
+#: app\Filament\App\Pages\SurveyDashboard.php:36
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:50
+#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:44
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:42
+#: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:33
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:48
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:44
 #: app\Providers\Filament\AppPanelProvider.php:167
 #: resources\views\components\survey-dashboard-header.blade.php:56
 msgid "Survey Dashboard"
 msgstr ""
 
-#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:52
-#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:28
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:57
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:45
 msgid "Place Adaptations"
 msgstr ""
 
-#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:70
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:75
 msgid "Time Frame"
 msgstr ""
 
-#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:83
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:92
 msgid "Time Frame Updated Successfully"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:39
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:47
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:44
 msgid "Survey Country & Languages"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:46
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:51
 #: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:28
-#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:38
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:43
 #: resources\views\filament\app\pages\survey-languages\survey-translations.blade.php:62
 msgid "Survey Languages"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:63
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:68
 msgid "Country"
 msgstr "País"
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:71
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:77
 msgid "Select the region for this country"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:74
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:80
 msgid "Enter the name of this country"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:79
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:85
 msgid "Enter the ISO Alpha-2 code for this country"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:84
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:90
 msgid "Enter the ISO Alpha-3 code for this country"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:102
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:108
 msgid "Languages"
 msgstr "Idiomas"
 
 #: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:33
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:130
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:85
 msgid "Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template."
 msgstr ""
 
@@ -111,36 +110,35 @@ msgstr ""
 msgid "Context: Survey Translations"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:57
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:62
 #: app\Filament\Shared\WithCompletionStatusBar.php:13
 msgid "MARK AS COMPLETE"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:71
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:81
 #: app\Filament\Shared\WithCompletionStatusBar.php:27
 msgid "MARK AS INCOMPLETE"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:57
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:52
+#: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:34
 msgid "Survey locations"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:32
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:193
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:37
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:148
 msgid "Survey Locations"
 msgstr ""
 
-#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:37
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:194
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:42
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:149
 msgid "Add the details of the farms you will visit, to allow the enumerators to carry out data collection."
 msgstr ""
 
-#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:21
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:22
 msgid "Test Submissions"
 msgstr ""
 
-#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:29
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:46
 msgid "Initial Pilot"
 msgstr ""
 
@@ -177,30 +175,30 @@ msgstr ""
 msgid "Updated At"
 msgstr ""
 
-#: app\Filament\App\Resources\TeamResource.php:41
+#: app\Filament\App\Resources\TeamResource.php:46
 msgid "Description"
 msgstr "Descripción"
 
-#: app\Filament\App\Resources\TeamResource.php:55
+#: app\Filament\App\Resources\TeamResource.php:60
 msgid "Program"
 msgstr ""
 
-#: app\Filament\App\Resources\TeamResource.php:61
+#: app\Filament\App\Resources\TeamResource.php:66
 msgid "# Users"
 msgstr ""
 
-#: app\Filament\App\Resources\TeamResource.php:65
+#: app\Filament\App\Resources\TeamResource.php:70
 msgid "# Invites"
 msgstr ""
 
-#: app\Filament\App\Resources\TeamResource.php:73
+#: app\Filament\App\Resources\TeamResource.php:78
 msgid "Created At"
 msgstr ""
 
 #: app\Livewire\InstructionsSidebarLivewire.php:35
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:9
+#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:39
 #: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:4
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:11
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:17
 #: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:17
 #: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:3
 #: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:10
@@ -212,19 +210,19 @@ msgstr ""
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:4
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:12
 #: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:4
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:14
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:4
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:30
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:47
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:18
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:26
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:11
 #: resources\views\filament\app\pages\survey-languages\survey-translations.blade.php:11
 #: resources\views\filament\app\pages\survey-locations\context-questions.blade.php:4
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:25
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:67
 #: resources\views\filament\app\resources\farm-resource\widgets\farm-list-header-widget.blade.php:3
 msgid "Instructions"
 msgstr "Instrucciones"
 
-#: app\Providers\Filament\AdminPanelProvider.php:76
-#: app\Providers\Filament\ProgramPanelProvider.php:87
+#: app\Providers\Filament\AdminPanelProvider.php:72
+#: app\Providers\Filament\ProgramPanelProvider.php:86
 msgid "Return to Front end"
 msgstr ""
 
@@ -259,7 +257,7 @@ msgstr ""
 
 #: resources\views\components\pilot-qr-codes.blade.php:5
 #: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:127
-#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:196
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:199
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:188
 msgid "SCAN QR Code in ODK Collect"
 msgstr ""
@@ -378,96 +376,6 @@ msgstr ""
 msgid "Not bad for a bunch of LLM-generated nonsense, right?"
 msgstr ""
 
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:16
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:40
-msgid "On the location levels page, you first need to add the names of the different levels:"
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:21
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:45
-msgid "Click on \"new location level\"."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:25
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:49
-msgid "Indicate whether the location level you are adding is a sub-level of another level - in our province > district > village example, district is a sub-level of province and village is a sub-level of district."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:29
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:53
-msgid "Add the name for the level."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:33
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:57
-msgid "Indicate whether there are farms at this level - This means that they are within this level but not in a lower sub-level; for example, there are farms at the village level but not the province level."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:37
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:61
-msgid "Click to create the level, or to create and immediately add another level."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:42
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:66
-msgid "Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have to option to import them from an excel file or add them manually."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:47
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:71
-msgid "To import locations, upload an excel spreadsheet with the required details:"
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:52
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:76
-msgid "A column with the name of the location"
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:56
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:80
-msgid "A column with the unique IDs for the locations. (These can be generated however you like, but each one must be unique)"
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:60
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:84
-msgid "If the location level you are adding to is a sub-level of another location level, then you need to also have a column with the name and unique ID of the location in the level above (in our province > district > village example, \"Village A\" might be located in \"District C\", and you would need to include the details of both.)"
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:64
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:88
-msgid "The first row of the worksheet should contain column headings, not your first location."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:68
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:92
-msgid "Make sure the data to be imported is in the first worksheet of the spreadsheet."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:72
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:96
-msgid "You should have a column for location name and a column for unique codes for the locations."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:76
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:100
-msgid "It does not matter what order the columns are in, what column headers you use, or if other data is in the spreadsheet."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:80
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:105
-msgid "Once you have uploaded the list, use the column mapping options to select the column for names and the column for unique code."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:83
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:108
-msgid "You have the option to override all previously added locations with the new locations from the uploaded spreadsheet. When you are ready, click submit."
-msgstr ""
-
-#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:87
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:112
-msgid "To add locations manually, click on \"Add new [location name]\", and type in the name and code, then click on \"Create\" or \"Create and create another\". Add locations for for all the location levels."
-msgstr ""
-
 #: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:12
 msgid "There are some questions in the survey where the appropriate answer options will be different depending on the location context - for example, questions that ask about crops that are grown on a farm"
 msgstr ""
@@ -508,47 +416,39 @@ msgstr ""
 msgid "Question text"
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:16
-msgid "In this section, you can download the dataset for your survey. The download will include all the data from the live data collection, some calculated agroecology and performance indicators, and a data dictionary."
-msgstr ""
-
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:18
-msgid "From here, your team can conduct whatever data analysis is needed, and organise storing and sharing of the data as required."
-msgstr ""
-
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:31
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:28
 msgid "Download data for analysis"
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:33
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:30
 msgid "Here, you can download the complete dataset for your survey. The download will be an .xlsx file containing:"
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:38
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:35
 msgid "All the data from the live data collection."
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:42
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:39
 msgid "Agroecology and performance indicators, automatically calculated at farm level."
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:46
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:43
 msgid "A detailed data dictionary to help you navigate through the data."
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:51
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:48
 msgid "Once you have downloaded the data, you can conduct data analysis as required, and it is up to your team or organisation to manage storage and sharing of the dataset as appropriate. Download the complete dataset from your survey. This export includes the agro-ecology and performance indicators, automatically calculated at farm-level, along with a detailed data dictionary to help you navigate through the data."
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:58
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:55
 msgid "Survey Dataset"
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:59
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:56
 msgid "Download the complete dataset from your survey. This export includes calculated agro-ecology and performance indicators and a detailed data dictionary."
 msgstr ""
 
-#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:60
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:57
 msgid "Download .xlsx"
 msgstr ""
 
@@ -637,7 +537,6 @@ msgstr ""
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:64
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:81
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:61
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:127
 msgid "Mark this section as complete when:"
 msgstr ""
 
@@ -895,7 +794,7 @@ msgid "The 'Access forms' section contains the option to publish your changes to
 msgstr ""
 
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:51
-#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:203
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:207
 msgid "Forms and submissions"
 msgstr ""
 
@@ -1016,19 +915,19 @@ msgstr ""
 msgid "button on the table below. We highly recommend reviewing the forms as DRAFT versions before publishing. You can do so on the"
 msgstr ""
 
-#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:208
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:212
 msgid "Survey Forms"
 msgstr ""
 
-#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:212
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:216
 msgid "Pilot Test Submissions"
 msgstr ""
 
-#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:224
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:228
 msgid "Begin Live Data Collection"
 msgstr ""
 
-#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:225
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:229
 msgid "When you have completed the pilot test and are ready to begin live data collection, click below. This will disable this page and mark all future submissions as \"live\" data."
 msgstr ""
 
@@ -1230,7 +1129,7 @@ msgid "Any submissions to these DRAFT versions will appear below, so you can con
 msgstr ""
 
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:199
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:331
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:286
 msgid "Localisation: Pilot"
 msgstr ""
 
@@ -1240,6 +1139,10 @@ msgstr ""
 
 #: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:13
 msgid "The first thing you can customise is the time frame that is asked about for questions concerning the recent past. By default, this time frame is \"In the last 12 months\". However, for your survey, it might make more sense to ask the questions about \"last season\" or \"last year\"."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:17
+msgid "The page shows the questions in the survey that use the time frame. Whatever phrase is used for the time frame will be inserted into the question in place of the \"${time_frame}\" text placeholder. Look through them, determine what time frame is most appropriate and, if you decide to change it, update the timeframe text in the box. Your entry will be automatically saved and the question text in your survey form will be updated."
 msgstr ""
 
 #: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:27
@@ -1270,217 +1173,134 @@ msgstr ""
 msgid "Below is the complete list of questions that use this time frame. Please review the questions. If you wish to change the time frame for your survey, update the text in the text box below. Your entry will be automatically saved and the question text in your survey form will be updated."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:20
-msgid "This is the HOLPA survey builder dashboard. Here you can see an overview of the tasks required to prepare and deliver the survey, and you can keep track of your progress."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:23
-msgid "Do I need to complete the sections in order?"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:25
-msgid "The sections do not have to be completed in order. Although they are in a logical order, most users will probably go back and forth and revisit sections. You can mark sections as complete to keep track of your work, but you can still make changes in a \"completed\" section."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:28
-msgid "How do I complete a section?"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:30
-msgid "Within each section, there are usually multiple actions. Most actions will have options to add information or adjust elements of your survey. Some actions are prompts for tasks that take place outside of the tool, such as the local indicator selection workshop. When you are finished with a section, mark it as complete using the button at the bottom of the screen; this will help you and your team keep track of your progress."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:34
-msgid "Each section also has instructions in text and video form."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:38
-msgid "What\\'s on the dashboard?"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:40
-msgid "The dashboard contains sections for each of the different tasks that need to be done to prepare and implement HOLPA. They are sorted into headings for different aspects of the process:"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:45
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:109
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:64
 msgid "Prepare survey"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:46
-msgid "This is where you indicate the country and language (or languages) in which you will be preparing the survey, and select or provide the translated versions of HOLPA to be used."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:48
-msgid "This will generate the forms which you will be customising and using throughout the rest of the process. You will not be able to complete some other steps until you have selected a country, language and translation."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:53
-msgid "Here, you will provide the details of the farms/locations to be visited. This is necessary to allow enumerators to conduct the survey; and possibly for data analysis later on."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:57
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:234
-msgid "Localisation"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:58
-msgid "The localisation process is a crucial aspect of the implementation of HOLPA. The HOLPA tool aims to balance harmonisation and comparability between results with specific adaptations to ensure those results are applicable and useful at a local level. The localisation sections allow you to adjust the HOLPA survey to ensure it is relevant to the target audience."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:61
-msgid "These sections are:"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:65
-msgid "\\'Place based adaptations\\', which allows you to adjust details of the survey such as a suitable time frame to ask about recent events, and the specific foods, crops, animals and other units which might be asked about, so that the answer options make sense in the context."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:67
-msgid "At the end of this section, you are prompted to conduct an initial pilot to check the sense and functionality of the survey."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:71
-msgid "The local indicator selection process (LISP), which involves holding a workshop with local farmers and stakeholders to identify a set of contextually-specific indicators to include in the HOLPA tool. You can then add those local indicators into the customised HOLPA tool."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:75
-msgid "A full pilot test of the customised HOLPA survey, allowing for quality control and for training of enumerators. After completing these activities, it may be necessary to return to previous sections and make changes to your survey."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:83
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:385
-msgid "Data collection"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:85
-msgid "When you commence data collection for your survey, you can monitor, review and edit submissions here."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:89
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:434
-msgid "Download data"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:91
-msgid "Quickly retrieve all the data collected for your customised HOLPA survey. From there, you may conduct your own analysis or whatever else you wish to do."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:129
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:84
 msgid "Survey Country and Languages"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:140
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:202
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:265
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:303
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:95
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:157
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:220
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:258
 msgid "Not started"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:147
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:209
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:272
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:310
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:401
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:102
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:164
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:227
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:265
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:356
 msgid "In Progress"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:154
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:216
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:279
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:317
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:349
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:408
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:109
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:171
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:234
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:272
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:304
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:363
 msgid "Complete"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:158
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:220
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:283
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:321
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:353
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:412
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:113
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:175
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:238
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:276
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:308
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:367
 msgid "View and Update"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:172
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:127
 msgid "Sampling"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:256
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:189
+msgid "Localisation"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:211
 msgid "Place-based adaptations"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:257
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:212
 msgid "Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:294
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:249
 msgid "Localisation: LISP"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:295
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:250
 msgid "The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:332
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:287
 msgid "Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:342
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:394
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:297
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:349
 msgid "Not Started"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:368
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:323
 msgid "Data Collection"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:386
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:340
+msgid "Data collection"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:341
 msgid "View and manage the survey and incoming data."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:427
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:382
 msgid "Datasets"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:435
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:389
+msgid "Download data"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:390
 msgid "Download data to conduct data analysis."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:439
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:394
 msgid "View Data"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:10
-#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:20
-msgid "Select country and languages"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:12
-#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:22
-msgid "Start by selecting the country for the survey. You can click in the box and either scroll through the dropdown list or start typing to narrow down the options and find your country. If the country you need is not listed, you can use the \"plus\" button to add it. This will require you to input the country name and some additional details."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:16
-#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:26
-msgid "You can then start adding the languages in which you will conduct your survey. If you are going to run your survey in multiple languages, all of them need to be added here. Start typing in the box to find and add languages."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:20
-msgid "Click \"Save and return\" when you have finished."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:31
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:27
 msgid "Please select the country and languages for your survey below."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:36
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:33
 msgid "Save and Return"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:35
+msgid "Return"
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:17
 msgid "The first step to set up the survey is to select the country and languages your team will conduct the survey in. Bear in mind that if you change these details later, you may need to review some of the other steps."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:20
+msgid "Select country and languages"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:22
+msgid "Start by selecting the country for the survey. You can click in the box and either scroll through the dropdown list or start typing to narrow down the options and find your country. If the country you need is not listed, you can use the \"plus\" button to add it. This will require you to input the country name and some additional details."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:26
+msgid "You can then start adding the languages in which you will conduct your survey. If you are going to run your survey in multiple languages, all of them need to be added here. Start typing in the box to find and add languages."
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:30
@@ -1577,7 +1397,6 @@ msgid "Manage the location levels (or other strata) in your sampling frame."
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:12
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:117
 msgid "List of farms"
 msgstr ""
 
@@ -1597,30 +1416,6 @@ msgstr ""
 msgid "Manage Questions"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:31
-msgid "To enable enumerators to conduct the survey, and possibly for data analysis later on, you will need to add details of the farms you will visit, including the details of the different location levels. The system by which geographic locations are organised and denoted will vary between places (some countries are organised into counties and towns, some have provinces and districts), so you will need to first input the details of the hierarchy, and then fill in the specific locations for your survey."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:35
-msgid "For example, a farm might be located in a village, which is in a district, which is in a province, so you would need to add the location levels province > district > village. Then you can add or import the full list of locations at each level and of the farms."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:38
-msgid "Location levels"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:119
-msgid "The next action is to add the details of all the farms that you will visit in your survey. Similar to adding locations, you can add farms manually or import a list from a spreadsheet file. The spreadsheet should be set up with the same structure as when adding locations at other levels."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:123
-msgid "When importing a list, you will need to include columns with the farm unique code, and the unique code for the location it is in. When you upload the list, you need to select the location level the farms are located in. You can also optionally include extra columns with details that identify the farm, such as farm name, telephone number, family name etc, or for details that contain properties of the farm which may be useful for future analysis, such as the size of the farm."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:129
-msgid "You have added all the location levels, locations, and a full list of the farms where you will conduct the survey."
-msgstr ""
-
 #: resources\views\languageSelector.blade.php:5
 #: resources\views\livewire\cover-page.blade.php:48
 msgid "Change Language"
@@ -1632,11 +1427,26 @@ msgstr ""
 msgid "Survey Tool"
 msgstr ""
 
+#: resources\views\livewire\cover-page.blade.php:87
+#: resources\views\livewire\cover-page.blade.php:182
+msgid "Log in"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:106
+#: resources\views\livewire\cover-page.blade.php:158
+msgid "Surveys"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:107
+msgid "Read more about the surveys."
+msgstr ""
+
 #: resources\views\livewire\cover-page.blade.php:110
 msgid "Find out more"
 msgstr ""
 
 #: resources\views\livewire\cover-page.blade.php:119
+#: resources\views\livewire\cover-page.blade.php:170
 msgid "Online Tool"
 msgstr ""
 
@@ -1644,20 +1454,49 @@ msgstr ""
 msgid "An online interface to help you tailor the surveys to your context and conduct a survey."
 msgstr ""
 
-#: resources\views\livewire\cover-page.blade.php:136
-msgid "Learn More"
+#: resources\views\livewire\cover-page.blade.php:123
+msgid "Read more"
 msgstr ""
 
-#: resources\views\livewire\cover-page.blade.php:182
-msgid "Log in"
-msgstr ""
-
+#: resources\views\livewire\cover-page.blade.php:132
 #: resources\views\livewire\cover-page.blade.php:200
 msgid "Results"
 msgstr "Resultados"
 
+#: resources\views\livewire\cover-page.blade.php:133
+msgid "Results from previous implementations."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:136
+msgid "Learn More"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:140
+msgid "Previous Surveys"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:160
+msgid "Groundswell International develops and implements surveys to support data collection, learning, monitoring, and evaluation across a range of programmes and contexts. Surveys can be adapted to different projects, stakeholder groups, and implementation settings, enabling teams to collect meaningful and context-specific information to support decision-making, reporting, and programme improvement. The survey approach supports flexible digital data collection, customised indicators, and streamlined analysis workflows, helping teams manage and interpret data efficiently across multiple locations and activities."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:172
+msgid "Teams wishing to implement Groundswell International surveys can request access to the online platform designed to support the setup, customisation, deployment, and management of surveys across different contexts."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:175
+msgid "The platform guides users through the process of adapting survey modules, configuring indicators, implementing data collection activities, and accessing results and reporting features."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:178
+msgid "For more information, or to register your interest in using the platform, please use the links below. Existing users can log in using their account credentials."
+msgstr ""
+
 #: resources\views\livewire\cover-page.blade.php:201
 msgid "The tool has been applied across multiple countries and programme contexts. Results dashboards and country reports enable users to explore findings, compare indicators, and visualise trends across implementations."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:203
+msgid "View Dashboard"
 msgstr ""
 
 #: resources\views\livewire\lisp\custom-module-ordering.blade.php:4
@@ -1792,12 +1631,12 @@ msgstr ""
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:8
+#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:10
 msgid "Duplicate"
 msgstr ""
 
-#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:11
 #: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:13
+#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:15
 msgid "Submit"
 msgstr "Enviar"
 

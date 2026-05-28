@@ -1,27 +1,23 @@
+<?php
+
+$instructions = <<<'EOT'
+##### Select country and languages
+
+Start by selecting the country for the survey. You can click in the box and either scroll through the dropdown list or start typing to narrow down the options and find your country. If the country you need is not listed, you can use the "plus" button to add it. This will require you to input the country name and some additional details.
+
+You can then start adding the languages in which you will conduct your survey. If you are going to run your survey in multiple languages, all of them need to be added here. Start typing in the box to find and add languages.
+
+Click "Save and return" when you have finished.
+EOT;
+
+?>
+
 <x-filament-panels::page>
 
-<x-instructions-sidebar>
+    <x-instructions-sidebar :videoUrl="'#'">
         <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
-
-            {{-- <div class="pr-4 content-center  mx-auto my-4">
-                <iframe class="rounded-3xl" src="https://www.youtube.com/embed/TODO_ADD_VIDEO_ID" style="width: 560px; height: 315px;" frameborder="0" allowfullscreen></iframe>
-            </div> --}}
-            <div class="mx-12 mb-4">
-
-                <h5>{{ t("Select country and languages") }}</h5>
-                <p class="mb-2">
-                    {{ t("Start by selecting the country for the survey. You can click in the box and either scroll through the dropdown list or start typing to narrow down the options and find your country. If the country you need is not listed, you can use the \"plus\" button to add it. This will require you to input the country name and some additional details.") }}
-                </p>
-                <p class="mb-2">
-                    {{ t("You can then start adding the languages in which you will conduct your survey. If you are going to run your survey in multiple languages, all of them need to be added here. Start typing in the box to find and add languages.") }}
-                </p>
-                 <p class="mb-2">
-                    {{ t("Click \"Save and return\" when you have finished.") }}
-                </p>
-
-
-            </div>
+            {!! \Illuminate\Support\Str::markdown($instructions) !!}
         </x-slot:instructions>
     </x-instructions-sidebar>
     <div class="container mx-auto  ">
