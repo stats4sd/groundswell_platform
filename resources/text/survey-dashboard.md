@@ -1,6 +1,3 @@
-THIS IS AN EDIT HERE.
-
-
 This is the HOLPA survey builder dashboard. Here you can see an overview of the tasks required to prepare and deliver the survey, and you can keep track of your progress.
 
 ##### Do I need to complete the sections in order?
