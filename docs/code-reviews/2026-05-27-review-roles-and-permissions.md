@@ -9,12 +9,12 @@
 
 ## Summary by Priority
 
-| # | Severity | File | Issue |
-| --- | --- | --- | --- |
-| 1 | **Security** | `TeamTranslationReviewEditForm.php` | Public Livewire property used as server-side auth guard |
-| 2 | **Security** | `UsersRelationManager.php` (App panel) | DetachAction/DetachBulkAction fully unguarded |
-| 3 | **Security** | `UsersRelationManager.php` (3 panels) | AttachAction only has UI guard, no server-side abort |
-| 4 | **Bug** | `Team.php` | Null deref on missing 'Team Admin' role in sendInvites() |
+| # | Severity | File | Issue | Comment / Resolution
+| --- | --- | --- | --- | --- | 
+| 1 | **Security** | `TeamTranslationReviewEditForm.php` | Public Livewire property used as server-side auth guard | Fixed by removing $canMaintain 
+| 2 | **Security** | `UsersRelationManager.php` (App panel) | DetachAction/DetachBulkAction fully unguarded | Un-needed currently; to review alongside user / program / team management featuers
+| 3 | **Security** | `UsersRelationManager.php` (3 panels) | AttachAction only has UI guard, no server-side abort | Un-needed currently; to review alongside user / program / team management featuers
+| 4 | **Bug** | `Team.php` | Null deref on missing 'Team Admin' role in sendInvites() | Default to parent role if role doesn't exist
 | 5 | **Bug** | `TeamsRelationManager.php` (Program panel) | CreateAction exposed to Program Viewers |
 | 6 | **Bug** | `ListUsers.php` (Admin panel) | Base CreateAction not guarded for Global Viewers |
 | 7 | **Reliability** | `RoleAndPermissionSeeder.php` | Role::create() crashes on re-run |
