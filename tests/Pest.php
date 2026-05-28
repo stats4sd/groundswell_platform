@@ -67,7 +67,9 @@ function createAppUser(\App\Models\Team $team): \App\Models\User
     $user = \App\Models\User::factory()->create();
     \App\Models\TeamMembership::withoutEvents(fn () => $user->teams()->attach($team->id));
     $user->latest_team_id = $team->id;
+    $user->roles()->attach(\Spatie\Permission\Models\Role::where('name', 'Team Admin')->first());
     $user->save();
+
     return $user;
 }
 
