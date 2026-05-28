@@ -15,12 +15,12 @@
 | 2 | **Security** | `UsersRelationManager.php` (App panel) | DetachAction/DetachBulkAction fully unguarded | Un-needed currently; to review alongside user / program / team management featuers
 | 3 | **Security** | `UsersRelationManager.php` (3 panels) | AttachAction only has UI guard, no server-side abort | Un-needed currently; to review alongside user / program / team management featuers
 | 4 | **Bug** | `Team.php` | Null deref on missing 'Team Admin' role in sendInvites() | Default to parent role if role doesn't exist
-| 5 | **Bug** | `TeamsRelationManager.php` (Program panel) | CreateAction exposed to Program Viewers |
-| 6 | **Bug** | `ListUsers.php` (Admin panel) | Base CreateAction not guarded for Global Viewers |
-| 7 | **Reliability** | `RoleAndPermissionSeeder.php` | Role::create() crashes on re-run |
-| 8 | **UX** | `EditProfile.php` | Cancel button hidden from read-only users |
-| 9 | **Clarity** | `DataAnalysisIndex.php` | Wrong-named permission in canAccess() |
-| 10 | **Cleanup** | `RoleAndPermissionSeeder.php` | Dead `maintain monitor data collection` permission |
+| 5 | **Bug** | `TeamsRelationManager.php` (Program panel) | CreateAction exposed to Program Viewers | TeamRelationManager isn't even viewable to Program Viewers
+| 6 | **Bug** | `ListUsers.php` (Admin panel) | Base CreateAction not guarded for Global Viewers | Handled through Policy
+| 7 | **Reliability** | `RoleAndPermissionSeeder.php` | Role::create() crashes on re-run | Updated policy to use updateOrCreate()
+| 8 | **UX** | `EditProfile.php` | Cancel button hidden from read-only users | This is fine
+| 9 | **Clarity** | `DataAnalysisIndex.php` | Wrong-named permission in canAccess() | This is fine
+| 10 | **Cleanup** | `RoleAndPermissionSeeder.php` | Dead `maintain monitor data collection` permission | Removed permission
 
 ---
 
