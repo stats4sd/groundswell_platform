@@ -98,7 +98,6 @@ class RoleAndPermissionSeeder extends Seeder
             ['name' => 'view set up the survey'],
             ['name' => 'maintain set up the survey'],
             ['name' => 'view monitor data collection'],
-            ['name' => 'maintain monitor data collection'],
             ['name' => 'view download data'],
             ['name' => 'maintain download data'],
         ];
