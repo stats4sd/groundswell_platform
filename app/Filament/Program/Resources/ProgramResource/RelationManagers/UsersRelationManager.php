@@ -42,6 +42,12 @@ class UsersRelationManager extends BaseUsersRelationManager
                 Tables\Actions\AttachAction::make()
                     ->label('Add Existing User to program')
                     ->visible(fn () => auth()->user()->can('maintain my program')),
+            ])
+            ->actions([
+                Tables\Actions\DetachAction::make()->label('Remove User')
+                    ->modalSubmitActionLabel('Remove User')
+                    ->modalHeading('Remove User from Program')
+                    ->visible(fn () => auth()->user()->can('maintain my program')),
             ]);
     }
 }
