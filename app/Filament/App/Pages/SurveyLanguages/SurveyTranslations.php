@@ -31,6 +31,11 @@ class SurveyTranslations extends Page
         return t('Context: Survey Translations');
     }
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view survey translations');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
@@ -56,7 +61,12 @@ class SurveyTranslations extends Page
         return Action::make('markComplete')
             ->label(fn () => t('MARK AS COMPLETE'))
             ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
+            ->visible(fn () => auth()->user()->can('maintain survey translations'))
             ->action(function () {
+                if (!auth()->user()->can('maintain survey translations')) {
+                    abort(403);
+                }
+
                 HelperService::getCurrentOwner()->update([
                     'languages_complete' => 1,
                 ]);
@@ -70,7 +80,12 @@ class SurveyTranslations extends Page
         return Action::make('markIncomplete')
             ->label(fn () => t('MARK AS INCOMPLETE'))
             ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
+            ->visible(fn () => auth()->user()->can('maintain survey translations'))
             ->action(function () {
+                if (!auth()->user()->can('maintain survey translations')) {
+                    abort(403);
+                }
+
                 HelperService::getCurrentOwner()->update([
                     'languages_complete' => 0,
                 ]);

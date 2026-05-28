@@ -22,7 +22,7 @@ class Dashboard extends Page
 
     public static function canAccess(): bool
     {
-        return auth()->user()->can('do admin');
+        return auth()->user()->can('view admin panel dashboard');
     }
 
     public function getHeaderWidgets(): array

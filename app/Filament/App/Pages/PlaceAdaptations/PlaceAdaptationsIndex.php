@@ -21,6 +21,11 @@ class PlaceAdaptationsIndex extends Page
 
     protected static ?string $title = 'Localisation: Place-based adaptations';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view place-based adaptations');
+    }
+
     protected ?string $summary = 'Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location.';
 
     protected $listeners = ['refreshPage' => '$refresh'];

@@ -28,6 +28,11 @@ class PilotIndex extends Page implements HasActions, HasForms
 
     protected static string $view = 'filament.app.pages.pilot.pilot-index';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view pilot');
+    }
+
     protected ?string $heading = 'Survey Testing - Pilot and Enumerator Training';
 
     #[Url]
@@ -62,7 +67,12 @@ class PilotIndex extends Page implements HasActions, HasForms
         return Action::make('markPilotComplete')
             ->color('success')
             ->label('Switch to live data collection')
+            ->visible(fn () => auth()->user()->can('maintain pilot'))
             ->action(function () {
+                if (!auth()->user()->can('maintain pilot')) {
+                    abort(403);
+                }
+
                 $this->team->pilot_complete = true;
                 $this->team->save();
 
@@ -79,7 +89,12 @@ class PilotIndex extends Page implements HasActions, HasForms
             ->modalHeading('Are you sure?')
             ->modalDescription('Any data collected while the pilot is in progress will be marked as "test" data, and not included in your final dataset by default')
             ->modalSubmitActionLabel('Yes, return to pilot test')
+            ->visible(fn () => auth()->user()->can('maintain pilot'))
             ->action(function () {
+                if (!auth()->user()->can('maintain pilot')) {
+                    abort(403);
+                }
+
                 $this->team->pilot_complete = false;
                 $this->team->save();
 

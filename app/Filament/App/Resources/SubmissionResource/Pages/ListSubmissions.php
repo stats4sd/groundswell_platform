@@ -22,6 +22,22 @@ class ListSubmissions extends ListRecords
         return t('Test Submissions');
     }
 
+    /** @var Collection<SurveyRow> */
+    public Collection $surveyRows;
+
+    /** @var Collection<Collection> */
+    public Collection $surveyRowData;
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        // a quick temporary workaround to avoid error occurred
+        // TODO: find actual data for surveyRows and surveyRowData
+        $this->surveyRows = collect();
+        $this->surveyRowData = collect();
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
