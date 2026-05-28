@@ -35,6 +35,11 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
     protected static bool $shouldRegisterNavigation = false;
 
     protected static string $view = 'filament.app.pages.place-adaptations.initial-pilot';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view initial pilot');
+    }
     protected ?string $heading = "Survey Testing - Initial Pilot";
     // protected ?string $subheading = "Test with local researchers and practitioners to review the initial localisations";
 
@@ -117,7 +122,11 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
                     ->url(fn() => HelperService::getCurrentOwner()->odkProject?->odk_url),
                 TableAction::make('pull-submissions')
                     ->label('Manually Get Submissions')
+                    ->visible(fn () => auth()->user()->can('maintain initial pilot'))
                     ->action(function (self $livewire) {
+                        if (!auth()->user()->can('maintain initial pilot')) {
+                            abort(403);
+                        }
 
                         $count = HelperService::getCurrentOwner()->xlsforms->map(function (Xlsform $record) {
                             return $record->getDraftSubmissions();

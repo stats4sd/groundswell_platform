@@ -22,6 +22,11 @@ class DataCollectionIndex extends Page
 
     protected static ?string $title = 'Data Collection';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view data collection');
+    }
+
     protected ?string $summary = 'View and manage the survey and incoming data.';
 
     public Team $team;

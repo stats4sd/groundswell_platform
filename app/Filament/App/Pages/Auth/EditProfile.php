@@ -25,10 +25,25 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
 
     protected ?string $heading = 'My Account';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view my account');
+    }
+
 
     /**
      * @throws \Exception
      */
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction()
+                ->visible(fn () => auth()->user()->can('maintain my account')),
+            $this->getCancelFormAction()
+                ->visible(fn () => auth()->user()->can('maintain my account')),
+        ];
+    }
+
     protected function getForms(): array
     {
         return [
@@ -37,17 +52,22 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
                     ->schema([
                         Section::make('Profile Information')
                             ->schema([
-                                $this->getNameFormComponent(),
-                                $this->getEmailFormComponent(),
+                                $this->getNameFormComponent()
+                                    ->disabled(fn () => !auth()->user()->can('maintain my account')),
+                                $this->getEmailFormComponent()
+                                    ->disabled(fn () => !auth()->user()->can('maintain my account')),
                             ]),
                         Section::make('Change Password')
                             ->columns(1)
                             ->schema([
                                 Shout::make('password-info')
                                     ->content('To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password.'),
-                                $this->getCurrentPasswordFormComponent(),
-                                $this->getPasswordFormComponent(),
-                                $this->getPasswordConfirmationFormComponent(),
+                                $this->getCurrentPasswordFormComponent()
+                                    ->disabled(fn () => !auth()->user()->can('maintain my account')),
+                                $this->getPasswordFormComponent()
+                                    ->disabled(fn () => !auth()->user()->can('maintain my account')),
+                                $this->getPasswordConfirmationFormComponent()
+                                    ->disabled(fn () => !auth()->user()->can('maintain my account')),
                             ]),
                     ])
                     ->operation('edit')
@@ -113,6 +133,9 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
      */
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
+        if (!auth()->user()->can('maintain my account')) {
+            abort(403);
+        }
 
         $updateData = [
             'email' => $data['email'],

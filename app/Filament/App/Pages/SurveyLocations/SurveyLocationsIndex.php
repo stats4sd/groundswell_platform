@@ -23,6 +23,11 @@ class SurveyLocationsIndex extends Page
 
     protected static ?string $title = 'Survey Locations';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view survey locations');
+    }
+
     protected ?string $summary = 'Add the details of the farms you will visit, to allow the enumerators to carry out data collection.';
 
     protected $listeners = ['refreshPage' => '$refresh'];

@@ -32,6 +32,11 @@ class DietDiversity extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.app.pages.place-adaptations.diet-diversity';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view adapt diet quality module');
+    }
+
     public function getMaxContentWidth(): MaxWidth|string|null
     {
         return MaxWidth::Full;
@@ -70,6 +75,7 @@ class DietDiversity extends Page implements HasForms, HasTable
             ->schema([
                 Select::make('diet_diversity_module_version_id')
                     ->live()
+                    ->disabled(fn () => !auth()->user()->can('maintain adapt diet quality module'))
                     ->relationship(
                         'dietDiversityModuleVersion',
                         'name',
@@ -83,6 +89,9 @@ class DietDiversity extends Page implements HasForms, HasTable
 
     public function saveData(): void
     {
+        if (!auth()->user()->can('maintain adapt diet quality module')) {
+            abort(403);
+        }
 
         $this->team->update($this->form->getState());
 

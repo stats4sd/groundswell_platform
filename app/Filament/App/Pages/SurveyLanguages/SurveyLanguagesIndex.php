@@ -22,6 +22,11 @@ class SurveyLanguagesIndex extends Page
 
     protected $listeners = ['refreshPage' => '$refresh'];
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view survey country and languages');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [

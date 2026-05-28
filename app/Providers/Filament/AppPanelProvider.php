@@ -177,8 +177,10 @@ class AppPanelProvider extends PanelProvider
                 NavigationItem::make()
                 ->label(__('Download User Guide'))
                 ->icon('heroicon-o-arrow-down-tray')
-                ->url(url('HOLPA Online tool guidance 2025.pdf')),
+                ->url(url('HOLPA Online tool guidance 2025.pdf'))
+                ->visible(fn () => auth()->user()->can('view download user guide')),
             ])
+            ->tenantMenu(fn () => auth()->check() && auth()->user()->can('view team selection box'))
             ->darkMode(false)
             ->topNavigation()
             ->renderHook(PanelsRenderHook::SCRIPTS_BEFORE, fn () => view('filament.app.scripts'))
