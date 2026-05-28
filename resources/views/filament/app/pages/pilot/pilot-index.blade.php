@@ -160,8 +160,12 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
 
                             </div>
                             <div class="mr-4 text-center basis-1/4  rounded-lg px-4 bg-white flex flex-col justify-start space-y-4">
-                                <div class="mx-auto">{{ QrCode::size(150)->generate(\Stats4sd\FilamentOdkLink\Services\HelperService::getCurrentOwner()->odk_qr_code) }}</div>
-                                <h5 class="">{{ t("SCAN QR Code in ODK Collect") }}</h5>
+                                @if(\Stats4sd\FilamentOdkLink\Services\HelperService::getCurrentOwner()->odk_qr_code)
+                                    <div class="mx-auto">{{ QrCode::size(150)->generate(\Stats4sd\FilamentOdkLink\Services\HelperService::getCurrentOwner()->odk_qr_code) }}</div>
+                                @else
+                                    <div class="mx-auto text-sm text-gray-400">QR code not available</div>
+                                    <h5 class="">{{ t("SCAN QR Code in ODK Collect") }}</h5>
+                                @endif
                             </div>
                         </div>
 

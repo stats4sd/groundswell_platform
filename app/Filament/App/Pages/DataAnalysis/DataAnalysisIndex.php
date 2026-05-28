@@ -3,6 +3,7 @@
 namespace App\Filament\App\Pages\DataAnalysis;
 
 use App\Filament\Actions\ExportDataAction;
+use App\Filament\Shared\WithCompletionStatusBar;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Services\HelperService;
 use Filament\Actions\Action;
@@ -18,6 +19,9 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
+    use WithCompletionStatusBar;
+
+    public string $completionProp = 'data_analysis_complete';
 
     protected static string $view = 'filament.app.pages.data-analysis.data-analysis-index';
 
@@ -26,6 +30,11 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
     protected static ?string $title = 'Data Analysis';
 
     protected $listeners = ['refreshPage' => '$refresh'];
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view download data');
+    }
 
     public function getBreadcrumbs(): array
     {
@@ -53,7 +62,12 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
         return Action::make('markComplete')
             ->label('MARK AS COMPLETE')
             ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
+            ->visible(fn () => auth()->user()->can('maintain download data'))
             ->action(function () {
+                if (!auth()->user()->can('maintain download data')) {
+                    abort(403);
+                }
+
                 $team = HelperService::getCurrentOwner();
                 $team->data_analysis_progress = 'complete';
                 $team->save();
@@ -67,7 +81,12 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
         return Action::make('markIncomplete')
             ->label('MARK AS INCOMPLETE')
             ->extraAttributes(['class' => 'buttonbrown block md:inline-block mb-6 md:mb-0 max-w-sm mx-auto'])
+            ->visible(fn () => auth()->user()->can('maintain download data'))
             ->action(function () {
+                if (!auth()->user()->can('maintain download data')) {
+                    abort(403);
+                }
+
                 $team = HelperService::getCurrentOwner();
                 $team->data_analysis_progress = 'not_started';
                 $team->save();

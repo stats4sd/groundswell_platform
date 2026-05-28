@@ -19,7 +19,6 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stats4sd\FilamentOdkLink\OdkLinkAdmin;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\CheckIfAdmin;
 use Tio\Laravel\Middleware\SetLocaleMiddleware;
 
@@ -39,10 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             // to include "Datasets" resource
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
-            ->resources([
-                // Bring in Users resource from package stats4sd/filament-team-management
-                UserResource::class,
-            ])
+            ->resources([])
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
             ->pages([

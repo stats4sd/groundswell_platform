@@ -93,6 +93,7 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                 Action::make('Add New')
                     ->extraAttributes(['class' => 'buttonb my-4 shadow-none !py-21'])
                     ->icon('heroicon-o-plus-circle')
+                    ->visible(fn () => auth()->user()->can('maintain survey translations'))
                     ->form([
                         TextInput::make('description')
                             ->label('Enter a label for the translation')
@@ -100,6 +101,10 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                             ->required(),
                     ])
                     ->action(function (array $data) {
+                        if (!auth()->user()->can('maintain survey translations')) {
+                            abort(403);
+                        }
+
                         $this->language->locales()->create([
                             'description' => $data['description'],
                             'creator_id' => $this->team->id,
@@ -124,7 +129,12 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                     ->color('white')
                     ->label('View / Edit Translation')
                     ->modalHeading(fn (Locale $record) => 'View / Edit Translation for '.$record->language_label)
-                    ->modalContent(fn (Locale $record) => view('team-translation-review', ['locale' => $record, 'team' => $this->team]))
+                    ->modalContent(fn (Locale $record) => view('
+                    team-translation-review', [
+                        'locale' => $record,
+                        'team' => $this->team,
+                        'canMaintain' => auth()->user()->can('maintain survey translations'),
+                    ]))
                     ->modalWidth(MaxWidth::SixExtraLarge)
                     ->extraModalWindowAttributes(['class' => 'py-4 px-10'])
                     ->modalSubmitAction(false)

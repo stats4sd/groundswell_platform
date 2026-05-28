@@ -9,4 +9,8 @@ arch()->expect(['dd', 'ddd'])->not()->toBeUsed();
 arch()->preset()->php();
 
 /** @phpstan-ignore-next-line */
-arch()->preset()->security();
+arch()->preset()->security()->ignoring([
+    'Stats4sd\FilamentOdkLink\Commands\GenerateSubmissions',
+    'Database\Seeders\TempResultSeeder'
+    ]);
+

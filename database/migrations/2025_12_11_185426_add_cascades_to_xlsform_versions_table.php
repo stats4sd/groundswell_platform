@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('xlsform_versions', function (Blueprint $table) {
-            $table->dropForeign('xlsform_versions_xlsform_id_foreign');
+            $table->dropForeign(['xlsform_id']);
             $table->foreign('xlsform_id')->references('id')->on('xlsforms')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
