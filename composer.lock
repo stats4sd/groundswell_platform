@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8412dcdbc04089ff787a944319711627",
+    "content-hash": "3e21cc65e2f0c6122274998dca676102",
     "packages": [
         {
             "name": "althinect/filament-spatie-roles-permissions",
@@ -8629,7 +8629,7 @@
         },
         {
             "name": "stats4sd/filament-odk-link",
-            "version": "dev-e48b93be5b57d54a7ee6eabf88a90a9a9ea34e45",
+            "version": "dev-42e9e019703e4b07bc25cfba52b69c60d0d85669",
             "dist": {
                 "type": "path",
                 "url": "packages/filament-odk-link",
@@ -8733,7 +8733,7 @@
         },
         {
             "name": "stats4sd/filament-team-management",
-            "version": "dev-enable-team-soft-delete",
+            "version": "dev-b33b0e4fd47a36bf7f5cbc13561478709351a21d",
             "dist": {
                 "type": "path",
                 "url": "packages/filament-team-management",

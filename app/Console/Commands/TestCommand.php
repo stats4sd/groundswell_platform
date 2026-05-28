@@ -36,8 +36,6 @@ class TestCommand extends Command
      */
     public function handle(): void
     {
-        dump('Use this as a scratch space for testing things!');
-
         TestEvent::dispatch();
         XlsformDraftWasDeployed::dispatch(4);
     }

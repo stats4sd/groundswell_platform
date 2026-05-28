@@ -1,11 +1,13 @@
 parameters:
 
-    level: 4
+    level: 5
     paths:
         - app
+        - tests
 
-    excludePaths:
-        - tests/*
+    stubFiles:
+        - phpstan/pest-stubs.php
+
     tmpDir: build/phpstan
     checkOctaneCompatibility: true
     checkModelProperties: true
@@ -14,3 +16,7 @@ parameters:
     ignoreErrors:
         - '#Call to an undefined method Illuminate\\Database\\Schema\\ColumnDefinition::constrained\(\)#'
         - '#Access to an undefined property [a-zA-Z\\_]+::\$form.#'
+        - message: '#Call to protected method .+ of class Illuminate\\Foundation\\Testing\\TestCase#'
+          path: tests/*
+        - '#Call to an undefined method Illuminate\\Testing\\TestResponse::assertSeeLivewire\(\)#'
+
