@@ -7,6 +7,7 @@ parameters:
 
     stubFiles:
         - phpstan/pest-stubs.php
+        - phpstan/tio-stubs.php
 
     tmpDir: build/phpstan
     checkOctaneCompatibility: true

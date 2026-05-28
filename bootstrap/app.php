@@ -14,12 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // redirect any unauthenicated request to app panel login page
+        $middleware->redirectGuestsTo('/app/login');
+
         $middleware->use([
                 SetLocaleMiddleware::class
             ]);
 
-        // redirect any unauthenicated request to app panel login page
-        $middleware->redirectGuestsTo('/app/login');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);

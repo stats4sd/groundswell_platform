@@ -49,7 +49,7 @@ class SurveyCountry extends Page implements HasForms
         return [
             SurveyDashboard::getUrl() => t('Survey Dashboard'),
             SurveyLanguagesIndex::getUrl() => t('Survey Languages'),
-            static::getUrl() => t('Survey Country & Languages'),
+            static::getUrl() => $this->getTitle(),
         ];
     }
 
