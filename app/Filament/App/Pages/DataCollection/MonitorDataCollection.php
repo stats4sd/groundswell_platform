@@ -22,6 +22,11 @@ class MonitorDataCollection extends Page
 
     protected static bool $shouldRegisterNavigation = false;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view monitor data collection');
+    }
+
     public Team $team;
 
     #[Url]

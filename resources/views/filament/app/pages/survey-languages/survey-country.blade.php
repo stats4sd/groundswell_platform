@@ -31,7 +31,12 @@
 
             {{ $this->form }}
 
-            <a href="{{ \App\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex::getUrl() }}" class="buttona block max-w-sm mx-auto md:inline-block mb-6 md:mb-0 mt-12">{{ t("Save and Return") }}</a>
+            @can('maintain select country and languages')
+                <a href="{{ \App\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex::getUrl() }}" class="buttona block max-w-sm mx-auto md:inline-block mb-6 md:mb-0 mt-12">{{ t("Save and Return") }}</a>
+            @else
+                <a href="{{ \App\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex::getUrl() }}" class="buttona block max-w-sm mx-auto md:inline-block mb-6 md:mb-0 mt-12">{{ t("Return") }}</a>
+            @endcan
+            
         </div>
     </div>
 </x-filament-panels::page>

@@ -3,6 +3,12 @@
 use App\Filament\App\Pages\SurveyDashboard;
 
 $surveyDashboardUrl = SurveyDashboard::getUrl();
+
+$instructions = <<<'EOT'
+In this section, you can download the dataset for your survey. The download will include all the data from the live data collection, some calculated agroecology and performance indicators, and a data dictionary.
+
+From here, your team can conduct whatever data analysis is needed, and organise storing and sharing of the data as required.
+EOT;
 ?>
 
 <x-filament-panels::page class="h-full">
@@ -10,16 +16,8 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
 <x-instructions-sidebar>
         <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
-
-            <div class="mx-12 mb-4">
-                <p class="mb-2">
-                    {{ t("In this section, you can download the dataset for your survey. The download will include all the data from the live data collection, some calculated agroecology and performance indicators, and a data dictionary.") }}
-                    {{ t("From here, your team can conduct whatever data analysis is needed, and organise storing and sharing of the data as required.") }}
-                </p>
-
-
-        </div>
-    </x-slot:instructions>
+            {!! \Illuminate\Support\Str::markdown($instructions) !!}
+        </x-slot:instructions>
 </x-instructions-sidebar>
 
 

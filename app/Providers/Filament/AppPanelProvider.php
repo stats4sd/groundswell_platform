@@ -184,8 +184,10 @@ class AppPanelProvider extends PanelProvider
                 NavigationItem::make()
                 ->label(fn() => t('Download User Guide'))
                 ->icon('heroicon-o-arrow-down-tray')
-                ->url('#'),
+                ->url('#')
+                ->visible(fn () => auth()->user()->can('view download user guide')),
             ])
+            ->tenantMenu(fn () => auth()->check() && auth()->user()->can('view team selection box'))
             ->darkMode(false)
             ->topNavigation()
             ->renderHook(PanelsRenderHook::SCRIPTS_BEFORE, fn () => view('filament.app.scripts'))

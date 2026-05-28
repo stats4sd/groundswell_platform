@@ -26,7 +26,7 @@ class TestSeeder extends Seeder
 
         $teamP1 = Team::create([
             'id' => 3,
-            'name' => 'P1 Test Team',
+            'name' => 'P1 Test Team 1',
         ]);
         $teamP2 = Team::create([
             'id' => 4,
@@ -41,15 +41,15 @@ class TestSeeder extends Seeder
         ]);
 
         // create users
-        $user = User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $superAdmin = User::create([
+            'name' => 'Test Super Admin',
+            'email' => 'admin@example.com',
             'password' => bcrypt('password123'),
         ]);
 
-        $admin = User::create([
-            'name' => 'Test Admin',
-            'email' => 'admin@example.com',
+        $globalViewer = User::create([
+            'name' => 'Test Global Viewer',
+            'email' => 'global_viewer@example.com',
             'password' => bcrypt('password123'),
         ]);
 
@@ -59,24 +59,40 @@ class TestSeeder extends Seeder
             'password' => bcrypt('password123'),
         ]);
 
+        $programViewer = User::create([
+            'name' => 'Test Program Viewer',
+            'email' => 'program_viewer@example.com',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $teamAdmin = User::create([
+            'name' => 'Test Team Admin',
+            'email' => 'test@example.com',
+            'password' => bcrypt('password123'),
+        ]);
+
         // link users to OdkCentral
         if(config('filament-odk-link.odk.url')) {
-            $user->registerOnOdkCentral('password123');
-            $admin->registerOnOdkCentral('password123');
+            $superAdmin->registerOnOdkCentral('password123');
+            $globalViewer->registerOnOdkCentral('password123');
             $programAdmin->registerOnOdkCentral('password123');
-
+            $programViewer->registerOnOdkCentral('password123');
+            $teamAdmin->registerOnOdkCentral('password123');
         }
 
         // assign role to users
-        $admin->assignRole('Super Admin');
+        $superAdmin->assignRole('Super Admin');
+        $globalViewer->assignRole('Global Viewer');
         $programAdmin->assignRole('Program Admin');
+        $programViewer->assignRole('Program Viewer');
+        $teamAdmin->assignRole('Team Admin');
 
         // assign user to teams
-        $user->teams()->attach($nonProgramTeam->id);
         $programAdmin->programs()->attach($program->id);
+        $programViewer->programs()->attach($program->id);
+        $teamAdmin->teams()->attach($nonProgramTeam->id);
 
         // create local indicators
         $teams = Team::all();
-
     }
 }

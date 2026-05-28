@@ -32,6 +32,11 @@ class SurveyLanguagesIndex extends Page
     {
         return t('Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template.');
     }
+        
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view survey country and languages');
+    }
 
     public function getBreadcrumbs(): array
     {
