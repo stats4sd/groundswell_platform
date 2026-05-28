@@ -28,31 +28,6 @@ describe('App panel CRUD — Team', function () {
             ->assertCanSeeTableRecords([$this->team]);
     });
 
-    test('team create page loads', function () {
-        $this->get("/app/{$this->team->id}/teams/create")->assertOk();
-    });
-
-    test('can create team via app panel', function () {
-        Http::fake();
-        withAppTenant($this->team);
-
-        livewire(CreateTeam::class)
-            ->fillForm(['name' => 'Brand New Team'])
-            ->call('create')
-            ->assertHasNoFormErrors();
-
-        $this->assertDatabaseHas('teams', ['name' => 'Brand New Team']);
-    });
-
-    test('create team requires name', function () {
-        withAppTenant($this->team);
-
-        livewire(CreateTeam::class)
-            ->fillForm(['name' => ''])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
-
     test('team edit page loads', function () {
         $this->get("/app/{$this->team->id}/teams/{$this->team->id}/edit")->assertOk();
     });
@@ -175,6 +150,45 @@ describe('App panel CRUD — ChoiceListEntry', function () {
 
     test('choice list entry list page loads', function () {
         $this->get("/app/{$this->team->id}/localisations/choice-list-entries")->assertOk();
+    });
+
+});
+
+
+describe('App Panel CRUD - Create New Team', function() {
+
+
+    beforeEach(function () {
+        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
+        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        $this->superAdmin = createSuperAdmin();
+        $this->actingAs($this->superAdmin);
+    });
+
+
+    test('team create page loads', function () {
+        $this->get("/app/{$this->team->id}/teams/create")->assertOk();
+    });
+
+    test('can create team via app panel', function () {
+        Http::fake();
+        withAppTenant($this->team);
+
+        livewire(CreateTeam::class)
+            ->fillForm(['name' => 'Brand New Team'])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $this->assertDatabaseHas('teams', ['name' => 'Brand New Team']);
+    });
+
+    test('create team requires name', function () {
+        withAppTenant($this->team);
+
+        livewire(CreateTeam::class)
+            ->fillForm(['name' => ''])
+            ->call('create')
+            ->assertHasFormErrors(['name' => 'required']);
     });
 
 });
