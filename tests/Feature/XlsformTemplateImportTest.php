@@ -1,20 +1,26 @@
 <?php
 
+use App\Models\Team;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 use Stats4sd\FilamentOdkLink\Listeners\HandleXlsformTemplateAdded;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
 
 test('an xlsform template is correctly imported and updated', function () {
 
+    $this->team = Team::withoutEvents(fn() => Team::factory()->create());
+
     $this->xlsformTemplate = XlsformTemplate::forceCreateQuietly([
-        'title' => 'Test Template',
+        'title' => 'Test Template'
     ]);
+
+    $this->xlsformTemplate->owner()->associate($this->team);
+    $this->xlsformTemplate->save();
 
 
     // manually trigger the import
     $listener = new HandleXlsformTemplateAdded();
     $moduleVersions = $listener->createModules('tests/assets/odk-example-form-1.xlsx', $this->xlsformTemplate);
-    $listener->processXlsformTemplate('tests/assets/odk-example-form-1.xlsx', $moduleVersions);
+    $listener->processXlsformTemplate('tests/assets/odk-example-form-1.xlsx', $this->xlsformTemplate);
 
 
     // check that the survey rows were imported correctly

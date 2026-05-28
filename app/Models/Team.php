@@ -10,6 +10,7 @@ use App\Services\LocationSectionBuilder;
 use Dom\Attr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,9 +26,15 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 use Stats4sd\FilamentTeamManagement\Models\Team as FilamentTeamManagementTeam;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
+use Stats4sd\FilamentTeamManagement\Mail\InviteUser;
 
 class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 {
+    use HasFactory;
     use HasXlsforms;
     use InteractsWithMedia;
     use SoftDeletes;
@@ -360,6 +367,43 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
         $xlsformsToUpdate->each(function (Xlsform $xlsform) {
             $xlsform->deployDraft();
         });
+    }
+
+    /**
+     * Generate an invitation to join this team for each of the provided email addresses
+     */
+    // override superclass function to add role "Team Admin" to the invited user
+    public function sendInvites(array $emails): void
+    {
+        $teamAdminRole = Role::where('name', 'Team Admin')->first();
+
+        // if team admin doesn't exist; default to parent method (role agnostic)
+        if(!$teamAdminRole) {
+            parent::sendInvites($emails);
+        }
+
+        foreach ($emails as $email) {
+            // if email is empty, skip to next email
+            if ($email == null || $email == '') {
+                continue;
+            }
+
+            $invite = $this->invites()->create([
+                'email' => $email,
+                'inviter_id' => auth()->id(),
+                'role_id' => $teamAdminRole->id,
+                'token' => Str::random(24),
+            ]);
+
+            Mail::to($invite->email)->send(new InviteUser($invite));
+
+            // show notification after sending invitation email to user
+            Notification::make()
+                ->success()
+                ->title('Invitation Sent')
+                ->body('An email invitation has been successfully sent to ' . $email)
+                ->send();
+        }
     }
 
 }

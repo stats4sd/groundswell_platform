@@ -20,7 +20,6 @@ class GlobalIndicatorFactory extends Factory
     {
         return [
             'name' => $this->faker->sentence,
-            'type' => $this->faker->randomElement(['Core (required) indicators', 'Optional indicators']),
             'theme_id' => $this->faker->randomElement(Theme::all()->pluck('id')->toArray()),
         ];
     }

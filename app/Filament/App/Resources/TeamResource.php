@@ -20,6 +20,11 @@ class TeamResource extends Resource
 {
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
+    // Teams are top-level entities — not children of the current tenant team.
+    // Without this, Filament tries to associate a new team with the tenant via a
+    // non-existent self-referential 'teams' relationship and throws an exception.
+    protected static bool $isScopedToTenant = false;
+
     public static function getModel(): string
     {
         return config('filament-team-management.models.team');

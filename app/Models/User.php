@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Client\ConnectionException;
@@ -14,6 +15,7 @@ use Stats4sd\FilamentTeamManagement\Models\User as FilamentTeamManagementUser;
 
 class User extends FilamentTeamManagementUser implements WithOdkCentralAccount
 {
+    use HasFactory;
     use HasOdkCentralAccount;
     use AuthenticationLoggable;
 

@@ -16,7 +16,7 @@
         <div class=" border-b py-4"></div>
     @endif
 
-    <livewire:survey-languages.team-translation-review-edit-form :locale="$locale" :team="$team"/>
+    <livewire:survey-languages.team-translation-review-edit-form :locale="$locale" :team="$team" :canMaintain="$canMaintain ?? false"/>
 
 
 </div>

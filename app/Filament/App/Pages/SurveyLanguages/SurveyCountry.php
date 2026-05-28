@@ -28,6 +28,11 @@ class SurveyCountry extends Page implements HasForms
 
     public array $formData = [];
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('view select country and languages');
+    }
+
     public function mount(): void
     {
         $this->team = HelperService::getCurrentOwner();
@@ -64,6 +69,7 @@ class SurveyCountry extends Page implements HasForms
                     ->relationship('country', 'name')
                     ->searchable()
                     ->preload()
+                    ->disabled(fn () => !auth()->user()->can('maintain select country and languages'))
                     ->createOptionForm(fn () => [
                         // add validations
                         Select::make('region_id')
@@ -109,6 +115,7 @@ class SurveyCountry extends Page implements HasForms
                     ->multiple()
                     ->searchable()
                     ->preload()
+                    ->disabled(fn () => !auth()->user()->can('maintain select country and languages'))
                     ->afterStateUpdated(fn (self $livewire) => $livewire->saveData())
                     ->live(),
 
@@ -117,6 +124,10 @@ class SurveyCountry extends Page implements HasForms
 
     public function saveData(): void
     {
+        if (!auth()->user()->can('maintain select country and languages')) {
+            abort(403);
+        }
+
         $this->team->update($this->form->getState());
     }
 }
