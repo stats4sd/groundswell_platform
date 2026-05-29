@@ -35,53 +35,9 @@ class FarmSurveyData extends Model
         return $this->hasMany(Crop::class, 'farm_survey_data_id', 'id');
     }
 
-    public function ecologicalPractices(): HasMany
-    {
-        return $this->hasMany(EcologicalPractice::class, 'farm_survey_data_id', 'id');
-    }
-
-    public function fieldworkSites(): HasMany
-    {
-        return $this->hasMany(FieldworkSite::class, 'farm_survey_data_id', 'id');
-    }
-
-    public function fishes(): HasMany
-    {
-        return $this->hasMany(Fish::class, 'farm_survey_data_id', 'id');
-    }
-
-    public function fishUses(): HasMany
-    {
-        return $this->hasMany(FishUse::class, 'farm_survey_data_id', 'id');
-    }
-
     public function livestocks(): HasMany
     {
         return $this->hasMany(Livestock::class, 'farm_survey_data_id', 'id');
     }
 
-    public function livestockUses(): HasMany
-    {
-        return $this->hasMany(LivestockUse::class, 'farm_survey_data_id', 'id');
-    }
-
-    public function permanentWorkers(): HasMany
-    {
-        return $this->hasMany(PermanentWorker::class, 'farm_survey_data_id', 'id');
-    }
-
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class, 'farm_survey_data_id', 'id');
-    }
-
-    public function seasonalWorkerSeasons(): HasMany
-    {
-        return $this->hasMany(SeasonalWorkerSeason::class, 'farm_survey_data_id', 'id');
-    }
-
-    public function growingSeasons(): HasMany
-    {
-        return $this->hasMany(GrowingSeason::class, 'farm_survey_data_id', 'id');
-    }
 }
