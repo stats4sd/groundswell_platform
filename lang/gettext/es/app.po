@@ -7,6 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2026-05-29T11:14:47+00:00\n"
 "PO-Revision-Date: 2026-05-29 11:14+0000\n"
 "Language: es\n"
@@ -34,6 +35,13 @@ msgstr "Nombre"
 msgid "# Global indicators"
 msgstr ""
 
+=======
+"POT-Creation-Date: 2026-05-27T14:53:47+00:00\n"
+"PO-Revision-Date: 2026-05-27 14:53+0000\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+
+>>>>>>> 45297eea4f203beb60f4dd0b341a16fe913cd5c6
 #: app\Filament\App\Pages\Auth\EditProfile.php:30
 #: app\Filament\App\Pages\Auth\EditProfile.php:35
 msgid "My Account"
@@ -175,7 +183,17 @@ msgstr ""
 msgid "Updated At"
 msgstr ""
 
+<<<<<<< HEAD
 #: app\Filament\App\Resources\TeamResource.php:46
+=======
+#: app\Filament\App\Resources\TeamResource.php:37
+#: app\Filament\App\Resources\TeamResource.php:51
+#: resources\views\emails\register-interest-email.blade.php:5
+msgid "Name"
+msgstr "Nombre"
+
+#: app\Filament\App\Resources\TeamResource.php:41
+>>>>>>> 45297eea4f203beb60f4dd0b341a16fe913cd5c6
 msgid "Description"
 msgstr "Descripción"
 
@@ -1417,6 +1435,7 @@ msgstr ""
 msgid "Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location."
 msgstr ""
 
+<<<<<<< HEAD
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:218
 msgid "Localisation: LISP"
 msgstr ""
@@ -1427,6 +1446,18 @@ msgstr ""
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:256
 msgid "Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators."
+=======
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:294
+msgid "Localisation: Optional Modules"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:295
+msgid "Add optionals modules to the survey."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:332
+msgid "Conduct a pilot run of the survey, both for quality control of the customised survey and training of enumerators."
+>>>>>>> 45297eea4f203beb60f4dd0b341a16fe913cd5c6
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:266
