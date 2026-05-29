@@ -6,7 +6,7 @@ The initial pilot can be completed by a member of your team with at least one lo
 
 1. Make sure you have made all the intended customisations up to this step of the process.
 2. Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed and set up.
-3. The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:
+3. The Groundswell partners should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:
 - Check that the survey layout and dependencies are correctly coded; for example, you should check that mandatory questions are not showing as optional.
 - Make sure all questions and response options are clear for respondents in the local context.
 - Identify if hints or examples are needed for any sections that may cause confusion or be misunderstood.

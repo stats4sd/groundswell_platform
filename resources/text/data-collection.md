@@ -1,4 +1,4 @@
-Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin.
+Once you have tested and finalised the details of your localised survey, data collection may begin.
 
 ##### Set up the survey
 
@@ -6,7 +6,7 @@ Up until this point, all the forms used for pilot testing have been labelled as 
 
 Once your survey is live, you will be able to use a QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms.
 
-Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. "HOLPA Household Form - Local Shared Test Version". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost.
+Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. "Global Indicators Form - Local Shared Test Version". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost.
 
 Once enumerators begin data collection, you will be able to see form submissions in the next section, Monitor data collection. At the bottom of the page, you can see the titles and published status of your forms. There are options to publish changes if this still needs to be done before commencing data collection.
 

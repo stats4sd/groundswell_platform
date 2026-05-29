@@ -1,4 +1,4 @@
-The localisation sections allow you to adjust the HOLPA survey to ensure it is relevant to the target audience. Customisations you make in the following steps will only affect the localised version of the survey used by your team. The global survey translation selected or uploaded in Step 1 and shared with other teams will remain unchanged.
+The localisation sections allow you to adjust the survey to ensure it is relevant to the target audience. Customisations you make in the following steps will only affect the localised version of the survey used by your team. The global survey translation selected or uploaded in Step 1 and shared with other teams will remain unchanged.
 
 In this first section "Place-based adaptations", you can customise certain questions and answer options. For example, in different geographical locations, farmers would be growing different crops and different staple foods would be commonly consumed; the options in the questionnaire should reflect this.
 
