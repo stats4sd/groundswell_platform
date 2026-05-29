@@ -7,7 +7,10 @@
       "Bash(vendor/bin/phpstan --version)",
       "Bash(vendor/bin/pest --version)",
       "Bash(vendor/bin/phpstan analyse *)",
-      "Bash(xargs ls -la)"
+      "Bash(xargs ls -la)",
+      "Bash(mkdir -p /Users/dave/Sites/groundswell_platform/resources/text)",
+      "Bash(mkdir -p /Users/dave/Sites/groundswell_platform/app/Helpers)",
+      "Bash(composer dump-autoload *)"
     ]
   }
 }

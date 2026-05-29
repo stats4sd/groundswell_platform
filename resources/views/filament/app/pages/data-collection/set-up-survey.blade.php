@@ -3,39 +3,16 @@
 use App\Filament\App\Pages\SurveyDashboard;
 
 $surveyDashboardUrl = SurveyDashboard::getUrl();
+
+$instructions = tfile('setup-survey');
+
 ?>
 <x-filament-panels::page class="px-10 h-full">
 
     <x-instructions-sidebar>
         <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
-
-            <div class="mx-12 mb-4">
-                <p class="my-2">
-                    {{ t("Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin.") }}
-                </p>
-                <h5>{{ t("Set up live forms for data collection") }}</h5>
-
-                <p class="my-2">
-                    {{ t("Up until this point, all the forms used for pilot testing have been labelled as \"test\" forms, and the submissions are stored as test data, not to be included in the results. To begin actual data collection, you need to use this section to set your survey to \"live\". There are some notes on this page to prompt you to double check all the necessary tasks have been completed. Read through these, and when you are ready, click the button to make your survey live.") }}
-                </p>
-                <h5>{{ t("Access live forms") }}</h5>
-                <p class="my-2">
-                    {{ t("Once your survey is live, this section will display the QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms.") }}
-                {{-- Check the above text. --}}
-                <p class="my-2">
-                    {{ t("Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. \"HOLPA Household Form - Local Shared Test Version\". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost.") }}
-                </p>
-                <p class="my-2">
-                    {{ t("Once enumerators begin data collection, you will be able to see form submissions in the next section,") }}
-                    <a href="{{ \App\Filament\App\Pages\DataCollection\MonitorDataCollection::getUrl() }}" class="font-semibold text-green">{{ t("Monitor data collection") }}</a>.
-                </p>
-
-                <h5>{{ t("Forms overview") }}</h5>
-                <p class="my-2">
-                    {{ t("Here you can see the titles and published status of your forms. There are options here to publish changes if this still needs to be done before commencing data collection.") }}
-                </p>
-            </div>
+            {!! \Illuminate\Support\Str::markdown($instructions) !!}
         </x-slot:instructions>
     </x-instructions-sidebar>
 

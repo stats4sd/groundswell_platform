@@ -579,6 +579,15 @@ fieldset {
     }
 }
 
+blockquote {
+    background-color: #FCEBEB;
+    color: #A32D2D;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    border: 1px solid #F0959580;
+}
+
 .instruction_panel ul {
     margin-left: 30px;
     margin-bottom: 1rem;
@@ -587,6 +596,7 @@ fieldset {
         @apply my-1;
     }
     @apply list-disc;
+
 }
 
 .instruction_panel h5 {
@@ -596,6 +606,10 @@ fieldset {
 .instruction_panel .fi-modal-content {
     @apply px-12;
     @apply gap-y-0 !important;
+}
+
+.instruction_panel p {
+    @apply mb-2;
 }
 
 .instructions_note {

@@ -1,20 +1,10 @@
+@php $instructions = tfile('place-adaptations-diet-diversity'); @endphp
+
 <x-filament-panels::page>
     <x-instructions-sidebar>
         <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
-            <div class="mx-12 mb-4">
-
-                <h5>{{ t("Diet Diversity module") }}</h5>
-
-                <p class="mb-2">
-                    {{ t("HOLPA uses an internationally validated indicator for \"dietary diversity\". The questions in this section ask whether members of the household have consumed anything from specific food groups within the last 24 hours, such as grain food, tubers, pulses, green veg, etc. The default survey has all the needed questions, but does not include lists of locally contextualised example foods for each group.") }}
-                </p>
-                <p class="mb-2">
-                    {{ t("The platform can incorporate localised versions of the questions from the") }}
-                    <a href="https://www.dietquality.org/tools" class="text-green font-semibold" target="_blank"
-                    >{{ t("Global Diet Quality Project") }}</a>, {{ t("which add relevant example foods for each category customised for over 100 countries. If you would like to include these in your survey, select the suitable country from the list of available countries. The page shows the questions that will appear in the survey, so you can review the default and the localised versions with examples, and decide what to use for your survey.") }}
-                </p>
-            </div>
+            {!! \Illuminate\Support\Str::markdown($instructions) !!}
         </x-slot:instructions>
     </x-instructions-sidebar>
 
