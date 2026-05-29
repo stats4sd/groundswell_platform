@@ -87,7 +87,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
             }
 
             // manually set the default time_frame
-            $owner->time_frame = 'in the last 12 months';
+            // $owner->time_frame = 'in the last 12 months';
 
             $owner->save();
         });
