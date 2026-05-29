@@ -7,246 +7,568 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-28T15:31:59+00:00\n"
-"PO-Revision-Date: 2026-05-28 15:31+0000\n"
+"POT-Creation-Date: 2026-05-29T11:14:47+00:00\n"
+"PO-Revision-Date: 2026-05-29 11:14+0000\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: app/Providers/Filament/ProgramPanelProvider.php:86
-#: app/Providers/Filament/AdminPanelProvider.php:72
-msgid "Return to Front end"
-msgstr ""
-
-#: app/Providers/Filament/AppPanelProvider.php:167
-#: app/Filament/App/Resources/SubmissionResource/Pages/ListSubmissions.php:44
-#: app/Filament/App/Pages/SurveyLocations/SurveyLocationsIndex.php:48
-#: app/Filament/App/Pages/SurveyLocations/ContextQuestions.php:33
-#: app/Filament/App/Pages/SurveyLanguages/SurveyTranslations.php:42
-#: app/Filament/App/Pages/SurveyLanguages/SurveyLanguagesIndex.php:44
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:50
-#: app/Filament/App/Pages/SurveyDashboard.php:31
-#: app/Filament/App/Pages/SurveyDashboard.php:36
-#: app/Filament/App/Pages/PlaceAdaptations/TimeFrame.php:56
-#: resources/views/components/survey-dashboard-header.blade.php:56
-msgid "Survey Dashboard"
-msgstr ""
-
-#: app/Providers/Filament/AppPanelProvider.php:171
-msgid "Admin Panel"
-msgstr "Panneau d'administration"
-
-#: app/Providers/Filament/AppPanelProvider.php:176
-msgid "Program Admin Panel"
-msgstr ""
-
-#: app/Providers/Filament/AppPanelProvider.php:181
-msgid "My Team"
-msgstr "Mon équipe"
-
-#: app/Providers/Filament/AppPanelProvider.php:185
-msgid "Download User Guide"
-msgstr ""
-
-#: app/Livewire/InstructionsSidebarLivewire.php:35
-#: resources/views/filament/app/resources/farm-resource/widgets/farm-list-header-widget.blade.php:3
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:4
-#: resources/views/filament/app/clusters/location-levels/resources/location-level-resource/pages/list-location-levels.blade.php:39
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:27
-#: resources/views/filament/app/pages/survey-locations/context-questions.blade.php:4
-#: resources/views/filament/app/pages/place-adaptations/place-adaptations-index.blade.php:12
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:3
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:4
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:4
-#: resources/views/filament/app/pages/lisp/lisp-indicators.blade.php:6
-#: resources/views/filament/app/pages/lisp/lisp-index.blade.php:16
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:3
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:17
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:10
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:11
-#: resources/views/filament/app/pages/survey-languages/survey-country.blade.php:18
-#: resources/views/filament/app/pages/survey-languages/survey-country.blade.php:26
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:11
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:15
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:16
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:10
-#: resources/views/filament/app/pages/info-panels/survey-dashboard.blade.php:19
-msgid "Instructions"
-msgstr ""
-
-#: app/Filament/App/Resources/SubmissionResource/Pages/ListSubmissions.php:22
-msgid "Test Submissions"
-msgstr ""
-
-#: app/Filament/App/Resources/SubmissionResource/Pages/ListSubmissions.php:45
-#: app/Filament/App/Pages/PlaceAdaptations/TimeFrame.php:57
-msgid "Place Adaptations"
-msgstr ""
-
-#: app/Filament/App/Resources/SubmissionResource/Pages/ListSubmissions.php:46
-msgid "Initial Pilot"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource/RelationManagers/InvitesRelationManager.php:31
-#: resources/views/emails/register-interest-email.blade.php:7
-msgid "Email"
-msgstr "Email:"
-
-#: app/Filament/App/Resources/TeamResource/RelationManagers/InvitesRelationManager.php:35
-msgid "Team"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource/RelationManagers/InvitesRelationManager.php:39
-msgid "Invited By"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource/RelationManagers/InvitesRelationManager.php:43
-msgid "Confirmed"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource/RelationManagers/InvitesRelationManager.php:47
-msgid "Invited At"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource/RelationManagers/InvitesRelationManager.php:50
-msgid "Updated At"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource/Pages/ViewTeam.php:26
-msgid "WARNING: Please do not delete when there is actual survey data collected, as deletion is unreversable. Are you sure you would like to do this?"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource/Pages/EditTeam.php:17
-msgid "WARNING: Please do not delete when there is actual survey data collected, as deletion is irreversible. Are you sure you would like to do this?"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource.php:42
-#: app/Filament/App/Resources/TeamResource.php:56
-#: app/Filament/Admin/Resources/ThemeResource.php:34
-#: app/Filament/Admin/Resources/ThemeResource.php:45
-#: resources/views/emails/register-interest-email.blade.php:5
-msgid "Name"
-msgstr "Nom"
-
-#: app/Filament/App/Resources/TeamResource.php:46
-msgid "Description"
-msgstr "Description"
-
-#: app/Filament/App/Resources/TeamResource.php:60
-msgid "Program"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource.php:66
-msgid "# Users"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource.php:70
-msgid "# Invites"
-msgstr ""
-
-#: app/Filament/App/Resources/TeamResource.php:78
-msgid "Created At"
-msgstr ""
-
-#: app/Filament/App/Pages/Auth/EditProfile.php:30
-#: app/Filament/App/Pages/Auth/EditProfile.php:35
-msgid "My Account"
-msgstr "Mon compte"
-
-#: app/Filament/App/Pages/SurveyLocations/SurveyLocationsIndex.php:37
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:117
-msgid "Survey Locations"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLocations/SurveyLocationsIndex.php:42
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:118
-msgid "Add the details of the farms you will visit, to allow the enumerators to carry out data collection."
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLocations/ContextQuestions.php:34
-msgid "Survey locations"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyTranslations.php:31
-msgid "Context: Survey Translations"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyTranslations.php:43
-#: app/Filament/App/Pages/SurveyLanguages/SurveyLanguagesIndex.php:28
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:51
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:62
-msgid "Survey Languages"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyTranslations.php:62
-#: app/Filament/Shared/WithCompletionStatusBar.php:13
-msgid "MARK AS COMPLETE"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyTranslations.php:81
-#: app/Filament/Shared/WithCompletionStatusBar.php:27
-msgid "MARK AS INCOMPLETE"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyLanguagesIndex.php:33
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:54
-msgid "Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template."
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:44
-msgid "Survey Country & Languages"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:68
-msgid "Country"
-msgstr "Pays"
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:77
-msgid "Select the region for this country"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:80
-msgid "Enter the name of this country"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:85
-msgid "Enter the ISO Alpha-2 code for this country"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:90
-msgid "Enter the ISO Alpha-3 code for this country"
-msgstr ""
-
-#: app/Filament/App/Pages/SurveyLanguages/SurveyCountry.php:108
-msgid "Languages"
-msgstr "Langues"
-
-#: app/Filament/App/Pages/PlaceAdaptations/TimeFrame.php:75
-msgid "Time Frame"
-msgstr ""
-
-#: app/Filament/App/Pages/PlaceAdaptations/TimeFrame.php:92
-msgid "Time Frame Updated Successfully"
-msgstr ""
-
-#: app/Filament/Admin/Resources/ThemeResource.php:28
-#: app/Filament/Admin/Resources/ThemeResource.php:49
+#: app\Filament\Admin\Resources\ThemeResource.php:28
+#: app\Filament\Admin\Resources\ThemeResource.php:49
 msgid "Module"
 msgstr ""
 
-#: app/Filament/Admin/Resources/ThemeResource.php:31
-#: app/Filament/Admin/Resources/ThemeResource.php:53
+#: app\Filament\Admin\Resources\ThemeResource.php:31
+#: app\Filament\Admin\Resources\ThemeResource.php:53
 msgid "Domain"
 msgstr ""
 
-#: app/Filament/Admin/Resources/ThemeResource.php:57
+#: app\Filament\Admin\Resources\ThemeResource.php:34
+#: app\Filament\Admin\Resources\ThemeResource.php:45
+#: app\Filament\App\Resources\TeamResource.php:42
+#: app\Filament\App\Resources\TeamResource.php:56
+#: resources\views\emails\register-interest-email.blade.php:5
+msgid "Name"
+msgstr "Nom"
+
+#: app\Filament\Admin\Resources\ThemeResource.php:57
 msgid "# Global indicators"
 msgstr ""
 
-#: resources/text/survey-dashboard.php:5
+#: app\Filament\App\Pages\Auth\EditProfile.php:30
+#: app\Filament\App\Pages\Auth\EditProfile.php:35
+msgid "My Account"
+msgstr "Mon compte"
+
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:56
+#: app\Filament\App\Pages\SurveyDashboard.php:31
+#: app\Filament\App\Pages\SurveyDashboard.php:36
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:50
+#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:44
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:42
+#: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:33
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:48
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:44
+#: app\Providers\Filament\AppPanelProvider.php:167
+#: resources\views\components\survey-dashboard-header.blade.php:56
+msgid "Survey Dashboard"
+msgstr ""
+
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:57
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:45
+msgid "Place Adaptations"
+msgstr ""
+
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:75
+msgid "Time Frame"
+msgstr ""
+
+#: app\Filament\App\Pages\PlaceAdaptations\TimeFrame.php:92
+msgid "Time Frame Updated Successfully"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:44
+msgid "Survey Country & Languages"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:51
+#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:28
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:43
+#: resources\views\filament\app\pages\survey-languages\survey-translations.blade.php:32
+msgid "Survey Languages"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:68
+msgid "Country"
+msgstr "Pays"
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:77
+msgid "Select the region for this country"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:80
+msgid "Enter the name of this country"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:85
+msgid "Enter the ISO Alpha-2 code for this country"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:90
+msgid "Enter the ISO Alpha-3 code for this country"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:108
+msgid "Languages"
+msgstr "Langues"
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:33
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:54
+msgid "Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template."
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:31
+msgid "Context: Survey Translations"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:62
+#: app\Filament\Shared\WithCompletionStatusBar.php:13
+msgid "MARK AS COMPLETE"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:81
+#: app\Filament\Shared\WithCompletionStatusBar.php:27
+msgid "MARK AS INCOMPLETE"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:34
+msgid "Survey locations"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:37
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:117
+msgid "Survey Locations"
+msgstr ""
+
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:42
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:118
+msgid "Add the details of the farms you will visit, to allow the enumerators to carry out data collection."
+msgstr ""
+
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:22
+msgid "Test Submissions"
+msgstr ""
+
+#: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:46
+msgid "Initial Pilot"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource\Pages\EditTeam.php:17
+msgid "WARNING: Please do not delete when there is actual survey data collected, as deletion is irreversible. Are you sure you would like to do this?"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource\Pages\ViewTeam.php:26
+msgid "WARNING: Please do not delete when there is actual survey data collected, as deletion is unreversable. Are you sure you would like to do this?"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:31
+#: resources\views\emails\register-interest-email.blade.php:7
+msgid "Email"
+msgstr "Email:"
+
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:35
+msgid "Team"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:39
+msgid "Invited By"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:43
+msgid "Confirmed"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:47
+msgid "Invited At"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:50
+msgid "Updated At"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource.php:46
+msgid "Description"
+msgstr "Description"
+
+#: app\Filament\App\Resources\TeamResource.php:60
+msgid "Program"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource.php:66
+msgid "# Users"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource.php:70
+msgid "# Invites"
+msgstr ""
+
+#: app\Filament\App\Resources\TeamResource.php:78
+msgid "Created At"
+msgstr ""
+
+#: app\Livewire\InstructionsSidebarLivewire.php:35
+#: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:15
+#: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:5
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:13
+#: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:19
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:5
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:13
+#: resources\views\filament\app\pages\info-panels\survey-dashboard.blade.php:19
+#: resources\views\filament\app\pages\lisp\lisp-index.blade.php:18
+#: resources\views\filament\app\pages\lisp\lisp-indicators.blade.php:8
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:14
+#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:5
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:6
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:14
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:5
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:16
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:10
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:18
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:13
+#: resources\views\filament\app\pages\survey-languages\survey-translations.blade.php:13
+#: resources\views\filament\app\pages\survey-locations\context-questions.blade.php:6
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:27
+#: resources\views\filament\app\resources\farm-resource\widgets\farm-list-header-widget.blade.php:5
+msgid "Instructions"
+msgstr ""
+
+#: app\Providers\Filament\AdminPanelProvider.php:72
+#: app\Providers\Filament\ProgramPanelProvider.php:86
+msgid "Return to Front end"
+msgstr ""
+
+#: app\Providers\Filament\AppPanelProvider.php:171
+msgid "Admin Panel"
+msgstr "Panneau d'administration"
+
+#: app\Providers\Filament\AppPanelProvider.php:176
+msgid "Program Admin Panel"
+msgstr ""
+
+#: app\Providers\Filament\AppPanelProvider.php:181
+msgid "My Team"
+msgstr "Mon équipe"
+
+#: app\Providers\Filament\AppPanelProvider.php:185
+msgid "Download User Guide"
+msgstr ""
+
+#: resources\text\choice-list-entries.php:5
 msgid ""
-"THIS IS AN EDIT HERE.\n"
+"There are some questions in the survey where the appropriate answer options will be different depending on the location context - for example, questions that ask about crops that are grown on a farm *should not* include lots of options for plants that do not grow in the location being surveyed, and *should* include the most commonly grown crops in that area. Questions should also reflect the units of measurement that are used in the location.\n"
 "\n"
+"The \"Contextualise choice lists\" has several choice lists to be checked and customised. You can select from the lists on the left hand side, then review the existing options. Options can be removed from the context, so they will not be included in this questionnaire, and you have the option to add new options by clicking the \"add new\" button. For each choice list entry, you will need to add a name and label, then click \"create\", or \"create and add another\" to save the entry.\n"
 "\n"
+"Each list page includes the option to view the questions that will use these answer options. Check these to ensure you provide suitable options.\n"
+""
+msgstr ""
+
+#: resources\text\context-questions.php:5
+msgid ""
+"##### Add Context Questions\n"
+"\n"
+"The HOLPA Survey already contains a set of core 'context' questions: questions asked about the farm household itself, to help put the agroecology and performance indicators into context. These include questions on the household roster, average education level of members, specifics about the respondent (to help identify possible biases) and whether household members have received specific types of training within the previous year. These questions are asked at the beginning of the household survey.\n"
+"\n"
+"If your project requires it, you may add a small number of additional questions to this section. For example, you may wish to ask whether the household has participated in specific events run by your intervention project, or ask about some specific landscape properties on the farm. To do so, add the questions to this page using the form provided. These questions will be included into your household form when it is next deployed.\n"
+""
+msgstr ""
+
+#: resources\text\data-analysis.php:5
+msgid ""
+"In this section, you can download the dataset for your survey. The download will include all the data from the live data collection, some calculated agroecology and performance indicators, and a data dictionary.\n"
+"\n"
+"From here, your team can conduct whatever data analysis is needed, and organise storing and sharing of the data as required.\n"
+""
+msgstr ""
+
+#: resources\text\data-collection-monitor.php:5
+msgid ""
+"##### Monitor data collection\n"
+"\n"
+"This page lets you see incoming data. You can track progress and review submissions for quality assurance purposes.\n"
+"\n"
+"At the top of the page, you will see a general summary of the data that has been collected; this includes the number of submissions for each form and number of farms surveyed. Beneath that, you can browse the submissions. Use the tabs to view submissions by locations at different levels, or to simply view all of them.\n"
+"\n"
+"There is also an option to download the raw data from submissions. Note that this will be unprocessed, and will not include calculated indicators; to obtain survey data ready for analysis, use the \"data analysis\" section.\n"
+"\n"
+"If you find you need to correct an error in the data, you can directly edit a submission. This should be used sparingly, only where it has been confirmed with an enumerator that something was inputted incorrectly.\n"
+""
+msgstr ""
+
+#: resources\text\data-collection.php:5
+msgid ""
+"Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin.\n"
+"\n"
+"##### Set up the survey\n"
+"\n"
+"Up until this point, all the forms used for pilot testing have been labelled as \"test\" forms, and the submissions are stored as test data, not to be included in the results. To begin actual data collection, you need to use the \"Set up live forms for data collection\" section to set your survey to \"live\". There are some notes on this page to prompt you to double check all the necessary tasks have been completed. Read through these, and when you are ready, click the button to make your survey live.\n"
+"\n"
+"Once your survey is live, you will be able to use a QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms.\n"
+"\n"
+"Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. \"HOLPA Household Form - Local Shared Test Version\". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost.\n"
+"\n"
+"Once enumerators begin data collection, you will be able to see form submissions in the next section, Monitor data collection. At the bottom of the page, you can see the titles and published status of your forms. There are options to publish changes if this still needs to be done before commencing data collection.\n"
+"\n"
+"##### Monitor data collection\n"
+"\n"
+"This page lets you see incoming data. You can track progress and review submissions for quality assurance purposes.\n"
+"\n"
+"At the top of the page, you will see a general summary of the data that has been collected; this includes the number of submissions for each form and number of farms surveyed. Beneath that, you can browse the submissions. Use the tabs to view submissions by locations at different levels, or to simply view all of them.\n"
+"\n"
+"There is also an option to download the raw data from submissions. Note that this will be unprocessed, and will not include calculated indicators; to obtain survey data ready for analysis, use the \"data analysis\" section.\n"
+"\n"
+"If you find you need to correct an error in the data, you can directly edit a submission. This should be used sparingly, only where it has been confirmed with an enumerator that something was inputted incorrectly.\n"
+"\n"
+"##### Mark this section as complete when:\n"
+"\n"
+"Data collection has been carried out and concluded.\n"
+""
+msgstr ""
+
+#: resources\text\farm-list.php:5
+msgid ""
+"The next action is to add the details of all the farms that you will visit in your survey. Similar to adding locations, you can add farms manually or import a list from a spreadsheet file. The spreadsheet should be set up with the same structure as when adding locations at other levels.\n"
+"\n"
+"When importing a list, you will need to include columns with the farm unique code, and the unique code for the location it is in. When you upload the list, you need to select the location level the farms are located in. You can also optionally include extra columns with details that identify the farm, such as farm name, telephone number, family name etc, or for details that contain properties of the farm which may be useful for future analysis, such as the size of the farm.\n"
+""
+msgstr ""
+
+#: resources\text\initial-pilot.php:5
+msgid ""
+"##### Initial pilot test\r\n"
+"\r\n"
+"Following customisation, a pilot test should be conducted to check the sense and functionality of the survey. On this page, you will find the QR code to scan to start testing the survey using ODK. Note that this QR code should only be used for this initial testing - the 'data collection' section contains a different link for the full pilot and live data collection, and it is important to use the correct version of the survey.\r\n"
+"\r\n"
+"The initial pilot can be completed by a member of your team with at least one local researcher or practitioner. To conduct the test:\r\n"
+"\r\n"
+"1. Make sure you have made all the intended customisations up to this step of the process.\r\n"
+"2. Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed and set up.\r\n"
+"3. The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:\r\n"
+"- Check that the survey layout and dependencies are correctly coded; for example, you should check that mandatory questions are not showing as optional.\r\n"
+"- Make sure all questions and response options are clear for respondents in the local context.\r\n"
+"- Identify if hints or examples are needed for any sections that may cause confusion or be misunderstood.\r\n"
+"4. When you submit data using the test survey, it will appear in the \"Draft submissions\" table, so you can confirm that the data has been submitted and recognised.\r\n"
+"\r\n"
+"Once you have completed this process, you may need to return to some of the actions within this step or previous steps (such as to edit the survey translation). You can repeat this pilot test as many times as you choose. Be aware that each time you make a change to the form, an updated form is generated. This can take a few minutes, so you may need to wait while this process completes to access the latest version of the test forms. Any submissions to the test forms are temporary and will be overwritten when the forms are updated.\r\n"
+"\r\n"
+"> ⚠️ **The QR codes below are DRAFTS.**\r\n"
+"> Please **do not share** these codes with enumerators!\r\n"
+"> **All submissions to the test forms are temporary** and will be reset whenever you take an action using the survey dashboard that changes the forms.\r\n"
+"> Do not use these forms for live data collection.\r\n"
+"\r\n"
+"##### Mark this section as complete when:\r\n"
+"\r\n"
+"You have conducted the technical test and are happy with the changes to the forms and the technical functioning of the survey up to this point.\r\n"
+""
+msgstr ""
+
+#: resources\text\lisp-indicators.php:5
+msgid ""
+"##### Customise indicators\n"
+"\n"
+"The customise indicators page allows you to incorporate the local indicators identified in your workshop into the customised HOLPA tool by uploading the local indicators, matching them where possible with available HOLPA indicators, and adding new custom indicators for any that remain.\n"
+"\n"
+"When you go to the customise indicators page, you have three options. You will want to work left to right to start with, but you can return at any point and make changes in any of the sections.\n"
+"\n"
+"- **Upload local indicators**\n"
+"  This is where you upload the completed template containing the local indicators that were selected in the workshop. Drag and drop or click to select the file you want to upload, then click the upload button to confirm. Once you have uploaded a file, you will see the details and have the option to delete it and upload a new file.\n"
+"\n"
+"- **Match with global indicators**\n"
+"  This option allows you to browse through the list of core and optional indicators already present in the global HOLPA survey. If your indicators match up to the ones already available, you can add them easily by matching them here.\n"
+"  Click on an indicator on the left hand side. The available indicators within the corresponding theme will appear on the right. Read through and, if there is one that is the same as your indicator (or \"close enough\", depending on what your team and stakeholders may decide), then select that as a match. Do this for each of the indicators. There may not be suitable matching indicators for all of them; remaining indicators can be incorporated into the survey using the \"Add custom survey questions\" option.\n"
+"\n"
+"- **Add custom survey questions**\n"
+"  This may be more resource intensive in terms of data collection, and reduces the comparability of results, so consider each one you choose to add carefully as a compromise between local relevance and global comparability.\n"
+"  You will see the remaining unmatched indicators in a table. You have the option to either import questions in bulk using an XLSform, or manually add questions for each indicator.\n"
+"    - If you are confident writing ODK forms in Excel, then importing questions will give you more flexibility (for example, with different question types). To import questions, click the \"Download XLSform template\" button, and fill in the template. You will need to write your questions in a normal ODK XLSform format, and use the first column in the template to select which indicator each question is associated with. When you have completed the form, return to the same page to upload it, and you will see the newly added questions in the table below.\n"
+"    - You can add questions manually using the \"Add question\" button for each indicator in the list. Select the question type, and then fill in the fields as needed. When you save changes to the question, it will appear in the list.\n"
+"    - On the left hand side of the table, there is a button you can drag to reorder the questions within an indicator.\n"
+"\n"
+"- **Place custom questions in survey**\n"
+"  This option allows you to indicate where in the survey the custom questions should be placed. In the left column is a list of your local indicators, and you can click to drop down to see the questions you have added for each one. On the right hand side are all the modules of the Household and Fieldwork surveys. To place the questions, drag an indicator from the list on the left to the desired position in the list on the right.\n"
+"\n"
+"  The order of the questions within each module cannot be changed here. To change the order of questions within a module, you will need to go back to the \"Add custom survey questions\" section and reorder them there.\n"
+"\n"
+"  Once you have placed all your custom questions, click \"Confirm Ordering\" to finalize the order and add your custom questions to the surveys for testing. If you need to reset the order at any time, click \"Reset Ordering\" to revert to the default ordering (this will remove your local indicator modules from the survey forms).\n"
+""
+msgstr ""
+
+#: resources\text\lisp.php:5
+msgid ""
+"##### The local indicator selection process (LISP) workshop\n"
+"\n"
+"The LISP is a vital part of the localisation of the HOLPA tool. It involves conducting a workshop with local farmers and stakeholders to identify a set of local indicators to include in the HOLPA tool that could be used to monitor the types of changes they want to see in their farms and landscapes.\n"
+"\n"
+"The LISP workshop page provides some guidance and materials to support teams with planning the workshop, but the details of this will be specific to each team and location. There is a template provided to collect the details of the indicators identified by the workshop; this template will be used to add these local indicators on the following page.\n"
+"\n"
+"##### Customise indicators\n"
+"\n"
+"The customise indicators page allows you to incorporate the local indicators identified in your workshop into the customised HOLPA tool by uploading the local indicators, matching them where possible with available HOLPA indicators, and adding new custom indicators for any that remain.\n"
+"\n"
+"When you go to the customise indicators page, you have three options. You will want to work left to right to start with, but you can return at any point and make changes in any of the sections.\n"
+"\n"
+"- **Upload local indicators**\n"
+"  This is where you upload the completed template containing the local indicators that were selected in the workshop. Drag and drop or click to select the file you want to upload, then click the upload button to confirm. Once you have uploaded a file, you will see the details and have the option to delete it and upload a new file.\n"
+"\n"
+"- **Match with global indicators**\n"
+"  This option allows you to browse through the list of core and optional indicators already present in the global HOLPA survey. If your indicators match up to the ones already available, you can add them easily by matching them here.\n"
+"  Click on an indicator on the left hand side. The available indicators within the corresponding theme will appear on the right. Read through and, if there is one that is the same as your indicator (or \"close enough\", depending on what your team and stakeholders may decide), then select that as a match. Do this for each of the indicators. There may not be suitable matching indicators for all of them; remaining indicators can be incorporated into the survey using the \"Add custom survey questions\" option.\n"
+"\n"
+"- **Add custom survey questions**\n"
+"  This may be more resource intensive in terms of data collection, and reduces the comparability of results, so consider each one you choose to add carefully as a compromise between local relevance and global comparability.\n"
+"  You will see the remaining unmatched indicators in a table. You have the option to either import questions in bulk using an XLSform, or manually add questions for each indicator.\n"
+"    - If you are confident writing ODK forms in Excel, then importing questions will give you more flexibility (for example, with different question types). To import questions, click the \"Download XLSform template\" button, and fill in the template. You will need to write your questions in a normal ODK XLSform format, and use the first column in the template to select which indicator each question is associated with. When you have completed the form, return to the same page to upload it, and you will see the newly added questions in the table below.\n"
+"    - You can add questions manually using the \"Add question\" button for each indicator in the list. Select the question type, and then fill in the fields as needed. When you save changes to the question, it will appear in the list.\n"
+"    - On the left hand side of the table, there is a button you can drag to reorder the questions within an indicator.\n"
+"\n"
+"- **Place custom questions in survey**\n"
+"  This option allows you to indicate where in the survey the custom questions should be placed. In the left column is a list of your local indicators, and you can click to drop down to see the questions you have added for each one. On the right hand side are all the modules of the Household and Fieldwork surveys. To place the questions, drag an indicator from the list on the left to the desired position in the list on the right.\n"
+"\n"
+"##### Mark this section as complete when:\n"
+"\n"
+"You have carried out the LISP workshop, agreed the local indicators for your survey, and used the matching and custom question options to add those indicators to your survey.\n"
+""
+msgstr ""
+
+#: resources\text\location-levels.php:5
+msgid ""
+"On the location levels page, you first need to add the names of the different levels:\n"
+"\n"
+"- Click on \"new location level\".\n"
+"- Indicate whether the location level you are adding is a sub-level of another level - in our province > district > village example, district is a sub-level of province and village is a sub-level of district.\n"
+"- Add the name for the level.\n"
+"- Indicate whether there are farms at this level - This means that they are within this level but not in a lower sub-level; for example, there are farms at the village level but not the province level.\n"
+"- Click to create the level, or to create and immediately add another level.\n"
+"\n"
+"Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have the option to import them from an excel file or add them manually.\n"
+"\n"
+"To import locations, upload an excel spreadsheet with the required details:\n"
+"\n"
+"- A column with the name of the location\n"
+"- A column with the unique IDs for the locations. (These can be generated however you like, but each one must be unique)\n"
+"- If the location level you are adding to is a sub-level of another location level, then you need to also have a column with the name and unique ID of the location in the level above (in our province > district > village example, \"Village A\" might be located in \"District C\", and you would need to include the details of both.)\n"
+"- The first row of the worksheet should contain column headings, not your first location.\n"
+"- Make sure the data to be imported is in the first worksheet of the spreadsheet.\n"
+"- You should have a column for location name and a column for unique codes for the locations.\n"
+"- It does not matter what order the columns are in, what column headers you use, or if other data is in the spreadsheet.\n"
+"\n"
+"Once you have uploaded the list, use the column mapping options to select the column for names and the column for unique code. You have the option to override all previously added locations with the new locations from the uploaded spreadsheet. When you are ready, click submit.\n"
+"\n"
+"To add locations manually, click on \"Add new [location name]\", and type in the name and code, then click on \"Create\" or \"Create and create another\". Add locations for all the location levels.\n"
+""
+msgstr ""
+
+#: resources\text\pilot-index.php:5
+msgid ""
+"##### Pilot test and enumerator training\r\n"
+"\r\n"
+"This page guides you through the process of conducting the pilot test for your survey. Before you conduct the pilot, ensure you have:\r\n"
+"\r\n"
+"- Made your intended changes and customisations using the previous steps on the dashboard.\r\n"
+"- As needed, used the initial pilot draft versions of the form to check any additional changes, such as the addition of custom questions for your local indicators following the LISP workshop.\r\n"
+"- Published all changes to update the forms you will use in the pilot. This must be done manually; this is so that you can make changes and test them as draft versions to confirm they are working as expected before updating the versions that your enumerator team will see. You will find the option to publish your changes on the 'Access forms' section of the page.\r\n"
+"\r\n"
+"When you are ready for the pilot, you will need to organise the workshop as described in this page. You will find the QR code to allow enumerators to set up the forms on the 'Access forms' section of the page. Note that these are not the same as the draft versions used in the initial pilot, and those draft forms should never be used for this pilot or for live data collection, as the data submitted for those forms is not saved. Ensure that everyone is using the correct version of the forms before proceeding with the pilot or any data collection.\r\n"
+"\r\n"
+"##### Access forms\r\n"
+"\r\n"
+"The 'Access forms' section contains the option to publish your changes to the survey, and QR codes to set up the forms on the mobile devices that will be used to pilot data collection.\r\n"
+"\r\n"
+"##### Forms and submissions\r\n"
+"\r\n"
+"In the 'Forms and submissions' section, you can see an overview of the current forms and view the submissions. If new submissions have not yet appeared on the page, you can use the 'manually get submissions' option on the survey forms view to prompt this to refresh.\r\n"
+"\r\n"
+"The survey submissions view shows you all the submissions for your forms. You can view individual submissions to conduct quality checks. This will help you identify frequent errors or omissions which may necessitate further enumerator training or adjustments to the form.\r\n"
+"\r\n"
+"When you have completed the pilot, you will likely then need to return to previous sections to make additional edits to the survey. Revisit any section from the dashboard as needed. You may choose to carry out further pilots or technical tests before commencing live data collection.\r\n"
+"\r\n"
+"##### Mark this section as complete when:\r\n"
+"\r\n"
+"You have conducted the pilot and training workshop, and are satisfied that the required adjustments have been made."
+msgstr ""
+
+#: resources\text\place-adaptations-diet-diversity.php:5
+msgid ""
+"##### Diet Diversity module\n"
+"\n"
+"HOLPA uses an internationally validated indicator for \"dietary diversity\". The questions in this section ask whether members of the household have consumed anything from specific food groups within the last 24 hours, such as grain food, tubers, pulses, green veg, etc. The default survey has all the needed questions, but does not include lists of locally contextualised example foods for each group.\n"
+"\n"
+"The platform can incorporate localised versions of the questions from the [Global Diet Quality Project](https://www.dietquality.org/tools), which add relevant example foods for each category customised for over 100 countries. If you would like to include these in your survey, select the suitable country from the list of available countries. The page shows the questions that will appear in the survey, so you can review the default and the localised versions with examples, and decide what to use for your survey.\n"
+""
+msgstr ""
+
+#: resources\text\place-adaptations-time-frame.php:5
+msgid ""
+"##### Time frame\n"
+"\n"
+"The first thing you can customise is the time frame that is asked about for questions concerning the recent past. By default, this time frame is \"In the last 12 months\". However, for your survey, it might make more sense to ask the questions about \"last season\" or \"last year\".\n"
+"\n"
+"The page shows the questions in the survey that use the time frame. Whatever phrase is used for the time frame will be inserted into the question in place of the \"${time_frame}\" text placeholder. Look through them, determine what time frame is most appropriate and, if you decide to change it, update the timeframe text in the box. Your entry will be automatically saved and the question text in your survey form will be updated.\n"
+""
+msgstr ""
+
+#: resources\text\place-adaptations.php:5
+msgid ""
+"The localisation sections allow you to adjust the HOLPA survey to ensure it is relevant to the target audience. Customisations you make in the following steps will only affect the localised version of the survey used by your team. The global survey translation selected or uploaded in Step 1 and shared with other teams will remain unchanged.\n"
+"\n"
+"In this first section \"Place-based adaptations\", you can customise certain questions and answer options. For example, in different geographical locations, farmers would be growing different crops and different staple foods would be commonly consumed; the options in the questionnaire should reflect this.\n"
+"\n"
+"##### Time frame\n"
+"\n"
+"The first thing you can customise is the time frame that is asked about for questions concerning the recent past. By default, this time frame is \"In the last 12 months\". However, for your survey, it might make more sense to ask the questions about \"last season\" or \"last year\".\n"
+"\n"
+"The page shows the questions in the survey that use the time frame. Whatever phrase is used for the time frame will be inserted into the question in place of the \"${time_frame}\" text placeholder. Look through them, determine what time frame is most appropriate and, if you decide to change it, update the timeframe text in the box. Your entry will be automatically saved and the question text in your survey form will be updated.\n"
+"\n"
+"##### Diet Diversity module\n"
+"\n"
+"HOLPA uses an internationally validated indicator for \"dietary diversity\". The questions in this section ask whether members of the household have consumed anything from specific food groups within the last 24 hours, such as grain food, tubers, pulses, green veg, etc. The default survey has all the needed questions, but does not include lists of locally contextualised example foods for each group.\n"
+"\n"
+"The platform can incorporate localised versions of the questions from the [Global Diet Quality Project](https://www.dietquality.org/tools), which add relevant example foods for each category customised for over 100 countries. If you would like to include these in your survey, select the suitable country from the list of available countries. The page shows the questions that will appear in the survey, so you can review the default and the localised versions with examples, and decide what to use for your survey.\n"
+"\n"
+"##### Contextualise choice lists\n"
+"\n"
+"There are some questions in the survey where the appropriate answer options will be different depending on the location context - for example, questions that ask about crops that are grown on a farm *should not* include lots of options for plants that do not grow in the location being surveyed, and *should* include the most commonly grown crops in that area. Questions should also reflect the units of measurement that are used in the location.\n"
+"\n"
+"The \"Contextualise choice lists\" has several choice lists to be checked and customised. You can select from the lists on the left hand side, then review the existing options. Options can be removed from the context, so they will not be included in this questionnaire, and you have the option to add new options by clicking the \"add new\" button. For each choice list entry, you will need to add a name and label, then click \"create\", or \"create and add another\" to save the entry.\n"
+"\n"
+"Each list page includes the option to view the questions that will use these answer options. Check these to ensure you provide suitable options.\n"
+"\n"
+"##### Pilot test\n"
+"\n"
+"Following customisation, a pilot test should be conducted to check the sense and functionality of the survey. The initial pilot page contains more detailed guidance on this process, and this is where you can find the QR code to scan to start testing the survey using ODK.\n"
+"\n"
+"Note that this QR code should only be used for this initial testing - the 'data collection' section contains a different link for the full pilot and live data collection, and it is important to use the correct version of the survey.\n"
+"\n"
+"##### Mark this section as complete when:\n"
+"\n"
+"You have made all the desired adaptions to the details available for change in this step, piloted the full survey with a local researcher or practitioner, and made any needed adjustments.\n"
+""
+msgstr ""
+
+#: resources\text\setup-survey.php:5
+msgid ""
+"Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin.\r\n"
+"\r\n"
+"##### Set up live forms for data collection\r\n"
+"\r\n"
+"Up until this point, all the forms used for pilot testing have been labelled as \"test\" forms, and the submissions are stored as test data, not to be included in the results. To begin actual data collection, you need to use this section to set your survey to \"live\". There are some notes on this page to prompt you to double check all the necessary tasks have been completed. Read through these, and when you are ready, click the button to make your survey live.\r\n"
+"\r\n"
+"##### Access live forms\r\n"
+"\r\n"
+"Once your survey is live, this section will display the QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms.\r\n"
+"\r\n"
+"Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. \"HOLPA Household Form - Local Shared Test Version\". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost.\r\n"
+"\r\n"
+"Once enumerators begin data collection, you will be able to see form submissions in the next section, Monitor data collection.\r\n"
+"\r\n"
+"##### Forms overview\r\n"
+"\r\n"
+"Here you can see the titles and published status of your forms. There are options here to publish changes if this still needs to be done before commencing data collection."
+msgstr ""
+
+#: resources\text\survey-country.php:5
+msgid ""
+"##### Select country and languages\n"
+"\n"
+"Start by selecting the country for the survey. You can click in the box and either scroll through the dropdown list or start typing to narrow down the options and find your country. If the country you need is not listed, you can use the \"plus\" button to add it. This will require you to input the country name and some additional details.\n"
+"\n"
+"You can then start adding the languages in which you will conduct your survey. If you are going to run your survey in multiple languages, all of them need to be added here. Start typing in the box to find and add languages.\n"
+"\n"
+"Click \"Save and return\" when you have finished.\n"
+""
+msgstr ""
+
+#: resources\text\survey-dashboard.php:5
+msgid ""
 "This is the HOLPA survey builder dashboard. Here you can see an overview of the tasks required to prepare and deliver the survey, and you can keep track of your progress.\n"
 "\n"
 "##### Do I need to complete the sections in order?\n"
@@ -278,7 +600,39 @@ msgid ""
 ""
 msgstr ""
 
-#: resources/text/survey-locations.php:5
+#: resources\text\survey-languages.php:5
+msgid ""
+"The first step to set up the survey is to select the country and languages your team will conduct the survey in. Bear in mind that if you change these details later, you may need to review some of the other steps.\n"
+"\n"
+"##### Select country and languages\n"
+"\n"
+"Start by selecting the country for the survey. You can click in the box and either scroll through the dropdown list or start typing to narrow down the options and find your country. If the country you need is not listed, you can use the \"plus\" button to add it. This will require you to input the country name and some additional details.\n"
+"\n"
+"You can then start adding the languages in which you will conduct your survey. If you are going to run your survey in multiple languages, all of them need to be added here. Start typing in the box to find and add languages.\n"
+"\n"
+"##### Survey translations\n"
+"\n"
+"When you have selected the languages for your survey, you should review the available translations.\n"
+"\n"
+"HOLPA is available in multiple languages. On the translations page, for each of the languages you selected previously, you will need to select the translation to use. Click \"Select translation\" to show the available translations for a language.\n"
+"\n"
+"If there is no existing translation, or the available translations are not suitable for your survey location, you should add a new translation. You may wish to duplicate an existing translation to use as a starting point.\n"
+"\n"
+"To add a new translation, click on \"add new\" and give it a clear name. The translation will appear in the table. You can then use the \"view/edit\" menu to download the translation template. Add the translated text in the indicated column in the xls files, then reupload them using the same menu. Once both forms have translated versions uploaded, the translation will be available for use. When editing or adding a translation, make sure you download the file for the language you wish to edit, and make the changes in that file. If the column headers do not match the original file or if the column for the translated text is left blank, you will see an error message when you upload the files.\n"
+"\n"
+"If you click on view/edit translation, this will allow you to download the xls files with the translated text. You can edit translations that your team has added. To do this, download the existing translation files and follow the same process as when adding a translation: make changes in the column for the destination language and upload the edited file through the same menu. Note that the translation is to reflect the text **as written in the HOLPA survey**; this is not the appropriate place to customise the content of the survey. Translations added by other teams or from the original ODK forms cannot be directly edited, but you can duplicate the translation to make a new version with your changes.\n"
+"\n"
+"The HOLPA platform will make user-uploaded translations available to all other teams.\n"
+"\n"
+"**NOTE:** The platform assumes that you are working within one country. If you are conducting HOLPA across multiple countries, you will need to create separate teams within this platform for each country. Please contact the HOLPA support team if you require assistance with this.\n"
+"\n"
+"##### Mark this section as complete when:\n"
+"\n"
+"You have selected the country, languages and added a global HOLPA survey translation for each language.\n"
+""
+msgstr ""
+
+#: resources\text\survey-locations.php:5
 msgid ""
 "To enable enumerators to conduct the survey, and possibly for data analysis later on, you will need to add details of the farms you will visit, including the details of the different location levels. The system by which geographic locations are organised and denoted will vary between places (some countries are organised into counties and towns, some have provinces and districts), so you will need to first input the details of the hierarchy, and then fill in the specific locations for your survey.\n"
 "\n"
@@ -321,1448 +675,1114 @@ msgid ""
 "You have added all the location levels, locations, and a full list of the farms where you will conduct the survey."
 msgstr ""
 
-#: resources/views/emails/register-interest-email.blade.php:2
-msgid "New Registration of Interest"
+#: resources\text\survey-translations.php:5
+msgid ""
+"##### Survey translations\n"
+"\n"
+"HOLPA is available in multiple languages. On the translations page, for each of the languages you selected previously, you will need to select the translation to use. Click \"Select translation\" to show the available translations for a language.\n"
+"\n"
+"If there is no existing translation, or the available translations are not suitable for your survey location, you should add a new translation. You may wish to duplicate an existing translation to use as a starting point.\n"
+"\n"
+"To add a new translation, click on \"add new\" and give it a clear name. The translation will appear in the table. You can then use the \"view/edit\" menu to download the translation template. Add the translated text in the indicated column in the xls files, then reupload them using the same menu. Once both forms have translated versions uploaded, the translation will be available for use. When editing or adding a translation, make sure you download the file for the language you wish to edit, and make the changes in that file. If the column headers do not match the original file or if the column for the translated text is left blank, you will see an error message when you upload the files.\n"
+"\n"
+"If you click on view/edit translation, this will allow you to download the xls files with the translated text. You can edit translations that your team has added. To do this, download the existing translation files and follow the same process as when adding a translation: make changes in the column for the destination language and upload the edited file through the same menu. Note that the translation is to reflect the text **as written in the HOLPA survey**; this is not the appropriate place to customise the content of the survey. Translations added by other teams or from the original ODK forms cannot be directly edited, but you can duplicate the translation to make a new version with your changes.\n"
+"\n"
+"The HOLPA platform will make user-uploaded translations available to all other teams.\n"
+"\n"
+"**NOTE:** The platform assumes that you are working within one country. If you are conducting HOLPA across multiple countries, you will need to create separate teams within this platform for each country. Please contact the HOLPA support team if you require assistance with this.\n"
+""
 msgstr ""
 
-#: resources/views/emails/register-interest-email.blade.php:9
-msgid "Organisation"
-msgstr ""
-
-#: resources/views/emails/register-interest-email.blade.php:11
-msgid "Details"
-msgstr ""
-
-#: resources/views/emails/register-interest-email.blade.php:14
-#: resources/views/emails/testing_email.blade.php:8
-msgid "Thanks,"
-msgstr "Merci,"
-
-#: resources/views/emails/register-interest-email-response.blade.php:2
-msgid "Thank you for your interest"
-msgstr ""
-
-#: resources/views/emails/register-interest-email-response.blade.php:5
-msgid "Thank you for registering your interest in the Groundswell International survey tool. Your details have been sent to the administrators of the platform, and they will get back to you as soon as possible."
-msgstr ""
-
-#: resources/views/emails/register-interest-email-response.blade.php:8
-msgid "Meanwhile, if you have any questions about the tool, you can contact the team at support@stats4sd.org."
-msgstr ""
-
-#: resources/views/emails/register-interest-email-response.blade.php:11
-msgid "All the best,"
-msgstr ""
-
-#: resources/views/emails/register-interest-email-response.blade.php:12
-msgid "Stats4SD Team"
-msgstr ""
-
-#: resources/views/emails/testing_email.blade.php:2
-msgid "Testing Email"
-msgstr ""
-
-#: resources/views/emails/testing_email.blade.php:5
-msgid "This is a testing email."
-msgstr ""
-
-#: resources/views/components/survey-dashboard-header.blade.php:55
-#: resources/views/livewire/cover-page.blade.php:24
-#: resources/views/livewire/results-page.blade.php:17
-msgid "Groundswell International"
-msgstr ""
-
-#: resources/views/components/survey-dashboard-header.blade.php:64
-msgid "Shortcut: test or preview survey"
-msgstr ""
-
-#: resources/views/components/survey-dashboard-header.blade.php:65
-msgid "Jump to the ‘initial pilot’ page to access a draft version of your survey questionnaires."
-msgstr ""
-
-#: resources/views/components/survey-dashboard-header.blade.php:68
-msgid "Preview"
-msgstr "Aperçu"
-
-#: resources/views/components/pilot-qr-codes.blade.php:5
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:188
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:127
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:199
-msgid "SCAN QR Code in ODK Collect"
-msgstr ""
-
-#: resources/views/components/pilot-qr-codes.blade.php:10
-msgid "Your project team has been setup. To link your Android device, install and open"
-msgstr ""
-
-#: resources/views/components/pilot-qr-codes.blade.php:12
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:116
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:159
-msgid "ODK Collect"
-msgstr ""
-
-#: resources/views/components/pilot-qr-codes.blade.php:13
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:159
-msgid "When asked for project details, scan the QR code on this page. Your device will be linked and you will have access to the forms listed below."
-msgstr ""
-
-#: resources/views/components/pilot-qr-codes.blade.php:16
-msgid "Both forms will be available to you. The platform will automatically update the forms when you make local adaptations. If for some reason the survey is not fully up to date with your latest changes, you may manually deploy the latest version by clicking the"
-msgstr ""
-
-#: resources/views/components/pilot-qr-codes.blade.php:18
-msgid "Deploy"
-msgstr ""
-
-#: resources/views/components/pilot-qr-codes.blade.php:18
-msgid "button in the table below."
-msgstr ""
-
-#: resources/views/components/pilot-qr-codes.blade.php:25
-msgid "ODK Project not found. Is this platform connected to an ODK Central server?"
-msgstr ""
-
-#: resources/views/components/layouts/app.blade.php:7
-msgid "Groundswell International Survey Tool"
-msgstr ""
-
-#: resources/views/components/complete-section-status-bar.blade.php:49
+#: resources\views\components\complete-section-status-bar.blade.php:49
 msgid "Section Complete"
 msgstr ""
 
-#: resources/views/components/complete-section-status-bar.blade.php:51
-#: resources/views/components/complete-section-status-bar.blade.php:55
+#: resources\views\components\complete-section-status-bar.blade.php:51
+#: resources\views\components\complete-section-status-bar.blade.php:55
 msgid "Go back"
 msgstr ""
 
-#: resources/views/livewire/lisp/local-indicators.blade.php:4
-msgid "Local indicators"
+#: resources\views\components\layouts\app.blade.php:7
+msgid "Groundswell International Survey Tool"
 msgstr ""
 
-#: resources/views/livewire/lisp/local-indicators.blade.php:9
-msgid "Select an indicator to start looking for matches."
+#: resources\views\components\pilot-qr-codes.blade.php:5
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:99
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:145
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:110
+msgid "SCAN QR Code in ODK Collect"
 msgstr ""
 
-#: resources/views/livewire/lisp/local-indicators.blade.php:22
-msgid "MATCHED"
+#: resources\views\components\pilot-qr-codes.blade.php:10
+msgid "Your project team has been setup. To link your Android device, install and open"
 msgstr ""
 
-#: resources/views/livewire/lisp/local-indicators.blade.php:31
-msgid "No local indicators have been uploaded."
+#: resources\views\components\pilot-qr-codes.blade.php:12
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:88
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:105
+msgid "ODK Collect"
 msgstr ""
 
-#: resources/views/livewire/lisp/match-indicators.blade.php:3
-msgid "MATCH WITH EXISTING GLOBAL INDICATORS"
+#: resources\views\components\pilot-qr-codes.blade.php:13
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:105
+msgid "When asked for project details, scan the QR code on this page. Your device will be linked and you will have access to the forms listed below."
 msgstr ""
 
-#: resources/views/livewire/lisp/match-indicators.blade.php:8
-msgid "Here, you can browse through the list of core and optional indicators already present in the global HOLPA survey. If your indicators match up to the ones already available, you can add them easily by matching them. Select an indicator on the left and see if an appropriate match is available on the right."
+#: resources\views\components\pilot-qr-codes.blade.php:16
+msgid "Both forms will be available to you. The platform will automatically update the forms when you make local adaptations. If for some reason the survey is not fully up to date with your latest changes, you may manually deploy the latest version by clicking the"
 msgstr ""
 
-#: resources/views/livewire/lisp/local-indicator-question-form.blade.php:11
-msgid "Hide Questions"
+#: resources\views\components\pilot-qr-codes.blade.php:18
+msgid "Deploy"
 msgstr ""
 
-#: resources/views/livewire/lisp/local-indicator-question-form.blade.php:14
-msgid "Show Questions"
+#: resources\views\components\pilot-qr-codes.blade.php:18
+msgid "button in the table below."
 msgstr ""
 
-#: resources/views/livewire/lisp/upload-local-indicators.blade.php:3
-msgid "UPLOAD LOCAL INDICATORS"
+#: resources\views\components\pilot-qr-codes.blade.php:25
+msgid "ODK Project not found. Is this platform connected to an ODK Central server?"
 msgstr ""
 
-#: resources/views/livewire/lisp/upload-local-indicators.blade.php:9
-msgid "On this page, please add the locally relevant indicators that you identified during the LISP workshop. You may either upload the indicators as an Excel file using the provided "
+#: resources\views\components\survey-dashboard-header.blade.php:55
+#: resources\views\livewire\cover-page.blade.php:24
+#: resources\views\livewire\results-page.blade.php:17
+msgid "Groundswell International"
 msgstr ""
 
-#: resources/views/livewire/lisp/upload-local-indicators.blade.php:11
-msgid "template"
+#: resources\views\components\survey-dashboard-header.blade.php:64
+msgid "Shortcut: test or preview survey"
 msgstr ""
 
-#: resources/views/livewire/lisp/upload-local-indicators.blade.php:11
-msgid "or enter each indicator manually into the table below."
+#: resources\views\components\survey-dashboard-header.blade.php:65
+msgid "Jump to the ‘initial pilot’ page to access a draft version of your survey questionnaires."
 msgstr ""
 
-#: resources/views/livewire/lisp/custom-module-versions.blade.php:4
-msgid "ADD CUSTOM SURVEY QUESTIONS"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-versions.blade.php:9
-msgid "Below are the local indicators that have not been mapped to an existing global HOLPA indicator. For each indicator, please add one or more questions that will be included into the survey."
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-versions.blade.php:10
-msgid "You can either add the questions directly using the \"Add Question\" buttons below, or download the Excel template, write your questions in a normal ODK \"Xlsform\" format, and upload the file. If you are confident writing ODK forms in Excel, this option will give you more flexibility, as you can add any feature that ODK supports."
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-versions.blade.php:13
-msgid "Download Xlsform Template"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-versions.blade.php:15
-msgid "Import Questions from an ODK Xlsform (Excel)"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-versions.blade.php:20
-msgid "Add / Edit Questions Directly"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:4
-msgid "Place custom questions in survey"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:9
-msgid "To add your custom questions into the survey, drag and drop each item into the correct place in the list on the right. Updates to the module ordering will be saved automatically. Once you have finished arranging your custom questions, click \"Confirm Ordering\" to finalize the order and add your custom questions to the surveys for testing. If you need to reset the order at any time, click \"Reset Ordering\" to revert to the default ordering (this will remove your local indicator modules from the survey forms)."
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:21
-msgid "Local Indicator Questions"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:62
-msgid "XLSForm"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:63
-msgid "modules"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:67
-msgid "(Tip: This form has many modules. Scroll the list below to see them all.)"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:114
-msgid "Reset Ordering"
-msgstr ""
-
-#: resources/views/livewire/lisp/custom-module-ordering.blade.php:123
-msgid "Confirm Ordering"
-msgstr ""
-
-#: resources/views/livewire/lisp/global-indicators.blade.php:4
-msgid "Global indicators"
-msgstr ""
-
-#: resources/views/livewire/lisp/global-indicators.blade.php:9
-msgid "Browse the available indicators in the global survey to search for a match for the selected local indicator."
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-entry.blade.php:6
-msgid "Selected Translation:"
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-entry.blade.php:14
-msgid "Select Translation"
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-review-edit-form.blade.php:7
-msgid "Cancel"
-msgstr "Annuler"
-
-#: resources/views/livewire/survey-languages/team-translation-review-edit-form.blade.php:10
-msgid "Duplicate"
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-review-edit-form.blade.php:13
-#: resources/views/livewire/survey-languages/team-translation-review-edit-form.blade.php:15
-msgid "Submit"
-msgstr "Soumettre"
-
-#: resources/views/livewire/survey-languages/team-translation-review.blade.php:2
-#: resources/views/team-translation-review.blade.php:2
-msgid "You can review the text for both ODK forms by downloading the files below."
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-review.blade.php:5
-#: resources/views/team-translation-review.blade.php:5
-msgid "This translation is from the original ODK Forms, and cannot be directly edited. If you wish to create your own version of"
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-review.blade.php:5
-#: resources/views/team-translation-review.blade.php:5
-msgid "you may add a new blank translation or duplicate this one and edit it."
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-review.blade.php:7
-msgid "This translation was uploaded by another team. You cannot edit this translation directly, but you may duplicate it and edit your version if you wish."
-msgstr ""
-
-#: resources/views/livewire/survey-languages/team-translation-review.blade.php:9
-msgid "To edit this translation, click edit below. To keep this version as-is and create a new version to edit, click duplicate."
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:29
-msgid "Survey Tool"
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:48
-#: resources/views/languageSelector.blade.php:5
-msgid "Change Language"
-msgstr "Changer de langue"
-
-#: resources/views/livewire/cover-page.blade.php:87
-#: resources/views/livewire/cover-page.blade.php:182
-msgid "Log in"
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:106
-#: resources/views/livewire/cover-page.blade.php:158
-msgid "Surveys"
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:107
-msgid "Read more about the surveys."
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:110
-msgid "Find out more"
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:119
-#: resources/views/livewire/cover-page.blade.php:170
-msgid "Online Tool"
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:120
-msgid "An online interface to help you tailor the surveys to your context and conduct a survey."
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:123
-msgid "Read more"
-msgstr ""
+#: resources\views\components\survey-dashboard-header.blade.php:68
+msgid "Preview"
+msgstr "Aperçu"
 
-#: resources/views/livewire/cover-page.blade.php:132
-#: resources/views/livewire/cover-page.blade.php:200
-msgid "Results"
+#: resources\views\emails\register-interest-email-response.blade.php:2
+msgid "Thank you for your interest"
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:133
-msgid "Results from previous implementations."
+#: resources\views\emails\register-interest-email-response.blade.php:5
+msgid "Thank you for registering your interest in the Groundswell International survey tool. Your details have been sent to the administrators of the platform, and they will get back to you as soon as possible."
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:136
-msgid "Learn More"
+#: resources\views\emails\register-interest-email-response.blade.php:8
+msgid "Meanwhile, if you have any questions about the tool, you can contact the team at support@stats4sd.org."
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:140
-msgid "Previous Surveys"
+#: resources\views\emails\register-interest-email-response.blade.php:11
+msgid "All the best,"
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:160
-msgid "Groundswell International develops and implements surveys to support data collection, learning, monitoring, and evaluation across a range of programmes and contexts. Surveys can be adapted to different projects, stakeholder groups, and implementation settings, enabling teams to collect meaningful and context-specific information to support decision-making, reporting, and programme improvement. The survey approach supports flexible digital data collection, customised indicators, and streamlined analysis workflows, helping teams manage and interpret data efficiently across multiple locations and activities."
+#: resources\views\emails\register-interest-email-response.blade.php:12
+msgid "Stats4SD Team"
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:172
-msgid "Teams wishing to implement Groundswell International surveys can request access to the online platform designed to support the setup, customisation, deployment, and management of surveys across different contexts."
+#: resources\views\emails\register-interest-email.blade.php:2
+msgid "New Registration of Interest"
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:175
-msgid "The platform guides users through the process of adapting survey modules, configuring indicators, implementing data collection activities, and accessing results and reporting features."
+#: resources\views\emails\register-interest-email.blade.php:9
+msgid "Organisation"
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:178
-msgid "For more information, or to register your interest in using the platform, please use the links below. Existing users can log in using their account credentials."
+#: resources\views\emails\register-interest-email.blade.php:11
+msgid "Details"
 msgstr ""
 
-#: resources/views/livewire/cover-page.blade.php:201
-msgid "The tool has been applied across multiple countries and programme contexts. Results dashboards and country reports enable users to explore findings, compare indicators, and visualise trends across implementations."
-msgstr ""
-
-#: resources/views/livewire/cover-page.blade.php:203
-msgid "View Dashboard"
-msgstr ""
-
-#: resources/views/livewire/results-page.blade.php:20
-msgid "Previous Results"
-msgstr ""
-
-#: resources/views/livewire/results-page.blade.php:27
-msgid "NOTE: The results presented on this page are not yet finalised and are subject to change pending verification."
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:12
-msgid "There are some questions in the survey where the appropriate answer options will be different depending on the location context - for example, questions that ask about crops that are grown on a farm"
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:14
-msgid "should not"
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:14
-msgid "include lots of options for plants that do not grow in the location being surveyed, and"
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:16
-msgid "should"
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:16
-msgid "include the most commonly grown crops in that area. Questions should also reflect the units of measurement that are used in the location."
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:20
-msgid "The \"Contextualise choice lists\" has several choice lists to be checked and customised. You can select from the lists on the left hand side, then review the existing options. Options can be removed from the context, so they will not be included in this questionnaire, and you have the option to add new options by clicking the \"add new\" button. For each choice list entry, you will need to add a name and label, then click \"create\", or \"create and add another\" to save the entry."
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:25
-msgid "Each list page includes the option to view the questions that will use these answer options. Check these to ensure you provide suitable options."
-msgstr ""
-
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:35
-msgid "The list below includes a set of possible responses to some of the survey questions. Please review the list and make sure it is appropriate for your context. You may add new entries and remove existing entries if they are not relevant."
-msgstr ""
+#: resources\views\emails\register-interest-email.blade.php:14
+#: resources\views\emails\testing_email.blade.php:8
+msgid "Thanks,"
+msgstr "Merci,"
 
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:42
-msgid "Variable Name:"
+#: resources\views\emails\testing_email.blade.php:2
+msgid "Testing Email"
 msgstr ""
 
-#: resources/views/filament/app/clusters/lookup-tables/resources/choice-list-entry-resource/widgets/choice-list-entries-info.blade.php:43
-msgid "Question text"
+#: resources\views\emails\testing_email.blade.php:5
+msgid "This is a testing email."
 msgstr ""
 
-#: resources/views/filament/app/clusters/localisations/pages/localisation-intro.blade.php:2
+#: resources\views\filament\app\clusters\localisations\pages\localisation-intro.blade.php:2
 msgid "Survey localisation is all about making sure questions hit home with the right crowd. It’s like translating not just words, but the whole vibe of the survey. Local customs, slang, and cultural references can make or break the responses."
 msgstr ""
 
-#: resources/views/filament/app/clusters/localisations/pages/localisation-intro.blade.php:4
+#: resources\views\filament\app\clusters\localisations\pages\localisation-intro.blade.php:4
 msgid "When crafting surveys, it’s crucial to consider regional differences. What works in one place might totally flop in another. Tailoring questions to fit local contexts can boost engagement and get more accurate data."
 msgstr ""
 
-#: resources/views/filament/app/clusters/localisations/pages/localisation-intro.blade.php:6
+#: resources\views\filament\app\clusters\localisations\pages\localisation-intro.blade.php:6
 msgid "Testing is key. Piloting surveys in different locales helps catch any awkward phrasing or cultural missteps. Feedback from local testers can refine the survey and ensure it resonates."
 msgstr ""
 
-#: resources/views/filament/app/clusters/localisations/pages/localisation-intro.blade.php:9
+#: resources\views\filament\app\clusters\localisations\pages\localisation-intro.blade.php:9
 msgid "In the end, effective survey localisation can lead to richer insights. It’s all about connecting with respondents in a way that feels natural and relevant to them."
 msgstr ""
 
-#: resources/views/filament/app/clusters/localisations/pages/localisation-intro.blade.php:10
+#: resources\views\filament\app\clusters\localisations\pages\localisation-intro.blade.php:10
 msgid "Not bad for a bunch of LLM-generated nonsense, right?"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:9
-msgid "Manage location levels"
+#: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:13
+msgid "The list below includes a set of possible responses to some of the survey questions. Please review the list and make sure it is appropriate for your context. You may add new entries and remove existing entries if they are not relevant."
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:10
-msgid "Manage the location levels (or other strata) in your sampling frame."
+#: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:20
+msgid "Variable Name:"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:12
-msgid "List of farms"
+#: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:21
+msgid "Question text"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:13
-msgid "Add or import details of the farms you will visit to give the questionnaire."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:15
-msgid "Context Questions"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:16
-msgid "Optionally, add extra questions to the survey to get additional context about the farms."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:18
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:8
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:86
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:94
-msgid "Update"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php:19
-msgid "Manage Questions"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-locations/context-questions.blade.php:8
-msgid "Add Context Questions"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-locations/context-questions.blade.php:10
-msgid "The HOLPA Survey already contains a set of core 'context' questions: questions asked about the farm household itself, to help put the agroecology and performance indicators into context. These include questions on the household roster, average education level of members, specifics about the respondent (to help identify possible biases) and whether household members have received specific types of training within the previous year. These questions are asked at the beginning of the household survey."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-locations/context-questions.blade.php:14
-msgid "If your project requires it, you may add a small number of additional questions to this section. For example, you may wish to ask whether the household has participated in specific events run by your intervention project, or ask about some specific landscape properties on the farm. To do so, add the questions to this page using the form provided. These questions will be included into your household form when it is next deployed."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:7
-msgid "Diet Diversity module"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:10
-msgid "HOLPA uses an internationally validated indicator for \"dietary diversity\". The questions in this section ask whether members of the household have consumed anything from specific food groups within the last 24 hours, such as grain food, tubers, pulses, green veg, etc. The default survey has all the needed questions, but does not include lists of locally contextualised example foods for each group."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:14
-msgid "The platform can incorporate localised versions of the questions from the"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:17
-msgid "Global Diet Quality Project"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:17
-msgid "which add relevant example foods for each category customised for over 100 countries. If you would like to include these in your survey, select the suitable country from the list of available countries. The page shows the questions that will appear in the survey, so you can review the default and the localised versions with examples, and decide what to use for your survey."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:26
-msgid "HOLPA uses an internationally validated indicator for \"dietary diversity\". This indicator has a pre-defined set of questions, which is different for different countries. More information about this module can be found on the"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:28
-msgid "website."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:31
-msgid "To complete this section of the localisation, please select the version of the questions that you would like to use for your survey. If an option for your country does not exist, you can either use the default version (without locally-relevant food examples), or contact the HOLPA team to ask for your country's module to be added."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:32
-msgid "It is assumed that you are conducting HOLPA within one country. If you are working across multiple countries, we recommend creating a different \"team\" for each country so that you can make different customisations to the survey within the different countries."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/diet-diversity.blade.php:38
-msgid "Below are the questions that form this module. When you select your country, this table will update to show the text that will appear in your version of the survey."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:9
-msgid "Initial pilot test"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:11
-msgid "Following customisation, a pilot test should be conducted to check the sense and functionality of the survey. On this page, you will find the QR code to scan to start testing the survey using ODK."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:13
-msgid "Note that this QR code should only be used for this initial testing - the 'data collection' section contains a different link for the full pilot and live data collection, and it is important to use the correct version of the survey."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:17
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:101
-msgid "The initial pilot can be completed by a member of your team with at least one local researcher or practitioner. To conduct the test:"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:22
-msgid "Make sure you have made all the intended customisations up to this step of the process."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:26
-msgid "Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed and set up."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:30
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:111
-msgid "The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:35
-msgid "Check that the survey layout and dependencies are correctly coded; for example, you should check that mandatory questions are not showing as optional."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:39
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:121
-msgid "Make sure all questions and response options are clear for respondents in the local context."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:44
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:126
-msgid "Identify if hints or examples are needed for any sections that may cause confusion or be misunderstood."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:50
-msgid "When you submit data using the test survey, it will appear in the \"Draft submissions\" table, so you can confirm that the data has been submitted and recognised."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:55
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:139
-msgid "Once you have completed this process, you may need to return to some of the actions within this step or previous steps (such as to edit the survey translation). You can repeat this pilot test as many times as you choose."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:57
-msgid "Be aware that each time you make a change to the form, an updated form is generated. This can take a few minutes, so you may need to wait while this process completes to access the latest version of the test forms. Any submissions to the test forms are temporary and will be overwritten when the forms are updated."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:63
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:154
-msgid "The QR codes below are"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:65
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:155
-msgid "DRAFTS"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:67
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:156
-msgid "Please"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:69
-msgid "do not share "
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:70
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:158
-msgid "these codes with enumerators!"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:73
-msgid " All submissions to the test forms are temporary "
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:74
-msgid " and will be reset whenever you take an action using the survey dashboard that changes the forms."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:77
-msgid "Do not use these forms for live data collection."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:81
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:75
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:61
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:64
-msgid "Mark this section as complete when:"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:83
-msgid "You have conducted the technical test and are happy with the changes to the forms and the technical functioning of the survey up to this point."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:96
-msgid "Testing the surveys"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:99
-msgid "Once your team has made customisations to the form, an \"initial pilot test\" should be carried out. This is predominantly a test of the sense and technical functionality of the survey."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:107
-msgid "Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:116
-msgid "Check that the survey layout and dependencies are correctly coded; for example, that mandatory questions are not showing as optional."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:132
-msgid "When you submit data using the test survey, it will appear in the"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:134
-msgid "Draft submissions"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:134
-msgid "table further down this page, so you can confirm that the data has been submitted and recognised."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:145
-msgid "Access the test forms"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:146
-msgid "The QR codes below use ODK Central's \"Draft\" feature to allow you to access test versions of the surveys. These versions always have the latest adaptations, and allow you to test changes without affecting the published versions that are shared with your enumerators."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:158
-msgid "do not share"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:161
-msgid "All submissions to the test forms are temporary"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:161
-msgid "and will be reset whenever you take an action using the survey dashboard that changes the forms."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:172
-msgid "This XLSForm is currently being updated. This may take 2-3 minutes. The QR code will appear when the new draft is ready. The form processing will continue even if you leave this page and return later."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:178
-msgid "Loading..."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:197
-msgid "Any submissions to these DRAFT versions will appear below, so you can confirm that the data you have submitted has been recognised. Note that these DRAFTs are intended as a technical test of the forms themselves, and the DRAFT submissions are not intended to be kept and processed. To conduct a full pilot, including data export and a test of the analysis process, please go to the"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:199
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:255
-msgid "Localisation: Pilot"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/initial-pilot.blade.php:199
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:121
-msgid "page."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:10
-msgid "Time frame"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:13
-msgid "The first thing you can customise is the time frame that is asked about for questions concerning the recent past. By default, this time frame is \"In the last 12 months\". However, for your survey, it might make more sense to ask the questions about \"last season\" or \"last year\"."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:17
-msgid "The page shows the questions in the survey that use the time frame. Whatever phrase is used for the time frame will be inserted into the question in place of the \"${time_frame}\" text placeholder. Look through them, determine what time frame is most appropriate and, if you decide to change it, update the timeframe text in the box. Your entry will be automatically saved and the question text in your survey form will be updated."
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:27
-msgid "In the HOLPA Household Survey, there are questions to ask about a specific time frame. By default, this time frame is "
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:29
-msgid "In the last 12 months"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:30
-msgid "However, that is not suitable for all situations. For your survey, it might make more sense to ask the questions about "
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:30
-msgid "Last Season"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:30
-msgid "or"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:30
-msgid "Last Year"
-msgstr ""
-
-#: resources/views/filament/app/pages/place-adaptations/time-frame.blade.php:32
-msgid "Below is the complete list of questions that use this time frame. Please review the questions. If you wish to change the time frame for your survey, update the text in the text box below. Your entry will be automatically saved and the question text in your survey form will be updated."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:6
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:53
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:36
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:121
-msgid "Monitor data collection"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:8
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:56
-msgid "This page lets you see incoming data. You can track progress and review submissions for quality assurance purposes."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:12
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:60
-msgid "At the top of the page, you will see a general summary of the data that has been collected; this includes the number of submissions for each form and number of farms surveyed."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:14
-msgid "Beneath that, you can browse the submissions. Use the tabs to view submissions by locations at different levels, or to simply view all of them."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:18
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:66
-msgid "There is also an option to download the raw data from submissions. Note that this will be unprocessed, and will not include calculated indicators; to obtain survey data ready for analysis, use the \"data analysis\" section."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:22
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:70
-msgid "If you find you need to correct an error in the data, you can directly edit a submission. This should be used sparingly, only where it has been confirmed with an enumerator that something was inputted incorrectly."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:32
-msgid "It looks like your team has not yet added locations and farms to conduct the survey. Please make sure you do so before proceeding."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:40
-msgid "Household Submissions:"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:42
-msgid "Fieldwork Submissions:"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:49
-msgid "Farms Fully Surveyed:"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:51
-msgid "Non-consenting Farms:"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:59
-msgid "Download raw data"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:61
-msgid "If needed, for example for quality assurance monitoring, you may download the raw data from submissions. Note that this will be unprocessed, and will not include calculated indicators; to obtain survey data ready for analysis, use the \"data analysis\" section."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:65
-msgid "Raw survey submission data"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:66
-msgid "Form response data for all survey submissions that have been received."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:67
-msgid "Download .csv"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:72
-#: resources/views/submission_summary_wrapper.blade.php:42
-msgid "Submissions By Location"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:84
-msgid "Farms"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/monitor-data-collection.blade.php:88
-msgid "Submissions"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:5
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:27
-msgid "Set up the survey"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:6
-msgid "Manage the ODK survey to be used for data collection"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:10
-msgid "Monitor Data Collection"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:11
-msgid "Review and quality-check incoming data"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:24
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:15
-msgid "Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:30
-msgid "Up until this point, all the forms used for pilot testing have been labelled as \"test\" forms, and the submissions are stored as test data, not to be included in the results. To begin actual data collection, you need to use the \"Set up live forms for data collection\" section to set your survey to \"live\". There are some notes on this page to prompt you to double check all the necessary tasks have been completed. Read through these, and when you are ready, click the button to make your survey live."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:36
-msgid "Once your survey is live, you will be able to use a QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:40
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:30
-msgid "Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. \"HOLPA Household Form - Local Shared Test Version\". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:44
-msgid "Once enumerators begin data collection, you will be able to see form submissions in the next section, Monitor data collection."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:48
-msgid "At the bottom of the page, you can see the titles and published status of your forms. There are options to publish changes if this still needs to be done before commencing data collection."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:62
-msgid "Beneath that, you can browse the submissions. Use the tabs to view submissions by locations at different levels, or  to simply view all of them."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:78
-msgid "Data collection has been carried out and concluded."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/data-collection-index.blade.php:88
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:51
-msgid "There are still localisation steps that are incomplete. Please review the dashboard for steps marked as 'not started' or 'in progress', and complete them before continuing."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:18
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:62
-msgid "Set up live forms for data collection"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:21
-msgid "Up until this point, all the forms used for pilot testing have been labelled as \"test\" forms, and the submissions are stored as test data, not to be included in the results. To begin actual data collection, you need to use this section to set your survey to \"live\". There are some notes on this page to prompt you to double check all the necessary tasks have been completed. Read through these, and when you are ready, click the button to make your survey live."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:24
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:96
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:107
-msgid "Access live forms"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:26
-msgid "Once your survey is live, this section will display the QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:34
-msgid "Once enumerators begin data collection, you will be able to see form submissions in the next section,"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:39
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:147
-msgid "Forms overview"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:41
-msgid "Here you can see the titles and published status of your forms. There are options here to publish changes if this still needs to be done before commencing data collection."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:64
-msgid "Your team is currently in"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:66
-msgid "pilot testing mode"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:66
-msgid "To switch to live data collection, please confirm that your team is ready to commence live data collection. This means:"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:72
-msgid "All the required changes to the survey have been made and published."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:74
-msgid "One or more of your forms has changes that have not been published. This may be intentional, but take the time to check that you have published all the required changes before continuing."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:74
-msgid "Click here"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:74
-msgid "to return to the pilot page and review the status of the forms."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:78
-msgid "All rounds of pilot testing and subsequent adjustments have been concluded."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:82
-msgid "All enumerators have ceased test or pilot submissions, and all subsequent form submissions are to be considered real survey data (until you revert to testing mode, if you choose to do so)."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:87
-msgid "If the above statements are true, click the button below to start live data collection."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:98
-msgid "You will be able to access the live forms once you have confirmed that you are ready to commence live data collection. Please see the above section or page instructions for more information."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:114
-msgid "To link your Android device, install and open"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:116
-msgid "When asked for project details, scan the QR code on this page. Your device will be linked and you will have access to the forms listed below. Enumerators who have already joined the project using the QR code at the pilot phase will automatically receive the latest live forms."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:133
-msgid "Your survey is live"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:135
-msgid "Your team's survey is currently set to"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:137
-msgid "live data collection"
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:137
-msgid "To switch back to testing mode, click the button below."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-collection/set-up-survey.blade.php:137
-msgid "If you do this, remember to return to this page and switch back again before resuming data collection."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:17
-msgid "The first step to set up the survey is to select the country and languages your team will conduct the survey in. Bear in mind that if you change these details later, you may need to review some of the other steps."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:20
-msgid "Select country and languages"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:22
-msgid "Start by selecting the country for the survey. You can click in the box and either scroll through the dropdown list or start typing to narrow down the options and find your country. If the country you need is not listed, you can use the \"plus\" button to add it. This will require you to input the country name and some additional details."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:26
-msgid "You can then start adding the languages in which you will conduct your survey. If you are going to run your survey in multiple languages, all of them need to be added here. Start typing in the box to find and add languages."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:30
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:17
-msgid "Survey translations"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:32
-msgid "When you have selected the languages for your survey, you should review the available translations."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:36
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:20
-msgid "HOLPA is available in multiple languages. On the translations page, for each of the languages you selected previously, you will need to select the translation to use. Click \"Select translation\" to show the available translations for a language."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:40
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:24
-msgid "If there is no existing translation, or the available translations are not suitable for your survey location, you should add a new translation. You may wish to duplicate an existing translation to use as a starting point."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:44
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:28
-msgid "To add a new translation, click on \"add new\" and give it a clear name. The translation will appear in the table. You can then use the \"view/edit\" menu to download the translation template. Add the translated text in the indicated column in the xls files, then reupload them using the same menu. Once both forms have translated versions uploaded, the translation will be available for use. When editing or adding a translation, make sure you download the file for the language you wish to edit, and make the changes in that file. If the column headers do not match the original file or if the column for the translated text is left blank, you will see an error message when you upload the files."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:48
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:32
-msgid "If you click on view/edit translation, this will allow you to download the xls files with the translated text."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:50
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:34
-msgid "You can edit translations that your team has added. To do this, download the existing translation files and follow the same process as when adding a translation: make changes in the column for the destination language and upload the edited file through the same menu. Note that the translation is to reflect the text <span class=\"font-semibold\">as written in the HOLPA survey</span>; this is not the appropriate place to customise the content of the survey. Translations added by other teams or from the original ODK forms cannot be directly edited, but you can duplicate the translation to make a new version with your changes."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:54
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:38
-msgid "The HOLPA platform will make user-uploaded translations available to all other teams."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:58
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:42
-msgid "NOTE:"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:58
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:42
-msgid "The platform assumes that you are working within one country. If you are conducting HOLPA across multiple countries, you will need to create separate teams within this platform for each country. Please contact the HOLPA support team if you require assistance with this."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:64
-msgid "You have selected the country, languages and added a global HOLPA survey translation for each language."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:84
-msgid "Select Country and Languages"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:85
-msgid "Pick the country you will be conducting the survey in, and the languages you will want to use. You can select multiple languages."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:92
-msgid "Survey Translations"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-languages-index.blade.php:93
-msgid "Review the available translations for your survey. You can upload new translations if required."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-country.blade.php:27
-msgid "Please select the country and languages for your survey below."
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-country.blade.php:33
-msgid "Save and Return"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-country.blade.php:35
-msgid "Return"
-msgstr ""
-
-#: resources/views/filament/app/pages/survey-languages/survey-translations.blade.php:66
-msgid "Below are the languages you selected for your survey. For each one, click on \"Select translation\" to see available translations, and either select an appropriate option from the list or add the translation for the language."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:7
-msgid ""
-"In this section, you can download the dataset for your survey. The download will include all the data from the live data collection, some calculated agroecology and performance indicators, and a data dictionary.\n"
-"\n"
-"From here, your team can conduct whatever data analysis is needed, and organise storing and sharing of the data as required."
-msgstr ""
-
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:26
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:24
 msgid "Download data for analysis"
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:28
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:26
 msgid "Here, you can download the complete dataset for your survey. The download will be an .xlsx file containing:"
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:33
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:31
 msgid "All the data from the live data collection."
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:37
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:35
 msgid "Agroecology and performance indicators, automatically calculated at farm level."
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:41
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:39
 msgid "A detailed data dictionary to help you navigate through the data."
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:46
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:44
 msgid "Once you have downloaded the data, you can conduct data analysis as required, and it is up to your team or organisation to manage storage and sharing of the dataset as appropriate. Download the complete dataset from your survey. This export includes the agro-ecology and performance indicators, automatically calculated at farm-level, along with a detailed data dictionary to help you navigate through the data."
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:53
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:51
 msgid "Survey Dataset"
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:54
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:52
 msgid "Download the complete dataset from your survey. This export includes calculated agro-ecology and performance indicators and a detailed data dictionary."
 msgstr ""
 
-#: resources/views/filament/app/pages/data-analysis/data-analysis-index.blade.php:55
+#: resources\views\filament\app\pages\data-analysis\data-analysis-index.blade.php:53
 msgid "Download .xlsx"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:33
-msgid "Prepare survey"
+#: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:5
+msgid "Set up the survey"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:53
-msgid "Survey Country and Languages"
+#: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:6
+msgid "Manage the ODK survey to be used for data collection"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:64
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:126
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:189
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:227
-msgid "Not started"
+#: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:8
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:34
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:42
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:18
+msgid "Update"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:71
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:133
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:196
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:234
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:325
-msgid "In Progress"
+#: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:10
+msgid "Monitor Data Collection"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:78
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:140
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:203
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:241
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:273
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:332
-msgid "Complete"
+#: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:11
+msgid "Review and quality-check incoming data"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:82
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:144
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:207
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:245
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:277
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:336
-msgid "View and Update"
+#: resources\views\filament\app\pages\data-collection\data-collection-index.blade.php:29
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:23
+msgid "There are still localisation steps that are incomplete. Please review the dashboard for steps marked as 'not started' or 'in progress', and complete them before continuing."
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:96
-msgid "Sampling"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:15
+msgid "It looks like your team has not yet added locations and farms to conduct the survey. Please make sure you do so before proceeding."
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:158
-msgid "Localisation"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:23
+msgid "Household Submissions:"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:180
-msgid "Place-based adaptations"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:25
+msgid "Fieldwork Submissions:"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:181
-msgid "Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location."
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:32
+msgid "Farms Fully Surveyed:"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:218
-msgid "Localisation: LISP"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:34
+msgid "Non-consenting Farms:"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:219
-msgid "The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool."
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:42
+msgid "Download raw data"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:256
-msgid "Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators."
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:44
+msgid "If needed, for example for quality assurance monitoring, you may download the raw data from submissions. Note that this will be unprocessed, and will not include calculated indicators; to obtain survey data ready for analysis, use the \"data analysis\" section."
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:266
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:318
-msgid "Not Started"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:48
+msgid "Raw survey submission data"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:292
-msgid "Data Collection"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:49
+msgid "Form response data for all survey submissions that have been received."
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:309
-msgid "Data collection"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:50
+msgid "Download .csv"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:310
-msgid "View and manage the survey and incoming data."
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:55
+#: resources\views\submission_summary_wrapper.blade.php:42
+msgid "Submissions By Location"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:351
-msgid "Datasets"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:67
+msgid "Farms"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:358
-msgid "Download data"
+#: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:71
+msgid "Submissions"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:359
-msgid "Download data to conduct data analysis."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:34
+msgid "Set up live forms for data collection"
 msgstr ""
 
-#: resources/views/filament/app/pages/survey-dashboard.blade.php:363
-msgid "View Data"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:36
+msgid "Your team is currently in"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:15
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:105
-msgid "Pilot test and enumerator training"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:38
+msgid "pilot testing mode"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:17
-msgid "This page guides you through the process of conducting the pilot test for your survey."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:38
+msgid "To switch to live data collection, please confirm that your team is ready to commence live data collection. This means:"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:19
-msgid "Before you conduct the pilot, ensure you have:"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:44
+msgid "All the required changes to the survey have been made and published."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:24
-msgid "Made your intended changes and customisations using the previous steps on the dashboard."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:46
+msgid "One or more of your forms has changes that have not been published. This may be intentional, but take the time to check that you have published all the required changes before continuing."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:28
-msgid "As needed, used the initial pilot draft versions of the form to check any additional changes, such as the addition of custom questions for your local indicators following the LISP workshop."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:46
+msgid "Click here"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:32
-msgid "Published all changes to update the forms you will use in the pilot."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:46
+msgid "to return to the pilot page and review the status of the forms."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:34
-msgid "This must be done manually; this is so that you can make changes and test them as draft versions to confirm they are working as expected before updating the versions that your enumerator team will see."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:50
+msgid "All rounds of pilot testing and subsequent adjustments have been concluded."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:36
-msgid "You will find the option to publish your changes on the 'Access forms' section of the page."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:54
+msgid "All enumerators have ceased test or pilot submissions, and all subsequent form submissions are to be considered real survey data (until you revert to testing mode, if you choose to do so)."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:41
-msgid "When you are ready for the pilot, you will need to organise the workshop as described in this page. You will find the QR code to allow enumerators to set up the forms on the 'Access forms' section of the page. Note that these are not the same as the draft versions used in the initial pilot, and those draft forms should never be used for this pilot or for live data collection, as the data submitted for those forms is not saved. Ensure that everyone is using the correct version of the forms before proceeding with the pilot or any data collection."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:59
+msgid "If the above statements are true, click the button below to start live data collection."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:45
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:151
-msgid "Access forms"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:68
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:79
+msgid "Access live forms"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:47
-msgid "The 'Access forms' section contains the option to publish your changes to the survey, and QR codes to set up the forms on the mobile devices that will be used to pilot data collection."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:70
+msgid "You will be able to access the live forms once you have confirmed that you are ready to commence live data collection. Please see the above section or page instructions for more information."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:51
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:207
-msgid "Forms and submissions"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:86
+msgid "To link your Android device, install and open"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:53
-msgid "In the 'Forms and submissions' section, you can see an overview of the current forms and view the submissions. If new submissions have not yet appeared on the page, you can use the 'manually get submissions' option on the survey forms view to prompt this to refresh."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:88
+msgid "When asked for project details, scan the QR code on this page. Your device will be linked and you will have access to the forms listed below. Enumerators who have already joined the project using the QR code at the pilot phase will automatically receive the latest live forms."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:57
-msgid "The survey submissions view shows you all the submissions for your forms. You can view individual submissions to conduct quality checks. This will help you identify frequent errors or omissions which may necessitate further enumerator training or adjustments to the form."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:93
+msgid "Monitor data collection"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:61
-msgid "When you have completed the pilot, you will likely then need to return to previous sections to make additional edits to the survey. Revisit any section from the dashboard as needed. You may choose to carry out further pilots or technical tests before commencing live data collection."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:93
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:121
+msgid "page."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:66
-msgid "You have conducted the pilot and training workshop, and are satisfied that the required adjustments have been made."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:105
+msgid "Your survey is live"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:81
-msgid "Your team has begun live data collection, which means pilot testing is no longer available. If you need to review changes to your forms before publishing them, you can review the DRAFT VERSIONS on the"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:107
+msgid "Your team's survey is currently set to"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:83
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:191
-msgid "Initial Pilot Page"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:109
+msgid "live data collection"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:86
-msgid "If you have started live data collection by mistake and need to return to the pilot test, click below."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:109
+msgid "To switch back to testing mode, click the button below."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:103
-msgid "Jump to access forms"
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:109
+msgid "If you do this, remember to return to this page and switch back again before resuming data collection."
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:108
-msgid "Once you have completed the localisations and any changes to the survey and translations, it is time to conduct a full pilot and enumerator training. This step familiarises the enumerators with the survey, preparing them to use the questionnaires, and allows for quality control and testing of the survey with the people and context for which it will need to work in the live data collection."
+#: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:119
+msgid "Forms overview"
 msgstr ""
 
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:112
-msgid "The enumerator training includes three stages:"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:118
-msgid "Survey review: "
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:119
-msgid "Enumerator training begins with an in-person workshop to go through each of the survey questions. The objective is for enumerators to understand the purpose of the survey and the information required by each question, to validate the functionality of the survey on their devices and to simulate survey implementation."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:124
-msgid "Piloting and feedback: "
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:125
-msgid "Enumerators then carry out a full pilot test with local farmers. The objective is to identify difficult or unclear questions and any technological errors in the digital survey."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:128
-msgid "For piloting and data collection, enumerators will need an android device with ODK collect installed and set up. They can then use the QR code below to access the latest published version of the form. Take note of the titles of the forms in the app - ensure nobody is accidentally using an old version of the form, or the incomplete version used in the initial pilot test."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:133
-msgid "Quality control: "
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:134
-msgid "In this stage, the data collected during the pilot is reviewed for quality assurance, and issues can be identified."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:136
-msgid "You can view a summary of submitted data and view each submission to conduct quality checks. This will help you identify frequent errors or omissions which may necessitate further enumerator training or adjustments to the form."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:142
-msgid "During the piloting and training, special attention should be paid to correct interpretation of questions related to social and environmental dimensions, which include perception questions and field work."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:146
-msgid "Once you have carried out the pilot and training, you will likely need to return to the dashboard options to make additional edits to the survey based on the feedback and findings gleaned from the pilot. Ensure you use the \"publish\" button to apply your changes to the published version of the form."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:157
-msgid "Your project team has been set up. To link your Android device, install and open"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:169
-msgid "One or more of your forms has changes that have not been published. These changes will not be reflected in the forms used for the pilot test. You can review the form details and and publish changes as necessary using the table below."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:174
-msgid "Review and publish"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:180
-msgid "When you make changes to the forms on the platform, they are not automatically updated on your device. This is so that you can make changes, test them as"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:182
-msgid "DRAFT VERSIONS"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:182
-msgid "and confirm they are working as expected before updating the versions that your enumerator team will see."
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:187
-msgid "If there are changes that can be published, you can do so by clicking the"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:189
-msgid "Publish"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:189
-msgid "button on the table below. We highly recommend reviewing the forms as DRAFT versions before publishing. You can do so on the"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:212
-msgid "Survey Forms"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:216
-msgid "Pilot Test Submissions"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:228
-msgid "Begin Live Data Collection"
-msgstr ""
-
-#: resources/views/filament/app/pages/pilot/pilot-index.blade.php:229
-msgid "When you have completed the pilot test and are ready to begin live data collection, click below. This will disable this page and mark all future submissions as \"live\" data."
-msgstr ""
-
-#: resources/views/filament/app/pages/info-panels/survey-dashboard.blade.php:7
+#: resources\views\filament\app\pages\info-panels\survey-dashboard.blade.php:7
 msgid "HOLPA Survey Dashboard"
 msgstr ""
 
-#: resources/views/filament/app/pages/info-panels/survey-dashboard.blade.php:20
+#: resources\views\filament\app\pages\info-panels\survey-dashboard.blade.php:20
 msgid "This is the HOLPA survey builder dashboard, designed to support and facilitate the customisation and delivery of the HOLPA survey, and allow teams to collect and manage HOLPA survey data."
 msgstr ""
 
-#: resources/views/filament/app/pages/info-panels/survey-dashboard.blade.php:22
+#: resources\views\filament\app\pages\info-panels\survey-dashboard.blade.php:22
 msgid "Find out more about HOLPA here."
 msgstr ""
 
-#: resources/views/filament/app/pages/info-panels/survey-dashboard.blade.php:24
+#: resources\views\filament\app\pages\info-panels\survey-dashboard.blade.php:24
 msgid "The dashboard below sets out the tasks required to prepare and deliver the survey, tracks your progress, and will support you with customising and implementing the survey."
 msgstr ""
 
-#: resources/views/filament/app/pages/info-panels/survey-dashboard.blade.php:26
+#: resources\views\filament\app\pages\info-panels\survey-dashboard.blade.php:26
 msgid "The sections do not have to be completed in order (although making certain changes, such as adding another language, may require reviewing some sections). Changes can be made at any point, even if a section has already been marked as complete."
 msgstr ""
 
-#: resources/views/filament/app/pages/info-panels/survey-dashboard.blade.php:28
+#: resources\views\filament\app\pages\info-panels\survey-dashboard.blade.php:28
 msgid "You can mark each section as complete to help you keep track."
 msgstr ""
 
-#: resources/views/filament/app/pages/info-panels/team-without-xlsform.blade.php:3
+#: resources\views\filament\app\pages\info-panels\team-without-xlsform.blade.php:3
 msgid "THIS TEAM DOES NOT HAVE ANY ODK FORMS. THIS IS DUE TO AN ISSUE WITH THE TEAM CREATION. PLEASE CONTACT"
 msgstr ""
 
-#: resources/views/filament/app/pages/info-panels/team-without-xlsform.blade.php:3
+#: resources\views\filament\app\pages\info-panels\team-without-xlsform.blade.php:3
 msgid "FOR SUPPORT BEFORE CONTINUING."
 msgstr ""
 
-#: resources/views/team-translation-review.blade.php:7
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:27
+msgid "Your team has begun live data collection, which means pilot testing is no longer available. If you need to review changes to your forms before publishing them, you can review the DRAFT VERSIONS on the"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:29
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:137
+msgid "Initial Pilot Page"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:32
+msgid "If you have started live data collection by mistake and need to return to the pilot test, click below."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:49
+msgid "Jump to access forms"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:51
+msgid "Pilot test and enumerator training"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:54
+msgid "Once you have completed the localisations and any changes to the survey and translations, it is time to conduct a full pilot and enumerator training. This step familiarises the enumerators with the survey, preparing them to use the questionnaires, and allows for quality control and testing of the survey with the people and context for which it will need to work in the live data collection."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:58
+msgid "The enumerator training includes three stages:"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:64
+msgid "Survey review: "
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:65
+msgid "Enumerator training begins with an in-person workshop to go through each of the survey questions. The objective is for enumerators to understand the purpose of the survey and the information required by each question, to validate the functionality of the survey on their devices and to simulate survey implementation."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:70
+msgid "Piloting and feedback: "
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:71
+msgid "Enumerators then carry out a full pilot test with local farmers. The objective is to identify difficult or unclear questions and any technological errors in the digital survey."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:74
+msgid "For piloting and data collection, enumerators will need an android device with ODK collect installed and set up. They can then use the QR code below to access the latest published version of the form. Take note of the titles of the forms in the app - ensure nobody is accidentally using an old version of the form, or the incomplete version used in the initial pilot test."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:79
+msgid "Quality control: "
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:80
+msgid "In this stage, the data collected during the pilot is reviewed for quality assurance, and issues can be identified."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:82
+msgid "You can view a summary of submitted data and view each submission to conduct quality checks. This will help you identify frequent errors or omissions which may necessitate further enumerator training or adjustments to the form."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:88
+msgid "During the piloting and training, special attention should be paid to correct interpretation of questions related to social and environmental dimensions, which include perception questions and field work."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:92
+msgid "Once you have carried out the pilot and training, you will likely need to return to the dashboard options to make additional edits to the survey based on the feedback and findings gleaned from the pilot. Ensure you use the \"publish\" button to apply your changes to the published version of the form."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:97
+msgid "Access forms"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:103
+msgid "Your project team has been set up. To link your Android device, install and open"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:115
+msgid "One or more of your forms has changes that have not been published. These changes will not be reflected in the forms used for the pilot test. You can review the form details and and publish changes as necessary using the table below."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:120
+msgid "Review and publish"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:126
+msgid "When you make changes to the forms on the platform, they are not automatically updated on your device. This is so that you can make changes, test them as"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:128
+msgid "DRAFT VERSIONS"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:128
+msgid "and confirm they are working as expected before updating the versions that your enumerator team will see."
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:133
+msgid "If there are changes that can be published, you can do so by clicking the"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:135
+msgid "Publish"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:135
+msgid "button on the table below. We highly recommend reviewing the forms as DRAFT versions before publishing. You can do so on the"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:153
+msgid "Forms and submissions"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:158
+msgid "Survey Forms"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:162
+msgid "Pilot Test Submissions"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:174
+msgid "Begin Live Data Collection"
+msgstr ""
+
+#: resources\views\filament\app\pages\pilot\pilot-index.blade.php:175
+msgid "When you have completed the pilot test and are ready to begin live data collection, click below. This will disable this page and mark all future submissions as \"live\" data."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:14
+msgid "HOLPA uses an internationally validated indicator for \"dietary diversity\". This indicator has a pre-defined set of questions, which is different for different countries. More information about this module can be found on the"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:16
+msgid "website."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:19
+msgid "To complete this section of the localisation, please select the version of the questions that you would like to use for your survey. If an option for your country does not exist, you can either use the default version (without locally-relevant food examples), or contact the HOLPA team to ask for your country's module to be added."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:20
+msgid "It is assumed that you are conducting HOLPA within one country. If you are working across multiple countries, we recommend creating a different \"team\" for each country so that you can make different customisations to the survey within the different countries."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:26
+msgid "Below are the questions that form this module. When you select your country, this table will update to show the text that will appear in your version of the survey."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:18
+msgid "Testing the surveys"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:21
+msgid "Once your team has made customisations to the form, an \"initial pilot test\" should be carried out. This is predominantly a test of the sense and technical functionality of the survey."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:23
+msgid "The initial pilot can be completed by a member of your team with at least one local researcher or practitioner. To conduct the test:"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:29
+msgid "Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:33
+msgid "The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:38
+msgid "Check that the survey layout and dependencies are correctly coded; for example, that mandatory questions are not showing as optional."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:43
+msgid "Make sure all questions and response options are clear for respondents in the local context."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:48
+msgid "Identify if hints or examples are needed for any sections that may cause confusion or be misunderstood."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:54
+msgid "When you submit data using the test survey, it will appear in the"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:56
+msgid "Draft submissions"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:56
+msgid "table further down this page, so you can confirm that the data has been submitted and recognised."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:61
+msgid "Once you have completed this process, you may need to return to some of the actions within this step or previous steps (such as to edit the survey translation). You can repeat this pilot test as many times as you choose."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:67
+msgid "Access the test forms"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:68
+msgid "The QR codes below use ODK Central's \"Draft\" feature to allow you to access test versions of the surveys. These versions always have the latest adaptations, and allow you to test changes without affecting the published versions that are shared with your enumerators."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:76
+msgid "The QR codes below are"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:77
+msgid "DRAFTS"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:78
+msgid "Please"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:80
+msgid "do not share"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:80
+msgid "these codes with enumerators!"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:83
+msgid "All submissions to the test forms are temporary"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:83
+msgid "and will be reset whenever you take an action using the survey dashboard that changes the forms."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:94
+msgid "This XLSForm is currently being updated. This may take 2-3 minutes. The QR code will appear when the new draft is ready. The form processing will continue even if you leave this page and return later."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:100
+msgid "Loading..."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:119
+msgid "Any submissions to these DRAFT versions will appear below, so you can confirm that the data you have submitted has been recognised. Note that these DRAFTs are intended as a technical test of the forms themselves, and the DRAFT submissions are not intended to be kept and processed. To conduct a full pilot, including data export and a test of the analysis process, please go to the"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:121
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:255
+msgid "Localisation: Pilot"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:14
+msgid "In the HOLPA Household Survey, there are questions to ask about a specific time frame. By default, this time frame is "
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:16
+msgid "In the last 12 months"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:17
+msgid "However, that is not suitable for all situations. For your survey, it might make more sense to ask the questions about "
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:17
+msgid "Last Season"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:17
+msgid "or"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:17
+msgid "Last Year"
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:19
+msgid "Below is the complete list of questions that use this time frame. Please review the questions. If you wish to change the time frame for your survey, update the text in the text box below. Your entry will be automatically saved and the question text in your survey form will be updated."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:33
+msgid "Prepare survey"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:53
+msgid "Survey Country and Languages"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:64
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:126
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:189
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:227
+msgid "Not started"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:71
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:133
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:196
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:234
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:325
+msgid "In Progress"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:78
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:140
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:203
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:241
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:273
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:332
+msgid "Complete"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:82
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:144
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:207
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:245
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:277
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:336
+msgid "View and Update"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:96
+msgid "Sampling"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:158
+msgid "Localisation"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:180
+msgid "Place-based adaptations"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:181
+msgid "Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:218
+msgid "Localisation: LISP"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:219
+msgid "The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:256
+msgid "Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:266
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:318
+msgid "Not Started"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:292
+msgid "Data Collection"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:309
+msgid "Data collection"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:310
+msgid "View and manage the survey and incoming data."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:351
+msgid "Datasets"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:358
+msgid "Download data"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:359
+msgid "Download data to conduct data analysis."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:363
+msgid "View Data"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:19
+msgid "Please select the country and languages for your survey below."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:25
+msgid "Save and Return"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-country.blade.php:27
+msgid "Return"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:32
+msgid "Select Country and Languages"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:33
+msgid "Pick the country you will be conducting the survey in, and the languages you will want to use. You can select multiple languages."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:40
+msgid "Survey Translations"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:41
+msgid "Review the available translations for your survey. You can upload new translations if required."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-languages\survey-translations.blade.php:36
+msgid "Below are the languages you selected for your survey. For each one, click on \"Select translation\" to see available translations, and either select an appropriate option from the list or add the translation for the language."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:9
+msgid "Manage location levels"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:10
+msgid "Manage the location levels (or other strata) in your sampling frame."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:12
+msgid "List of farms"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:13
+msgid "Add or import details of the farms you will visit to give the questionnaire."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:15
+msgid "Context Questions"
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:16
+msgid "Optionally, add extra questions to the survey to get additional context about the farms."
+msgstr ""
+
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:19
+msgid "Manage Questions"
+msgstr ""
+
+#: resources\views\languageSelector.blade.php:5
+#: resources\views\livewire\cover-page.blade.php:48
+msgid "Change Language"
+msgstr "Changer de langue"
+
+#: resources\views\livewire\cover-page.blade.php:29
+msgid "Survey Tool"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:87
+#: resources\views\livewire\cover-page.blade.php:182
+msgid "Log in"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:106
+#: resources\views\livewire\cover-page.blade.php:158
+msgid "Surveys"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:107
+msgid "Read more about the surveys."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:110
+msgid "Find out more"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:119
+#: resources\views\livewire\cover-page.blade.php:170
+msgid "Online Tool"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:120
+msgid "An online interface to help you tailor the surveys to your context and conduct a survey."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:123
+msgid "Read more"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:132
+#: resources\views\livewire\cover-page.blade.php:200
+msgid "Results"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:133
+msgid "Results from previous implementations."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:136
+msgid "Learn More"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:140
+msgid "Previous Surveys"
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:160
+msgid "Groundswell International develops and implements surveys to support data collection, learning, monitoring, and evaluation across a range of programmes and contexts. Surveys can be adapted to different projects, stakeholder groups, and implementation settings, enabling teams to collect meaningful and context-specific information to support decision-making, reporting, and programme improvement. The survey approach supports flexible digital data collection, customised indicators, and streamlined analysis workflows, helping teams manage and interpret data efficiently across multiple locations and activities."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:172
+msgid "Teams wishing to implement Groundswell International surveys can request access to the online platform designed to support the setup, customisation, deployment, and management of surveys across different contexts."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:175
+msgid "The platform guides users through the process of adapting survey modules, configuring indicators, implementing data collection activities, and accessing results and reporting features."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:178
+msgid "For more information, or to register your interest in using the platform, please use the links below. Existing users can log in using their account credentials."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:201
+msgid "The tool has been applied across multiple countries and programme contexts. Results dashboards and country reports enable users to explore findings, compare indicators, and visualise trends across implementations."
+msgstr ""
+
+#: resources\views\livewire\cover-page.blade.php:203
+msgid "View Dashboard"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:4
+msgid "Place custom questions in survey"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:9
+msgid "To add your custom questions into the survey, drag and drop each item into the correct place in the list on the right. Updates to the module ordering will be saved automatically. Once you have finished arranging your custom questions, click \"Confirm Ordering\" to finalize the order and add your custom questions to the surveys for testing. If you need to reset the order at any time, click \"Reset Ordering\" to revert to the default ordering (this will remove your local indicator modules from the survey forms)."
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:21
+msgid "Local Indicator Questions"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:62
+msgid "XLSForm"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:63
+msgid "modules"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:67
+msgid "(Tip: This form has many modules. Scroll the list below to see them all.)"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:114
+msgid "Reset Ordering"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-ordering.blade.php:123
+msgid "Confirm Ordering"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-versions.blade.php:4
+msgid "ADD CUSTOM SURVEY QUESTIONS"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-versions.blade.php:9
+msgid "Below are the local indicators that have not been mapped to an existing global HOLPA indicator. For each indicator, please add one or more questions that will be included into the survey."
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-versions.blade.php:10
+msgid "You can either add the questions directly using the \"Add Question\" buttons below, or download the Excel template, write your questions in a normal ODK \"Xlsform\" format, and upload the file. If you are confident writing ODK forms in Excel, this option will give you more flexibility, as you can add any feature that ODK supports."
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-versions.blade.php:13
+msgid "Download Xlsform Template"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-versions.blade.php:15
+msgid "Import Questions from an ODK Xlsform (Excel)"
+msgstr ""
+
+#: resources\views\livewire\lisp\custom-module-versions.blade.php:20
+msgid "Add / Edit Questions Directly"
+msgstr ""
+
+#: resources\views\livewire\lisp\global-indicators.blade.php:4
+msgid "Global indicators"
+msgstr ""
+
+#: resources\views\livewire\lisp\global-indicators.blade.php:9
+msgid "Browse the available indicators in the global survey to search for a match for the selected local indicator."
+msgstr ""
+
+#: resources\views\livewire\lisp\local-indicator-question-form.blade.php:11
+msgid "Hide Questions"
+msgstr ""
+
+#: resources\views\livewire\lisp\local-indicator-question-form.blade.php:14
+msgid "Show Questions"
+msgstr ""
+
+#: resources\views\livewire\lisp\local-indicators.blade.php:4
+msgid "Local indicators"
+msgstr ""
+
+#: resources\views\livewire\lisp\local-indicators.blade.php:9
+msgid "Select an indicator to start looking for matches."
+msgstr ""
+
+#: resources\views\livewire\lisp\local-indicators.blade.php:22
+msgid "MATCHED"
+msgstr ""
+
+#: resources\views\livewire\lisp\local-indicators.blade.php:31
+msgid "No local indicators have been uploaded."
+msgstr ""
+
+#: resources\views\livewire\lisp\match-indicators.blade.php:3
+msgid "MATCH WITH EXISTING GLOBAL INDICATORS"
+msgstr ""
+
+#: resources\views\livewire\lisp\match-indicators.blade.php:8
+msgid "Here, you can browse through the list of core and optional indicators already present in the global HOLPA survey. If your indicators match up to the ones already available, you can add them easily by matching them. Select an indicator on the left and see if an appropriate match is available on the right."
+msgstr ""
+
+#: resources\views\livewire\lisp\upload-local-indicators.blade.php:3
+msgid "UPLOAD LOCAL INDICATORS"
+msgstr ""
+
+#: resources\views\livewire\lisp\upload-local-indicators.blade.php:9
+msgid "On this page, please add the locally relevant indicators that you identified during the LISP workshop. You may either upload the indicators as an Excel file using the provided "
+msgstr ""
+
+#: resources\views\livewire\lisp\upload-local-indicators.blade.php:11
+msgid "template"
+msgstr ""
+
+#: resources\views\livewire\lisp\upload-local-indicators.blade.php:11
+msgid "or enter each indicator manually into the table below."
+msgstr ""
+
+#: resources\views\livewire\results-page.blade.php:20
+msgid "Previous Results"
+msgstr ""
+
+#: resources\views\livewire\results-page.blade.php:27
+msgid "NOTE: The results presented on this page are not yet finalised and are subject to change pending verification."
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-entry.blade.php:6
+msgid "Selected Translation:"
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-entry.blade.php:14
+msgid "Select Translation"
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:7
+msgid "Cancel"
+msgstr "Annuler"
+
+#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:10
+msgid "Duplicate"
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:13
+#: resources\views\livewire\survey-languages\team-translation-review-edit-form.blade.php:15
+msgid "Submit"
+msgstr "Soumettre"
+
+#: resources\views\livewire\survey-languages\team-translation-review.blade.php:2
+#: resources\views\team-translation-review.blade.php:2
+msgid "You can review the text for both ODK forms by downloading the files below."
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-review.blade.php:5
+#: resources\views\team-translation-review.blade.php:5
+msgid "This translation is from the original ODK Forms, and cannot be directly edited. If you wish to create your own version of"
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-review.blade.php:5
+#: resources\views\team-translation-review.blade.php:5
+msgid "you may add a new blank translation or duplicate this one and edit it."
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-review.blade.php:7
+msgid "This translation was uploaded by another team. You cannot edit this translation directly, but you may duplicate it and edit your version if you wish."
+msgstr ""
+
+#: resources\views\livewire\survey-languages\team-translation-review.blade.php:9
+msgid "To edit this translation, click edit below. To keep this version as-is and create a new version to edit, click duplicate."
+msgstr ""
+
+#: resources\views\team-translation-review.blade.php:7
 msgid "This translation was uploaded by another team as a contribution to HOLPA. You cannot edit this translation directly, but you may duplicate it and edit your version if you wish."
 msgstr ""
 
-#: resources/views/team-translation-review.blade.php:9
+#: resources\views\team-translation-review.blade.php:9
 msgid "To edit the translations:"
 msgstr ""
 
-#: resources/views/team-translation-review.blade.php:12
+#: resources\views\team-translation-review.blade.php:12
 msgid "Download the existing translations file. Alternatively, download the blank translations file to start fresh."
 msgstr ""
 
-#: resources/views/team-translation-review.blade.php:13
+#: resources\views\team-translation-review.blade.php:13
 msgid "The Excel file contains a list of every string in the form. The orange columns should not be changed. Please enter the translated text into the final column, titled"
 msgstr ""
 
-#: resources/views/team-translation-review.blade.php:14
+#: resources\views\team-translation-review.blade.php:14
 msgid "Re-upload the completed Excel file below. If there is already a file uploaded, you can delete it and upload a replacement."
 msgstr ""

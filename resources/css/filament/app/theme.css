@@ -580,12 +580,12 @@ fieldset {
 }
 
 blockquote {
-    border-left: 4px solid #E24B4A;
     background-color: #FCEBEB;
     color: #A32D2D;
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem;
     margin: 1rem 0;
-    border-radius: 0 0.375rem 0.375rem 0;
+    border-radius: 0.5rem;
+    border: 1px solid #F0959580;
 }
 
 .instruction_panel ul {
