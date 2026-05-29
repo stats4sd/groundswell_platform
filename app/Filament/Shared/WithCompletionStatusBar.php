@@ -10,8 +10,9 @@ trait WithCompletionStatusBar
     public function markCompleteAction(): Action
     {
         return Action::make('markComplete')
-            ->label('MARK AS COMPLETE')
-            ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->label(fn () => t('MARK AS COMPLETE'))
+            ->color('gray')
+            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block fi-ac-action-no-style'])
             ->action(function () {
 
                 HelperService::getCurrentOwner()->update([
@@ -23,8 +24,9 @@ trait WithCompletionStatusBar
     public function markIncompleteAction(): Action
     {
         return Action::make('markIncomplete')
-            ->label('MARK AS INCOMPLETE')
-            ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->label(fn () => t('MARK AS INCOMPLETE'))
+            ->color('gray')
+            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block fi-ac-action-no-style'])
             ->action(function () {
                 HelperService::getCurrentOwner()->update([
                     $this->completionProp => 0,

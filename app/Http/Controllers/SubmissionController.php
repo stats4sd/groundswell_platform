@@ -85,11 +85,11 @@ class SubmissionController extends Controller
         if ($farmDone) {
 
             // Run R scripts
-            $RscriptPath = config('services.R.rscript_path');
-            $agOut = Process::path(base_path('packages/holpa-r-scripts'))
-                ->run($RscriptPath . ' data_processing/holpa_agroecology_scores.R');
-            $perfOut = Process::path(base_path('packages/holpa-r-scripts'))
-                ->run($RscriptPath . ' data_processing/key_performance_indicators.R');
+            // $RscriptPath = config('services.R.rscript_path');
+            // $agOut = Process::path(base_path('packages/holpa-r-scripts'))
+            //     ->run($RscriptPath . ' data_processing/holpa_agroecology_scores.R');
+            // $perfOut = Process::path(base_path('packages/holpa-r-scripts'))
+            //     ->run($RscriptPath . ' data_processing/key_performance_indicators.R');
 
         }
 

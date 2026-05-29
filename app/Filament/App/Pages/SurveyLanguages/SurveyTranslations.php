@@ -26,6 +26,11 @@ class SurveyTranslations extends Page
     /** @var Collection<Language> */
     public Collection $languages;
 
+    public function getTitle(): string
+    {
+        return t('Context: Survey Translations');
+    }
+
     public static function canAccess(): bool
     {
         return auth()->user()->can('view survey translations');
@@ -34,8 +39,8 @@ class SurveyTranslations extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            SurveyLanguagesIndex::getUrl() => 'Survey Languages',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLanguagesIndex::getUrl() => t('Survey Languages'),
             static::getUrl() => static::getTitle(),
         ];
     }
@@ -54,8 +59,8 @@ class SurveyTranslations extends Page
     public function markCompleteAction(): Action
     {
         return Action::make('markComplete')
-            ->label('MARK AS COMPLETE')
-            ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->label(fn () => t('MARK AS COMPLETE'))
+            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
             ->visible(fn () => auth()->user()->can('maintain survey translations'))
             ->action(function () {
                 if (!auth()->user()->can('maintain survey translations')) {
@@ -73,8 +78,8 @@ class SurveyTranslations extends Page
     public function markIncompleteAction(): Action
     {
         return Action::make('markIncomplete')
-            ->label('MARK AS INCOMPLETE')
-            ->extraAttributes(['class' => 'buttona mx-4 inline-block'])
+            ->label(fn () => t('MARK AS INCOMPLETE'))
+            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
             ->visible(fn () => auth()->user()->can('maintain survey translations'))
             ->action(function () {
                 if (!auth()->user()->can('maintain survey translations')) {

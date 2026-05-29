@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Holpa\LocalIndicator;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
@@ -93,43 +92,10 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
             $owner->save();
         });
 
-        static::saved(static function (self $owner) {
-            // if the diet_diversity module is updated, add that module into the household survey
-            if ($owner->isDirty('diet_diversity_module_version_id')) {
-                $newModuleVersion = $owner->dietDiversityModuleVersion;
-
-                // Update all forms with the diet diversity module
-                $owner->xlsforms()
-                    ->with('xlsformModuleVersions.xlsformModule')
-                    // only edit forms with the diet diversity module
-                    ->whereHas('xlsformModuleVersions.xlsformModule', function (Builder $query) {
-                        $query->where('xlsform_modules.name', 'diet_diversity');
-                    })
-                    ->get()
-                    ->each(function (Xlsform $xlsform) use ($newModuleVersion) {
-
-                        // Identify and remove the current DD module version
-                        $currentDDModule = $xlsform->xlsformModuleVersions->filter(fn(XlsformModuleVersion $xlsformModuleVersion) => $xlsformModuleVersion->xlsformModule?->name === 'diet_diversity')->first();
-
-                        $order = $currentDDModule->pivot->order;
-                        $xlsform->xlsformModuleVersions()->detach($currentDDModule->id);
-
-                        // Attach the new module version with the same order value (so it is included in the same position)
-                        $xlsform->xlsformModuleVersions()->attach($newModuleVersion->id, ['order' => $order]);
-
-                        $xlsform->draft_needs_update = true;
-                        $xlsform->save();
-
-                    });
-            }
-
-        });
     }
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('local_indicators')
-            ->singleFile();
 
         $this->addMediaCollection('custom_questions')
             ->singleFile();
@@ -163,12 +129,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
         return $this->hasMany(TeamMembership::class);
     }
 
-    /** @return HasMany<LocalIndicator, $this> */
-    public function localIndicators(): HasMany
-    {
-        return $this->hasMany(LocalIndicator::class);
-    }
-
     /** @return BelongsTo<Country, $this> */
     public function country(): BelongsTo
     {
@@ -200,12 +160,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     }
 
     // Customisations
-
-    /** @return BelongsTo<XlsformModuleVersion, $this> */
-    public function dietDiversityModuleVersion(): BelongsTo
-    {
-        return $this->belongsTo(XlsformModuleVersion::class, 'diet_diversity_module_version_id');
-    }
 
     /** @return HasOne<XlsformModuleVersion, $this> */
     public function localContextModuleVersion(): HasOne
@@ -264,7 +218,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 
                 if (
                     $this->time_frame !== null ||
-                    $this->diet_diversity_module_version_id !== null ||
                     $this->choiceListEntries()->exists()
                 ) {
                     return 'in_progress';
@@ -283,8 +236,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
                 if ($this->lisp_complete) {
                     return 'complete';
                 }
-
-                return $this->localIndicators()->exists() ? 'in_progress' : 'not_started';
 
             }
         );

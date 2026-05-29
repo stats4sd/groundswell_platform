@@ -39,9 +39,11 @@ class TeamResource extends Resource
                 Forms\Components\Section::make('Team Details')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label(t('Name'))
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\Textarea::make('description'),
+                        Forms\Components\Textarea::make('description')
+                            ->label(t('Description'))
                     ]),
             ]);
     }
@@ -51,19 +53,21 @@ class TeamResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label(t('Name'))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('programs.name')
+                    ->label(t('Program'))
                     ->searchable()
                     ->badge()
                     ->color('success')
                     ->visible(config('filament-team-management.use_programs')),
                 Tables\Columns\TextColumn::make('users_count')
-                    ->label('# Users')
+                    ->label(fn() => t('# Users'))
                     ->counts('users')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('invites_count')
-                    ->label('# Invites')
+                    ->label(fn() => t('# Invites'))
                     ->counts('invites')
                     ->sortable(),
                 // Tables\Columns\TextColumn::make('xlsforms_count')
@@ -71,6 +75,7 @@ class TeamResource extends Resource
                 //     ->counts('xlsforms')
                 //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(t('Created At'))
                     ->sortable(),
             ]);
     }

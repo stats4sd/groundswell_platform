@@ -32,7 +32,7 @@ class CoverPage extends Component implements HasActions, HasForms
     public function registerInterestAction(): Action
     {
         return Action::make('registerInterest')
-            ->extraAttributes(['class' => 'buttonb px-4 mx-2'])
+            ->extraAttributes(['class' => 'button bg-orange hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white hover:text-orange font-semibold w-auto flex justify-center items-center text-center px-4 mx-2'])
             ->label('Register Interest')
             ->form([
                 Shout::make('message')
@@ -46,7 +46,7 @@ class CoverPage extends Component implements HasActions, HasForms
                     ->label('Enter your organisation name'),
                 Textarea::make('details')
                     ->rows(5)
-                    ->label('Do you intend to implement HOLPA? If so, please give some details about your project / work, etc.'),
+                    ->label('Do you intend to implement Groundswell International Surveys? If so, please give some details about your project / work, etc.'),
             ])
             ->action(function (array $data) {
 
@@ -55,7 +55,7 @@ class CoverPage extends Component implements HasActions, HasForms
 
                 Notification::make('success')
                     ->title('Thank you')
-                    ->body('Thank you for your interest in HOLPA. You should receive an automated email to confirm your registration of interest.')
+                    ->body('Thank you for your interest in Groundswell International Surveys. You should receive an automated email to confirm your registration of interest.')
                     ->send();
             });
 

@@ -63,7 +63,7 @@ class AdminPanelProvider extends PanelProvider
                 CheckIfAdmin::class,
             ])->navigationItems([
                 NavigationItem::make()
-                    ->label(__('Return to Front end'))
+                    ->label('Return to Front end')
                     ->icon('heroicon-o-home')
                     ->url(url('/app'))
                     ->sort(1),

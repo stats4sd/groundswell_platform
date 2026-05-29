@@ -54,7 +54,6 @@ class ProgramPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Program/Widgets'), for: 'App\\Filament\\Program\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
@@ -77,7 +76,7 @@ class ProgramPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make()
-                    ->label(__('Return to Front end'))
+                    ->label('Return to Front end')
                     ->icon('heroicon-o-home')
                     ->url(url('/app')),
             ])

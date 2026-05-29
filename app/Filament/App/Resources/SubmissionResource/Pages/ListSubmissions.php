@@ -17,6 +17,11 @@ class ListSubmissions extends ListRecords
 
     protected static string $view = 'filament.app.resources.submission-resource.pages.view-submission';
 
+    public function getHeading(): string
+    {
+        return t('Test Submissions');
+    }
+
     /** @var Collection<SurveyRow> */
     public Collection $surveyRows;
 
@@ -36,9 +41,9 @@ class ListSubmissions extends ListRecords
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            PlaceAdaptationsIndex::getUrl() => 'Place Adaptations',
-            InitialPilot::getUrl() => 'Initial Pilot',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            PlaceAdaptationsIndex::getUrl() => t('Place Adaptations'),
+            InitialPilot::getUrl() => t('Initial Pilot'),
             static::getUrl() => static::getTitle(),
         ];
     }

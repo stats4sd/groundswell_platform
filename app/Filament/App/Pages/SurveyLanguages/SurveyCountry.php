@@ -39,12 +39,17 @@ class SurveyCountry extends Page implements HasForms
         $this->form->fill($this->team->toArray());
     }
 
+    public function getTitle(): string
+    {
+        return t('Survey Country & Languages');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            SurveyLanguagesIndex::getUrl() => 'Survey Languages',
-            static::getUrl() => static::getTitle(),
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLanguagesIndex::getUrl() => t('Survey Languages'),
+            static::getUrl() => $this->getTitle(),
         ];
     }
 
@@ -60,6 +65,7 @@ class SurveyCountry extends Page implements HasForms
             ->model($this->team)
             ->schema([
                 Select::make('country_id')
+                    ->label(fn() => t('Country'))
                     ->relationship('country', 'name')
                     ->searchable()
                     ->preload()
@@ -68,20 +74,20 @@ class SurveyCountry extends Page implements HasForms
                         // add validations
                         Select::make('region_id')
                             ->relationship('region', 'name')
-                            ->label('Select the region for this country')
+                            ->label(fn() => t('Select the region for this country'))
                             ->required(),
                         TextInput::make('name')
-                            ->label('Enter the name of this country')
+                            ->label(fn() => t('Enter the name of this country'))
                             ->required()
                             ->unique()
                             ->maxLength(255),
                         TextInput::make('iso_alpha2')
-                            ->label('Enter the ISO Alpha-2 code for this country')
+                            ->label(fn() => t('Enter the ISO Alpha-2 code for this country'))
                             ->required()
                             ->unique()
                             ->maxLength(2),
                         TextInput::make('iso_alpha3')
-                            ->label('Enter the ISO Alpha-3 code for this country')
+                            ->label(fn() => t('Enter the ISO Alpha-3 code for this country'))
                             ->required()
                             ->unique()
                             ->maxLength(3),
@@ -99,6 +105,7 @@ class SurveyCountry extends Page implements HasForms
                     ->afterStateUpdated(fn (self $livewire) => $livewire->saveData())
                     ->live(),
                 Select::make('languages')
+                    ->label(fn() => t('Languages'))
                     ->relationship(
                         'languages',
                         'name',

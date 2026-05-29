@@ -1,12 +1,11 @@
 @component('mail::message')
-### New Registration of Interest
+### {{ t('New Registration of Interest') }}
 
-Name: {{ $data['name'] }}
-Email: {{ $data['email'] }}
-Organisation: {{ $data['organisation'] }}
-Details: {{ $data['details'] }}
+{{ t('Name') }}: {{ $data['name'] }}
+{{ t('Email') }}: {{ $data['email'] }}
+{{ t('Organisation') }}: {{ $data['organisation'] }}
+{{ t('Details') }}: {{ $data['details'] }}
 
-
-Thanks,<br>
+{{ t('Thanks,') }}<br>
 {{ config('app.name') }}
 @endcomponent

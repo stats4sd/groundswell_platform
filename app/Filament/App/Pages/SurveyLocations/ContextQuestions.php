@@ -27,6 +27,15 @@ class ContextQuestions extends Page implements HasActions, HasForms, HasTable
 
     protected static string $view = 'filament.app.pages.survey-locations.context-questions';
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLocationsIndex::getUrl() => t('Survey locations'),
+            static::getUrl() => static::getTitle(),
+        ];
+    }
+
     protected static bool $shouldRegisterNavigation = false;
 
     public Team $team;
@@ -54,15 +63,6 @@ class ContextQuestions extends Page implements HasActions, HasForms, HasTable
         $this->xlsformModuleVersion = $this->team->localContextModuleVersion->load(['surveyRows.languageStrings', 'surveyRows.choiceList.choiceListEntries.languageStrings']);
 
         $this->form->fill($this->xlsformModuleVersion->toArray());
-    }
-
-    public function getBreadcrumbs(): array
-    {
-        return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            SurveyLocationsIndex::getUrl() => 'Survey locations',
-            static::getUrl() => static::getTitle(),
-        ];
     }
 
     public function table(Table $table): Table

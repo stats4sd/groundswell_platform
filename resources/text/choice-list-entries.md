@@ -1,0 +1,5 @@
+There are some questions in the survey where the appropriate answer options will be different depending on the location context - for example, questions that ask about crops that are grown on a farm *should not* include lots of options for plants that do not grow in the location being surveyed, and *should* include the most commonly grown crops in that area. Questions should also reflect the units of measurement that are used in the location.
+
+The "Contextualise choice lists" has several choice lists to be checked and customised. You can select from the lists on the left hand side, then review the existing options. Options can be removed from the context, so they will not be included in this questionnaire, and you have the option to add new options by clicking the "add new" button. For each choice list entry, you will need to add a name and label, then click "create", or "create and add another" to save the entry.
+
+Each list page includes the option to view the questions that will use these answer options. Check these to ensure you provide suitable options.

@@ -3,18 +3,21 @@
 @config 'tailwind.config.js';
 
 :root {
-    --green: #5fa35a;
+    --brown: #392022;
+    --green: #5E9691;
+    --orange: #C45D5D;
+    --danger: #C45D5D;
+    --primary: #72B73D;
+    --blue: #F39F5D;
+
     --lightgreen: #f8fff5;
-    --blue: #3FA9F5;
-    --dark-blue: #296fa1;
-    --orange: #EB5A45;
-    --danger: #EB5A45;
     --dark-orange: #c3432f;
     --light-orange: #F4A69B;
     --light-grey: #F2F2F8;
     --shadowgrey: #989898;
-    --hyellow: #FFC84F;
+
   }
+
 body {
     @apply font-montserrat text-sm ;
 }
@@ -28,10 +31,10 @@ body:has(#languages),.actionblock {
         @apply font-extrabold text-5xl;
     }
 h2{
-        @apply font-light text-2xl;
+        @apply font-semibold text-2xl;
     }
     h3 {
-        @apply text-black font-bold text-lg }
+        @apply text-brown font-bold text-lg }
 
 }
 .surveystepshead {
@@ -40,25 +43,33 @@ h2{
 .instructionsvid {
     @apply float-right;
 }
-h4 {
-    @apply text-base font-bold uppercase;
-}
-
 
 h1 {
-    @apply font-extrabold text-5xl;
+    @apply text-brown font-extrabold text-5xl;
 }
+
 h2 {
-    @apply font-light text-2xl;
+    @apply text-brown font-semibold text-2xl;
 }
+
 h3 {
-    @apply text-black font-bold text-lg }
+    @apply text-brown font-bold text-lg
+}
+
+h4 {
+    @apply text-brown text-base font-bold uppercase;
+}
+
 h5 {
-    @apply text-black font-bold  mt-4;
+    @apply text-brown font-bold  mt-4;
 }
 
 h6 {
     @apply text-green text-base font-semibold uppercase;
+}
+
+p {
+    @apply text-brown;
 }
 
 .surveyblocks {
@@ -70,33 +81,42 @@ button {
     text-transform: uppercase ;
 
 }
+
 .fi-btn {
     @apply rounded-full uppercase duration-200;
     font-size: 0.75rem;
 }
+
 .fi-btn-color-orange:hover {
     @apply bg-dark-orange;
 }
-.fi-btn-color-blue:hover {
+
+/* .fi-btn-color-blue:hover {
     @apply bg-dark-blue;
-}
+} */
+
 .greensection {
     @apply flex-none bg-green text-white text-xl font-extrabold flex flex-row lg:flex-col lg:w-52 2xl:w-64  lg:h-72 items-center justify-center px-4 py-8 lg:py-0 relative;
 }
+
 .whitesection {
     @apply bg-white px-4  lg:py-0 lg:py-6 lg:h-72 flex flex-grow w-full lg:w-52 xl:w-64 2xl:w-80;
 }
+
 .whitesection h2 {
     @apply !text-base;
 }
+
 .whiteborderbox {
     @apply border-b lg:border-b-0 lg:border-r border-gray-300 w-full;
 }
+
 .whitecard {
-@apply relative min-w-40  lg:mx-auto text-xs h-full w-full px-4 xl:px-8 flex flex-row flex-grow lg:flex-col py-8 lg:py-0;
-h3 {
-    @apply text-base;
-}
+    @apply relative min-w-40  lg:mx-auto text-xs h-full w-full px-4 xl:px-8 flex flex-row flex-grow lg:flex-col py-8 lg:py-0;
+
+    h3 {
+        @apply text-base;
+    }
 }
 
 .dashdescdiv {
@@ -104,18 +124,21 @@ h3 {
 }
 
 .dashbuttondiv {
-    @apply text-center lg:absolute lg:inset-x-0 lg:bottom-2  w-2/4 pl-20 lg:pl-0 lg:w-full ;
+    @apply text-brown text-center lg:absolute lg:inset-x-0 lg:bottom-2  w-2/4 pl-20 lg:pl-0 lg:w-full ;
 }
+
 .buttona{
     @apply bg-blue font-semibold text-xs text-white py-2 px-4 rounded-full  duration-200;
     text-transform: uppercase;
     .fi-btn-icon {
         @apply !text-white;}
 }
-.buttona:hover {
-    @apply shadow-none bg-dark-blue ;
+
+/* .buttona:hover {
+    @apply shadow-none;
     text-decoration: none !important;
-}
+} */
+
 .buttona:disabled.outline-none {
     @apply !ring-0 !bg-gray-200 !text-gray-600;
     cursor: not-allowed;
@@ -126,17 +149,19 @@ h3 {
 }
 
 .buttonb{
-    @apply bg-orange font-semibold text-xs text-white py-2 px-4 rounded-full  duration-200;
+    @apply bg-orange font-semibold text-xs text-white py-2 px-4 rounded-full;
     text-transform: uppercase;
 }
-.buttonb:hover {
-    @apply shadow-none bg-dark-orange;
-}
 
+.buttonbrown{
+    @apply bg-white font-semibold text-xs text-brown py-2 px-4 rounded-full border border-brown;
+    text-transform: uppercase;
+}
 
 .actionblock .buttona,.actionblock .buttonb {
     @apply text-sm;
 }
+
 .hover-effect {
     transition: all 0.2s ease-in-out;
 }
@@ -170,6 +195,7 @@ h3 {
 .rounded-3xl {
     border-radius: 1.5rem;
 }
+
 .container {
     display: block;
     justify-content: revert;
@@ -177,6 +203,7 @@ h3 {
     background-color: revert;
     border-bottom: none;
 }
+
 .actionblockborder
 {
     margin-left: 8rem;
@@ -185,30 +212,32 @@ h3 {
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
+
 .actionblock:last-child .actionblockborder
 {
     border-color: white !important;
-
 }
+
 .completebar {
-    @apply md:h-16 h-max bg-gray-900 text-center fixed  w-screen bottom-0 -left-0 pt-4;
+    @apply md:h-16 h-max text-center fixed w-screen bottom-0 -left-0 pt-4;
 }
 
 .tabbuttons {
     @apply bg-green text-white;
 }
+
 .tabbuttons h3 {
     @apply text-white;
 }
+
 .lisptabs:hover {
     @apply bg-green text-white;
     h3 {@apply text-white;}
 }
+
 .lisptabs-desc {
     @apply hidden lg:block ;
 }
-
-
 
 .lispboxinactive {
     @apply bg-gray-50 border-l-4 border-gray-50;
@@ -216,9 +245,6 @@ h3 {
 
 .lispboxinactive:hover {
     @apply bg-gray-50 border-l-4 border-green text-green;
-}
-.lispboxinactive {
-    @apply bg-gray-50 border-l-4 border-gray-50;
 }
 
 .lispboxselected {
@@ -292,6 +318,7 @@ button:disabled:hover {
         padding: 0px;
     }
 } */
+
 .warningbox {
     @apply bg-orange w-3/4 mx-auto rounded-3xl p-6 text-white;
     a {
@@ -302,6 +329,7 @@ button:disabled:hover {
         @apply bg-white text-orange;
     }
 }
+
 .uploadedindicatorstable th button {
 padding-left: 0px ;
 }
@@ -314,11 +342,9 @@ padding-left: 0px ;
     @apply w-60;
 }
 
-
 .success-row td  {
     @apply !bg-lightgreen;
 }
-
 
 /*!* Remove grey background on some button *!*/
 /*button:disabled.outline-none {*/
@@ -334,7 +360,6 @@ padding-left: 0px ;
  .fi-fo-repeater-item {
     @apply border-2 border-green;
 }
-
 
 /* For 'inline repeater' elements, hide the defuault border, ring and shadow around items - to make the repeated fields look like they are 'in line' with the other fields and not a separate section of the form.
     The intention is that these 'inline repeater' elements have a pre-set number of repeats. The user should not be able to add or remove elements, so to the user it should be not visible that this is a 'repeating' section at all.
@@ -358,7 +383,6 @@ padding-left: 0px ;
     @apply hidden;
 }
 
-
 .dropdown_tables {
    .fi-ta-header,.fi-ta-header-toolbar {
     @apply shadow-none ring-0 !border-none divide-none py-0;
@@ -370,13 +394,13 @@ padding-left: 0px ;
 
 .fi-ta-ctn{
     @apply shadow-none ring-0 border-b ;
-margin: 0.5rem 1rem 3rem 1rem;
-.translations_viewedit {
-    @apply ml-4;
-    span {
-    @apply !text-xs ;
-}
-}
+    margin: 0.5rem 1rem 3rem 1rem;
+    .translations_viewedit {
+        @apply ml-4;
+        span {
+            @apply !text-xs ;
+        }
+    }
 }
 }
 
@@ -385,20 +409,23 @@ margin: 0.5rem 1rem 3rem 1rem;
    .add_questions_btn {
     @apply  shadow-none;
 }
+
 .add_questions_btn:hover {
     background-color: var(--dark-orange);
 }
+
 }
 .dropdown_tables .fi-ta-text-item svg {
 @apply mr-2;
 }
+
 .dropdown_tables .fi-ta-content {
     @apply border-x ;
 }
+
 .translation-modal button {
     margin-left: 0.6rem;
 }
-
 
 .fi-ta-header-cell-label {
     text-transform: none !important;
@@ -416,7 +443,6 @@ margin: 0.5rem 1rem 3rem 1rem;
     }
 }
 
-
 fieldset {
     @apply !p-0 !border-none;
     legend {
@@ -430,9 +456,11 @@ fieldset {
         @apply !text-base !font-semibold;
     }
 }
+
 .fi-section-header-heading {
     @apply border-none ring-0 shadow-none;
 }
+
 .fi-section-header {
     @apply pb-0;
 }
@@ -440,22 +468,46 @@ fieldset {
 .fi-topbar-item-button {
     border-radius: 9999px;
 }
+
+.fi-topbar-item-label {
+    @apply text-brown;
+}
+
+.fi-topbar-item-icon {
+    @apply text-brown;
+}
+
+.fi-topbar-item-active .fi-topbar-item-label {
+    @apply text-blue;
+}
+
+.fi-topbar-item-active .fi-topbar-item-icon {
+    @apply text-blue;
+}
+
+/* .fi-usermenu {
+    .fi-usermenu-item {
+        @apply text-brown;
+    }
+} */
+
 .indicator {
     @apply bg-gray-50 !rounded-none ;
 
     .fi-section-header {
         @apply pb-4 ;
-
     }
+
     h3 {
         @apply !text-sm;
-    font-weight: 400 !important;
-
+        font-weight: 400 !important;
     }
-.fi-section-content {
-   @apply px-4 pt-0 pb-2;
+
+    .fi-section-content {
+    @apply px-4 pt-0 pb-2;
+    }
 }
-}
+
 .draggable {
     @apply bg-green rounded-none text-white;
     .fi-section-header {
@@ -474,10 +526,11 @@ fieldset {
     background-color: #ffffffe1;
 
     .indicator_questions {
-        @apply px-4 pt-0 pb-2 my-4 text-black;
+        @apply px-4 pt-0 pb-2 my-4 text-brown;
     }
     }
 }
+
 .draggable.indicator:hover {
     @apply text-white shadow-lg;
 }
@@ -498,45 +551,74 @@ fieldset {
     max-width: 100vw;
     width: 100vw;
 }
+
 .instruction_sidebar:hover {
-padding-right: 2rem;
-transition:  100ms ease-in-out;
-background-color: #83be7f;
-cursor: pointer;
+    padding-right: 2rem;
+    transition:  100ms ease-in-out;
+    /* background-color: #83be7f; */
+    cursor: pointer;
 }
+
 .instruction_sidebar .fi-btn-icon {
-height: 1.7rem;
-width: 1.7rem;
-margin-right: 0.5rem;
+    height: 1.7rem;
+    width: 1.7rem;
+    margin-right: 0.5rem;
 }
 
 .fi-modal-slide-over-window {
+    .fi-modal-header {
+        @apply !border-none mx-8;
+    }
 
-.fi-modal-header {
-    @apply !border-none mx-8;
-}
-.fi-modal-heading {
-    @apply !text-xl uppercase;
-}
-.fi-btn {
-    @apply buttonb mx-auto shadow-none !ring-0 border-none;
-}
+    .fi-modal-heading {
+        @apply !text-xl uppercase;
+    }
+
+    .fi-btn {
+        @apply buttonb mx-auto shadow-none !ring-0 border-none;
+    }
 }
 
-.instructions_list {
+blockquote {
+    background-color: #FCEBEB;
+    color: #A32D2D;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    border: 1px solid #F0959580;
+}
+
+.instruction_panel ul {
     margin-left: 30px;
     margin-bottom: 1rem;
     margin-top: 1rem;
     li {
         @apply my-1;
     }
+    @apply list-disc;
+
 }
+
+.instruction_panel h5 {
+    margin-bottom: 0;
+}
+
+.instruction_panel .fi-modal-content {
+    @apply px-12;
+    @apply gap-y-0 !important;
+}
+
+.instruction_panel p {
+    @apply mb-2;
+}
+
 .instructions_note {
     @apply rounded-xl py-6 px-9 my-6;
     padding: 20px 30px;
     background-color: #5fa35a2b;
 
 }
+
 .results-summary {
     .fi-section {
         @apply bg-gray-100;
@@ -545,6 +627,7 @@ margin-right: 0.5rem;
         @apply pt-2;
     }
 }
+
 .add_questions_modal {
     @apply py-4 px-8;
     .fi-modal-footer-actions {
@@ -556,9 +639,8 @@ margin-right: 0.5rem;
 }
 
 /* Messy button workaround */
-button.text-white span {
+button.text-white:not(:hover) span {
     color: white !important;
-
 }
 
 button.font-normal span {
@@ -581,3 +663,8 @@ div:has(> .fi-page-sub-navigation-sidebar-ctn) {
         height: 50vh;
     }
 }
+
+/* .fi-ac-action-no-style {
+    all: unset;
+    display: inline-block;
+} */

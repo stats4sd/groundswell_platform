@@ -17,7 +17,7 @@ class SurveyDashboard extends Page
 
     protected static ?string $navigationLabel = 'Survey Dashboard';
 
-    protected static ?string $title = 'Holpa Survey Dashboard'; // set to empty because the dashboard has a custom header
+    protected static ?string $title = 'Survey Dashboard'; // set to empty because the dashboard has a custom header
 
     public static function canAccess(): bool
     {
@@ -25,6 +25,16 @@ class SurveyDashboard extends Page
     }
 
     public Team $team;
+
+    public static function getNavigationLabel(): string
+    {
+        return t('Survey Dashboard');
+    }
+
+    public function getTitle(): string
+    {
+        return t('Survey Dashboard');
+    }
 
     public function getHeader(): ?View
     {

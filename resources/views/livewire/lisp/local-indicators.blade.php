@@ -1,11 +1,11 @@
 <div>
 
     <div class="text-base font-semibold ">
-        Local indicators
+        {{ t("Local indicators") }}
     </div>
 
     <div class="pt-2 pb-4 text-sm font-normal h-20">
-        Select an indicator to start looking for matches.
+        {{ t("Select an indicator to start looking for matches.") }}
     </div>
 
     <div class=" rounded-xl">
@@ -17,7 +17,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5  mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span class="text-sm  font-semibold">MATCHED</span>
+                        <span class="text-sm  font-semibold">{{ t("MATCHED") }}</span>
                     </div>
                 @endif
                 <p class="ps-6 ml-1">
@@ -25,7 +25,7 @@
                 </p>
             </div>
         @empty
-            <div>No local indicators have been uploaded.</div>
+            <div>{{ t("No local indicators have been uploaded.") }}</div>
         @endforelse
     </div>
 

@@ -1,8 +1,8 @@
 @component('mail::message')
-### Testing Email
+### {{ t('Testing Email') }}
 
-This is a testing email.
+{{ t('This is a testing email.') }}
 
-Thanks,<br>
+{{ t('Thanks,') }}<br>
 {{ config('app.name') }}
 @endcomponent

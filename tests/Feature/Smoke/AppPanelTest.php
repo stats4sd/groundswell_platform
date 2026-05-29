@@ -104,12 +104,6 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
-    test('diet diversity loads', function () {
-        $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/diet-diversity")
-            ->assertOk();
-    });
-
     test('initial pilot loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/initial-pilot")

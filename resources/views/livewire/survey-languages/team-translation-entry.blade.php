@@ -3,15 +3,15 @@
         <div class="sm:w-2/3 md:flex ">
             <h6 class="w-full md:w-1/2 lg:w-1/4 ">{{ $language->language_label }}</h6>
             <h5 class="w-full mt-0 md:w-1/2 lg:w-3/4 md:flex  md:ml-8 font-medium capitalize">
-                <span class="mr-2">Selected Translation: </span>
+                <span class="mr-2">{{ t("Selected Translation:") }}</span>
                 <span class="{{ $selectedLocale ? 'text-green' : 'text-dark-orange' }}">{{ $selectedLocale ? $selectedLocale->languageLabel : 'none' }}</span>
             </h5>
 
         </div>
         <div class="md:self-end  md:w-1/3 md:flex justify-end mt-5 sm:mt-0">
 
-            <button class=" text-nowrap flex text-black  items-center !text-sm justify-between " wire:click="$toggle('expanded')">
-                Select Translation
+            <button class=" text-nowrap flex text-brown items-center !text-sm justify-between " wire:click="$toggle('expanded')">
+                {{ t("Select Translation") }}
                 @if($expanded)
                 <x-heroicon-o-chevron-up class="h-6 ml-4 font-bold text-lg " />
                 @else

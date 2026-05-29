@@ -32,10 +32,20 @@ class SurveyLocationsIndex extends Page
 
     protected $listeners = ['refreshPage' => '$refresh'];
 
+    public function getTitle(): string
+    {
+        return t('Survey Locations');
+    }
+
+    public function getSummary(): string
+    {
+        return t('Add the details of the farms you will visit, to allow the enumerators to carry out data collection.');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
             static::getUrl() => static::getTitle(),
         ];
     }

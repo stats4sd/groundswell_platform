@@ -53,8 +53,8 @@ class TimeFrame extends Page implements HasForms, HasTable
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            PlaceAdaptationsIndex::getUrl() => 'Place Adaptations',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            PlaceAdaptationsIndex::getUrl() => t('Place Adaptations'),
             static::getUrl() => static::getTitle(),
         ];
     }
@@ -72,6 +72,7 @@ class TimeFrame extends Page implements HasForms, HasTable
             ->model($this->team)
             ->schema([
                 TextInput::make('time_frame')
+                    ->label(fn() => t('Time Frame'))
                     ->live()
                     ->disabled(fn () => !auth()->user()->can('maintain adapt time frame'))
                     ->afterStateUpdated(fn(self $livewire) => $livewire->saveData()),
@@ -88,7 +89,7 @@ class TimeFrame extends Page implements HasForms, HasTable
 
         Notification::make('updated')
             ->success()
-            ->title('Time Frame Updated Successfully')
+            ->title(fn () => t('Time Frame Updated Successfully'))
             ->send();
     }
 
