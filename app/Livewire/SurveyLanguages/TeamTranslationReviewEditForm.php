@@ -39,7 +39,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public Team $team;
 
-    protected bool $canSave = false;
+    public bool $canSave = false;
 
     public function mount()
     {
