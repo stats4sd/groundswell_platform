@@ -8,12 +8,6 @@ The first thing you can customise is the time frame that is asked about for ques
 
 The page shows the questions in the survey that use the time frame. Whatever phrase is used for the time frame will be inserted into the question in place of the "${time_frame}" text placeholder. Look through them, determine what time frame is most appropriate and, if you decide to change it, update the timeframe text in the box. Your entry will be automatically saved and the question text in your survey form will be updated.
 
-##### Diet Diversity module
-
-HOLPA uses an internationally validated indicator for "dietary diversity". The questions in this section ask whether members of the household have consumed anything from specific food groups within the last 24 hours, such as grain food, tubers, pulses, green veg, etc. The default survey has all the needed questions, but does not include lists of locally contextualised example foods for each group.
-
-The platform can incorporate localised versions of the questions from the [Global Diet Quality Project](https://www.dietquality.org/tools), which add relevant example foods for each category customised for over 100 countries. If you would like to include these in your survey, select the suitable country from the list of available countries. The page shows the questions that will appear in the survey, so you can review the default and the localised versions with examples, and decide what to use for your survey.
-
 ##### Contextualise choice lists
 
 There are some questions in the survey where the appropriate answer options will be different depending on the location context - for example, questions that ask about crops that are grown on a farm *should not* include lots of options for plants that do not grow in the location being surveyed, and *should* include the most commonly grown crops in that area. Questions should also reflect the units of measurement that are used in the location.

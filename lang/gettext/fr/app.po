@@ -7,8 +7,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-29T11:26:37+00:00\n"
-"PO-Revision-Date: 2026-05-29 11:26+0000\n"
+"POT-Creation-Date: 2026-05-29T11:49:48+00:00\n"
+"PO-Revision-Date: 2026-05-29 11:49+0000\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
@@ -190,7 +190,6 @@ msgstr ""
 #: resources\views\filament\app\pages\lisp\lisp-index.blade.php:18
 #: resources\views\filament\app\pages\lisp\lisp-indicators.blade.php:8
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:14
-#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:5
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:6
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:14
 #: resources\views\filament\app\pages\place-adaptations\time-frame.blade.php:5
@@ -203,11 +202,6 @@ msgstr ""
 #: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:27
 #: resources\views\filament\app\resources\farm-resource\widgets\farm-list-header-widget.blade.php:5
 msgid "Instructions"
-msgstr ""
-
-#: app\Providers\Filament\AdminPanelProvider.php:72
-#: app\Providers\Filament\ProgramPanelProvider.php:86
-msgid "Return to Front end"
 msgstr ""
 
 #: app\Providers\Filament\AppPanelProvider.php:171
@@ -460,16 +454,6 @@ msgid ""
 "You have conducted the pilot and training workshop, and are satisfied that the required adjustments have been made."
 msgstr ""
 
-#: resources\text\place-adaptations-diet-diversity.php:5
-msgid ""
-"##### Diet Diversity module\n"
-"\n"
-"HOLPA uses an internationally validated indicator for \"dietary diversity\". The questions in this section ask whether members of the household have consumed anything from specific food groups within the last 24 hours, such as grain food, tubers, pulses, green veg, etc. The default survey has all the needed questions, but does not include lists of locally contextualised example foods for each group.\n"
-"\n"
-"The platform can incorporate localised versions of the questions from the [Global Diet Quality Project](https://www.dietquality.org/tools), which add relevant example foods for each category customised for over 100 countries. If you would like to include these in your survey, select the suitable country from the list of available countries. The page shows the questions that will appear in the survey, so you can review the default and the localised versions with examples, and decide what to use for your survey.\n"
-""
-msgstr ""
-
 #: resources\text\place-adaptations-time-frame.php:5
 msgid ""
 "##### Time frame\n"
@@ -491,12 +475,6 @@ msgid ""
 "The first thing you can customise is the time frame that is asked about for questions concerning the recent past. By default, this time frame is \"In the last 12 months\". However, for your survey, it might make more sense to ask the questions about \"last season\" or \"last year\".\n"
 "\n"
 "The page shows the questions in the survey that use the time frame. Whatever phrase is used for the time frame will be inserted into the question in place of the \"${time_frame}\" text placeholder. Look through them, determine what time frame is most appropriate and, if you decide to change it, update the timeframe text in the box. Your entry will be automatically saved and the question text in your survey form will be updated.\n"
-"\n"
-"##### Diet Diversity module\n"
-"\n"
-"HOLPA uses an internationally validated indicator for \"dietary diversity\". The questions in this section ask whether members of the household have consumed anything from specific food groups within the last 24 hours, such as grain food, tubers, pulses, green veg, etc. The default survey has all the needed questions, but does not include lists of locally contextualised example foods for each group.\n"
-"\n"
-"The platform can incorporate localised versions of the questions from the [Global Diet Quality Project](https://www.dietquality.org/tools), which add relevant example foods for each category customised for over 100 countries. If you would like to include these in your survey, select the suitable country from the list of available countries. The page shows the questions that will appear in the survey, so you can review the default and the localised versions with examples, and decide what to use for your survey.\n"
 "\n"
 "##### Contextualise choice lists\n"
 "\n"
@@ -1193,26 +1171,6 @@ msgstr ""
 
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:175
 msgid "When you have completed the pilot test and are ready to begin live data collection, click below. This will disable this page and mark all future submissions as \"live\" data."
-msgstr ""
-
-#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:14
-msgid "HOLPA uses an internationally validated indicator for \"dietary diversity\". This indicator has a pre-defined set of questions, which is different for different countries. More information about this module can be found on the"
-msgstr ""
-
-#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:16
-msgid "website."
-msgstr ""
-
-#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:19
-msgid "To complete this section of the localisation, please select the version of the questions that you would like to use for your survey. If an option for your country does not exist, you can either use the default version (without locally-relevant food examples), or contact the HOLPA team to ask for your country's module to be added."
-msgstr ""
-
-#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:20
-msgid "It is assumed that you are conducting HOLPA within one country. If you are working across multiple countries, we recommend creating a different \"team\" for each country so that you can make different customisations to the survey within the different countries."
-msgstr ""
-
-#: resources\views\filament\app\pages\place-adaptations\diet-diversity.blade.php:26
-msgid "Below are the questions that form this module. When you select your country, this table will update to show the text that will appear in your version of the survey."
 msgstr ""
 
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:18
