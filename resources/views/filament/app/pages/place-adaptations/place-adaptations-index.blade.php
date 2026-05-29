@@ -37,13 +37,6 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
                     the translation of your survey in future steps.
                 </p>
             </div>
-            <x-rounded-section
-                heading='Adapt time frame'
-                buttonLabel='Update'
-                :url='\App\Filament\App\Pages\PlaceAdaptations\TimeFrame::getUrl()'>
-                <x-slot:description>Some questions in the Household Survey ask about a specific time frame in the recent past. You may customise this to your specific requirements.
-                </x-slot:description>
-            </x-rounded-section>
 
             @if(ChoiceList::where('is_localisable', true)->where('has_custom_handling', false)->count() > 0)
                 <x-rounded-section

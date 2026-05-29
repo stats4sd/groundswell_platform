@@ -175,7 +175,6 @@ All tests: `actingAs($this->user)->get("/app/{$this->team->id}/{$slug}")->assert
 | `pilot index loads` | `pilot-index` |
 | `place adaptations index loads` | `place-adaptations-index` |
 | `initial pilot loads` | `initial-pilot` |
-| `time frame loads` | `time-frame` |
 
 ### Resources (5 tests)
 

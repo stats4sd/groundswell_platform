@@ -110,12 +110,6 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
-    test('time frame loads', function () {
-        $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/time-frame")
-            ->assertOk();
-    });
-
     // Resources
 
     test('submissions list loads', function () {
