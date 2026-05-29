@@ -225,26 +225,6 @@ describe('Admin panel CRUD — GlobalIndicator', function () {
 
 // ---------------------------------------------------------------------------
 
-describe('Admin panel CRUD — DietDiversityModuleVersion', function () {
-
-    beforeEach(function () {
-        $this->superAdmin = createSuperAdmin();
-        $this->actingAs($this->superAdmin);
-        withAdminPanel();
-    });
-
-    test('diet diversity module version list page loads', function () {
-        $this->get('/admin/diet-diversity-module-versions')->assertOk();
-    });
-
-    test('diet diversity module version create page loads', function () {
-        $this->get('/admin/diet-diversity-module-versions/create')->assertOk();
-    });
-
-});
-
-// ---------------------------------------------------------------------------
-
 describe('Admin panel CRUD — Program (list only in admin panel)', function () {
 
     beforeEach(function () {

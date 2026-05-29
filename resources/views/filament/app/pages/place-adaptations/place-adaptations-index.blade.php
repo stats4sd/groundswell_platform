@@ -45,13 +45,6 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
                 </x-slot:description>
             </x-rounded-section>
 
-            <x-rounded-section
-                heading='Adapt Diet Quality Module'
-                buttonLabel='Update'
-                :url='\App\Filament\App\Pages\PlaceAdaptations\DietDiversity::getUrl()'/>
-            <x-slot:description>HOLPA uses an international standard "Diet Quality" module. This module is available for over 100 countries. We recommend you select the version most suited to your context.
-            </x-slot:description>
-
             @if(ChoiceList::where('is_localisable', true)->where('has_custom_handling', false)->count() > 0)
                 <x-rounded-section
                     heading='Contextualise choice lists'

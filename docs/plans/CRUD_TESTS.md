@@ -106,17 +106,6 @@ Prerequisites: `Theme` records seeded.
 
 ---
 
-### DietDiversityModuleVersion (2 tests — file upload required for create/edit)
-
-| Test name | Assertion |
-|---|---|
-| `diet diversity module version list page loads` | `get('/admin/diet-diversity-module-versions')->assertOk()` |
-| `diet diversity module version create page loads` | `get('/admin/diet-diversity-module-versions/create')->assertOk()` |
-
-> Full create/edit tests are **out of scope** — the form requires a valid `.xlsx` file upload via Spatie Media Library.
-
----
-
 ### Program (2 tests — list-only resource in Admin panel)
 
 The app-level `ProgramResource` overrides `getPages()` to expose only `index`. Create/edit are handled via the Program panel directly.

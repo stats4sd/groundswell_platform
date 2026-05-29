@@ -129,7 +129,6 @@ All tests: `actingAs($this->superAdmin)->get($url)->assertOk()`
 | `domains list loads` | `/admin/domains` |
 | `global indicators list loads` | `/admin/global-indicators` |
 | `themes list loads` | `/admin/themes` |
-| `diet diversity module versions list loads` | `/admin/diet-diversity-module-versions` |
 | `programs list loads` | `/admin/programs` |
 | `teams list loads` | `/admin/teams` |
 | `users list loads` | `/admin/users` |
@@ -175,7 +174,6 @@ All tests: `actingAs($this->user)->get("/app/{$this->team->id}/{$slug}")->assert
 | `lisp workshop loads` | `lisp-workshop` |
 | `pilot index loads` | `pilot-index` |
 | `place adaptations index loads` | `place-adaptations-index` |
-| `diet diversity loads` | `diet-diversity` |
 | `initial pilot loads` | `initial-pilot` |
 | `time frame loads` | `time-frame` |
 

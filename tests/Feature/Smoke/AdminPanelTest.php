@@ -30,12 +30,6 @@ describe('Admin panel routes load for Super Admin', function () {
             ->assertOk();
     });
 
-    test('diet diversity module versions list loads', function () {
-        $this->actingAs($this->superAdmin)
-            ->get('/admin/diet-diversity-module-versions')
-            ->assertOk();
-    });
-
     test('programs list loads', function () {
         $this->actingAs($this->superAdmin)
             ->get('/admin/programs')
