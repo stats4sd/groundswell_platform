@@ -7,41 +7,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2026-05-29T11:14:47+00:00\n"
-"PO-Revision-Date: 2026-05-29 11:14+0000\n"
+"POT-Creation-Date: 2026-05-29T11:26:37+00:00\n"
+"PO-Revision-Date: 2026-05-29 11:26+0000\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
-#: app\Filament\Admin\Resources\ThemeResource.php:28
-#: app\Filament\Admin\Resources\ThemeResource.php:49
-msgid "Module"
-msgstr ""
-
-#: app\Filament\Admin\Resources\ThemeResource.php:31
-#: app\Filament\Admin\Resources\ThemeResource.php:53
-msgid "Domain"
-msgstr ""
-
-#: app\Filament\Admin\Resources\ThemeResource.php:34
-#: app\Filament\Admin\Resources\ThemeResource.php:45
-#: app\Filament\App\Resources\TeamResource.php:42
-#: app\Filament\App\Resources\TeamResource.php:56
-#: resources\views\emails\register-interest-email.blade.php:5
-msgid "Name"
-msgstr "Nombre"
-
-#: app\Filament\Admin\Resources\ThemeResource.php:57
-msgid "# Global indicators"
-msgstr ""
-
-=======
-"POT-Creation-Date: 2026-05-27T14:53:47+00:00\n"
-"PO-Revision-Date: 2026-05-27 14:53+0000\n"
-"Language: es\n"
-"Plural-Forms: nplurals=2; plural=n!=1;\n"
-
->>>>>>> 45297eea4f203beb60f4dd0b341a16fe913cd5c6
 #: app\Filament\App\Pages\Auth\EditProfile.php:30
 #: app\Filament\App\Pages\Auth\EditProfile.php:35
 msgid "My Account"
@@ -183,17 +153,13 @@ msgstr ""
 msgid "Updated At"
 msgstr ""
 
-<<<<<<< HEAD
-#: app\Filament\App\Resources\TeamResource.php:46
-=======
-#: app\Filament\App\Resources\TeamResource.php:37
-#: app\Filament\App\Resources\TeamResource.php:51
+#: app\Filament\App\Resources\TeamResource.php:42
+#: app\Filament\App\Resources\TeamResource.php:56
 #: resources\views\emails\register-interest-email.blade.php:5
 msgid "Name"
 msgstr "Nombre"
 
-#: app\Filament\App\Resources\TeamResource.php:41
->>>>>>> 45297eea4f203beb60f4dd0b341a16fe913cd5c6
+#: app\Filament\App\Resources\TeamResource.php:46
 msgid "Description"
 msgstr "Descripción"
 
@@ -342,30 +308,30 @@ msgstr ""
 
 #: resources\text\initial-pilot.php:5
 msgid ""
-"##### Initial pilot test\r\n"
-"\r\n"
-"Following customisation, a pilot test should be conducted to check the sense and functionality of the survey. On this page, you will find the QR code to scan to start testing the survey using ODK. Note that this QR code should only be used for this initial testing - the 'data collection' section contains a different link for the full pilot and live data collection, and it is important to use the correct version of the survey.\r\n"
-"\r\n"
-"The initial pilot can be completed by a member of your team with at least one local researcher or practitioner. To conduct the test:\r\n"
-"\r\n"
-"1. Make sure you have made all the intended customisations up to this step of the process.\r\n"
-"2. Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed and set up.\r\n"
-"3. The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:\r\n"
-"- Check that the survey layout and dependencies are correctly coded; for example, you should check that mandatory questions are not showing as optional.\r\n"
-"- Make sure all questions and response options are clear for respondents in the local context.\r\n"
-"- Identify if hints or examples are needed for any sections that may cause confusion or be misunderstood.\r\n"
-"4. When you submit data using the test survey, it will appear in the \"Draft submissions\" table, so you can confirm that the data has been submitted and recognised.\r\n"
-"\r\n"
-"Once you have completed this process, you may need to return to some of the actions within this step or previous steps (such as to edit the survey translation). You can repeat this pilot test as many times as you choose. Be aware that each time you make a change to the form, an updated form is generated. This can take a few minutes, so you may need to wait while this process completes to access the latest version of the test forms. Any submissions to the test forms are temporary and will be overwritten when the forms are updated.\r\n"
-"\r\n"
-"> ⚠️ **The QR codes below are DRAFTS.**\r\n"
-"> Please **do not share** these codes with enumerators!\r\n"
-"> **All submissions to the test forms are temporary** and will be reset whenever you take an action using the survey dashboard that changes the forms.\r\n"
-"> Do not use these forms for live data collection.\r\n"
-"\r\n"
-"##### Mark this section as complete when:\r\n"
-"\r\n"
-"You have conducted the technical test and are happy with the changes to the forms and the technical functioning of the survey up to this point.\r\n"
+"##### Initial pilot test\n"
+"\n"
+"Following customisation, a pilot test should be conducted to check the sense and functionality of the survey. On this page, you will find the QR code to scan to start testing the survey using ODK. Note that this QR code should only be used for this initial testing - the 'data collection' section contains a different link for the full pilot and live data collection, and it is important to use the correct version of the survey.\n"
+"\n"
+"The initial pilot can be completed by a member of your team with at least one local researcher or practitioner. To conduct the test:\n"
+"\n"
+"1. Make sure you have made all the intended customisations up to this step of the process.\n"
+"2. Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed and set up.\n"
+"3. The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:\n"
+"- Check that the survey layout and dependencies are correctly coded; for example, you should check that mandatory questions are not showing as optional.\n"
+"- Make sure all questions and response options are clear for respondents in the local context.\n"
+"- Identify if hints or examples are needed for any sections that may cause confusion or be misunderstood.\n"
+"4. When you submit data using the test survey, it will appear in the \"Draft submissions\" table, so you can confirm that the data has been submitted and recognised.\n"
+"\n"
+"Once you have completed this process, you may need to return to some of the actions within this step or previous steps (such as to edit the survey translation). You can repeat this pilot test as many times as you choose. Be aware that each time you make a change to the form, an updated form is generated. This can take a few minutes, so you may need to wait while this process completes to access the latest version of the test forms. Any submissions to the test forms are temporary and will be overwritten when the forms are updated.\n"
+"\n"
+"> ⚠️ **The QR codes below are DRAFTS.**\n"
+"> Please **do not share** these codes with enumerators!\n"
+"> **All submissions to the test forms are temporary** and will be reset whenever you take an action using the survey dashboard that changes the forms.\n"
+"> Do not use these forms for live data collection.\n"
+"\n"
+"##### Mark this section as complete when:\n"
+"\n"
+"You have conducted the technical test and are happy with the changes to the forms and the technical functioning of the survey up to this point.\n"
 ""
 msgstr ""
 
@@ -467,30 +433,30 @@ msgstr ""
 
 #: resources\text\pilot-index.php:5
 msgid ""
-"##### Pilot test and enumerator training\r\n"
-"\r\n"
-"This page guides you through the process of conducting the pilot test for your survey. Before you conduct the pilot, ensure you have:\r\n"
-"\r\n"
-"- Made your intended changes and customisations using the previous steps on the dashboard.\r\n"
-"- As needed, used the initial pilot draft versions of the form to check any additional changes, such as the addition of custom questions for your local indicators following the LISP workshop.\r\n"
-"- Published all changes to update the forms you will use in the pilot. This must be done manually; this is so that you can make changes and test them as draft versions to confirm they are working as expected before updating the versions that your enumerator team will see. You will find the option to publish your changes on the 'Access forms' section of the page.\r\n"
-"\r\n"
-"When you are ready for the pilot, you will need to organise the workshop as described in this page. You will find the QR code to allow enumerators to set up the forms on the 'Access forms' section of the page. Note that these are not the same as the draft versions used in the initial pilot, and those draft forms should never be used for this pilot or for live data collection, as the data submitted for those forms is not saved. Ensure that everyone is using the correct version of the forms before proceeding with the pilot or any data collection.\r\n"
-"\r\n"
-"##### Access forms\r\n"
-"\r\n"
-"The 'Access forms' section contains the option to publish your changes to the survey, and QR codes to set up the forms on the mobile devices that will be used to pilot data collection.\r\n"
-"\r\n"
-"##### Forms and submissions\r\n"
-"\r\n"
-"In the 'Forms and submissions' section, you can see an overview of the current forms and view the submissions. If new submissions have not yet appeared on the page, you can use the 'manually get submissions' option on the survey forms view to prompt this to refresh.\r\n"
-"\r\n"
-"The survey submissions view shows you all the submissions for your forms. You can view individual submissions to conduct quality checks. This will help you identify frequent errors or omissions which may necessitate further enumerator training or adjustments to the form.\r\n"
-"\r\n"
-"When you have completed the pilot, you will likely then need to return to previous sections to make additional edits to the survey. Revisit any section from the dashboard as needed. You may choose to carry out further pilots or technical tests before commencing live data collection.\r\n"
-"\r\n"
-"##### Mark this section as complete when:\r\n"
-"\r\n"
+"##### Pilot test and enumerator training\n"
+"\n"
+"This page guides you through the process of conducting the pilot test for your survey. Before you conduct the pilot, ensure you have:\n"
+"\n"
+"- Made your intended changes and customisations using the previous steps on the dashboard.\n"
+"- As needed, used the initial pilot draft versions of the form to check any additional changes, such as the addition of custom questions for your local indicators following the LISP workshop.\n"
+"- Published all changes to update the forms you will use in the pilot. This must be done manually; this is so that you can make changes and test them as draft versions to confirm they are working as expected before updating the versions that your enumerator team will see. You will find the option to publish your changes on the 'Access forms' section of the page.\n"
+"\n"
+"When you are ready for the pilot, you will need to organise the workshop as described in this page. You will find the QR code to allow enumerators to set up the forms on the 'Access forms' section of the page. Note that these are not the same as the draft versions used in the initial pilot, and those draft forms should never be used for this pilot or for live data collection, as the data submitted for those forms is not saved. Ensure that everyone is using the correct version of the forms before proceeding with the pilot or any data collection.\n"
+"\n"
+"##### Access forms\n"
+"\n"
+"The 'Access forms' section contains the option to publish your changes to the survey, and QR codes to set up the forms on the mobile devices that will be used to pilot data collection.\n"
+"\n"
+"##### Forms and submissions\n"
+"\n"
+"In the 'Forms and submissions' section, you can see an overview of the current forms and view the submissions. If new submissions have not yet appeared on the page, you can use the 'manually get submissions' option on the survey forms view to prompt this to refresh.\n"
+"\n"
+"The survey submissions view shows you all the submissions for your forms. You can view individual submissions to conduct quality checks. This will help you identify frequent errors or omissions which may necessitate further enumerator training or adjustments to the form.\n"
+"\n"
+"When you have completed the pilot, you will likely then need to return to previous sections to make additional edits to the survey. Revisit any section from the dashboard as needed. You may choose to carry out further pilots or technical tests before commencing live data collection.\n"
+"\n"
+"##### Mark this section as complete when:\n"
+"\n"
 "You have conducted the pilot and training workshop, and are satisfied that the required adjustments have been made."
 msgstr ""
 
@@ -554,22 +520,22 @@ msgstr ""
 
 #: resources\text\setup-survey.php:5
 msgid ""
-"Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin.\r\n"
-"\r\n"
-"##### Set up live forms for data collection\r\n"
-"\r\n"
-"Up until this point, all the forms used for pilot testing have been labelled as \"test\" forms, and the submissions are stored as test data, not to be included in the results. To begin actual data collection, you need to use this section to set your survey to \"live\". There are some notes on this page to prompt you to double check all the necessary tasks have been completed. Read through these, and when you are ready, click the button to make your survey live.\r\n"
-"\r\n"
-"##### Access live forms\r\n"
-"\r\n"
-"Once your survey is live, this section will display the QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms.\r\n"
-"\r\n"
-"Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. \"HOLPA Household Form - Local Shared Test Version\". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost.\r\n"
-"\r\n"
-"Once enumerators begin data collection, you will be able to see form submissions in the next section, Monitor data collection.\r\n"
-"\r\n"
-"##### Forms overview\r\n"
-"\r\n"
+"Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin.\n"
+"\n"
+"##### Set up live forms for data collection\n"
+"\n"
+"Up until this point, all the forms used for pilot testing have been labelled as \"test\" forms, and the submissions are stored as test data, not to be included in the results. To begin actual data collection, you need to use this section to set your survey to \"live\". There are some notes on this page to prompt you to double check all the necessary tasks have been completed. Read through these, and when you are ready, click the button to make your survey live.\n"
+"\n"
+"##### Access live forms\n"
+"\n"
+"Once your survey is live, this section will display the QR code to set up new devices with the correct forms. Enumerators who have already joined the project using the QR code at the pilot phase can alternatively sync their devices to receive the updated forms.\n"
+"\n"
+"Before enumerators commence data collection, they should double check that the forms on their ODK Collect app are indeed the live versions; test versions will be labelled as such in the form title, e.g. \"HOLPA Household Form - Local Shared Test Version\". Reminder: under no circumstances should enumerators use the draft versions of the survey forms accessed from the initial pilot section. The data from these is not saved and will be lost.\n"
+"\n"
+"Once enumerators begin data collection, you will be able to see form submissions in the next section, Monitor data collection.\n"
+"\n"
+"##### Forms overview\n"
+"\n"
 "Here you can see the titles and published status of your forms. There are options here to publish changes if this still needs to be done before commencing data collection."
 msgstr ""
 
@@ -1435,29 +1401,16 @@ msgstr ""
 msgid "Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location."
 msgstr ""
 
-<<<<<<< HEAD
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:218
-msgid "Localisation: LISP"
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:219
-msgid "The local indicator selection process (LISP) involves conducting a workshop with local farmers and stakeholders to brainstorm and prioritise a set of local indicators to include in the HOLPA tool."
-msgstr ""
-
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:256
-msgid "Conduct a pilot run of the survey, both for quality control of the customised HOLPA survey and training of enumerators."
-=======
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:294
 msgid "Localisation: Optional Modules"
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:295
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:219
 msgid "Add optionals modules to the survey."
 msgstr ""
 
-#: resources\views\filament\app\pages\survey-dashboard.blade.php:332
+#: resources\views\filament\app\pages\survey-dashboard.blade.php:256
 msgid "Conduct a pilot run of the survey, both for quality control of the customised survey and training of enumerators."
->>>>>>> 45297eea4f203beb60f4dd0b341a16fe913cd5c6
 msgstr ""
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:266
