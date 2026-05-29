@@ -102,7 +102,7 @@
                             <h3 class="text-white uppercase text-lg lg:text-xl mb-4 lg:my-4">{{ t("Surveys") }}</h3>
                             <p class="mb-4 lg:mb-6">{{ t("Read more about the surveys.") }}</p>
                         </div>
-                        <a href="{{ url('#what-is-holpa') }}" class="button bg-orange hover:bg-white uppercase b-white border-2 rounded-full  px-4 py-2 text-white hover:text-orange font-semibold w-auto flex justify-center items-center text-center">
+                        <a href="{{ url('#surveys') }}" class="button bg-orange hover:bg-white uppercase b-white border-2 rounded-full  px-4 py-2 text-white hover:text-orange font-semibold w-auto flex justify-center items-center text-center">
                             {{ t("Find out more") }}
                         </a>
                     </div>
@@ -129,9 +129,6 @@
                         <a href="{{ url('#results') }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white uppercase hover:text-blue font-semibold w-auto flex justify-center items-center text-center mb-4">
                             {{ t("Learn More") }}
                         </a>
-                        <a href="{{ url('results') }}" class="button bg-blue hover:bg-white b-white border-2 rounded-full  px-4 py-2 text-white uppercase hover:text-blue font-semibold w-auto flex justify-center items-center text-center">
-                            {{ t("Previous Surveys") }}
-                        </a>
                     </div>
                 </div>
             </div>
@@ -141,7 +138,7 @@
     {{-- MAIN CONTENT --}}
     <div class="mx-auto mt-28 md:mt-0 lg:mt-44 max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        <div id="what-is-holpa" class="py-6 lg:grid flex flex-col lg:grid-cols-2 gap-5  mb-12">
+        <div id="surveys" class="py-6 lg:grid flex flex-col lg:grid-cols-2 gap-5  mb-12">
             <div class="col-span-1 h-96 mx-12 mb-6 lg:mr-6 lg:ml-0 lg:mb-0 rounded-2xl" style="background-image:url('images/farmers_honduras.jpg');  background-position:center; background-size: cover;" alt="Picture of farmers">
 
             </div>
