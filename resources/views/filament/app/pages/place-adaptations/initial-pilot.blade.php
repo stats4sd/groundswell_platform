@@ -1,72 +1,11 @@
+@php $instructions = tfile('initial-pilot'); @endphp
+
 <x-filament-panels::page class="px-10 h-full">
 
     <x-instructions-sidebar>
         <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
-
-            <div class="mx-12 mb-4">
-
-                <h5 class="mt-0">{{ t("Initial pilot test") }}</h5>
-                <p class="my-2">
-                    {{ t("Following customisation, a pilot test should be conducted to check the sense and functionality of the survey. On this page, you will find the QR code to scan to start testing the survey using ODK.")}}
-                    {{ t("Note that this QR code should only be used for this initial testing - the 'data collection' section contains a different link for the full pilot and live data collection, and it is important to use the correct version of the survey.") }}
-                </p>
-                <p class="mb-2">
-                    {{ t("The initial pilot can be completed by a member of your team with at least one local researcher or practitioner. To conduct the test:") }}
-                </p>
-                <ol class="mb-4 ml-6 list-decimal">
-                    <li class="mb-1">
-                        {{ t("Make sure you have made all the intended customisations up to this step of the process.") }}
-                    </li>
-                    <li class="mb-1">
-                        {{ t("Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed and set up.") }}
-                    </li>
-                    <li class="mb-1">
-                        {{ t("The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:") }}
-
-                        <ul class=" ml-6 list-disc">
-                            <li class="mb-1">
-                                {{ t("Check that the survey layout and dependencies are correctly coded; for example, you should check that mandatory questions are not showing as optional.") }}
-                            </li>
-                            <li class="mb-1">
-                                {{ t("Make sure all questions and response options are clear for respondents in the local context.") }}
-                            </li>
-                            <li class="mb-1">
-
-                                {{ t("Identify if hints or examples are needed for any sections that may cause confusion or be misunderstood.") }}
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="mb-1">
-                        {{ t("When you submit data using the test survey, it will appear in the \"Draft submissions\" table, so you can confirm that the data has been submitted and recognised.") }}
-                    </li>
-                </ol>
-                <p class="mb-2">
-                    {{ t("Once you have completed this process, you may need to return to some of the actions within this step or previous steps (such as to edit the survey translation). You can repeat this pilot test as many times as you choose.") }}
-                    {{ t("Be aware that each time you make a change to the form, an updated form is generated. This can take a few minutes, so you may need to wait while this process completes to access the latest version of the test forms. Any submissions to the test forms are temporary and will be overwritten when the forms are updated.") }}
-                </p>
-
-                <x-red-alert-box>
-                    <x-slot:content>
-                        {{ t("The QR codes below are") }}
-                        <span class="font-semibold">{{ t("DRAFTS") }}</span>.
-                        <br>
-                        {{ t("Please") }}
-                        <span class="font-semibold">{{ t("do not share ") }}</span>
-                        {{ t("these codes with enumerators!") }}
-                        <br>
-                        <span class="font-semibold">{{ t(" All submissions to the test forms are temporary ") }}</span>
-                        {{ t(" and will be reset whenever you take an action using the survey dashboard that changes the forms.") }}
-                        <br>
-                        {{ t("Do not use these forms for live data collection.") }}
-                    </x-slot:content>
-                </x-red-alert-box>
-                <h5> {{ t("Mark this section as complete when:") }}</h5>
-                <p class="mb-2">
-                    {{ t("You have conducted the technical test and are happy with the changes to the forms and the technical functioning of the survey up to this point.") }}
-                </p>
-
-            </div>
+            {!! \Illuminate\Support\Str::markdown($instructions) !!}
         </x-slot:instructions>
     </x-instructions-sidebar>
 

@@ -1,23 +1,10 @@
+@php $instructions = tfile('data-collection-monitor'); @endphp
+
 <x-filament-panels::page class="px-10 h-full">
     <x-instructions-sidebar>
         <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
         <x-slot:instructions>
-            <div class="mx-12 mb-4">
-                <h5>{{ t("Monitor data collection") }}</h5>
-                <p class="my-2">
-                    {{ t("This page lets you see incoming data. You can track progress and review submissions for quality assurance purposes.") }}
-                </p>
-                <p class="my-2">
-                    {{ t("At the top of the page, you will see a general summary of the data that has been collected; this includes the number of submissions for each form and number of farms surveyed.") }}
-                    {{ t("Beneath that, you can browse the submissions. Use the tabs to view submissions by locations at different levels, or to simply view all of them.") }}
-                </p>
-                <p class="my-2">
-                    {{ t("There is also an option to download the raw data from submissions. Note that this will be unprocessed, and will not include calculated indicators; to obtain survey data ready for analysis, use the \"data analysis\" section.") }}
-                </p>
-                <p class="my-2">
-                    {{ t("If you find you need to correct an error in the data, you can directly edit a submission. This should be used sparingly, only where it has been confirmed with an enumerator that something was inputted incorrectly.") }}
-                </p>
-            </div>
+            {!! \Illuminate\Support\Str::markdown($instructions) !!}
         </x-slot:instructions>
     </x-instructions-sidebar>
     <div class="container mx-auto xl:px-12">
