@@ -18,7 +18,6 @@ class TeamFactory extends Factory
             'name' => fake()->company(),
             'description' => fake()->sentence(),
             'live_data_collection_started' => false,
-            'time_frame' => 'in the last 12 months',
         ];
     }
 }
