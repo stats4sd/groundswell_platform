@@ -659,3 +659,8 @@ div:has(> .fi-page-sub-navigation-sidebar-ctn) {
     all: unset;
     display: inline-block;
 } */
+
+
+iframe:focus-visible {
+    outline: none !important;
+}

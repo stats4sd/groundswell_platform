@@ -31,6 +31,7 @@
         "spatie/laravel-ignition": "^2.9",
         "stats4sd/filament-odk-link": "*",
         "stats4sd/filament-team-management": "*",
+        "stats4sd/laravel-shiny-loader": "*",
         "stats4sd/laravel-sql-views": "^1.2",
         "staudenmeir/belongs-to-through": "^2.16",
         "staudenmeir/eloquent-has-many-deep": "^1.20",
@@ -111,9 +112,16 @@
                 "symlink": true
             }
         },
-        "stats4sd/filament-team-management-": {
+        "stats4sd/filament-team-management": {
             "type": "path",
             "url": "packages/filament-team-management",
+            "options": {
+                "symlink": true
+            }
+        },
+        "stats4sd/laravel-shiny-loader": {
+            "type": "path",
+            "url": "packages/laravel-shiny-loader",
             "options": {
                 "symlink": true
             }

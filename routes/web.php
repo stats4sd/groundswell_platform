@@ -39,4 +39,6 @@ Route::group([
 
     Route::get('/temp-results', [TempResultsController::class, 'index']);
 
+    Route::shiny();
+
 });

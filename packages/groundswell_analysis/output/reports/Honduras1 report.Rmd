@@ -1,0 +1,763 @@
+---
+title: "`r params$title`"
+date: "`r format(Sys.time(), '%d/%m/%Y')`"
+format: 
+  html:
+    theme: cosmo
+    version: 5
+params:
+  data_processed: NA
+  data_raw: NA
+  data_type: NA
+  title: NA
+  translations: NA
+  indicator_tab: NA
+  global_form: NA
+  womens_form: NA
+  language: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error=FALSE,message = FALSE)
+
+library(tidyverse)
+library(openxlsx)
+library(gt)
+library(gtsummary)
+
+#devtools::install_github("sdumble1/ODKTools")
+library(ODKTools)
+
+source("functions/functions.R")
+
+
+# params <- NULL
+# 
+#       params <- list(
+#         title = paste0("Honduras1", " Summary Report"),
+#         data_processed = data_processed,
+#         data_raw = NA,
+#         language = language,
+#         #summary_vars = input$summary_vars,
+#         data_type = "processed",
+#         translations = report_translations,
+#         indicator_tab = indicator_tab,
+#         global_form = form_schema_ext(fid=Sys.getenv("form_id")),
+#         womens_form = form_schema_ext(fid=Sys.getenv("women_form_id"))
+#       )
+
+#set up forms and langauage
+global_form <- params$global_form
+womens_form <- params$womens_form
+language_trans <- params$language
+
+if(params$data_type == "raw"){
+
+  #set data frames
+  data_list <- params$data_raw
+  
+  #global
+  global <-  data_list$global$full_data
+  global <- number_fix(global) #fix to numeric those that should be as such
+  
+    #fix column names
+  cols_global <- data.frame(ruodk_name = colnames(global))
+  cols_global_ruodk <- data.frame(ruodk_name = global_form$ruodk_name,
+                                  short_name = global_form$name)
+  cols_global <- cols_global%>%
+    left_join(cols_global_ruodk)%>%
+    mutate(short_name = ifelse(is.na(short_name), ruodk_name, short_name))
+  
+  colnames(global) <- cols_global$short_name
+  print(colnames(global))
+    #merge labels for variables
+  global <- merge_labels_clean(global, global_form, language_trans)
+  
+  #women
+  womens <-  data_list$women$full_data
+  womens <- number_fix(womens) #fix numeric variables
+    #fix column names
+  cols_women <- data.frame(ruodk_name = colnames(womens))
+  cols_women_ruodk <- data.frame(ruodk_name = womens_form$ruodk_name,
+                                  short_name = womens_form$name)
+  cols_women <- cols_women%>%
+    left_join(cols_women_ruodk)%>%
+    mutate(short_name = ifelse(is.na(short_name), ruodk_name, short_name))
+  
+  colnames(womens) <- cols_women$short_name
+  
+  #redo assets - ignore labels
+  wom_assets <- womens%>%select(id,ends_with("own"))
+  #merge in clean labels for womens data
+  womens <- merge_labels_clean(womens, womens_form, language_trans)
+  #join asset vars back
+  womens <- womens%>%select(-ends_with("own"))%>%
+    left_join(wom_assets)
+  
+  ##EXCLUDE DUPLICATES
+  global <- global%>%
+    group_by(household_id)%>%
+    mutate(n = n())%>%
+    filter(n==1)
+  
+  womens <- womens%>%
+    group_by(household_id)%>%
+    mutate(n = n())%>%
+    filter(n==1)
+  
+  #global - join womens age
+  global <- global%>%left_join(womens%>%select(household_id,respondentage))
+  
+  #crops
+  crops <- data_list$global$repeats$survey_grp_section_crop_productivity_crop_repeat
+  crops <- number_fix(crops) #fix to numeric
+    #fix column names
+  cols_crops <- data.frame(ruodk_name = colnames(crops))
+  crop_form <- global_form%>%filter(str_detect(ruodk_name,"crop_repeat"))%>%filter(name!="crop_repeat")%>%filter(type!="structure")
+  
+  colnames(crops) <- c(crop_form$name, "id", "submissions_id", "odata_context")
+  
+  #merge in crop label in relevant language 
+  crops <- merge_crops_label(crops, global_form, language_trans)
+  #exclude other crops
+  crops <- crops%>%filter(!is.na(label_lang) & label_lang!="")
+  crops <- crops%>%filter(!str_detect(crop_label, "\\:"))
+  
+  #relevel missing levels in cosumed and sold props for crops
+  crops$crop_consumed_prop[is.na(crops$crop_consumed_prop) & crops$crop_use=="eat"] <- levels(crops$crop_consumed_prop)[1]
+  crops$crop_consumed_prop[is.na(crops$crop_consumed_prop)] <- levels(crops$crop_consumed_prop)[6]
+  
+  crops$crop_sold_prop[is.na(crops$crop_sold_prop) & crops$crop_use=="sell"] <- levels(crops$crop_sold_prop)[1]
+  crops$crop_sold_prop[is.na(crops$crop_sold_prop)] <- levels(crops$crop_sold_prop)[6]
+  
+  #off_farm
+  #fix column names
+  off_farm <- data_list$global$repeats$survey_grp_offfarm_income_grp_section_off_farm_income_offfarm_income_repeat
+  cols_off_farm <- data.frame(ruodk_name = colnames(off_farm))
+  off_farm_form <- global_form%>%filter(str_detect(ruodk_name, "offfarm_income_repeat"))%>%
+    filter(name!="offfarm_income_repeat")%>%filter(type!="structure")
+  
+  colnames(off_farm) <- c(off_farm_form$name, "id", "submissions_id", "odata_context")
+  
+  #filter missing income names
+  off_farm <- off_farm%>%filter(!is.na(offfarm_income_name))
+  
+  #indicators
+  indicators <- data_list$indicators
+
+
+}else{
+
+  data_list <- params$data_processed
+  
+  #global
+  #merge clean labels
+  global <-  params$data_processed$global%>%left_join(data_list$women%>%select(household_id,respondentage))
+  #global <- merge_labels_clean(global, global_form, language_trans)
+  
+  #women
+  #merge clean labels except assets
+  womens <-  params$data_processed$women
+  # wom_assets <- womens%>%select(household_id,ends_with("own"))
+  # womens <- merge_labels_clean(womens, womens_form, language_trans)
+  # womens <- womens%>%select(-ends_with("own"))%>%
+  #   left_join(wom_assets)
+  
+  #crops
+  crops <- params$data_processed$crops
+  #crops <- merge_crops_label(crops, global_form, language_trans)
+  #exclude other crops
+  crops <- crops%>%filter(!is.na(label_lang) & label_lang!="")
+  crops <- crops%>%filter(!str_detect(crop_label, "\\:"))
+  
+    #relevel missing levels in cosumed and sold props for crops
+
+  
+  #off_farm
+  off_farm <- params$data_processed$off_farm%>%filter(!is.na(offfarm_income_name))
+  
+  indicators <- params$data_processed$indicators
+
+}
+
+indicator_tab <- params$indicator_tab
+
+indicators <- data.frame(indicators)
+
+min_date <- min(as_date(global$interview_date))
+max_date <- max(as_date(global$interview_date))
+```
+
+## `r params$translations[params$translations$english=="Survey Summary", language_trans]`
+
+`r md(paste0("**",params$translations[params$translations$english=="Data Collection Dates:", language_trans],"**")) ` : `r paste0(min_date, " - ", max_date)`
+
+```{r}
+data.frame(
+    Form = params$translations[params$translations$type=="label" & params$translations$indicator=="Survey Summary", language_trans],
+    N = c(
+      nrow(global),
+      nrow(womens),
+      sum(global$household_id%in%womens$household_id),
+      sum(!global$household_id%in%womens$household_id),
+      sum(!womens$household_id%in%global$household_id)
+    )
+  )%>%
+  gt()%>%
+  cols_label(
+    Form = params$translations[params$translations$english == "Form", language_trans]
+  )
+```
+
+## `r params$translations[params$translations$english=="Sample Demographics", language_trans]`
+
+```{r}
+global%>%
+tbl_summary(
+  include = c(loc1_name, participant_sex, participant_age, respondentage, education_level),
+  label = list(
+    #loc ~ loc_type,
+    participant_sex ~ params$translations[params$translations$english=="Respondent Sex", language_trans],
+    participant_age ~ params$translations[params$translations$english=="Respondent Age", language_trans],
+    respondentage ~ params$translations[params$translations$english=="Women's Form Respondent Age", language_trans],
+    education_level ~ params$translations[params$translations$english=="Education (Household Head)", language_trans]
+  ),
+  missing = "no"
+)%>%
+  modify_header(label ~  
+                  md(paste0("**",params$translations[params$translations$english=="Characteristic",
+                                              language_trans],"**")))
+```
+
+
+## Indicator Summary
+
+```{r}
+indicator_tab <- indicator_tab%>%filter(Available == 1)
+
+for(i in 1:nrow(indicator_tab)){
+
+  if(indicator_tab$summary[i]=="asis"){
+
+    indicator_tab$value[i] <- scales::percent(indicators[1,indicator_tab$indicator[i]],accuracy = 0.1)
+
+  }
+
+    if(indicator_tab$summary[i]=="median"){
+
+    indicator_tab$value[i] <- round(median(indicators[,indicator_tab$indicator[i]],na.rm = TRUE),2)
+
+
+
+    }
+
+     if(indicator_tab$summary[i]=="median_prop"){
+
+    indicator_tab$value[i] <-
+      paste0(scales::percent(median(indicators[,indicator_tab$indicator[i]],na.rm = TRUE),accuracy = 0.1))
+
+
+
+  }
+
+  if(indicator_tab$summary[i] == "prop"){
+
+    if(indicator_tab$binary[i] == 1){
+
+    indicator_tab$value[i] <- scales::percent(mean(indicators[,indicator_tab$indicator[i]],na.rm=TRUE),accuracy = 0.1)
+
+    }
+
+    if(indicator_tab$indicator[i] == "I_HI_n_income_sources"){
+
+    indicator_tab$value[i] <- scales::percent(mean(indicators[,indicator_tab$indicator[i]]>=2,na.rm=TRUE),accuracy = 0.1)
+
+    }
+
+        if(str_detect(indicator_tab$indicator[i], "I_VCC")){
+
+    results <- indicators[,indicator_tab$indicator[i]]
+
+
+    results <- case_when(
+    results%in%c(levels(results)[4],levels(results)[5]) ~ 1,
+    results == levels(results)[6] | is.na(results) ~ NA,
+    .default = 0)
+  
+
+    indicator_tab$value[i] <- scales::percent(mean(results,na.rm=TRUE),accuracy = 0.1)
+
+    }
+
+
+  }
+}
+
+xx <- indicator_tab[,c("objective", language_trans, "value")]
+
+colnames(xx) <- c("objective", params$translations[params$translations$indicator=="Indicators", language_trans])
+
+gt(xx, groupname_col = "objective")
+```
+
+
+\pagebreak
+
+## `r params$translations[params$translations$english=="PO.1 Productivity", language_trans]`
+
+`r md(paste0("**",params$translations[params$translations$english=="Objective Definition", language_trans],"**"))` : `r params$translations[params$translations$element=="definition1", language_trans]`
+
+### `r params$translations[params$translations$english=="Crop Production", language_trans]`
+
+```{r}
+crop_labels <- params$translations%>%
+  filter(indicator=="Crop Production")
+
+crop_tab <- crops%>%
+  group_by(label_lang)%>%
+  summarise(n = n(),
+            perc = n/nrow(global)*100,
+            area = mean(crop_area_ha,na.rm=TRUE),
+            yield = mean(crop_yield_kg,na.rm=TRUE),
+            prod = mean(crop_yield_kg_ha,na.rm=TRUE))%>%
+  arrange(desc(n))%>%
+  mutate(N_perc = paste0(n, " (", formatC(round(perc,1),format='f',digits = 1), "%)"))%>%
+  select(label_lang, N_perc, area,   yield, prod)
+
+crop_tab%>%
+  gt()%>%
+  cols_label(
+    label_lang = crop_labels[1,language_trans],
+    N_perc = crop_labels[2,language_trans],
+    area = crop_labels[3,language_trans],
+    yield = crop_labels[4,language_trans],
+    prod = crop_labels[5,language_trans]
+  )%>%
+  fmt_number(columns = 3,decimals = 2)%>%
+  fmt_number(columns = c(4,5), decimals = 0)%>%
+  fmt_missing(missing_text = "")%>%
+  gt::tab_footnote(footnote = crop_labels[6,language_trans])
+```
+
+\pagebreak
+
+`r md(paste0("**",params$translations[params$translations$english=="Number of crops grown in a farm", language_trans],"**"))`
+
+```{r}
+indicators%>%
+  select(household_id,I_P_total_crops,I_P_total_important_crops)%>%
+  pivot_longer(cols = -household_id)%>%
+  mutate(name = ifelse(name=="I_P_total_crops", params$translations[params$translations$english=="Total", language_trans],
+                       params$translations[params$translations$english=="Important only", language_trans]))%>%
+  ggplot(aes(x = value))+
+  geom_bar(fill = "#E0EABE", colour = "black")+
+  facet_wrap(~name)+
+  labs(x = params$translations[params$translations$english=="Number of crops grown", language_trans],
+       y = params$translations[params$translations$english=="Number of Households", language_trans][1])+
+  theme_bw()
+```
+
+\pagebreak
+
+`r md(paste0("**",params$translations[params$translations$english=="Area of main crops (Ha)", language_trans],"**"))`
+
+```{r}
+crops%>%
+  group_by(label_lang)%>%
+  mutate(n = n())%>%
+  filter(n >= 5)%>%# DEFINITION TBD - MIGHT NEED FILTER ON OUTLIERS
+  mutate(label_lang = paste0(label_lang, " (n=",n,")"))%>%
+  ggplot(aes(y = reorder(label_lang,n), x = crop_area_ha, fill = reorder(label_lang,n) ))+
+  geom_boxplot()+
+  geom_jitter()+
+  labs(x = params$translations[params$translations$english=="Crop area (Ha)", language_trans],
+       y = params$translations[params$translations$english=="Crop", language_trans])+
+  theme_bw()+
+  theme(legend.position = "none")+
+  scale_fill_brewer(palette = "Set3")
+```
+
+\pagebreak
+
+`r md(paste0("**",params$translations[params$translations$english=="Crop Yields (Kg/Ha)", language_trans],"**"))`
+
+```{r}
+crops%>%
+  group_by(label_lang)%>%
+  mutate(n = n())%>%
+  filter(n>=5)%>%
+  mutate(label_lang = paste0(label_lang, " (n=",n,")"))%>%
+  ggplot(aes(y = reorder(label_lang,n), x = crop_yield_kg_ha, fill = reorder(label_lang,n) ))+
+  geom_boxplot()+
+  geom_jitter()+
+  labs(x = params$translations[params$translations$english=="Crop Productivity (Kg/Ha)", language_trans],
+       y = params$translations[params$translations$english=="Crop", language_trans])+
+  theme_bw()+
+  theme(legend.position = "none")+
+  scale_fill_brewer(palette = "Set3")
+```
+
+\pagebreak
+
+## `r params$translations[params$translations$english=="PO.2 Womens Empowerment", language_trans]`
+
+`r md(paste0("**",params$translations[params$translations$english=="Objective Definition", language_trans],"**"))` : `r params$translations[params$translations$element=="definition2", language_trans]`
+
+`r md(paste0("**",params$translations[params$translations$english=="Proportion of households where women have equal/more influence or voice about...", language_trans][1],"**"))`
+
+```{r}
+VCC <- indicators%>%
+  select(household_id,I_VCC1:I_VCC6)
+
+VCC%>%
+    mutate_at(vars(starts_with("I_VCC")), function(x) case_when(
+    x%in%c(levels(x)[4],levels(x)[5]) ~ 1,
+    x == levels(x)[6] ~ NA,
+    .default = 0
+  ))%>%
+  pivot_longer(cols = -household_id)%>%
+  group_by(name)%>%
+  summarise(
+    N = sum(!is.na(value)),
+    n = sum(value,na.rm = TRUE),
+    perc = n/N
+  )%>%
+  mutate(name = case_when(
+    name == "I_VCC1" ~ paste0(params$translations[params$translations$english=="Crops grown for food", language_trans], " (n=",N,")"),
+    name == "I_VCC2" ~ paste0(params$translations[params$translations$english=="Crops grown for the market", language_trans]," (n=",N,")"),
+    name == "I_VCC3" ~ paste0(params$translations[params$translations$english=="Expenditure of household savings", language_trans]," (", "n=",N,")"),
+    name == "I_VCC4" ~ paste0(params$translations[params$translations$english=="Choose how to spend their own income", language_trans]," (", "n=",N,")"),
+    name == "I_VCC5" ~ paste0(params$translations[params$translations$english=="Choose what to sell in the market", language_trans]," (", "n=",N,")"),
+    name == "I_VCC6" ~ paste0(params$translations[params$translations$english=="Participate in community committees – specifically can they choose how they allocate time to community groups, farm work, etc.", language_trans]," (n = ",N,")")
+  ))%>%
+  mutate(name = str_wrap(name,35))%>%
+  ggplot(aes(y = name, x = perc))+
+  geom_col(fill = "#F39F5D", colour = "black")+
+  geom_label(aes(label = scales::percent(perc,accuracy = 0.1)))+
+  scale_x_continuous(labels = scales::percent, limits = c(0,1))+
+  labs(x = NULL,
+       title = str_wrap(params$translations[params$translations$indicator=="I_VCC" & params$translations$type=="title", language_trans],50),
+       y = NULL)+
+  theme_bw()
+```
+
+\pagebreak
+
+`r md(paste0("**",params$translations[params$translations$english=="A-WEAI - Access to productive capital", language_trans],"**"))`
+
+```{r}
+asset_labels <- params$translations%>%filter(indicator=="I_AWEAI_asset")
+
+assets <- womens%>%
+  select(household_id,ends_with("own"))%>%
+  mutate_at(vars(ends_with("own")), function(x)
+            case_when(
+              x %in% c(1,2) ~ asset_labels[asset_labels$english=="Joint/Sole ownership", language_trans],
+              x %in% c(3) ~ asset_labels[asset_labels$english=="Owned by other household member", language_trans],
+              .default = asset_labels[asset_labels$english=="Unowned", language_trans]
+            ))%>%
+  pivot_longer(cols=-household_id)%>%
+  group_by(name) %>%
+  mutate(value = factor(value,
+                        levels = asset_labels[asset_labels$type=="fill_label", language_trans],
+                        labels = asset_labels[asset_labels$type=="fill_label", language_trans]))%>%
+  mutate(name = case_when(
+    name == "transportation_own" ~ asset_labels[4,language_trans],
+    name == "small_livestock_own" ~ asset_labels[5,language_trans],
+    name == "small_consumer_own" ~ asset_labels[6,language_trans],
+    name == "poultry_own" ~ asset_labels[7,language_trans],
+    name == "other_land_own" ~ asset_labels[8,language_trans],
+    name == "nonfarm_eqp_own" ~ asset_labels[9,language_trans],
+    name == "non_mech_eqp_own" ~ asset_labels[10,language_trans],
+    name == "mech_eqp_own" ~ asset_labels[11,language_trans],
+    name == "large_consumer_own" ~ asset_labels[12,language_trans],
+    name == "land_own" ~ asset_labels[13,language_trans],
+    name == "house_own" ~ asset_labels[14,language_trans],
+    name == "fish_pond_own" ~ asset_labels[15,language_trans],
+    name == "cell_phone_own" ~ asset_labels[16,language_trans],
+    name == "large_livestockown" ~ asset_labels[17,language_trans],
+    .default = name
+  ))%>%
+  mutate(name = str_wrap(name,45))
+
+assets%>%
+  ggplot(aes(y = reorder(name,desc(name)), fill = reorder(value,desc(value))))+
+  geom_bar(colour = "black", position = "fill")+
+  labs(x = NULL,
+       title = asset_labels[asset_labels$english=="Women's Household Asset Ownership", language_trans],
+       y = NULL,
+       fill = asset_labels[asset_labels$english=="Ownership status", language_trans])+
+  theme_bw()+
+  theme(legend.position = "bottom",
+        legend.margin = margin(l = -.35, unit = "npc"))+
+  scale_fill_manual(values = c("grey80", "#61958F", "#F39F5D"))+
+  scale_x_continuous(labels = scales::percent)
+```
+
+```{r}
+assets%>%
+  ungroup()%>%
+  group_by(name, value)%>%
+  mutate(N = nrow(womens),
+         n = n())%>%
+  select(-household_id)%>%
+  mutate(perc = n/N)%>%
+  unique()%>%
+  select(-N, -n)%>%
+  pivot_wider(names_from = value, values_from = perc)%>%
+  mutate_all(function(x) replace_na(x,0))%>%
+  gt(groupname_col = NULL)%>%
+  fmt_percent(columns = 2:4, decimals = 1)%>%
+  cols_label(name = "Asset")
+```
+
+
+\pagebreak
+
+## `r params$translations[params$translations$english=="PO.3 Household Income", language_trans]`
+
+`r md(paste0("**",params$translations[params$translations$english=="Objective Definition", language_trans],"**"))` : `r params$translations[params$translations$element=="definition3", language_trans]`
+
+### `r params$translations[params$translations$english=="Markets", language_trans]`
+
+```{r, fig.width=9}
+market_labels <- params$translations%>%filter(indicator=="Markets")
+
+orangeblue <- colorRampPalette(c("#F39F5D","white","#61958F"))
+
+colours <- orangeblue(7)
+
+sales <- crops%>%
+  select(label_lang,crop_use, crop_consumed_prop,crop_sold_prop)
+
+# if(params$data_type == "processed"){
+# 
+# sales <- sales%>%
+#   mutate(
+#     crop_consumed_prop = ifelse(crop_use=="eat", "All", crop_consumed_prop),
+#     crop_sold_prop = ifelse(crop_use=="sell", "All", crop_sold_prop)
+#   )%>%
+#   mutate_at(vars(crop_use:crop_sold_prop), function(x) ifelse(x == "","None", x))%>%
+#   filter(crop_use!="None")%>%
+#   mutate_at(vars(crop_consumed_prop, crop_sold_prop), function(x) factor(x,
+#                                                                          levels = c("None","Little","UnderHalf","Half","Most","All"),
+#                                                                          labels = market_labels[1:6,language_trans]))
+# }
+
+sales <- sales%>%
+  group_by(label_lang)%>%
+  mutate(n = n())%>%
+  filter(n>5)
+
+sales%>%
+  mutate(label_lang = paste0(label_lang, " (n=",n,")"))%>%
+  pivot_longer(cols = c(crop_consumed_prop, crop_sold_prop))%>%
+  mutate(name = ifelse(name == "crop_sold_prop", market_labels[8,language_trans], market_labels[7,language_trans]))%>%
+  ggplot(aes(y = reorder(label_lang,n),fill = value))+
+  geom_bar(position = "fill", colour = "black")+
+  facet_wrap(~name)+
+  labs(x = NULL,
+       y = market_labels[9,language_trans],
+       fill = market_labels[10,language_trans])+
+  scale_fill_manual(values = colours)+
+  scale_x_continuous(labels = scales::percent)+
+  theme_bw()+
+  theme(legend.position = "top")+
+  guides(fill = guide_legend(nrow=3))
+```
+
+```{r}
+tbl1 <- sales%>%
+  pivot_longer(cols = c(crop_consumed_prop, crop_sold_prop))%>%
+  mutate(name = ifelse(name == "crop_sold_prop", market_labels[8,language_trans], market_labels[7,language_trans]))%>%
+  filter(name == market_labels[7,language_trans])%>%
+  mutate(label_lang = as.character(label_lang))%>%
+  tbl_summary(
+    include = value,
+    by = label_lang,
+    label = list(value = market_labels[7,language_trans])
+  )
+
+tbl2 <- sales%>%
+  pivot_longer(cols = c(crop_consumed_prop, crop_sold_prop))%>%
+  mutate(name = ifelse(name == "crop_sold_prop", market_labels[8,language_trans], market_labels[7,language_trans]))%>%
+  filter(name == market_labels[8,language_trans])%>%
+  mutate(label_lang = as.character(label_lang))%>%
+  tbl_summary(
+    include = value,
+    by = label_lang,
+    label = list(value = market_labels[8,language_trans])
+  )
+
+tbl_stack(list(tbl1,tbl2))%>%
+  modify_header(label ~  "")
+```
+
+
+\pagebreak
+
+### `r params$translations[params$translations$english=="Income Diversification", language_trans]`
+
+`r md(paste0("**",params$translations[params$translations$english=="Diversity  & Importance of Income Sources", language_trans],"**"))`
+
+```{r}
+income_labels <- params$translations%>%
+  filter(indicator=="I_HI_income_diversification")
+
+indicators%>%
+  tbl_summary(
+    include = I_HI_income_diversification,
+    label = I_HI_income_diversification~income_labels[12,language_trans]
+  )
+```
+
+```{r}
+off_farm%>%
+    select(offfarm_income_name)%>%
+  group_by(offfarm_income_name)%>%
+  summarise(n = n(),
+            N = nrow(global),
+            perc  = n/N)%>%
+  mutate(offfarm_income_name = factor(
+    offfarm_income_name,
+    levels = c("otherfarms","otherlabour","ownbusiness",
+               "localbusiness","remittances", "gov_institution","other"),
+    labels = income_labels[4:10,language_trans]
+  ))%>%
+  arrange(offfarm_income_name)%>%
+  select(-N)%>%
+  filter(!is.na(offfarm_income_name))%>%
+  gt()%>%
+  cols_label(
+    offfarm_income_name = income_labels[12,language_trans],
+    n = income_labels[13,language_trans],
+    perc = "%"
+  )%>%
+  fmt_percent(3,decimals = 1)
+```
+
+
+### `r params$translations[params$translations$english=="Ability to Save & Pay Debts", language_trans]`
+
+`r paste0(params$translations[params$translations$english=='Households reporting their financial situation as “We can buy everything we want and there is still money for potential savings”', language_trans], ": ", scales::percent(mean(indicators$I_HI_self_perception==levels(indicators$I_HI_self_perception)[1],na.rm=TRUE),accuracy = 0.1))`
+
+`r paste0(params$translations[params$translations$english=="Does your household have any credit, debts or loans, or did you have any in the last 12 months?:", language_trans], " ", scales::percent(mean(indicators$I_HI_have_debt==1,na.rm=TRUE),accuracy = 0.1))`
+
+`r paste0(params$translations[params$translations$english=="Did you ever find it difficult to pay the debts in the last 12 months", language_trans], ": ", scales::percent(mean(indicators$I_HI_worry_debt==1,na.rm=TRUE),accuracy = 0.1))`
+
+\pagebreak
+
+### `r params$translations[params$translations$english=="Self-Perception of Financial Situation", language_trans]`
+
+```{r}
+perception_labels <- params$translations%>%
+  filter(indicator=="I_HI_self_perception")
+
+perceptions <- indicators%>%
+  filter(!is.na(I_HI_self_perception))
+
+perceptions%>%
+  tbl_summary(
+    include = I_HI_self_perception,
+    label = list(I_HI_self_perception ~ perception_labels[8,language_trans])
+  )%>%
+  modify_header(label ~  "")
+```
+
+\pagebreak
+
+## `r params$translations[params$translations$english=="PO.4 Food Security & Dietary Diversity", language_trans]`
+
+`r md(paste0("**",params$translations[params$translations$english=="Objective Definition", language_trans],"**"))` : `r params$translations[params$translations$element=="definition4", language_trans]`
+
+### `r params$translations[params$translations$english=="Household Dietary Diversity", language_trans]`
+
+`r paste0(params$translations[params$translations$english=="% Households Reached minimum level of diversity (at least 5 food groups):", language_trans], " ", scales::percent(mean(indicators$I_HDDS_min,na.rm=TRUE),accuracy = 0.1))`
+
+```{r}
+indicators%>%
+  mutate(I_HDDS = factor(I_HDDS, levels = c(0:12), labels = c(0:12)))%>%
+  filter(!is.na(I_HDDS))%>%
+  group_by(I_HDDS, .drop = FALSE)%>%
+  summarise(n = n())%>%
+  ggplot(aes(x = I_HDDS, y = n))+
+  geom_col(fill = "#61958F", colour = "black")+
+  geom_label(aes(label = n))+
+  labs(x = params$translations[params$translations$english=="Household Dietary Diversity Score", language_trans],
+       y =params$translations[params$translations$english=="Number of Households", language_trans][1])+
+  theme_bw()
+```
+
+\pagebreak
+
+### `r params$translations[params$translations$english=="FIES (Food Insecurity)", language_trans]`
+
+`r paste0(params$translations[params$translations$english=="Estimated % of households with moderate or severe food insecurity", language_trans], ": ", scales::percent(mean(indicators$I_FIES_prev_moderate,na.rm=TRUE),accuracy = 0.1))`
+
+`r paste0(params$translations[params$translations$english=="Estimated % of households with severe food insecurity", language_trans], ": ", scales::percent(mean(indicators$I_FIES_prev_severe,na.rm=TRUE),accuracy = 0.1))`
+
+
+```{r}
+fies_cat_labs <- params$translations%>%
+  filter(indicator == "I_FIES_category" & type=="label")
+
+fies_cats <- indicators%>%
+  mutate(N = n())%>%
+  group_by(I_FIES_category)%>%
+  summarise(N = mean(N),
+            n = n(),
+            `%` = n/N)%>%
+  select(-N)
+
+fies_cats%>%
+  gt()%>%
+  fmt_percent(columns = 3, decimals = 1)%>%
+  cols_label(I_FIES_category = params$translations[params$translations$english=="FIES Category", language_trans])%>%
+  tab_footnote(footnote = params$translations[params$translations$english=="All FIES Qs = 'No'", language_trans], locations = cells_body(columns = 1, rows = 1))%>%
+  tab_footnote(footnote = params$translations[params$translations$english=="FIES Q5- Q8 = 'No'", language_trans], locations = cells_body(columns = 1, rows = 2))%>%
+  tab_footnote(footnote = params$translations[params$translations$english=="FIES Q5 or Q6 or Q7 = 'Yes'", language_trans], locations = cells_body(columns = 1, rows = 3))%>%
+  tab_footnote(footnote = params$translations[params$translations$english=="FIES Q8 = 'Yes'", language_trans], locations = cells_body(columns = 1, rows = 4))
+```
+
+
+```{r}
+indicators%>%
+  group_by(I_FIES_score)%>%
+  summarise(n = n())%>%
+  ggplot(aes(x = I_FIES_score, y = n))+
+  geom_col(fill = "#61958F", colour = "black")+
+  geom_label(aes(label = n))+
+  scale_x_continuous(n.breaks = 8)+
+  labs(x = params$translations[params$translations$english=="FIES Score", language_trans],
+       y = params$translations[params$translations$english=="Number of Households", language_trans][1])+
+  theme_bw()
+```
+
+```{r}
+fies_labels <- params$translations%>%
+  filter(indicator=="FIES")
+
+indicators%>%
+  select(household_id, FIES_1:FIES_8)%>%
+  pivot_longer(cols=-household_id)%>%
+  group_by(name) %>%
+  summarise(
+    N = sum(!is.na(value)),
+    n = sum(value,na.rm = TRUE),
+    perc = n/N
+  )%>%
+  mutate(name = factor(name,
+    levels = c("FIES_1", "FIES_2","FIES_3", "FIES_4",
+               "FIES_5", "FIES_6","FIES_7", "FIES_8"),
+    labels = fies_labels[5:12,language_trans]))%>%
+  ggplot(aes(y = reorder(name,desc(name)), x = perc))+
+  geom_col(fill = "#61958F", colour = "black")+
+  geom_label(aes(label = scales::percent(perc,accuracy = 0.1)))+
+  scale_x_continuous(labels = scales::percent, limits = c(0,1))+
+  labs(x = NULL,
+       title = str_wrap(fies_labels[13,language_trans],40),
+       y = NULL)+
+  theme_bw()
+```
+
+

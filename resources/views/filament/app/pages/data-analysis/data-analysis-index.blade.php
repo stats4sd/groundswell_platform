@@ -9,45 +9,15 @@ $instructions = tfile('data-analysis');
 
 <x-filament-panels::page class="h-full">
 
-<x-instructions-sidebar>
-        <x-slot:heading>{{ t("Instructions") }}</x-slot:heading>
+    <x-instructions-sidebar>
+        <x-slot:heading>{{ t('Instructions') }}</x-slot:heading>
         <x-slot:instructions>
             {!! \Illuminate\Support\Str::markdown($instructions) !!}
         </x-slot:instructions>
-</x-instructions-sidebar>
-
-
-
-    <div class="container mx-auto  ">
-        <div class="surveyblocks pt-16 pb-24 mb-32 px-12 lg:px-16">
-            <h3 class="mb-6">{{ t("Download data for analysis") }}</h3>
-            <p class="mb-4">
-                {{ t("Here, you can download the complete dataset for your survey. The download will be an .xlsx file containing:") }}
-            </p>
-            <ul class="list-disc ml-6">
-                <li class="mb-1">
-                    {{ t("All the data from the live data collection.") }}
-                </li>
-                <li class="mb-1">
-                    {{ t("Agroecology and performance indicators, automatically calculated at farm level.") }}
-                </li>
-                <li class="mb-4">
-                    {{ t("A detailed data dictionary to help you navigate through the data.") }}
-                </li>
-            </ul>
-            <p class="mb-8">
-                {{ t("Once you have downloaded the data, you can conduct data analysis as required, and it is up to your team or organisation to manage storage and sharing of the dataset as appropriate. Download the complete dataset from your survey. This export includes the agro-ecology and performance indicators, automatically calculated at farm-level, along with a detailed data dictionary to help you navigate through the data.") }}
-            </p>
-                {{-- This was the previous export data button - I wanted to make it look like the other downloads from other sections (I think just the workshop section) but couldn't figure out how to make that work so ....--}}
-                 {{-- {{ $this->exportDataAction }} --}}
-
-                <x-download-section :url="url('#')">
-                    <x-slot:heading>{{ t("Survey Dataset") }}</x-slot:heading>
-                        <x-slot:description>{{ t("Download the complete dataset from your survey. This export includes calculated agro-ecology and performance indicators and a detailed data dictionary.") }}</x-slot:description>
-                        <x-slot:buttonLabel>{{ t("Download .xlsx") }}</x-slot:buttonLabel>
-                </x-download-section>
-
-
+    </x-instructions-sidebar>
+    <div class="mx-0 xl:px-4" style="margin-top:-50px">
+        <div class="surveyblocks">
+            <x-shiny-loader::shiny-iframe shiny-app-url="http://127.0.0.1:7009" :post-data="['foo' => 'bar']" />
         </div>
     </div>
 
