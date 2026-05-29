@@ -54,7 +54,6 @@ class ProgramPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Program/Widgets'), for: 'App\\Filament\\Program\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
