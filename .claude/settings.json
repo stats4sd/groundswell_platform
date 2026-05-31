@@ -3,7 +3,10 @@
     "allow": [
       "Bash(git submodule *)",
       "Bash(git -C /Users/dave/Sites/groundswell_platform config --file .git/config --get-regexp submodule)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AppPanelTest.php)",
+      "Bash(./vendor/bin/phpstan analyse *)",
+      "Bash(git stash *)"
     ]
   }
 }

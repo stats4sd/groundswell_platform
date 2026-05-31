@@ -75,9 +75,8 @@ class MonitorDataCollection extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            DatacollectionIndex::getUrl() => 'Data Collection',
-            static::getUrl() => 'Monitor Data Collection',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            static::getUrl() => t('Monitor Data Collection'),
         ];
     }
 

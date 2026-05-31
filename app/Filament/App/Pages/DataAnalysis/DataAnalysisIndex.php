@@ -27,7 +27,7 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Data Analysis';
+    protected static ?string $title = 'Data Analysis & Results';
 
     protected $listeners = ['refreshPage' => '$refresh'];
 
