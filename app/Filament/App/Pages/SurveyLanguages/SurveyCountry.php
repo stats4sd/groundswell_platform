@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
 use Stats4sd\FilamentOdkLink\Models\Country;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Language;
 
 class SurveyCountry extends Page implements HasForms
 {
@@ -128,6 +129,16 @@ class SurveyCountry extends Page implements HasForms
             abort(403);
         }
 
-        $this->team->update($this->form->getState());
+        $state = $this->form->getState();
+
+        $this->team->update(['country_id' => $state['country_id']]);
+
+        $syncData = [];
+        foreach ($state['languages'] ?? [] as $langId) {
+            $language = Language::find($langId);
+            $locale = $language->defaultLocale ?? $language->locales()->create(['is_default' => true]);
+            $syncData[$langId] = ['locale_id' => $locale->id];
+        }
+        $this->team->languages()->sync($syncData);
     }
 }
