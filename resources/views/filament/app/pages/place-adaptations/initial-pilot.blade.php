@@ -90,9 +90,13 @@
                         @else
 
                             <div class=" rounded-lg p-4 flex flex-col items-center justify-center space-y-4 space-x-4 h-100">
-                                <div class="mx-auto">{{ QrCode::size(150)->generate($xlsform->draft_qr_code_string) }}</div>
+                                @if($xlsform->draft_qr_code_string)
+                                    <div class="mx-auto">{{ QrCode::size(150)->generate($xlsform->draft_qr_code_string) }}</div>
+                                    <h5 class="mx-auto font-normal">{{ t("SCAN QR Code in ODK Collect") }}</h5>
+                                @else
+                                    <div class="mx-auto text-sm text-gray-400">{{ t("QR code not available") }}</div>
+                                @endif
                                 <h3>{{ $xlsform->title }}</h3>
-                                <h5 class="mx-auto font-normal">{{ t("SCAN QR Code in ODK Collect") }}</h5>
                             </div>
                         @endif
                     @endforeach
