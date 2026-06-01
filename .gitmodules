@@ -4,3 +4,12 @@
 [submodule "packages/filament-team-management"]
 	path = packages/filament-team-management
 	url = https://github.com/stats4sd/filament-team-management.git
+[submodule "packages/groundswell_monitor"]
+	path = packages/groundswell_monitor
+	url = git@github.com:stats4sd/groundswell_monitor.git
+[submodule "packages/laravel-shiny-loader"]
+	path = packages/laravel-shiny-loader
+	url = git@github.com:stats4sd/laravel-shiny-loader.git
+[submodule "packages/groundswell_analysis"]
+	path = packages/groundswell_analysis
+	url = git@github.com:stats4sd/groundswell_monitor.git

@@ -44,8 +44,7 @@ class SetUpSurvey extends Page implements HasActions, HasForms
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            DatacollectionIndex::getUrl() => 'Data Collection',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
             static::getUrl() => static::getTitle(),
         ];
     }

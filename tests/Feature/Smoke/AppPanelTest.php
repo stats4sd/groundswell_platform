@@ -32,12 +32,6 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
-    test('data collection index loads', function () {
-        $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/data-collection-index")
-            ->assertOk();
-    });
-
     test('data analysis index loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/data-analysis-index")

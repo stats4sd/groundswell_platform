@@ -1,6 +1,8 @@
 <?php
 
     use App\Filament\App\Pages\DataAnalysis\DataAnalysisIndex;
+    use App\Filament\App\Pages\DataCollection\SetUpSurvey;
+    use App\Filament\App\Pages\DataCollection\MonitorDataCollection;
     use App\Filament\App\Pages\Lisp\LispIndex;
     use App\Filament\App\Pages\Pilot\PilotIndex;
     use App\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex;
@@ -275,78 +277,52 @@
 
                 </div>
 
-                <!-- Data collection card -->
-                <div class="flex flex-col lg:flex-row drop-shadow-lg overflow-hidden col-span-12 lg:col-span-6 lg:h-72">
+                <!-- Live Data Collection card -->
+                <div class="flex flex-col lg:flex-row drop-shadow-lg overflow-hidden col-span-12">
                     <!-- Green Section -->
                     <div class=" greensection">
-                        <img src="/images/data_collection_icon.png" alt="Data Collection Icon" class="w-8 mb-2 ml-8 lg:ml-0">
+                        <img src="/images/data_collection_icon.png" alt="Live Data Collection Icon" class="w-8 mb-2 ml-8 lg:ml-0">
                         <div class="w-3/4 mx-10 lg:w-full lg:mx-0 lg:text-center">
-                            <span class="mt-2 text-center">{{ t("Data Collection") }}</span>
-                            <!-- Progress bar -->
-                            @if ($team->data_collection_progress === 'complete')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
-                                    <div class="bg-white h-2.5 rounded-full w-full"></div>
-                                </div>
-                            @else
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
-                                    <div class="bg-white h-2.5 rounded-full w-1/12"></div>
-                                </div>
-                            @endif
+                            <span class="mt-2 text-center">{{ t("Live Data Collection") }}</span>
                         </div>
                     </div>
-                    <!-- White Section -->
+                    <!-- White Section: Set up the survey -->
                     <div class="whitesection">
-                        <div class=" whitecard ">
-                            <div class="dashdescdiv">
-                                <h3 class="mb-2">{{ t("Data collection") }}</h3>
-                                <p class="mb-4">{{ t("View and manage the survey and incoming data.") }}</p>
-                            </div>
-                            <div class="dashbuttondiv">
-                                @if ($team->data_collection_progress === 'not_started')
-                                    <div class="mb-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 inline" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
-                                        </svg>
-                                        <span class="ml-1 inline text-xs uppercase font-semibold">{{ t("Not Started") }}</span>
-                                    </div>
-                                @elseif ($team->data_collection_progress === 'in_progress')
-                                    <div class="mb-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 inline" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currekntColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
-                                        </svg>
-                                        <span class="ml-1 inline text-xs uppercase font-semibold">{{ t("In Progress") }}</span>
-                                    </div>
-                                @elseif ($team->data_collection_progress === 'complete')
-                                    <div class="mb-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 inline" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                        </svg>
-                                        <span class="text-brown uppercase ml-1 inline text-xs font-semibold">{{ t("Complete") }}</span>
-                                    </div>
-                                @endif
-                                <a href="{{ \App\Filament\App\Pages\DataCollection\DataCollectionIndex::getUrl() }}" class="buttona uppercase">
-                                    {{ t("View and Update") }}
-                                </a>
+                        <div class="whiteborderbox">
+                            <div class=" whitecard ">
+                                <div class="dashdescdiv">
+                                    <h3 class="mb-2">{{ t("Set up the survey") }}</h3>
+                                    <p class="mb-4">{{ t("Manage the ODK survey to be used for data collection") }}</p>
+                                </div>
+                                <div class="dashbuttondiv">
+                                    <a href="{{ SetUpSurvey::getUrl() }}" class="buttona uppercase">
+                                        {{ t("View and Update") }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-                <!-- Data analysis card -->
-                <div class="flex flex-col lg:flex-row drop-shadow-lg overflow-hidden col-span-12 lg:col-span-6 lg:h-72">
-                    <!-- Green Section -->
-                    <div class=" greensection">
-                        <img src="/images/data_analysis_icon.png" alt="Data Aanalysis Icon" class="w-8 mb-2 ml-8 lg:ml-0">
-                        <div class="w-3/4 mx-10 lg:w-full lg:mx-0 lg:text-center">
-                            <span class="mt-2 text-center">{{ t("Datasets") }}</span>
+                    <!-- White Section: Monitor Data Collection -->
+                    <div class="whitesection">
+                        <div class="whiteborderbox">
+                            <div class=" whitecard ">
+                                <div class="dashdescdiv">
+                                    <h3 class="mb-2">{{ t("Monitor Data Collection") }}</h3>
+                                    <p class="mb-4">{{ t("Review and quality-check incoming data") }}</p>
+                                </div>
+                                <div class="dashbuttondiv">
+                                    <a href="{{ MonitorDataCollection::getUrl() }}" class="buttona uppercase">
+                                        {{ t("View and Update") }}
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <!-- White Section -->
+                    <!-- White Section: Data Analysis & Results -->
                     <div class="whitesection">
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
-                                <h3 class="mb-2">{{ t("Download data") }}</h3>
+                                <h3 class="mb-2">{{ t("Data Analysis & Results") }}</h3>
                                 <p class="mb-4">{{ t("Download data to conduct data analysis.") }}</p>
                             </div>
                             <div class="dashbuttondiv">

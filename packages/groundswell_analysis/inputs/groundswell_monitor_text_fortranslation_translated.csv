@@ -1,0 +1,47 @@
+id,element,en,fr,es
+1,tabName_Data,Load Data,Charger les données,Cargar datos
+2,tabName_View,View Data,Afficher les données,Ver datos
+3,tabName_Monitor,Monitor Data Collection,Surveiller la collecte des données,Supervisar la recopilación de datos
+4,tabName_Enumerator,Completion by Enumerator,Remplissage par l'enquêteur,Finalización por parte del encuestador
+5,tabName_Summarise,Summarise Results,Résumer les résultats,Resumir resultados
+6,select_Country,Select Country,Sélectionner un pays,Seleccionar país
+7,select_Language,Select Language,Sélectionner une langue,Seleccionar idioma
+8,action_confirm,Click Here To Load Data,Cliquez ici pour charger les données,Haga clic aquí para cargar datos
+9,select_monitor_table,Table,Tableau,Tabla
+10,select_monitor_table_match,Farmer Completion,Remplissage par l'agriculteur,Finalización por parte del agricultor
+11,select_monitor_table_completion,Form Completion,Remplissage du formulaire,Finalización del formulario
+12,select_form1,Select form,Sélectionner un formulaire,Seleccionar formulario
+13,select_form1_global,Global Indicators,Indicateurs globaux,Indicadores globales
+14,select_form1_women,Women's Form,Formulaire pour les femmes,Formulario para mujeres
+15,select_form1_reg,Registration Form,Formulaire d'inscription,Formulario de registro
+16,download_dl,Download Form Data as CSV,Télécharger les données du formulaire au format CSV,Descargar datos del formulario como CSV
+17,download_dlx,Download Form Data as XLSX (including repeats),Télécharger les données du formulaire au format XLSX (y compris les répétitions),Descargar datos del formulario como XLSX (incluidas las repeticiones)
+18,select_enums,Select Enumerator,Sélectionner le recenseur,Seleccionar encuestador
+19,select_enums_All,All,Tous,Todos
+20,dateRange_dates,Select Date Range,Sélectionner la plage de dates,Seleccionar intervalo de fechas
+21,select_geo_var,Select Co-ordinate Variable,Sélectionner la variable de coordonnée,Seleccionar variable de coordenadas
+22,select_geo_var_None,None,Aucune,Ninguna
+23,select_inspect,Select Farmer to Inspect,Sélectionner l'agriculteur à inspecter,Seleccionar agricultor para inspeccionar
+24,select_question,Select Question,Sélectionner la question,Seleccionar pregunta
+25,output_data_message_loading,Data loading,Chargement des données,Cargando datos
+26,message1_data_success,Form 1/3 : Global Indicators,Formulaire 1/3 : Indicateurs globaux,Formulario 1/3: Indicadores globales
+27,message1_data_records,records loaded,enregistrements chargés,registros cargados
+28,message1_data_failure,Form 1/3 : Error in Global Indicators,Formulaire 1/3 : Erreur dans les indicateurs globaux,Formulario 1/3: Error en los indicadores globales
+29,message2_data_success,Form 2/3 : Women's Form,Formulaire 2/3 : Formulaire pour les femmes,Formulario 2/3: Formulario para mujeres
+30,message2_data_failure,Form 2/3 : Error in Women's Form,Formulaire 2/3 : Erreur dans le formulaire pour les femmes,Formulario 2/3: Error en el formulario para mujeres
+31,message3_data_success,Form 3/3 : Registration Data,Formulaire 3/3 : Données d'enregistrement,Formulario 3/3: Datos de registro
+32,message3_data_failure,Form 3/3 : Error in Registration Data,Formulaire 3/3 : Erreur dans les données d'enregistrement,Formulario 3/3: Error en los datos de registro
+33,Status_1,Completed both forms,Les deux formulaires ont été remplis,Ambos formularios completados
+34,Status_2,Complete both w/ duplication,Les deux formulaires ont été remplis avec duplication,Ambos completados con duplicación
+35,Status_3,Completed one form,Un formulaire a été rempli,Un formulario completado
+36,Status_4,Completed one form w/ duplication,Un formulaire a été rempli avec duplication,Un formulario completado con duplicación
+37,Status_5,Registered - Not Started,Enregistré - Non commencé,Registrado - No iniciado
+38,output_data_message_success,Data loaded successfully,Données chargées avec succès,Datos cargados correctamente
+39,label_dates,Date(s),Date(s),Fecha(s)
+40,label_Response,Response,Réponse,Respuesta
+41,label_n_response,Number of Responses,Nombre de réponses,Número de respuestas
+42,label_submissions,Submissions,Soumissions,Envíos
+43,label_start,Start Date,Date de début,Fecha de inicio
+44,label_end,End Date,Date de fin,Fecha de finalización
+45,label_time,Average Time,Durée moyenne,Tiempo medio
+46,label_interview10,Interviews < 10 minutes,Entretiens < 10 minutes,Entrevistas < 10 minutos
