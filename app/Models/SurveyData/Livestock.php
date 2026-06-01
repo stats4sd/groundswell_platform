@@ -16,11 +16,6 @@ class Livestock extends Model implements RepeatModel
         'properties' => 'collection',
     ];
 
-    public function livestockUses(): HasMany
-    {
-        return $this->hasMany(LivestockUse::class);
-    }
-
     public function farmSurveyData(): BelongsTo
     {
         return $this->belongsTo(FarmSurveyData::class, 'submission_id', 'submission_id');
