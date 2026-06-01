@@ -26,7 +26,7 @@
                         {{ t("Use the QR codes below to access the draft versions of the survey on an appropriate device with the ODK collect application installed.") }}
                     </li>
                     <li class="mb-1">
-                        {{ t("The HOLPA user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:") }}
+                        {{ t("The user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:") }}
 
                         <ul class="my-2 ml-12 list-disc">
                             <li class="mb-1">
@@ -61,7 +61,7 @@
 
                     <x-heroicon-o-exclamation-triangle class="w-16 sm:w-20 flex-shrink-0 text-red mb-2 md:mb-0"/>
                     <div class="md:ml-8 py-auto">
-                        {{ t("The QR codes below are") }}`
+                        {{ t("The QR codes below are") }}
                         <span class="font-semibold">{{ t("DRAFTS") }}</span>.
                         {{ t("Please") }}
                         <span class="font-semibold">{{ t("do not share") }}</span> {{ t("these codes with enumerators!") }}

@@ -1,4 +1,4 @@
-Once you have tested and finalised the details of your localised HOLPA survey, data collection may begin.
+Once you have tested and finalised the details of your survey, data collection may begin.
 
 ##### Set up live forms for data collection
 
