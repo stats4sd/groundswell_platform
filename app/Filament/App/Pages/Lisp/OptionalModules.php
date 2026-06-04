@@ -2,8 +2,9 @@
 
 namespace App\Filament\App\Pages\Lisp;
 
-use Filament\Navigation\NavigationItem;
+use App\Filament\App\Pages\SurveyDashboard;
 use Filament\Pages\Page;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -15,26 +16,36 @@ class OptionalModules extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-puzzle-piece';
-
-    protected static ?string $navigationLabel = 'Optional Modules';
+    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $title = 'Localisation: Optional Modules';
 
-    protected static ?int $navigationSort = 3;
-
     protected static string $view = 'filament.app.pages.lisp.optional-modules';
 
-    public static function getNavigationItems(): array
+    protected ?string $summary = 'Please select the optional modules to be included in your survey.';
+
+    public function getBreadcrumbs(): array
     {
         return [
-            NavigationItem::make(static::getNavigationLabel())
-                ->group('Optional Modules')
-                ->icon(static::getNavigationIcon())
-                ->isActiveWhen(fn () => request()->routeIs(static::getRouteName()))
-                ->sort(static::getNavigationSort())
-                ->url(static::getUrl()),
+            SurveyDashboard::getUrl() => 'Survey Dashboard',
+            static::getUrl() => static::getTitle(),
         ];
+    }
+
+    public function getHeader(): ?\Illuminate\Contracts\View\View
+    {
+        return view('components.small-header', [
+            'heading' => $this->getHeading(),
+            'subheading' => $this->getSubheading(),
+            'actions' => $this->getHeaderActions(),
+            'breadcrumbs' => $this->getBreadcrumbs(),
+            'summary' => $this->summary,
+        ]);
+    }
+
+    public function getMaxContentWidth(): MaxWidth
+    {
+        return MaxWidth::Full;
     }
 
     public function table(Table $table): Table
