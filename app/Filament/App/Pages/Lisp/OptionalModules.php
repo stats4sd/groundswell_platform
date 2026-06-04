@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Filament\App\Clusters\Localisations\Pages;
+namespace App\Filament\App\Pages\Lisp;
 
-use App\Filament\App\Clusters\Localisations;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\IconColumn;
@@ -16,15 +15,27 @@ class OptionalModules extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected static ?string $cluster = Localisations::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-puzzle-piece';
 
     protected static ?string $navigationLabel = 'Optional Modules';
 
+    protected static ?string $title = 'Localisation: Optional Modules';
+
     protected static ?int $navigationSort = 3;
 
-    protected static string $view = 'filament.app.clusters.localisations.pages.optional-modules';
+    protected static string $view = 'filament.app.pages.lisp.optional-modules';
+
+    public static function getNavigationItems(): array
+    {
+        return [
+            NavigationItem::make(static::getNavigationLabel())
+                ->group('Optional Modules')
+                ->icon(static::getNavigationIcon())
+                ->isActiveWhen(fn () => request()->routeIs(static::getRouteName()))
+                ->sort(static::getNavigationSort())
+                ->url(static::getUrl()),
+        ];
+    }
 
     public function table(Table $table): Table
     {
