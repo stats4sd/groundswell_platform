@@ -3,6 +3,7 @@
 namespace App\Filament\App\Pages\Lisp;
 
 use App\Filament\App\Pages\SurveyDashboard;
+use App\Filament\Shared\WithCompletionStatusBar;
 use App\Models\Team;
 use App\Services\HelperService;
 use Filament\Forms\Components\Select;
@@ -25,6 +26,9 @@ class OptionalModules extends Page implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
+    use WithCompletionStatusBar;
+
+    public string $completionProp = 'lisp_complete';
 
     protected static bool $shouldRegisterNavigation = false;
 

@@ -68,21 +68,9 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
-    test('lisp index loads', function () {
+    test('optional modules loads', function () {
         $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/lisp-index")
-            ->assertOk();
-    });
-
-    test('lisp indicators loads', function () {
-        $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/lisp-indicators")
-            ->assertOk();
-    });
-
-    test('lisp workshop loads', function () {
-        $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/lisp-workshop")
+            ->get("/app/{$this->team->id}/optional-modules")
             ->assertOk();
     });
 
