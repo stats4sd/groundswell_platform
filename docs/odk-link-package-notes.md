@@ -1114,3 +1114,215 @@ Empty placeholder class (`@mixin Testable`) — conventional Spatie/package-skel
 - `src/Exports/*.php`, `src/Exports/XlsformExport/*.php`
 - `database/seeders/PlatformSeeder.php`, `database/factories/ModelFactory.php`
 - `src/Testing/TestsFilamentOdkLink.php`, `tests/*`
+
+---
+
+## 6. Diagrams
+
+Each diagram below is provided two ways: as a **Mermaid** code block (renders inline in GitHub, GitLab, VS Code with the Mermaid extension, etc.) and as a pre-rendered **PNG image** (`docs/images/odk-link/`, useful for slides/docs that don't render Mermaid). Source `.mmd` files are alongside the PNGs and can be re-rendered with `npx @mermaid-js/mermaid-cli -i <file>.mmd -o <file>.png`.
+
+### 6.1 Entity-Relationship Diagram
+
+![ER Diagram](images/odk-link/01-er-diagram.png)
+
+```mermaid
+erDiagram
+    PLATFORM ||--o{ XLSFORM_TEMPLATE : "owns (global)"
+    TEAM ||--o{ XLSFORM_TEMPLATE : "owns (custom)"
+    TEAM ||--o{ XLSFORM : "deploys"
+    TEAM ||--o{ DATASET : "owns"
+    TEAM ||--o{ LOCALE : "creates"
+    TEAM ||--o{ ODK_PROJECT : "has"
+
+    XLSFORM_TEMPLATE ||--o{ XLSFORM : "deployed as"
+    XLSFORM_TEMPLATE ||--o{ XLSFORM_MODULE : "groups questions into"
+    XLSFORM_TEMPLATE ||--o{ XLSFORM_TEMPLATE_SECTION : "schema tree"
+    XLSFORM_TEMPLATE ||--o{ REQUIRED_MEDIA : "requires"
+
+    XLSFORM_MODULE ||--o{ XLSFORM_MODULE_VERSION : "default + local versions"
+
+    XLSFORM_MODULE_VERSION ||--o{ SURVEY_ROW : "contains"
+    XLSFORM_MODULE_VERSION ||--o{ CHOICE_LIST : "contains"
+    XLSFORM_MODULE_VERSION }o--o{ LOCALE : "translated into"
+    XLSFORM_MODULE_VERSION }o--o{ XLSFORM : "selected by (pivot+order)"
+
+    SURVEY_ROW }o--|| CHOICE_LIST : "select_one/select_multiple"
+    CHOICE_LIST ||--o{ CHOICE_LIST_ENTRY : "has options"
+
+    SURVEY_ROW ||--o{ LANGUAGE_STRING : "label/hint translations"
+    CHOICE_LIST_ENTRY ||--o{ LANGUAGE_STRING : "label translations"
+    LOCALE ||--o{ LANGUAGE_STRING : "in language"
+    LANGUAGE ||--o{ LOCALE : "has locales"
+
+    XLSFORM_TEMPLATE_SECTION }o--|| DATASET : "populates"
+    DATASET ||--o{ DATASET_VARIABLE : "defines"
+    DATASET ||--o{ ENTITY : "stores"
+    DATASET }o--o{ DATASET : "parent/child"
+
+    XLSFORM ||--o{ XLSFORM_VERSION : "draft + published"
+    XLSFORM_VERSION ||--o{ SUBMISSION : "receives"
+    SUBMISSION ||--o{ ENTITY : "produces"
+    ENTITY ||--o{ ENTITY_VALUE : "has values"
+    ENTITY_VALUE }o--|| DATASET_VARIABLE : "value of"
+    ENTITY }o--o{ ENTITY : "parent/child (repeats)"
+
+    ODK_PROJECT ||--o{ APP_USER : "has"
+    APP_USER }o--o{ XLSFORM : "assigned to"
+```
+
+### 6.2 Import Pipeline (Excel Upload → Database)
+
+![Import Pipeline](images/odk-link/02-import-pipeline.png)
+
+```mermaid
+flowchart TD
+    A["Admin/Team uploads .xlsx\n(survey + choices sheets)\nto XlsformTemplate or\nXlsformModuleVersion media"] --> B["Spatie MediaHasBeenAddedEvent"]
+    B --> C["HandleXlsformTemplateAdded listener"]
+
+    C -->|"if XlsformTemplate"| D["XlsformModuleImport\n(sync)\ngroups survey rows by `module` column\ncreates XlsformModule + default\nXlsformModuleVersion records"]
+    D --> E["model.processing = true"]
+    C -->|"if XlsformModuleVersion"| E
+
+    E --> F["XlsformTemplateChoiceListImport\n(queued)\ncreates ChoiceList rows\nper select_one/select_multiple list"]
+
+    F --> G["XlsformTemplateWorkbookImport\n(queued, chunked)"]
+    G --> G1["XlsformTemplateSurveyImport\n-> SurveyRow rows"]
+    G --> G2["XlsformTemplateChoicesImport\n-> ChoiceListEntry rows"]
+    G1 --> H["afterImport: delete stale\nSurveyRow / ChoiceListEntry /\nempty ChoiceList"]
+    G2 --> H
+
+    H --> I["PrepareSurveyRowPaths"]
+    I --> J["FinishSurveyRowImport"]
+    J --> K["FinishChoiceListEntryImport"]
+    K --> L["LinkModuleVersionToLocales"]
+
+    L --> M["ImportAllLanguageStrings\n(per translatable column heading)"]
+    M --> N["XlsformTemplateLanguageStringImport\n-> LanguageString rows\n(linked to SurveyRow / ChoiceListEntry)"]
+    N --> O["FinishLanguageStringImport\n(dispatchSync)"]
+    N --> P["AddMissingChoiceListStrings\n(dispatchSync)\npropagates translations across\nshared choice lists"]
+
+    O --> Q["FinishXlsformTemplateImport"]
+    P --> Q
+    Q --> R["model.processing = false\nfire XlsformTemplateWasImported /\nXlsformModuleVersionWasImported\nnotify Super Admins"]
+```
+
+### 6.3 Export Pipeline (Database → Regenerated XLSForm → ODK Central)
+
+![Export Pipeline](images/odk-link/03-export-pipeline.png)
+
+```mermaid
+flowchart TD
+    subgraph DB["Database (per Xlsform instance)"]
+        SR["SurveyRow rows\n(per XlsformModuleVersion)"]
+        CL["ChoiceList / ChoiceListEntry rows"]
+        LS["LanguageString rows\n(per Locale)"]
+        PIVOT["selected_xlsform_module_versions\n(pivot, ordered)"]
+    end
+
+    SYNC["Xlsform::syncWithTemplate()\nensures pivot has the default\nXlsformModuleVersion for every\nXlsformModule, plus team's\n'Local {module}' versions\nwhen can_be_extended"] --> PIVOT
+
+    PIVOT --> SR
+    PIVOT --> CL
+
+    SR --> SE["XlsformSurveyExport\njoins survey_rows through pivot,\nordered by pivot.order then\nxlsform_module_version_id then row_number\n= THE MERGE STEP"]
+    CL --> CE["XlsformChoicesExport\nChoiceListEntry rows for choice lists\nin selected module versions, deduped"]
+    LS --> SE
+    LS --> CE
+    SET["XlsformSettingsExport\nfresh settings sheet,\nnew version timestamp"]
+
+    SE --> WB["XlsformWorkbookExport\n(survey + choices + settings sheets)"]
+    CE --> WB
+    SET --> WB
+
+    WB --> XLSX["Regenerated .xlsx XLSForm"]
+    XLSX --> UF["UpdateXlsformFile\nattaches xlsx to xlsform_file media"]
+    UF --> DD["DeployDraftXlsformToOdkCentral\nOdkLinkService::createDraftForm()\nPOST /forms or /forms/{id}/draft\n+ updateSchema + media attachments"]
+    DD --> ODK["ODK Central draft form"]
+    ODK -->|"publishForm()"| LIVE["Published XlsformVersion\n(live form on ODK Central)"]
+```
+
+### 6.4 Module/Version Selection & Merge
+
+![Module Version Merge](images/odk-link/04-module-version-merge.png)
+
+```mermaid
+flowchart LR
+    subgraph TEMPLATE["XlsformTemplate"]
+        M1["XlsformModule:\nDemographics"]
+        M2["XlsformModule:\nDietary Diversity\n(can_be_extended)"]
+        M3["XlsformModule:\nUnspecified Module 1"]
+    end
+
+    M1 --> M1D["Version: Default\n(is_default = true)"]
+    M2 --> M2D["Version: Default\n(is_default = true)"]
+    M2 --> M2L["Version: Local Dietary Diversity\n(owner = Team, custom questions)"]
+    M3 --> M3D["Version: Default\n(is_default = true)"]
+
+    subgraph PIVOT["selected_xlsform_module_versions (per Xlsform, ordered)"]
+        direction TB
+        P1["order 1 -> Demographics: Default"]
+        P2["order 2 -> Dietary Diversity: Default"]
+        P3["order 3 -> Dietary Diversity: Local (Team)"]
+        P4["order 4 -> Unspecified Module 1: Default"]
+    end
+
+    M1D --> P1
+    M2D --> P2
+    M2L --> P3
+    M3D --> P4
+
+    P1 --> OUT["Regenerated survey sheet\n(rows concatenated in pivot order)"]
+    P2 --> OUT
+    P3 --> OUT
+    P4 --> OUT
+```
+
+### 6.5 End-to-End Flow (Sequence Diagram)
+
+![End to End Flow](images/odk-link/05-end-to-end-flow.png)
+
+```mermaid
+sequenceDiagram
+    actor Admin as Admin/Team User
+    participant Filament as Filament UI
+    participant Media as Spatie Media Library
+    participant Listener as HandleXlsformTemplateAdded
+    participant Jobs as Import Job Chain
+    participant DB as Database
+    participant Export as XlsformWorkbookExport
+    participant ODK as ODK Central
+
+    Admin->>Filament: Upload .xlsx (survey + choices)
+    Filament->>Media: addMediaFromDisk(...)->toMediaCollection()
+    Media->>Listener: MediaHasBeenAddedEvent
+    Listener->>DB: XlsformModuleImport (sync)\ncreate XlsformModule/Version
+    Listener->>Jobs: queue ChoiceListImport + WorkbookImport chain
+    Jobs->>DB: SurveyRow, ChoiceList, ChoiceListEntry,\nLanguageString rows
+    Jobs->>DB: processing = false\nfire XlsformTemplateWasImported
+
+    Note over Admin,DB: Later: team deploys template to a draft form
+
+    Admin->>Filament: deployDraft()
+    Filament->>DB: syncWithTemplate()\n(populate selected_xlsform_module_versions)
+    Filament->>Export: generateXlsfile()
+    Export->>DB: query merged survey/choices\nthrough pivot (ordered)
+    Export->>Media: attach regenerated .xlsx (UpdateXlsformFile)
+    Filament->>ODK: DeployDraftXlsformToOdkCentral\nPOST /forms (+draft), updateSchema, media
+    ODK-->>Filament: draft form details (enketo id, etc.)
+    Filament->>DB: update XlsformVersion (is_draft=true)
+
+    Note over Admin,ODK: When ready
+
+    Admin->>Filament: publishForm()
+    Filament->>ODK: publish draft
+    Filament->>DB: create permanent XlsformVersion,\ndelete draft submissions
+
+    Note over ODK,DB: Ongoing: scheduled submission sync
+
+    loop odk:poll-for-odk-data
+        Jobs->>ODK: getSubmissions() (OData $expand=*)
+        ODK-->>Jobs: submission metadata + content
+        Jobs->>DB: upsert Submission rows
+        Jobs->>DB: ProcessOdkSubmission ->\nEntity / EntityValue rows
+    end
+```

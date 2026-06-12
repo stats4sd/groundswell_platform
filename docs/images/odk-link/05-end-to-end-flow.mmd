@@ -1,0 +1,43 @@
+sequenceDiagram
+    actor Admin as Admin/Team User
+    participant Filament as Filament UI
+    participant Media as Spatie Media Library
+    participant Listener as HandleXlsformTemplateAdded
+    participant Jobs as Import Job Chain
+    participant DB as Database
+    participant Export as XlsformWorkbookExport
+    participant ODK as ODK Central
+
+    Admin->>Filament: Upload .xlsx (survey + choices)
+    Filament->>Media: addMediaFromDisk(...)->toMediaCollection()
+    Media->>Listener: MediaHasBeenAddedEvent
+    Listener->>DB: XlsformModuleImport (sync)\ncreate XlsformModule/Version
+    Listener->>Jobs: queue ChoiceListImport + WorkbookImport chain
+    Jobs->>DB: SurveyRow, ChoiceList, ChoiceListEntry,\nLanguageString rows
+    Jobs->>DB: processing = false\nfire XlsformTemplateWasImported
+
+    Note over Admin,DB: Later: team deploys template to a draft form
+
+    Admin->>Filament: deployDraft()
+    Filament->>DB: syncWithTemplate()\n(populate selected_xlsform_module_versions)
+    Filament->>Export: generateXlsfile()
+    Export->>DB: query merged survey/choices\nthrough pivot (ordered)
+    Export->>Media: attach regenerated .xlsx (UpdateXlsformFile)
+    Filament->>ODK: DeployDraftXlsformToOdkCentral\nPOST /forms (+draft), updateSchema, media
+    ODK-->>Filament: draft form details (enketo id, etc.)
+    Filament->>DB: update XlsformVersion (is_draft=true)
+
+    Note over Admin,ODK: When ready
+
+    Admin->>Filament: publishForm()
+    Filament->>ODK: publish draft
+    Filament->>DB: create permanent XlsformVersion,\ndelete draft submissions
+
+    Note over ODK,DB: Ongoing: scheduled submission sync
+
+    loop odk:poll-for-odk-data
+        Jobs->>ODK: getSubmissions() (OData $expand=*)
+        ODK-->>Jobs: submission metadata + content
+        Jobs->>DB: upsert Submission rows
+        Jobs->>DB: ProcessOdkSubmission ->\nEntity / EntityValue rows
+    end

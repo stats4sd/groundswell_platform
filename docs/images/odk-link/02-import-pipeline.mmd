@@ -1,0 +1,29 @@
+flowchart TD
+    A["Admin/Team uploads .xlsx\n(survey + choices sheets)\nto XlsformTemplate or\nXlsformModuleVersion media"] --> B["Spatie MediaHasBeenAddedEvent"]
+    B --> C["HandleXlsformTemplateAdded listener"]
+
+    C -->|"if XlsformTemplate"| D["XlsformModuleImport\n(sync)\ngroups survey rows by `module` column\ncreates XlsformModule + default\nXlsformModuleVersion records"]
+    D --> E["model.processing = true"]
+    C -->|"if XlsformModuleVersion"| E
+
+    E --> F["XlsformTemplateChoiceListImport\n(queued)\ncreates ChoiceList rows\nper select_one/select_multiple list"]
+
+    F --> G["XlsformTemplateWorkbookImport\n(queued, chunked)"]
+    G --> G1["XlsformTemplateSurveyImport\n-> SurveyRow rows"]
+    G --> G2["XlsformTemplateChoicesImport\n-> ChoiceListEntry rows"]
+    G1 --> H["afterImport: delete stale\nSurveyRow / ChoiceListEntry /\nempty ChoiceList"]
+    G2 --> H
+
+    H --> I["PrepareSurveyRowPaths"]
+    I --> J["FinishSurveyRowImport"]
+    J --> K["FinishChoiceListEntryImport"]
+    K --> L["LinkModuleVersionToLocales"]
+
+    L --> M["ImportAllLanguageStrings\n(per translatable column heading)"]
+    M --> N["XlsformTemplateLanguageStringImport\n-> LanguageString rows\n(linked to SurveyRow / ChoiceListEntry)"]
+    N --> O["FinishLanguageStringImport\n(dispatchSync)"]
+    N --> P["AddMissingChoiceListStrings\n(dispatchSync)\npropagates translations across\nshared choice lists"]
+
+    O --> Q["FinishXlsformTemplateImport"]
+    P --> Q
+    Q --> R["model.processing = false\nfire XlsformTemplateWasImported /\nXlsformModuleVersionWasImported\nnotify Super Admins"]
