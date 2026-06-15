@@ -3,7 +3,9 @@
         {{ $this->form }}
     </x-filament::section>
 
-    {{ $this->table }}
+    <div class="pb-24">
+        {{ $this->table }}
+    </div>
 
     <!-- Footer -->
     <x-complete-section-status-bar :completion-prop="$completionProp">
