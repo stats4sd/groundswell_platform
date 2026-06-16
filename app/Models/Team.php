@@ -262,6 +262,20 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     }
 
     /** @return Attribute<string, never> */
+    protected function setupSurveyProgress(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                if ($this->setup_survey_complete) {
+                    return 'complete';
+                }
+
+                return 'not_started';
+            }
+        );
+    }
+
+    /** @return Attribute<string, never> */
     protected function dataCollectionProgress(): Attribute
     {
         return new Attribute(

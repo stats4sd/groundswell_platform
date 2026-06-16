@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('teams', function (Blueprint $table) {
             $table->renameColumn('lisp_complete', 'optional_modules_complete');
+            $table->renameColumn('data_analysis_complete', 'setup_survey_complete');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('teams', function (Blueprint $table) {
             $table->renameColumn('optional_modules_complete', 'lisp_complete');
+            $table->renameColumn('setup_survey_complete', 'data_analysis_complete');
         });
     }
 };
