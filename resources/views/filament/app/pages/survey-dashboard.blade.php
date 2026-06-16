@@ -3,7 +3,7 @@
     use App\Filament\App\Pages\DataAnalysis\DataAnalysisIndex;
     use App\Filament\App\Pages\DataCollection\SetUpSurvey;
     use App\Filament\App\Pages\DataCollection\MonitorDataCollection;
-    use App\Filament\App\Pages\Lisp\LispIndex;
+    use App\Filament\App\Pages\Lisp\OptionalModules;
     use App\Filament\App\Pages\Pilot\PilotIndex;
     use App\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex;
     use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
@@ -238,7 +238,7 @@
                                             <span class="ml-1 inline text-xs uppercase font-semibold">{{ t("Complete") }}</span>
                                         </div>
                                     @endif
-                                    <a href="{{ url(LispIndex::getUrl()) }}" class="buttona uppercase">
+                                    <a href="{{ url(OptionalModules::getUrl()) }}" class="buttona uppercase">
                                         {{ t("View and Update") }}
                                     </a>
                                 </div>
