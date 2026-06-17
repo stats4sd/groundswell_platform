@@ -6,16 +6,19 @@ use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Services\LocationSectionBuilder;
-use Dom\Attr;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Models\Role;
 use Stats4sd\FilamentOdkLink\Models\Country;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Traits\HasXlsforms;
@@ -23,13 +26,8 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Language;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
-use Stats4sd\FilamentTeamManagement\Models\Team as FilamentTeamManagementTeam;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Mail;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Str;
 use Stats4sd\FilamentTeamManagement\Mail\InviteUser;
+use Stats4sd\FilamentTeamManagement\Models\Team as FilamentTeamManagementTeam;
 
 class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 {
@@ -63,18 +61,17 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
             ]);
 
             $owner->languages()->sync([
-                    $en->id => [
-                        'locale_id' => $enLocale->id,
-                    ],
-                ]
-                , false);
+                $en->id => [
+                    'locale_id' => $enLocale->id,
+                ],
+            ], false);
 
             // create xlsform models for all active xlsform template for this newly created team
             $xlsformTemplates = XlsformTemplate::where('available', 1)->get();
 
             // Create the "local context" module version for the team to add custom questions about the farm
             $owner->localContextModuleVersion()->create([
-               'name' => 'Local Context',
+                'name' => 'Local Context',
             ]);
 
             // suppose a newly created team does not have any xlsform, it is not necessary to do checking
@@ -168,6 +165,19 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
             ->where('name', 'Local Context');
     }
 
+    /**
+     * The HDDS module version selected into this team's form(s), if any.
+     * The version is linked via the selected_xlsform_module_versions pivot, and
+     * the "HDDS" name lives on the related XlsformModule.
+     */
+    public function hddsModuleVersion(): ?XlsformModuleVersion
+    {
+        return XlsformModuleVersion::query()
+            ->whereHas('xlsformModule', fn ($q) => $q->where('name', 'HDDS'))
+            ->whereHas('xlsforms', fn ($q) => $q->where('owner_id', $this->id))
+            ->first();
+    }
+
     /** @return Attribute<string, never> */
     protected function languagesProgress(): Attribute
     {
@@ -251,7 +261,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
                 }
 
                 // $farm->household_form_completed + fieldwork_form_completed are only marked for 'live' submissions, so here we can just count if any submissions have come in.
-                if ($this->farms->some(fn(Farm $farm) => $farm->submissions()->count() > 0)) {
+                if ($this->farms->some(fn (Farm $farm) => $farm->submissions()->count() > 0)) {
                     return 'in_progress';
                 }
 
@@ -269,7 +279,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
                     return 'complete';
                 }
 
-                if ($this->farms->some(fn(Farm $farm) => $farm->household_form_completed || $farm->fieldwork_form_completed)) {
+                if ($this->farms->some(fn (Farm $farm) => $farm->household_form_completed || $farm->fieldwork_form_completed)) {
                     return 'in_progress';
                 }
 
@@ -278,22 +288,21 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
         );
     }
 
-
     // For HOLPA, teams should automatically receive a version of all available XlsformTemplates.
 
     /** @return Attribute<bool, never> */
     protected function shouldReceiveAllXlsformTemplates(): Attribute
     {
         return new Attribute(
-            get: fn(): bool => true,
+            get: fn (): bool => true,
         );
     }
 
-    /** @return Attribute<boolean, never> */
+    /** @return Attribute<bool, never> */
     public function readyForLive(): Attribute
     {
         return new Attribute(
-            get: fn(): bool => $this->languages_complete && $this->sampling_complete && $this->pba_complete && $this->lisp_complete,
+            get: fn (): bool => $this->languages_complete && $this->sampling_complete && $this->pba_complete && $this->lisp_complete,
         );
     }
 
@@ -311,7 +320,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     {
         // if no team forms need a draft update; abort.
 
-        $xlsformsToUpdate = $this->xlsforms->filter(fn(Xlsform $xlsform) => $xlsform->draft_needs_update);
+        $xlsformsToUpdate = $this->xlsforms->filter(fn (Xlsform $xlsform) => $xlsform->draft_needs_update);
 
         $this->localiseXlsforms();
 
@@ -329,7 +338,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
         $teamAdminRole = Role::where('name', 'Team Admin')->first();
 
         // if team admin doesn't exist; default to parent method (role agnostic)
-        if(!$teamAdminRole) {
+        if (! $teamAdminRole) {
             parent::sendInvites($emails);
         }
 
@@ -352,9 +361,8 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
             Notification::make()
                 ->success()
                 ->title('Invitation Sent')
-                ->body('An email invitation has been successfully sent to ' . $email)
+                ->body('An email invitation has been successfully sent to '.$email)
                 ->send();
         }
     }
-
 }

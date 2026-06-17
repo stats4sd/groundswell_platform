@@ -6,7 +6,12 @@
       "Bash(git config *)",
       "Bash(./vendor/bin/pest tests/Feature/Smoke/AppPanelTest.php)",
       "Bash(./vendor/bin/phpstan analyse *)",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(./vendor/bin/pint app/Filament/App/Pages/PlaceAdaptations/HddsHints.php app/Models/Team.php)",
+      "Bash(./vendor/bin/pint app/Filament/App/Pages/PlaceAdaptations/HddsHints.php)",
+      "Bash(./vendor/bin/pest tests/Feature/PlaceAdaptations/HddsHintsTest.php)",
+      "Bash(./vendor/bin/pint tests/Feature/PlaceAdaptations/HddsHintsTest.php)",
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AppPanelTest.php --filter=\"place adaptations\")"
     ]
   }
 }

@@ -38,6 +38,15 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
                 </p>
             </div>
 
+            @php $currentTeam = \App\Services\HelperService::getCurrentOwner(); @endphp
+            @if($currentTeam?->hddsModuleVersion())
+                <x-rounded-section
+                    heading='Adapt HDDS hints'
+                    description='Adjust the help text shown for Household Dietary Diversity questions for each language.'
+                    buttonLabel='Update'
+                    :url="\App\Filament\App\Pages\PlaceAdaptations\HddsHints::getUrl()"/>
+            @endif
+
             @if(ChoiceList::where('is_localisable', true)->where('has_custom_handling', false)->count() > 0)
                 <x-rounded-section
                     heading='Contextualise choice lists'
