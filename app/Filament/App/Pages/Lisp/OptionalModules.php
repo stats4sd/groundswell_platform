@@ -28,7 +28,7 @@ class OptionalModules extends Page implements HasForms, HasTable
     use InteractsWithTable;
     use WithCompletionStatusBar;
 
-    public string $completionProp = 'lisp_complete';
+    public string $completionProp = 'optional_modules_complete';
 
     protected static bool $shouldRegisterNavigation = false;
 
