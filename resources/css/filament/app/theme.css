@@ -673,3 +673,22 @@ div:has(> .fi-page-sub-navigation-sidebar-ctn) {
 iframe:focus-visible {
     outline: none !important;
 }
+
+/* Custom intermediate max-widths beyond Filament's built-in 7xl (80rem).
+   Use via: protected ?string $maxContentWidth = 'max-w-8xl'; */
+.max-w-8xl { max-width: 90rem; }  /* 1440px */
+.max-w-9xl { max-width: 96rem; }  /* 1536px */
+.max-w-10xl { max-width: 102rem; } /* 1632px */
+
+
+.row-group-begin td {
+    background-color: #eff6ff;
+}
+
+.row-group-end td {
+    background-color: #dbeafe;
+}
+
+.row-group-begin span, .row-group-end span {
+    color: gray !important;
+}

@@ -59,6 +59,8 @@ Models are namespaced by domain under `app/Models/`:
 - `Models/Holpa/` — LocalIndicator, Theme, Domain (custom indicator framework)
 - `Models/Reference/` — Reference/lookup data
 
+All models are globally unguarded (`Model::unguard()` in `app/Providers/AppServiceProvider.php`), so mass assignment is open everywhere — none of the models define `$fillable`/`$guarded`.
+
 Notable patterns:
 - `staudenmeir/eloquent-has-many-deep` for nested multi-level relationships
 - `staudenmeir/belongs-to-through` for inverse deep relationships
