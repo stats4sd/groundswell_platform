@@ -43,7 +43,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     protected $appends = ['odk_qr_code'];
 
     protected $casts = [
-        'lisp_complete' => 'boolean',
+        'optional_modules_complete' => 'boolean',
         'sampling_complete' => 'boolean',
         'languages_complete' => 'boolean',
         'pba_complete' => 'boolean',
@@ -229,14 +229,15 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     }
 
     /** @return Attribute<string, never> */
-    protected function lispProgress(): Attribute
+    protected function optionalModulesProgress(): Attribute
     {
         return new Attribute(
             get: function () {
-                if ($this->lisp_complete) {
+                if ($this->optional_modules_complete) {
                     return 'complete';
                 }
 
+                return 'not_started';
             }
         );
     }
@@ -253,6 +254,20 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
                 // $farm->household_form_completed + fieldwork_form_completed are only marked for 'live' submissions, so here we can just count if any submissions have come in.
                 if ($this->farms->some(fn(Farm $farm) => $farm->submissions()->count() > 0)) {
                     return 'in_progress';
+                }
+
+                return 'not_started';
+            }
+        );
+    }
+
+    /** @return Attribute<string, never> */
+    protected function setupSurveyProgress(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                if ($this->setup_survey_complete) {
+                    return 'complete';
                 }
 
                 return 'not_started';
@@ -293,7 +308,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     public function readyForLive(): Attribute
     {
         return new Attribute(
-            get: fn(): bool => $this->languages_complete && $this->sampling_complete && $this->pba_complete && $this->lisp_complete,
+            get: fn(): bool => $this->languages_complete && $this->sampling_complete && $this->pba_complete && $this->optional_modules_complete,
         );
     }
 

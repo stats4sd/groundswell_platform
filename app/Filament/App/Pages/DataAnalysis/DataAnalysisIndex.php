@@ -3,9 +3,7 @@
 namespace App\Filament\App\Pages\DataAnalysis;
 
 use App\Filament\Actions\ExportDataAction;
-use App\Filament\Shared\WithCompletionStatusBar;
 use App\Filament\App\Pages\SurveyDashboard;
-use App\Services\HelperService;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -13,15 +11,11 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
-use Illuminate\Contracts\View\View;
 
 class DataAnalysisIndex extends Page implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
-    use WithCompletionStatusBar;
-
-    public string $completionProp = 'data_analysis_complete';
 
     protected static string $view = 'filament.app.pages.data-analysis.data-analysis-index';
 
@@ -57,41 +51,4 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
     }
 
 
-    public function markCompleteAction(): Action
-    {
-        return Action::make('markComplete')
-            ->label('MARK AS COMPLETE')
-            ->extraAttributes(['class' => 'buttonbrown mx-4 inline-block'])
-            ->visible(fn () => auth()->user()->can('maintain download data'))
-            ->action(function () {
-                if (!auth()->user()->can('maintain download data')) {
-                    abort(403);
-                }
-
-                $team = HelperService::getCurrentOwner();
-                $team->data_analysis_progress = 'complete';
-                $team->save();
-
-                $this->dispatch('refreshPage');
-            });
-    }
-
-    public function markIncompleteAction(): Action
-    {
-        return Action::make('markIncomplete')
-            ->label('MARK AS INCOMPLETE')
-            ->extraAttributes(['class' => 'buttonbrown block md:inline-block mb-6 md:mb-0 max-w-sm mx-auto'])
-            ->visible(fn () => auth()->user()->can('maintain download data'))
-            ->action(function () {
-                if (!auth()->user()->can('maintain download data')) {
-                    abort(403);
-                }
-
-                $team = HelperService::getCurrentOwner();
-                $team->data_analysis_progress = 'not_started';
-                $team->save();
-
-                $this->dispatch('refreshPage');
-            });
-    }
 }
