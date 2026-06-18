@@ -136,8 +136,7 @@ class SurveyCountry extends Page implements HasForms
         $syncData = [];
         foreach ($state['languages'] ?? [] as $langId) {
             $language = Language::find($langId);
-            $locale = $language->defaultLocale ?? $language->locales()->create(['is_default' => true]);
-            $syncData[$langId] = ['locale_id' => $locale->id];
+            $syncData[$langId] = ['locale_id' => $language->defaultLocale?->id];
         }
         $this->team->languages()->sync($syncData);
     }
