@@ -1,5 +1,5 @@
 <div class="space-y-2 translation-modal">
-    <p>{{ t("You can review the text for both ODK forms by downloading the files below.") }}</p>
+    <p>{{ t("You can review the text for the ODK forms by downloading the files below.") }}</p>
 
     @if($locale->is_default)
         <p>{{ t("This translation is from the original ODK Forms, and cannot be directly edited. If you wish to create your own version of") }} {{ $locale->language->name }}, {{ t("you may add a new blank translation or duplicate this one and edit it.") }}</p>
