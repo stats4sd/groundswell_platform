@@ -41,6 +41,8 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public bool $canSave = false;
 
+    public bool $canMaintain = false;
+
     public function mount()
     {
         $this->form->fill($this->locale->toArray());
