@@ -66,6 +66,24 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
             abort(404);
         }
 
+        // First visit: the team is still pointing at the global HDDS version.
+        // Clone it so their edits are isolated, then swap the pivot entries on
+        // all of this team's xlsforms to reference the new team-owned version.
+        if ($moduleVersion->owner_id !== $team->id) {
+            $globalVersion = $moduleVersion;
+            $moduleVersion = $globalVersion->cloneForTeam($team);
+
+            $xlsformIds = $team->xlsforms()->pluck('xlsforms.id');
+            foreach ($xlsformIds as $xlsformId) {
+                $linked = $globalVersion->xlsforms()->wherePivot('xlsform_id', $xlsformId)->first();
+                if ($linked) {
+                    $order = $linked->pivot->order;
+                    $globalVersion->xlsforms()->detach($xlsformId);
+                    $moduleVersion->xlsforms()->attach($xlsformId, ['order' => $order]);
+                }
+            }
+        }
+
         $this->xlsformModuleVersion = $moduleVersion->load('surveyRows.languageStrings');
     }
 
