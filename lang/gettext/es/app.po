@@ -7,14 +7,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-18T08:25:47+00:00\n"
-"PO-Revision-Date: 2026-06-18 08:25+0000\n"
+"POT-Creation-Date: 2026-06-18T14:25:56+00:00\n"
+"PO-Revision-Date: 2026-06-18 14:25+0000\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:27
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:61
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:42
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:51
 msgid "Contextualise choice lists"
 msgstr ""
 
@@ -27,6 +27,7 @@ msgstr ""
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:59
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:66
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:53
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:93
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:76
 #: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:42
 #: app\Filament\App\Pages\SurveyDashboard.php:31
@@ -43,6 +44,7 @@ msgid "Survey Dashboard"
 msgstr ""
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:60
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:94
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:77
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:182
 msgid "Place-based adaptations"
@@ -572,7 +574,7 @@ msgstr ""
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:45
 #: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:46
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:55
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:64
 msgid "Initial Pilot"
 msgstr ""
 
@@ -920,6 +922,7 @@ msgstr ""
 #: resources\views\filament\app\pages\data-collection\monitor-data-collection.blade.php:5
 #: resources\views\filament\app\pages\data-collection\set-up-survey.blade.php:13
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:14
+#: resources\views\filament\app\pages\place-adaptations\hdds-hints.blade.php:6
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:6
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:14
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:18
@@ -1117,6 +1120,16 @@ msgid ""
 "The next action is to add the details of all the farms that you will visit in your survey. Similar to adding locations, you can add farms manually or import a list from a spreadsheet file. The spreadsheet should be set up with the same structure as when adding locations at other levels.\n"
 "\n"
 "When importing a list, you will need to include columns with the farm unique code, and the unique code for the location it is in. When you upload the list, you need to select the location level the farms are located in. You can also optionally include extra columns with details that identify the farm, such as farm name, telephone number, family name etc, or for details that contain properties of the farm which may be useful for future analysis, such as the size of the farm.\n"
+""
+msgstr ""
+
+#: resources\text\hdds-hints.php:5
+msgid ""
+"##### Adapt HDDS hints\n"
+"\n"
+"The Household Dietary Diversity Score (HDDS) module asks about the different food groups a household has consumed. The wording of each question is standardised so that results stay comparable between projects, but the **hint** text — the short help text shown to enumerators and respondents alongside each question — often needs adapting to use locally familiar examples and terms.\n"
+"\n"
+"On this page you can review every HDDS question and edit its hint for each of the languages your team uses. The question type, variable name and label cannot be changed here. When you save a hint, your team's survey is flagged for an update and the change is compiled and sent to ODK Central the next time the survey is synced.\n"
 ""
 msgstr ""
 
@@ -1843,22 +1856,22 @@ msgstr ""
 msgid "Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. Youi will be prompted to update the translation of your survey in future steps."
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:43
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:52
 msgid "Adapt units, crops, and other choice list entries to be locally relevant."
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:44
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:53
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:34
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:42
 #: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:18
 msgid "Update"
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:56
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:65
 msgid "Initial piloting should be conducted to check the sense and functionality of the survey."
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:57
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:66
 msgid "View details"
 msgstr ""
 
@@ -2116,7 +2129,7 @@ msgstr "Enviar"
 
 #: resources\views\livewire\survey-languages\team-translation-review.blade.php:2
 #: resources\views\team-translation-review.blade.php:2
-msgid "You can review the text for both ODK forms by downloading the files below."
+msgid "You can review the text for the ODK forms by downloading the files below."
 msgstr ""
 
 #: resources\views\livewire\survey-languages\team-translation-review.blade.php:5
