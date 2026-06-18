@@ -71,7 +71,7 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
         // all of this team's xlsforms to reference the new team-owned version.
         if ($moduleVersion->owner_id !== $team->id) {
             $globalVersion = $moduleVersion;
-            $moduleVersion = $globalVersion->cloneForTeam($team);
+            $moduleVersion = $globalVersion->cloneForOwner($team);
 
             $xlsformIds = $team->xlsforms()->pluck('xlsforms.id');
             foreach ($xlsformIds as $xlsformId) {
