@@ -3,6 +3,7 @@
 namespace App\Filament\App\Pages\DataCollection;
 
 use App\Filament\App\Pages\SurveyDashboard;
+use App\Filament\Shared\WithCompletionStatusBar;
 use App\Models\Team;
 use App\Services\HelperService;
 use Filament\Actions\Action;
@@ -19,6 +20,9 @@ class SetUpSurvey extends Page implements HasActions, HasForms
 {
     use InteractsWithForms;
     use InteractsWithActions;
+    use WithCompletionStatusBar;
+
+    public string $completionProp = 'setup_survey_complete';
 
     protected static bool $shouldRegisterNavigation = false;
 

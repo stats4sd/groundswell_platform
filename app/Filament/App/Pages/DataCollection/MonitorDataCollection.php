@@ -3,19 +3,29 @@
 namespace App\Filament\App\Pages\DataCollection;
 
 use App\Filament\App\Pages\SurveyDashboard;
+use App\Filament\Shared\WithCompletionStatusBar;
 use App\Livewire\SubmissionsTableView;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use App\Services\HelperService;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Url;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 
-class MonitorDataCollection extends Page
+class MonitorDataCollection extends Page implements HasActions, HasForms
 {
+    use InteractsWithActions;
+    use InteractsWithForms;
+    use WithCompletionStatusBar;
+
+    public string $completionProp = 'data_collection_complete';
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.app.pages.data-collection.monitor-data-collection';
