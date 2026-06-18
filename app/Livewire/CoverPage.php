@@ -33,20 +33,20 @@ class CoverPage extends Component implements HasActions, HasForms
     {
         return Action::make('registerInterest')
             ->extraAttributes(['class' => 'button bg-orange hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white hover:text-orange font-semibold w-auto flex justify-center items-center text-center px-4 mx-2'])
-            ->label('Register Interest')
+            ->label(t('Register Interest'))
             ->form([
                 Shout::make('message')
-                    ->content('Please fill in your details below - your email address will be used to contact you.'),
+                    ->content(t('Please fill in your details below - your email address will be used to contact you.')),
                 TextInput::make('email')->required()
                     ->email()
-                    ->label('Enter your email address'),
+                    ->label(t('Enter your email address')),
                 TextInput::make('name')
-                    ->label('Enter your name'),
+                    ->label(t('Enter your name')),
                 Textarea::make('organisation')
-                    ->label('Enter your organisation name'),
+                    ->label(t('Enter your organisation name')),
                 Textarea::make('details')
                     ->rows(5)
-                    ->label('Do you intend to implement Groundswell International Surveys? If so, please give some details about your project / work, etc.'),
+                    ->label(t('Do you intend to implement Groundswell International Surveys? If so, please give some details about your project / work, etc.')),
             ])
             ->action(function (array $data) {
 
@@ -54,8 +54,8 @@ class CoverPage extends Component implements HasActions, HasForms
                 Mail::to($data['email'])->send(new RegisterInterestEmailResponse($data));
 
                 Notification::make('success')
-                    ->title('Thank you')
-                    ->body('Thank you for your interest in Groundswell International Surveys. You should receive an automated email to confirm your registration of interest.')
+                    ->title(t('Thank you'))
+                    ->body(t('Thank you for your interest in Groundswell International Surveys. You should receive an automated email to confirm your registration of interest.'))
                     ->send();
             });
 

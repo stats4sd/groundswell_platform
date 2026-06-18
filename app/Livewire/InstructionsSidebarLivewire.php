@@ -39,7 +39,7 @@ class InstructionsSidebarLivewire extends Component implements HasActions, HasFo
             ->modalHeading($this->heading)
             ->modalContent(new HtmlString($this->instructions))
             ->modalSubmitAction(false)
-            ->modalCancelActionLabel('Close')
+            ->modalCancelActionLabel(fn () => t('Close'))
             ->slideOver();
     }
 }

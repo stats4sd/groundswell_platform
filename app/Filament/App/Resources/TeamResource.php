@@ -36,14 +36,14 @@ class TeamResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Team Details')
+                Forms\Components\Section::make(fn () => t('Team Details'))
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label(t('Name'))
+                            ->label(fn () => t('Name'))
                             ->required()
                             ->maxLength(255),
                         Forms\Components\Textarea::make('description')
-                            ->label(t('Description'))
+                            ->label(fn () => t('Description'))
                     ]),
             ]);
     }

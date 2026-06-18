@@ -32,11 +32,17 @@ class OptionalModules extends Page implements HasForms, HasTable
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Localisation: Optional Modules';
+    public function getTitle(): string
+    {
+        return t('Localisation: Optional Modules');
+    }
 
     protected static string $view = 'filament.app.pages.lisp.optional-modules';
 
-    protected ?string $summary = 'Please select the optional modules to be included in your survey.';
+    public function getSummary(): string
+    {
+        return t('Please select the optional modules to be included in your survey.');
+    }
 
     public Team $team;
 
@@ -57,7 +63,7 @@ class OptionalModules extends Page implements HasForms, HasTable
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
             static::getUrl() => static::getTitle(),
         ];
     }
@@ -69,7 +75,7 @@ class OptionalModules extends Page implements HasForms, HasTable
             'subheading'  => $this->getSubheading(),
             'actions'     => $this->getHeaderActions(),
             'breadcrumbs' => $this->getBreadcrumbs(),
-            'summary'     => $this->summary,
+            'summary'     => $this->getSummary(),
         ]);
     }
 
@@ -84,14 +90,14 @@ class OptionalModules extends Page implements HasForms, HasTable
             ->statePath('data')
             ->schema([
                 Select::make('xlsform_id')
-                    ->label('Survey Form')
+                    ->label(fn () => t('Survey Form'))
                     ->options(fn () => $this->team->xlsforms()->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(function () {
                         $this->selectedVersionIds = null;
                         $this->resetTable();
                     })
-                    ->placeholder('Select a survey form...')
+                    ->placeholder(fn () => t('Select a survey form...'))
                     ->required(),
             ]);
     }
@@ -177,21 +183,21 @@ class OptionalModules extends Page implements HasForms, HasTable
                     ->sortable(),
                 TextColumn::make('survey_rows_count')
                     ->counts('surveyRows')
-                    ->label('# Questions'),
+                    ->label(fn () => t('# Questions')),
                 IconColumn::make('is_selected')
-                    ->label('In Survey')
+                    ->label(fn () => t('In Survey'))
                     ->boolean()
                     ->state(fn (XlsformModuleVersion $record): bool => $this->isSelected($record)),
             ])
             ->actions([
                 Action::make('add')
-                    ->label('Add to Survey')
+                    ->label(fn () => t('Add to Survey'))
                     ->icon('heroicon-o-plus-circle')
                     ->color('success')
                     ->visible(fn (XlsformModuleVersion $record): bool => $xlsformSelected && ! $this->isSelected($record))
                     ->action(fn (XlsformModuleVersion $record) => $this->addModule($record)),
                 Action::make('remove')
-                    ->label('Remove')
+                    ->label(fn () => t('Remove'))
                     ->icon('heroicon-o-minus-circle')
                     ->color('danger')
                     ->visible(fn (XlsformModuleVersion $record): bool => $xlsformSelected && $this->isSelected($record))

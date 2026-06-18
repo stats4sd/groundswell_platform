@@ -21,7 +21,10 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Data Analysis & Results';
+    public function getTitle(): string
+    {
+        return t('Data Analysis & Results');
+    }
 
     protected $listeners = ['refreshPage' => '$refresh'];
 
@@ -33,7 +36,7 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
             static::getUrl() => static::getTitle(),
         ];
     }
@@ -46,7 +49,7 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
     public function exportDataAction(): Action
     {
         return ExportDataAction::make('exportData')
-            ->label('Export Data')
+            ->label(fn () => t('Export Data'))
             ->extraAttributes(['class' => 'buttona']);
     }
 

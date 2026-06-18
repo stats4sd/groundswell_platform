@@ -40,7 +40,15 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
     {
         return auth()->user()->can('view initial pilot');
     }
-    protected ?string $heading = "Survey Testing - Initial Pilot";
+    public function getTitle(): string
+    {
+        return t('Initial Pilot');
+    }
+
+    public function getHeading(): string
+    {
+        return t('Survey Testing - Initial Pilot');
+    }
     // protected ?string $subheading = "Test with local researchers and practitioners to review the initial localisations";
 
     public Team $team;
@@ -65,8 +73,8 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            PlaceAdaptationsIndex::getUrl() => 'Place Adaptations',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            PlaceAdaptationsIndex::getUrl() => t('Place-based adaptations'),
             static::getUrl() => static::getTitle(),
         ];
     }
@@ -98,7 +106,7 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
     public function table(Table $table): Table
     {
         return $table
-            ->heading('Draft Submissions')
+            ->heading(fn () => t('Draft Submissions'))
             ->query(fn(): Builder => Submission::onlyDraftData())
             ->recordTitleAttribute('uuid')
             ->columns([
@@ -115,13 +123,14 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
                 \Filament\Tables\Actions\Action::make('view')
                     ->modalContent(fn(Submission $record) => view('filament.app.pages.submissions.modal_view', ['submission' => $record]))
                     ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Close'),
+                    ->modalCancelActionLabel(fn () => t('Close')),
             ])
             ->headerActions([
                 TableAction::make('test-on-odk-central')
+                    ->label(fn () => t('Test on ODK Central'))
                     ->url(fn() => HelperService::getCurrentOwner()->odkProject?->odk_url),
                 TableAction::make('pull-submissions')
-                    ->label('Manually Get Submissions')
+                    ->label(fn () => t('Manually Get Submissions'))
                     ->visible(fn () => auth()->user()->can('maintain initial pilot'))
                     ->action(function (self $livewire) {
                         if (!auth()->user()->can('maintain initial pilot')) {
@@ -136,8 +145,8 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
                         $livewire->resetTable();
 
                         Notification::make('update_success')
-                            ->title('Success!')
-                            ->body("{$count} submissions have been pulled from the ODK server. (they may take a moment to process).")
+                            ->title(t('Success!'))
+                            ->body($count . ' ' . t('submissions have been pulled from the ODK server. (they may take a moment to process).'))
                             ->color('success')
                             ->send();
                     }),

@@ -36,6 +36,16 @@ class ChoiceListEntryResource extends Resource
 
     protected static bool $isScopedToTenant = false; // use custom query instead to get both global entries and team-entries.
 
+    public static function getModelLabel(): string
+    {
+        return t('choice list entry');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return t('choice list entries');
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
@@ -72,7 +82,7 @@ class ChoiceListEntryResource extends Resource
 
         return $lists
             ->map(fn (ChoiceList $choiceList) => NavigationItem::make($choiceList->list_name)
-                ->group('Choice Lists')
+                ->group(t('Choice Lists'))
 //                ->icon(fn() => HelperService::getCurrentOwner()?->hasCompletedLookupList($choiceList) ? 'heroicon-o-check' : 'heroicon-o-exclamation-circle')
 //                ->activeIcon(fn() => HelperService::getCurrentOwner()?->hasCompletedLookupList($choiceList) ? 'heroicon-o-check' : 'heroicon-o-exclamation-circle')
                 ->isActiveWhen(fn () => request()->routeIs(static::getRouteBaseName().'.*')
@@ -104,14 +114,14 @@ class ChoiceListEntryResource extends Resource
                 ->default(fn () => HelperService::getCurrentOwner()?->id),
             Hidden::make('choice_list_id')
                 ->formatStateUsing(fn (?ChoiceListEntry $record, ListChoiceListEntries $livewire) => $record ? $record->choiceList->id : ChoiceList::where('list_name', $livewire->choiceListName)->first()->id),
-            TextInput::make('name')->required()
+            TextInput::make('name')->label(t('Name'))->required()
                 ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule, Get $get) {
                     return $rule
                         ->where('choice_list_id', $get('choice_list_id'))
                         ->where('owner_id', $get('owner_id'));
                 }),
             Repeater::make('languageStrings')
-                ->label('Add Labels for the following languages:')
+                ->label(t('Add Labels for the following languages:'))
                 ->relationship('languageStrings')
                 ->minItems(fn () => HelperService::getCurrentOwner()?->locales->count())
                 ->maxItems(fn () => HelperService::getCurrentOwner()?->locales->count())
@@ -135,7 +145,7 @@ class ChoiceListEntryResource extends Resource
                         ->label(function (Get $get) {
                             $locale = Locale::find($get('locale_id'));
 
-                            return 'Label::'.$locale?->language_label;
+                            return t('Label') . '::' . $locale?->language_label;
                         })
                         ->required(),
                 ])
@@ -153,7 +163,7 @@ class ChoiceListEntryResource extends Resource
 
         $labelColumns = $locales->map(function (Locale $locale) {
             return TextColumn::make('label_'.$locale->language->id)
-                ->label('label::'.$locale->language_label)
+                ->label(t('Label') . '::' . $locale->language_label)
                 ->state(function (ChoiceListEntry $record) use ($locale) {
 
                     return $record->languageStrings
@@ -168,11 +178,11 @@ class ChoiceListEntryResource extends Resource
 
         return $table
             ->columns([
-                TextColumn::make('choiceList.list_name')->label('list_name'),
-                TextColumn::make('name')->label('name'),
+                TextColumn::make('choiceList.list_name')->label(fn () => t('List Name')),
+                TextColumn::make('name')->label(fn () => t('Name')),
                 ...$labelColumns->toArray(),
                 IconColumn::make('is_customised_entry')
-                    ->label('Localised Entry')
+                    ->label(fn () => t('Localised Entry'))
                     ->boolean(),
             ])
             ->recordClasses(fn (ChoiceListEntry $record) => $record->isRemoved(HelperService::getCurrentOwner()) ? 'opacity-50' : '');

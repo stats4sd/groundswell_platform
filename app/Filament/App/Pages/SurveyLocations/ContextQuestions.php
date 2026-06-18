@@ -38,6 +38,11 @@ class ContextQuestions extends Page implements HasActions, HasForms, HasTable
 
     protected static bool $shouldRegisterNavigation = false;
 
+    public function getTitle(): string
+    {
+        return t('Context Questions');
+    }
+
     public Team $team;
     public XlsformModuleVersion $xlsformModuleVersion;
 

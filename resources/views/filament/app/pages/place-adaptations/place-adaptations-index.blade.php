@@ -27,14 +27,11 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
     <div class="container mx-auto xl:px-12 ">
         <div class="surveyblocks pr-10  ">
             <div class="mb-12 -mr-10  px-16 pb-12 text-white bg-green">
-                <p class="font-bold text-green text-lg pb-4">CUSTOM SURVEY</p>
+                <p class="font-bold text-green text-lg pb-4">{{ t('CUSTOM SURVEY') }}</p>
                 <p>
-                    <b>You are customising the survey for this project only.</b>
+                    <b>{{ t('You are customising the survey for this project only.') }}</b>
                 </p>
-                <p>Customisations you make in the following steps will
-                    <b>only affect the localised version of the survey used by your team.</b>
-                    The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. Youi will be prompted to update
-                    the translation of your survey in future steps.
+                <p>{{ t('Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. Youi will be prompted to update the translation of your survey in future steps.') }}
                 </p>
             </div>
 
@@ -48,18 +45,28 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
             @endif
 
             @if(ChoiceList::where('is_localisable', true)->where('has_custom_handling', false)->count() > 0)
+                @php
+                    $choiceListHeading = t('Contextualise choice lists');
+                    $choiceListDescription = t('Adapt units, crops, and other choice list entries to be locally relevant.');
+                    $updateLabel = t('Update');
+                @endphp
                 <x-rounded-section
-                    heading='Contextualise choice lists'
-                    description='Adapt units, crops, and other choice list entries to be locally relevant..'
-                    buttonLabel='Update'
+                    :heading="$choiceListHeading"
+                    :description="$choiceListDescription"
+                    :buttonLabel="$updateLabel"
                     :url='\App\Filament\App\Clusters\Localisations::getUrl()'/>
             @endif
 
 
+            @php
+                $initialPilotHeading = t('Initial Pilot');
+                $initialPilotDescription = t('Initial piloting should be conducted to check the sense and functionality of the survey.');
+                $viewDetailsLabel = t('View details');
+            @endphp
             <x-offline-action-section
-                heading='Initial Pilot'
-                description='Initial piloting should be conducted to check the sense and functionality of the survey.'
-                buttonLabel='View details'
+                :heading="$initialPilotHeading"
+                :description="$initialPilotDescription"
+                :buttonLabel="$viewDetailsLabel"
                 :url="\App\Filament\App\Pages\PlaceAdaptations\InitialPilot::getUrl()"/>
 
         </div>
