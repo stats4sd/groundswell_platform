@@ -9,9 +9,6 @@
     </x-instructions-sidebar>
     <div class="mx-0 xl:px-4" style="margin-top:-50px">
         <div class="surveyblocks">
-            <pre>
-                @dump($shinyData)
-            </pre>
 
             <x-shiny-loader::shiny-iframe shiny-app-url="{{ config('shiny-loader.monitoring-app-url') }}"
                 :post-data="$shinyData->toArray()" />
