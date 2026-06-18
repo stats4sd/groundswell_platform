@@ -33,17 +33,25 @@ class PilotIndex extends Page implements HasActions, HasForms
         return auth()->user()->can('view pilot');
     }
 
-    protected ?string $heading = 'Survey Testing - Pilot and Enumerator Training';
-
     #[Url]
     public string $tab = 'xlsforms';
     public Team $team;
 
+    public function getTitle(): string
+    {
+        return t('Survey Testing - Pilot and Enumerator Training');
+    }
+
+    public function getHeading(): string
+    {
+        return t('Survey Testing - Pilot and Enumerator Training');
+    }
+
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            PilotIndex::getUrl() => 'Localisation: Pilot',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            PilotIndex::getUrl() => t('Localisation: Pilot'),
         ];
     }
 
@@ -66,7 +74,7 @@ class PilotIndex extends Page implements HasActions, HasForms
     {
         return Action::make('markPilotComplete')
             ->color('success')
-            ->label('Switch to live data collection')
+            ->label(fn () => t('Switch to live data collection'))
             ->visible(fn () => auth()->user()->can('maintain pilot'))
             ->action(function () {
                 if (!auth()->user()->can('maintain pilot')) {
@@ -84,11 +92,11 @@ class PilotIndex extends Page implements HasActions, HasForms
     {
         return Action::make('markPilotIncomplete')
             ->button()
-            ->label('Return to pilot testing mode')
+            ->label(fn () => t('Return to pilot testing mode'))
             ->color('warning')
-            ->modalHeading('Are you sure?')
-            ->modalDescription('Any data collected while the pilot is in progress will be marked as "test" data, and not included in your final dataset by default')
-            ->modalSubmitActionLabel('Yes, return to pilot test')
+            ->modalHeading(fn () => t('Are you sure?'))
+            ->modalDescription(fn () => t('Any data collected while the pilot is in progress will be marked as "test" data, and not included in your final dataset by default'))
+            ->modalSubmitActionLabel(fn () => t('Yes, return to pilot test'))
             ->visible(fn () => auth()->user()->can('maintain pilot'))
             ->action(function () {
                 if (!auth()->user()->can('maintain pilot')) {

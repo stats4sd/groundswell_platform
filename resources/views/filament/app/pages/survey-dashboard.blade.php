@@ -51,7 +51,7 @@
                     <div class="whitesection">
                         <div class=" whitecard ">
                             <div class="dashdescdiv">
-                                <h3 class="mb-2">{{ t("Survey Country and Languages") }}</h3>
+                                <h3 class="mb-2">{{ t("Survey Country & Languages") }}</h3>
                                 <p class="mb-4">{{ t("Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template.") }}
                                 </p>
                             </div>

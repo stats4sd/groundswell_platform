@@ -52,7 +52,8 @@ class ImportFarmsAction extends ExcelImportAction
 
         $this
             ->modalWidth('3xl')
-            ->modalDescription('Import Farms from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings. You must have already created or imported the locations that the farms will be associated with.');
+            ->modalHeading(fn () => t('Import Farms'))
+            ->modalDescription(fn () => t('Import Farms from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings. You must have already created or imported the locations that the farms will be associated with.'));
     }
 
     protected function getDefaultForm(): array
@@ -61,8 +62,8 @@ class ImportFarmsAction extends ExcelImportAction
 
         return [
             FileUpload::make('upload')
-                ->label(fn (HasTable $livewire) => str($livewire->getTable()->getPluralModelLabel())->title().' Excel Data')
-                ->helperText('Please make sure your data is in the first worksheet of the Excel file, and that the first row contains the column headers.')
+                ->label(fn (HasTable $livewire) => str($livewire->getTable()->getPluralModelLabel())->title().' '.t('Excel Data'))
+                ->helperText(t('Please make sure your data is in the first worksheet of the Excel file, and that the first row contains the column headers.'))
                 ->disk($this->getDisk())
                 ->columns()
                 ->required()
@@ -79,39 +80,39 @@ class ImportFarmsAction extends ExcelImportAction
                 }),
 
             Hidden::make('header_columns')
-                ->default(['na' => '~~upload a file to see the column headers~~'])
+                ->default(['na' => t('Upload a file to see the column headers')])
                 ->live(),
 
-            Section::make('Location')
+            Section::make(t('Location'))
                 ->schema([
                     Select::make('location_level_id')
-                        ->label('Which location level are the farms linked to?')
+                        ->label(t('Which location level are the farms linked to?'))
                         ->options(
                             LocationLevel::where('has_farms', true)->get()->pluck('name', 'id')
                         )
-                        ->placeholder('Select a location level')
-                        ->helperText('For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places.')
+                        ->placeholder(t('Select a location level'))
+                        ->helperText(t('For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places.'))
                         ->live(),
 
                     Select::make('location_code_column')
                         ->options(fn (Get $get) => $get('header_columns'))
-                        ->label(fn (Get $get) => 'Which column contains the '.(LocationLevel::find($get('location_level_id'))?->name ?? 'location').' unique code?')
-                        ->placeholder('Select a column'),
+                        ->label(fn (Get $get) => t('Which column contains the') . ' ' . (LocationLevel::find($get('location_level_id'))?->name ?? t('location')) . ' ' . t('unique code?'))
+                        ->placeholder(t('Select a column')),
                 ]),
 
-            Section::make('Farm Information')
+            Section::make(t('Farm Information'))
                 ->columns(1)
                 ->schema([
                     Select::make('farm_code_column')
-                        ->label('Which column contains the farm unique code?')
-                        ->placeholder('Select a column')
-                        ->helperText('e.g. farm_id or farm_code')
+                        ->label(t('Which column contains the farm unique code?'))
+                        ->placeholder(t('Select a column'))
+                        ->helperText(t('e.g. farm_id or farm_code'))
                         ->live()
                         ->options(fn (Get $get) => $get('header_columns')),
 
                     CheckboxList::make('farm_identifiers')
-                        ->label('Are there any additional columns that contain identifiers for the farm? Tick all that apply.')
-                        ->helperText('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.')
+                        ->label(t('Are there any additional columns that contain identifiers for the farm? Tick all that apply.'))
+                        ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.'))
                         ->options(fn (Get $get): array => $get('header_columns'))
                         ->disableOptionWhen(
                             fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||
@@ -122,8 +123,8 @@ class ImportFarmsAction extends ExcelImportAction
                         ->columnSpanFull(),
 
                     CheckboxList::make('farm_properties')
-                        ->label('Are there any additional columns that contain properties of the farm? Tick all that apply.')
-                        ->helperText('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.')
+                        ->label(t('Are there any additional columns that contain properties of the farm? Tick all that apply.'))
+                        ->helperText(t('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.'))
                         ->options(fn (Get $get) => $get('header_columns'))
                         ->disableOptionWhen(
                             fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||

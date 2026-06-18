@@ -59,7 +59,7 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
                         default => 'heroicon-o-information-circle',
                     })
                     ->description(fn(Xlsform $record): ?HtmlString => $record->live_needs_update || $record->draft_needs_update ? new HtmlString('<span class="text-red-600">updates available to publish</span>') : null)
-                    ->label('Status'),
+                    ->label(fn () => t('Status')),
 
                 TextColumn::make('live_submissions_count')
                     ->label(fn() => new HtmlString('No. of Submissions <br/>in ODK Central')),

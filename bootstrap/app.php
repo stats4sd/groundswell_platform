@@ -17,9 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // redirect any unauthenicated request to app panel login page
         $middleware->redirectGuestsTo('/app/login');
 
-        $middleware->use([
-                SetLocaleMiddleware::class
-            ]);
+        $middleware->appendToGroup('web', [
+            SetLocaleMiddleware::class,
+        ]);
 
     })
     ->withExceptions(function (Exceptions $exceptions) {

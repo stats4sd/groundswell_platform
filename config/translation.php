@@ -5,5 +5,5 @@ return [
     'source_locale' => 'en',
     'target_locales' => ['fr', 'es'],
 
-    'gettext_parse_paths' => ['app', 'resources']
+    'gettext_parse_paths' => ['app', 'resources', 'packages']
 ];

@@ -12,17 +12,19 @@ class ListLocationLevels extends ListRecords
 {
     protected static string $resource = LocationLevelResource::class;
 
-    protected ?string $heading = 'Survey locations';
-    // protected ?string $subheading = 'Manage hierarchy';
-
     protected static string $view = 'filament.app.clusters.location-levels.resources.location-level-resource.pages.list-location-levels';
+
+    public function getHeading(): string
+    {
+        return t('Survey locations');
+    }
 
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            SurveyLocationsIndex::getUrl() => 'Survey Locations',
-            static::getUrl() => static::getTitle(),
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLocationsIndex::getUrl() => t('Survey Locations'),
+            static::getUrl() => t('Location Levels'),
         ];
     }
 

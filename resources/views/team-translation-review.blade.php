@@ -4,7 +4,7 @@
     @if($locale->is_default)
         <p>{{ t("This translation is from the original ODK Forms, and cannot be directly edited. If you wish to create your own version of") }} {{ $locale->language->name }}, {{ t("you may add a new blank translation or duplicate this one and edit it.") }}</p>
     @elseif($locale->creator->id !== \Stats4sd\FilamentOdkLink\Services\HelperService::getCurrentOwner()->id)
-        <p>{{ t("This translation was uploaded by another team as a contribution to HOLPA. You cannot edit this translation directly, but you may duplicate it and edit your version if you wish.") }}</p>
+        <p>{{ t("This translation was uploaded by another team. You cannot edit this translation directly, but you may duplicate it and edit your version if you wish.") }}</p>
     @else
         <p>{{ t("To edit the translations:") }}
         <ol class="list-inside list-decimal">

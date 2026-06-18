@@ -21,7 +21,7 @@ class LocationsRelationManager extends RelationManager
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return Str::of($ownerRecord->name)->title().' List';
+        return Str::of($ownerRecord->name)->title() . ' ' . t('List');
     }
 
     public function isReadOnly(): bool
@@ -47,6 +47,7 @@ class LocationsRelationManager extends RelationManager
                 // location name should be uniqeu per team, as other teams may have the same location name.
                 // ignore the current record to allow user update current record with same location name
                 Forms\Components\TextInput::make('name')
+                    ->label(t('Name'))
                     ->required()
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
                         return $rule->where('owner_id', HelperService::getCurrentOwner()->id);
@@ -56,6 +57,7 @@ class LocationsRelationManager extends RelationManager
                 // location code should be unique per team, as other teams may have the same location code
                 // ignore the current record to allow user update current record with same location code
                 Forms\Components\TextInput::make('code')
+                    ->label(t('Code'))
                     ->required()
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
                         return $rule->where('owner_id', HelperService::getCurrentOwner()->id);
@@ -87,7 +89,7 @@ class LocationsRelationManager extends RelationManager
         $columns[] = Tables\Columns\TextColumn::make('code');
 
         $columns[] = Tables\Columns\TextColumn::make('farms_all_count')
-            ->label('# of Farms');
+            ->label(fn () => t('# of Farms'));
 
         return $table
             ->recordTitleAttribute('name')
@@ -95,7 +97,7 @@ class LocationsRelationManager extends RelationManager
             ->filters($filters)
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->label(fn () => 'Add new '.$this->getOwnerRecord()->name),
+                    ->label(fn () => t('Add new') . ' ' . $this->getOwnerRecord()->name),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

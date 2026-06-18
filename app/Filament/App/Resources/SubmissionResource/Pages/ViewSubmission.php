@@ -51,7 +51,7 @@ class ViewSubmission extends ViewRecord
         return [
             Actions\Action::make('edit_on_central')
                 ->openUrlInNewTab(true)
-                ->label('Edit Submission')
+                ->label(fn () => t('Edit Submission'))
                 ->modalWidth('2xl')
                 ->modalDescription(fn (): HtmlString => new HtmlString('
 

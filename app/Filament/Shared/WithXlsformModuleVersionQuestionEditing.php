@@ -65,7 +65,7 @@ trait WithXlsformModuleVersionQuestionEditing
         $questionForm = [
             Hidden::make('xlsform_module_version_id')->default($xlsformModuleVersion->id)->live(),
             Hidden::make('id'),
-            Fieldset::make('Question Information')
+            Fieldset::make(t('Question Information'))
                 ->columns([
                     'sm' => 1,
                     'md' => 2,
@@ -103,8 +103,8 @@ trait WithXlsformModuleVersionQuestionEditing
                         })
                         ->live(onBlur: true)
                         ->required(),
-                    TextInput::make('name')->label('Variable Name')->live()->required()
-                        ->helperText('The variable name should only have alphanumeric characters or underscores. Any spaces will be automatically replaced with underscores when saving this question.')
+                    TextInput::make('name')->label(t('Variable Name'))->live()->required()
+                        ->helperText(t('The variable name should only have alphanumeric characters or underscores. Any spaces will be automatically replaced with underscores when saving this question.'))
                         ->dehydrateStateUsing(fn($state): string => Str::lower(Str::slug($state, separator: '_'))),
                     Repeater::make('languageStrings')
                         ->extraAttributes(['class' => 'inline-repeater'])
@@ -127,7 +127,7 @@ trait WithXlsformModuleVersionQuestionEditing
                         ->live(onBlur: true),
 
                 ])->live(onBlur: true),
-            Fieldset::make('Choice List')
+            Fieldset::make(t('Choice List'))
                 ->columns([
                     'sm' => 1,
                     'md' => 1,
@@ -143,12 +143,12 @@ trait WithXlsformModuleVersionQuestionEditing
                         ->dehydrateStateUsing(fn(Get $get) => $get('../name') . '_choices_' . Str::random(8)),
                     Repeater::make('choiceListEntries')
                         ->relationship('choiceListEntries')
-                        ->label('Options list for the select question')
+                        ->label(t('Options list for the select question'))
                         ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
                         ->schema([
                             TextInput::make('name')
-                                ->label('Option name')
-                                ->helperText('This is the "name" column in ODK, and is the value that appears in the data when the option is selected')
+                                ->label(t('Option name'))
+                                ->helperText(t('This is the "name" column in ODK, and is the value that appears in the data when the option is selected'))
                                 ->required(),
                             Hidden::make('owner_id')->default(HelperService::getCurrentOwner()->id),
                             Repeater::make('languageStrings')
@@ -183,17 +183,16 @@ trait WithXlsformModuleVersionQuestionEditing
                     ->orderBy('row_number'),
             )
             ->columns([
-                TextColumn::make('type')->label('Question Type'),
-                TextColumn::make('name')->label('Variable Name')->wrap(),
-                // fix to show default label as string instead of a JSON array
-                TextColumn::make('defaultLabel.text')->label('Default Label'),
+                TextColumn::make('type')->label(fn () => t('Question Type')),
+                TextColumn::make('name')->label(fn () => t('Variable Name'))->wrap(),
+                TextColumn::make('defaultLabel.text')->label(fn () => t('Default Label')),
             ])
             // allow user to change the ordering by drag and drop
             ->reorderable('row_number')
             ->reorderRecordsTriggerAction(
                 fn(Action $action, bool $isReordering) => $action
                     ->button()
-                    ->label($isReordering ? 'Disable reordering' : 'Enable reordering')
+                    ->label($isReordering ? t('Disable reordering') : t('Enable reordering'))
                     ->extraAttributes(['class' => 'buttona border-0 !ring-0 !shadow-none -ml-2  mb-4'])
                     ->icon(fn(self $livewire) => $livewire->processing ? 'heroicon-o-arrow-path' : 'heroicon-m-plus')
                     ->disabled(fn(self $livewire) => $livewire->processing ?? false)
@@ -203,13 +202,13 @@ trait WithXlsformModuleVersionQuestionEditing
             // add "create new record" button in table header
             ->headerActions([
                 CreateAction::make()
-                    ->label('ADD QUESTION')
+                    ->label(fn () => t('ADD QUESTION'))
                     ->icon(fn(self $livewire) => $livewire->processing ? 'heroicon-o-arrow-path' : 'heroicon-m-plus')
                     ->button()
                     ->color('danger')
                     ->extraAttributes(['class' => 'add_questions_btn'])
                     ->modalWidth(MaxWidth::SevenExtraLarge)
-                    ->modalHeading('ADD QUESTION')
+                    ->modalHeading(fn () => t('ADD QUESTION'))
                     ->extraModalWindowAttributes(['class' => 'add_questions_modal'])
                     ->modalSubmitAction(fn(StaticAction $action) => $action
                         ->extraAttributes(['class' => 'buttona shadow-none !ring-0 border-0']))
@@ -224,7 +223,7 @@ trait WithXlsformModuleVersionQuestionEditing
             ->actions([
 
                 Action::make('view_edit_question')
-                    ->label('EDIT QUESTION')
+                    ->label(fn () => t('EDIT QUESTION'))
                     ->icon('heroicon-m-pencil')
                     ->extraAttributes(['class' => 'py-2 shadow-none'])
                     ->extraModalWindowAttributes(['class' => 'add_questions_modal'])
@@ -239,7 +238,7 @@ trait WithXlsformModuleVersionQuestionEditing
                     // when we start using survey_rows.path for matching submissions to SurveyRow entries,
                     // we will need to create a new column as a flag for indication
                     ->disabled(fn(self $livewire, SurveyRow $record) => $record->path != null || $livewire->processing)
-                    ->tooltip(fn(SurveyRow $record) => $record->path == null ? 'You cannot directly edit questions created via an Excel Import. Please download the template above and edit the question inside Excel' : '')
+                    ->tooltip(fn(SurveyRow $record) => $record->path == null ? t('You cannot directly edit questions created via an Excel Import. Please download the template above and edit the question inside Excel') : '')
                     // set more horizontal space for modal popup
                     ->modalWidth(MaxWidth::SevenExtraLarge)
                     // fill the form with existing data
@@ -256,10 +255,10 @@ trait WithXlsformModuleVersionQuestionEditing
 
                 // add "DELETE QUESTION" button in table row instead of inside modal popup
                 DeleteAction::make()
-                    ->label('DELETE QUESTION')
+                    ->label(fn () => t('DELETE QUESTION'))
                     ->extraAttributes(['class' => 'py-2 shadow-none'])
                     ->button()
-                    ->modalHeading('Delete Question')
+                    ->modalHeading(fn () => t('Delete Question'))
                     ->action(function (DeleteAction $action) {
 
                         $choiceList = $action->process(static fn(Model $record) => $record->choiceList);

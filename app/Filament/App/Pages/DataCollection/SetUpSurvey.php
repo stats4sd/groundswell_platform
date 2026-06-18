@@ -33,7 +33,15 @@ class SetUpSurvey extends Page implements HasActions, HasForms
         return auth()->user()->can('view set up the survey');
     }
 
-    protected ?string $heading = 'Set up the survey';
+    public function getTitle(): string
+    {
+        return t('Set up the survey');
+    }
+
+    public function getHeading(): string
+    {
+        return t('Set up the survey');
+    }
 
     public Team $team;
 
@@ -72,7 +80,7 @@ class SetUpSurvey extends Page implements HasActions, HasForms
     {
         return Action::make('markPilotComplete')
             ->extraAttributes(['class' => 'buttona'])
-            ->label('Switch to live data collection')
+            ->label(fn () => t('Switch to live data collection'))
             ->visible(fn () => auth()->user()->can('maintain set up the survey'))
             ->action(function () {
                 if (!auth()->user()->can('maintain set up the survey')) {
@@ -89,10 +97,10 @@ class SetUpSurvey extends Page implements HasActions, HasForms
     {
         return Action::make('markPilotIncomplete')
             ->extraAttributes(['class' => 'buttonb'])
-            ->label('Return to pilot testing mode')
-            ->modalHeading('Are you sure?')
-            ->modalDescription('Any data collected while the pilot is in progress will be marked as "test" data, and not included in your final dataset by default')
-            ->modalSubmitActionLabel('Yes, return to pilot test')
+            ->label(fn () => t('Return to pilot testing mode'))
+            ->modalHeading(fn () => t('Are you sure?'))
+            ->modalDescription(fn () => t('Any data collected while the pilot is in progress will be marked as "test" data, and not included in your final dataset by default'))
+            ->modalSubmitActionLabel(fn () => t('Yes, return to pilot test'))
             ->visible(fn () => auth()->user()->can('maintain set up the survey'))
             ->action(function () {
                 if (!auth()->user()->can('maintain set up the survey')) {

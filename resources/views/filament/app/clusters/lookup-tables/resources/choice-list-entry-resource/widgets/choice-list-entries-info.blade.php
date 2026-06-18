@@ -11,7 +11,8 @@
     <x-filament::section class="mb-4" :heading="$choiceListName">
         {{ $choiceList->description ?? t("The list below includes a set of possible responses to some of the survey questions. Please review the list and make sure it is appropriate for your context. You may add new entries and remove existing entries if they are not relevant.") }}
     </x-filament::section>
-    <x-filament::section collapsed heading="Questions that use this list" icon="heroicon-o-information-circle" collapsible>
+    @php $questionsHeading = t('Questions that use this list'); @endphp
+    <x-filament::section collapsed :heading="$questionsHeading" icon="heroicon-o-information-circle" collapsible>
 
         <ul>
             <li class="flex w-full border-b mb-2">
