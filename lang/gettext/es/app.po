@@ -7,14 +7,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-18T14:25:56+00:00\n"
-"PO-Revision-Date: 2026-06-18 14:25+0000\n"
+"POT-Creation-Date: 2026-06-22T17:56:55+00:00\n"
+"PO-Revision-Date: 2026-06-22 17:56+0000\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:27
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:61
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:51
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:56
 msgid "Contextualise choice lists"
 msgstr ""
 
@@ -27,7 +27,7 @@ msgstr ""
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:59
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:66
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:53
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:93
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:96
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:76
 #: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:42
 #: app\Filament\App\Pages\SurveyDashboard.php:31
@@ -44,7 +44,7 @@ msgid "Survey Dashboard"
 msgstr ""
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:60
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:94
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:97
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:77
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:182
 msgid "Place-based adaptations"
@@ -392,7 +392,7 @@ msgstr "Código"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:92
 msgid "# of Farms"
-msgstr ""
+msgstr "N.º de granjas"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:69
 msgid "Is this location level a sub-level of another level?"
@@ -547,7 +547,7 @@ msgstr ""
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:186
 msgid "# Questions"
-msgstr ""
+msgstr "# Preguntas"
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:188
 msgid "In Survey"
@@ -572,9 +572,13 @@ msgstr ""
 msgid "Localisation: Pilot"
 msgstr ""
 
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:41
+msgid "Localisation: HDDS hints"
+msgstr ""
+
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:45
 #: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:46
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:64
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:69
 msgid "Initial Pilot"
 msgstr ""
 
@@ -778,11 +782,11 @@ msgstr ""
 
 #: app\Filament\App\Resources\TeamResource.php:66
 msgid "# Users"
-msgstr ""
+msgstr "# Usuarios"
 
 #: app\Filament\App\Resources\TeamResource.php:70
 msgid "# Invites"
-msgstr ""
+msgstr "# Invitaciones"
 
 #: app\Filament\App\Resources\TeamResource.php:78
 msgid "Created At"
@@ -1019,11 +1023,11 @@ msgstr ""
 msgid "View / Edit Translation for"
 msgstr ""
 
-#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:65
+#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:67
 msgid "Download existing translations"
 msgstr ""
 
-#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:77
+#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:79
 msgid "Download empty translation template"
 msgstr ""
 
@@ -1856,22 +1860,31 @@ msgstr ""
 msgid "Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. Youi will be prompted to update the translation of your survey in future steps."
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:52
-msgid "Adapt units, crops, and other choice list entries to be locally relevant."
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:43
+msgid "Adapt HDDS hints"
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:53
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:44
+msgid "Adjust the help text shown for Household Dietary Diversity questions for each language."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:45
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:58
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:34
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:42
 #: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:18
 msgid "Update"
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:65
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:57
+msgid "Adapt units, crops, and other choice list entries to be locally relevant."
+msgstr ""
+
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:70
 msgid "Initial piloting should be conducted to check the sense and functionality of the survey."
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:66
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:71
 msgid "View details"
 msgstr ""
 

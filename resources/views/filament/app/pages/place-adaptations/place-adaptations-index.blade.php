@@ -37,10 +37,15 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
 
             @php $currentTeam = \App\Services\HelperService::getCurrentOwner(); @endphp
             @if($currentTeam?->hddsModuleVersion())
+                @php
+                    $hddsHeading = t('Adapt HDDS hints');
+                    $hddsDescription = t('Adjust the help text shown for Household Dietary Diversity questions for each language.');
+                    $hddsUpdateLabel = t('Update');
+                @endphp
                 <x-rounded-section
-                    heading='Adapt HDDS hints'
-                    description='Adjust the help text shown for Household Dietary Diversity questions for each language.'
-                    buttonLabel='Update'
+                    :heading="$hddsHeading"
+                    :description="$hddsDescription"
+                    :buttonLabel="$hddsUpdateLabel"
                     :url="\App\Filament\App\Pages\PlaceAdaptations\HddsHints::getUrl()"/>
             @endif
 

@@ -36,7 +36,10 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
 
     protected static string $view = 'filament.app.pages.place-adaptations.hdds-hints';
 
-    protected static ?string $title = 'Localisation: HDDS hints';
+    public function getTitle(): string
+    {
+        return t('Localisation: HDDS hints');
+    }
 
     public Team $team;
 
