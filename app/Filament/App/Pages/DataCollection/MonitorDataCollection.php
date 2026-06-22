@@ -16,8 +16,10 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Livewire\Attributes\Url;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 
 class MonitorDataCollection extends Page implements HasActions, HasForms
 {
@@ -38,20 +40,7 @@ class MonitorDataCollection extends Page implements HasActions, HasForms
     }
 
     public Team $team;
-
-    #[Url]
-    public ?int $locationLevelId = null;
-
-    #[Url]
-    public ?string $table = null;
-
-    #[Url]
-    public ?array $tableFilters;
-
-    public int $householdSubmissionCount;
-    public int $fieldworkSubmissionCount;
-    public int $completeFarmCount;
-    public int $nonConsentingFarmCount;
+    public Collection $shinyData;
 
     public function getMaxContentWidth(): MaxWidth
     {
@@ -60,26 +49,37 @@ class MonitorDataCollection extends Page implements HasActions, HasForms
 
     public function mount(): void
     {
-        /** @var Team team */
         $this->team = HelperService::getCurrentOwner();
 
-        // summary
+        // get the forms or nulls:
+        $xlsforms = $this->team->xlsforms()->get();
 
-        $this->householdSubmissionCount = Submission::onlyRealData()
-            ->whereHas('xlsformVersion', fn(Builder $query) => $query->whereHas('xlsform', fn(Builder $query) => $query->whereLike('title', '%HOLPA Household Form%')))->count();
-
-        $this->fieldworkSubmissionCount = Submission::onlyRealData()
-            ->whereHas('xlsformVersion', fn(Builder $query) => $query->whereHas('xlsform', fn(Builder $query) => $query->whereLike('title', '%HOLPA Fieldwork Form%')))->count();
+        $regForm = $xlsforms->filter(fn(Xlsform $xlsform): bool => str_contains(strtolower($xlsform->title), 'reg'))->first();
+        $indicatorForm = $xlsforms->filter(fn(Xlsform $xlsform): bool => str_contains(strtolower($xlsform->title), 'indicators'))->first();
+        $womensForm = $xlsforms->filter(fn(Xlsform $xlsform): bool => str_contains(strtolower($xlsform->title), 'womens'))->first();
 
 
-        $this->completeFarmCount = $this->team->farms()
-            ->where('household_form_completed', true)
-            ->where('fieldwork_form_completed', true)
-            ->count();
 
-        $this->nonConsentingFarmCount = $this->team->farms()
-            ->where('refused', true)
-            ->count();
+        $this->shinyData = collect([
+
+        ### Temporarily don't send this information - use the shiny .env vars instead for demo
+
+
+            'odk_project_id' => $this->team->odkProject->id,
+
+            # 'reg_form_xml_id' => $regForm->odk_id ?? null,
+            # 'reg_form_enketo_id' => $regForm->enketo_id ?? null,
+
+            # 'indicators_form_xml_id' => $indicatorForm->odk_id ?? null,
+            # 'indicators_form_enketo_id' => $regForm->enketo_id ?? null,
+
+            # 'womens_form_xml_id' => $womensForm->odk_id ?? null,
+            # 'womens_form_enketo_id' => $womensForm->enketo_id ?? null,
+
+            'language' => app()->getLocale(),
+        ]);
+
+
     }
 
     public function getBreadcrumbs(): array
@@ -88,12 +88,6 @@ class MonitorDataCollection extends Page implements HasActions, HasForms
             SurveyDashboard::getUrl() => t('Survey Dashboard'),
             static::getUrl() => t('Monitor Data Collection'),
         ];
-    }
-
-    public function showTable(string $table, ?int $locationLevelId = null)
-    {
-        $this->locationLevelId = $locationLevelId;
-        $this->table = $table;
     }
 
 }
