@@ -7,8 +7,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-22T17:56:55+00:00\n"
-"PO-Revision-Date: 2026-06-22 17:56+0000\n"
+"POT-Creation-Date: 2026-06-22T18:27:58+00:00\n"
+"PO-Revision-Date: 2026-06-22 18:27+0000\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
@@ -93,6 +93,8 @@ msgstr "Ajouter des étiquettes pour les langues suivantes :"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:148
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:166
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:111
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:167
 msgid "Label"
 msgstr "Étiquette"
 
@@ -575,6 +577,27 @@ msgstr "Localisation : projet pilote"
 #: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:41
 msgid "Localisation: HDDS hints"
 msgstr "Localisation : conseils HDDS"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:117
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:170
+msgid "Hint"
+msgstr "Conseil"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:129
+msgid "Type"
+msgstr "Type"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:130
+msgid "Variable name"
+msgstr "Nom de la variable"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:151
+msgid "EDIT HINTS"
+msgstr "MODIFIER LES CONSEILS"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:152
+msgid "Edit hints"
+msgstr "Modifier les conseils"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:45
 #: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:46

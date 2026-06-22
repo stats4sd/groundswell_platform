@@ -31,7 +31,7 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
                 <p>
                     <b>{{ t('You are customising the survey for this project only.') }}</b>
                 </p>
-                <p>{{ t('Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. Youi will be prompted to update the translation of your survey in future steps.') }}
+                <p>{!! t('Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. Youi will be prompted to update the translation of your survey in future steps.') !!}
                 </p>
             </div>
 

@@ -112,7 +112,7 @@ $instructions = tfile('pilot-index');
 
                                 <br/><br/>
 
-                                {{ t("If there are changes that can be published, you can do so by clicking the <b>Publish</b> button on the table below. We highly recommend reviewing the forms as DRAFT versions before publishing. You can do so on the") }}
+                                {!! t("If there are changes that can be published, you can do so by clicking the <b>Publish</b> button on the table below. We highly recommend reviewing the forms as DRAFT versions before publishing. You can do so on the") !!}
                                 <a class="font-semibold text-green" href="{{ \App\Filament\App\Pages\PlaceAdaptations\InitialPilot::getUrl() }}">{{ t("Initial Pilot Page") }}</a>.
 
                             </div>
