@@ -7,8 +7,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-22T18:27:58+00:00\n"
-"PO-Revision-Date: 2026-06-22 18:27+0000\n"
+"POT-Creation-Date: 2026-06-22T18:39:47+00:00\n"
+"PO-Revision-Date: 2026-06-22 18:39+0000\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
@@ -623,10 +623,13 @@ msgid "Test on ODK Central"
 msgstr "Test sur ODK Central"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:133
+#: app\Livewire\XlsformsTableView.php:91
 msgid "Manually Get Submissions"
 msgstr "Récupérer manuellement les soumissions"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:148
+#: app\Livewire\XlsformsTableView.php:84
+#: app\Livewire\XlsformsTableView.php:123
 msgid "Success!"
 msgstr "C'est réussi !"
 
@@ -998,7 +1001,7 @@ msgid "E.g. \"Portuguese (Brazil)\""
 msgstr "Par exemple : « Portugais (Brésil) »"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:88
-#: app\Livewire\XlsformsTableView.php:62
+#: app\Livewire\XlsformsTableView.php:63
 msgid "Status"
 msgstr "Etat"
 
@@ -1053,6 +1056,51 @@ msgstr "Télécharger les traductions existantes"
 #: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:79
 msgid "Download empty translation template"
 msgstr "Télécharger un modèle de traduction vierge"
+
+#: app\Livewire\XlsformsTableView.php:44
+msgid "Title"
+msgstr "Titre"
+
+#: app\Livewire\XlsformsTableView.php:62
+msgid "updates available to publish"
+msgstr "mises à jour disponibles pour publication"
+
+#: app\Livewire\XlsformsTableView.php:66
+#: app\Livewire\XlsformsTableView.php:68
+msgid "No. of Submissions"
+msgstr "Nombre de soumissions"
+
+#: app\Livewire\XlsformsTableView.php:66
+msgid "in ODK Central"
+msgstr "dans ODK Central"
+
+#: app\Livewire\XlsformsTableView.php:68
+msgid "in database"
+msgstr "dans la base de données"
+
+#: app\Livewire\XlsformsTableView.php:77
+msgid "Publish changes"
+msgstr "Publier les modifications"
+
+#: app\Livewire\XlsformsTableView.php:85
+msgid "The form :title is being compiled and will be deployed shortly."
+msgstr "Le formulaire :title est en cours de compilation et sera mis en ligne sous peu."
+
+#: app\Livewire\XlsformsTableView.php:98
+msgid "Form publishing started"
+msgstr "La publication du formulaire a commencé"
+
+#: app\Livewire\XlsformsTableView.php:99
+msgid ":count submissions have been pulled from the ODK server for the form :title (they may take a moment to process)."
+msgstr "Les soumissions :count ont été récupérées depuis le serveur ODK pour le formulaire :title (leur traitement peut prendre quelques instants)."
+
+#: app\Livewire\XlsformsTableView.php:109
+msgid "Download Submissions"
+msgstr "Télécharger les soumissions"
+
+#: app\Livewire\XlsformsTableView.php:124
+msgid "The form has been published successfully."
+msgstr "Le formulaire a bien été envoyé."
 
 #: app\Providers\Filament\AppPanelProvider.php:171
 msgid "Admin Panel"
