@@ -51,7 +51,7 @@
                             collapsed
                             @class([
                                 'rounded border my-1',
-                                'bg-gray-200 border-gray-400 global-module cursor-not-allowed opacity-75' => $module->xlsform_module_id !== null,
+                                '!bg-gray-200 border-gray-400 global-module cursor-not-allowed opacity-75' => $module->xlsform_module_id !== null,
                                 'bg-white border-slate-400 cursor-grab' => $module->xlsform_module_id === null,
                             ])
                         >
