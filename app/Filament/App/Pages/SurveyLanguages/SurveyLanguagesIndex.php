@@ -53,7 +53,7 @@ class SurveyLanguagesIndex extends Page
             'subheading' => $this->getSubheading(),
             'actions' => $this->getHeaderActions(),
             'breadcrumbs' => $this->getBreadcrumbs(),
-            'summary' => $this->summary,
+            'summary' => $this->getSummary(),
         ]);
     }
 

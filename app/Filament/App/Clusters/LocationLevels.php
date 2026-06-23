@@ -12,4 +12,14 @@ class LocationLevels extends Cluster
     {
         return false;
     }
+
+    public static function getClusterBreadcrumb(): ?string
+    {
+        return t('Location Levels');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return t('Location Levels');
+    }
 }

@@ -42,8 +42,8 @@ class SubmissionsTableView extends Component implements HasActions, HasForms, Ha
     public function table(Table $table): Table
     {
         return $table
-            ->heading(fn() => $this->test ? 'Pilot Test Submissions' : 'Survey Submissions')
-            ->description(fn() => $this->test ? 'These are the submissions that have been submitted during the pilot test. You can review them here, even after the pilot is complete.' : '')
+            ->heading(fn() => $this->test ? t('Pilot Test Submissions') : t('Survey Submissions'))
+            ->description(fn() => $this->test ? t('These are the submissions that have been submitted during the pilot test. You can review them here, even after the pilot is complete.') : '')
             ->groups([
                 \Filament\Tables\Grouping\Group::make('xlsformVersion.xlsform.title')->label('Form'),
                 Group::make('primary_data_subject_id')

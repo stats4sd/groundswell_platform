@@ -36,7 +36,10 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
 
     protected static string $view = 'filament.app.pages.place-adaptations.hdds-hints';
 
-    protected static ?string $title = 'Localisation: HDDS hints';
+    public function getTitle(): string
+    {
+        return t('Localisation: HDDS hints');
+    }
 
     public Team $team;
 
@@ -66,6 +69,24 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
             abort(404);
         }
 
+        // First visit: the team is still pointing at the global HDDS version.
+        // Clone it so their edits are isolated, then swap the pivot entries on
+        // all of this team's xlsforms to reference the new team-owned version.
+        if ($moduleVersion->owner_id !== $team->id) {
+            $globalVersion = $moduleVersion;
+            $moduleVersion = $globalVersion->cloneForTeam($team);
+
+            $xlsformIds = $team->xlsforms()->pluck('xlsforms.id');
+            foreach ($xlsformIds as $xlsformId) {
+                $linked = $globalVersion->xlsforms()->wherePivot('xlsform_id', $xlsformId)->first();
+                if ($linked) {
+                    $order = $linked->pivot->order;
+                    $globalVersion->xlsforms()->detach($xlsformId);
+                    $moduleVersion->xlsforms()->attach($xlsformId, ['order' => $order]);
+                }
+            }
+        }
+
         $this->xlsformModuleVersion = $moduleVersion->load('surveyRows.languageStrings');
     }
 
@@ -87,13 +108,13 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
 
         foreach ($locales as $locale) {
             $localeColumns[] = TextColumn::make("label_{$locale->id}")
-                ->label("Label — {$locale->language_label}")
+                ->label(t('Label') . " — {$locale->language_label}")
                 ->wrap()
                 ->weight(FontWeight::Bold)
                 ->state(fn (SurveyRow $record): ?string => $record->getLanguageString('label', $locale));
 
             $localeColumns[] = TextColumn::make("hint_{$locale->id}")
-                ->label("Hint — {$locale->language_label}")
+                ->label(t('Hint') . " — {$locale->language_label}")
                 ->wrap()
                 ->state(fn (SurveyRow $record): ?string => $record->getLanguageString('hint', $locale));
         }
@@ -105,8 +126,8 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
                     ->orderBy('row_number'),
             )
             ->columns([
-                TextColumn::make('type')->label('Type')->size(TextColumnSize::ExtraSmall),
-                TextColumn::make('name')->label('Variable name')->wrap()->size(TextColumnSize::ExtraSmall),
+                TextColumn::make('type')->label(t('Type'))->size(TextColumnSize::ExtraSmall),
+                TextColumn::make('name')->label(t('Variable name'))->wrap()->size(TextColumnSize::ExtraSmall),
                 ...$localeColumns,
             ])
             ->recordClasses(fn (SurveyRow $record): string => match ($record->type) {
@@ -127,8 +148,8 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
 
                         return true;
                     })
-                    ->label('EDIT HINTS')
-                    ->modalHeading('Edit hints')
+                    ->label(t('EDIT HINTS'))
+                    ->modalHeading(t('Edit hints'))
                     ->fillForm(function (SurveyRow $record) use ($locales): array {
                         $hints = [];
 
@@ -143,10 +164,10 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
                             ->columns(1)
                             ->schema([
                                 Placeholder::make("label_{$locale->id}")
-                                    ->label('Label')
+                                    ->label(t('Label'))
                                     ->content(fn (SurveyRow $record): ?string => $record->getLanguageString('label', $locale)),
                                 TextInput::make("hints.{$locale->id}")
-                                    ->label('Hint'),
+                                    ->label(t('Hint')),
                             ]),
                         $locales,
                     ))

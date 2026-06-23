@@ -41,14 +41,15 @@ class ImportLocationsAction extends ExcelImportAction
 
         $this
             ->modalWidth('3xl')
-            ->modalDescription('Import Locations from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings.');
+            ->modalHeading(fn () => t('Import Locations'))
+            ->modalDescription(fn () => t('Import Locations from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings.'));
     }
 
     protected function getDefaultForm(): array
     {
         return [
             FileUpload::make('upload')
-                ->label(fn ($livewire) => str($livewire->getRecord()->name)->plural()->title().' '.'Excel Data')
+                ->label(fn ($livewire) => str($livewire->getRecord()->name)->plural()->title().' '.t('Excel Data'))
                 ->disk($this->getDisk())
                 ->columns()
                 ->required()
@@ -63,7 +64,7 @@ class ImportLocationsAction extends ExcelImportAction
                     $set('header_columns', $headings ?? []);
                 }),
 
-            Section::make('Column Mapping')
+            Section::make(t('Column Mapping'))
                 ->columns(2)
                 ->schema(function ($livewire) {
                     $currentLevel = $livewire->getRecord();
@@ -77,12 +78,12 @@ class ImportLocationsAction extends ExcelImportAction
                     $parentQuestions = $parents->reverse()->map(callback: function ($parent) {
                         return collect([
                             Select::make("parent_{$parent->id}_code_column")
-                                ->label(fn ($livewire) => "Which column contains the {$parent->name} unique code?")
+                                ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('unique code?'))
                                 ->options(fn (Get $get) => $get('header_columns'))
                                 ->notIn(['na'])
                                 ->required(),
                             Select::make("parent_{$parent->id}_name_column")
-                                ->label(fn ($livewire) => "Which column contains the {$parent->name} name?")
+                                ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('name?'))
                                 ->options(fn (Get $get) => $get('header_columns'))
                                 ->notIn(['na'])
                                 ->required(),
@@ -91,12 +92,12 @@ class ImportLocationsAction extends ExcelImportAction
 
                     $currentLevelQuestions = collect([
                         Select::make('code_column')
-                            ->label(fn ($livewire) => "Which column contains the {$livewire->getRecord()->name} unique code?")
+                            ->label(fn ($livewire) => t('Which column contains the') . ' ' . $livewire->getRecord()->name . ' ' . t('unique code?'))
                             ->options(fn (Get $get) => $get('header_columns'))
                             ->notIn(['na'])
                             ->required(),
                         Select::make('name_column')
-                            ->label(fn ($livewire) => "Which column contains the {$livewire->getRecord()->name} name?")
+                            ->label(fn ($livewire) => t('Which column contains the') . ' ' . $livewire->getRecord()->name . ' ' . t('name?'))
                             ->options(fn (Get $get) => $get('header_columns'))
                             ->notIn(['na'])
                             ->required(),
@@ -106,16 +107,16 @@ class ImportLocationsAction extends ExcelImportAction
                 }),
 
             Select::make('override')
-                ->label('Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)')
+                ->label(t('Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)'))
                 ->options([
-                    'no' => 'No',
-                    'yes' => 'Yes',
+                    'no' => t('No'),
+                    'yes' => t('Yes'),
                 ])
-                ->helperText('If you select "No", all existing locations will be kept. If you select "Yes", all existing locations will be deleted and replaced with the data from this import.')
+                ->helperText(t('If you select "No", all existing locations will be kept. If you select "Yes", all existing locations will be deleted and replaced with the data from this import.'))
                 ->default('no'),
 
             Hidden::make('header_columns')
-                ->default(['na' => '~~upload a file to see the headers~~'])
+                ->default(['na' => t('Upload a file to see the headers')])
                 ->live(),
             Hidden::make('level')
                 ->default(fn ($livewire) => $livewire->getRecord()),

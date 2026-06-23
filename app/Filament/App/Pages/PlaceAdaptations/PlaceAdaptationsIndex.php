@@ -19,21 +19,27 @@ class PlaceAdaptationsIndex extends Page
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Localisation: Place-based adaptations';
-
     public static function canAccess(): bool
     {
         return auth()->user()->can('view place-based adaptations');
     }
 
-    protected ?string $summary = 'Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location.';
-
     protected $listeners = ['refreshPage' => '$refresh'];
+
+    public function getTitle(): string
+    {
+        return t('Localisation: Place-based adaptations');
+    }
+
+    public function getSummary(): string
+    {
+        return t('Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location.');
+    }
 
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
             static::getUrl() => static::getTitle(),
         ];
     }
@@ -50,7 +56,7 @@ class PlaceAdaptationsIndex extends Page
             'subheading' => $this->getSubheading(),
             'actions' => $this->getHeaderActions(),
             'breadcrumbs' => $this->getBreadcrumbs(),
-            'summary' => $this->summary,
+            'summary' => $this->getSummary(),
         ]);
     }
 }

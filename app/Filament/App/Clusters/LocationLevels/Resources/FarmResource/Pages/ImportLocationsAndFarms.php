@@ -38,6 +38,11 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
     protected static string $view = 'filament.app.clusters.location-levels.resources.farm-resource.pages.import-locations-and-farms';
 
+    public function getTitle(): string
+    {
+        return t('Import Locations and Farm List');
+    }
+
     public ?array $data = [];
 
     protected ?string $disk = null;
@@ -106,8 +111,8 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
         // send notification
         Notification::make()
-            ->title('Locations and farms are being imported.')
-            ->body('The file will be processed in the background and the data will appear below once complete. You may leave this page without interrupting this process.') // TODO: listen for server-side event nad refresh the list of farms when the import jobs complete!
+            ->title(t('Locations and farms are being imported.'))
+            ->body(t('The file will be processed in the background and the data will appear below once complete. You may leave this page without interrupting this process.'))
             ->success()
             ->send();
 
@@ -123,13 +128,13 @@ class ImportLocationsAndFarms extends Page implements HasForms
                 Wizard::make([
 
                     // Step 1
-                    Wizard\Step::make('Upload your farm list excel file')
+                    Wizard\Step::make(t('Upload your farm list excel file'))
                         ->schema([
 
                             // Question: is the file upload works for ExcelImportAction's subclass only?
                             FileUpload::make('upload')
-                                ->label('Location Levels and Farm List Excel Data')
-                                ->helperText('Please make sure your data is in the first worksheet of the Excel file, and that the first row contains the column headers.')
+                                ->label(t('Location Levels and Farm List Excel Data'))
+                                ->helperText(t('Please make sure your data is in the first worksheet of the Excel file, and that the first row contains the column headers.'))
                                 ->disk($this->getDisk())
                                 ->columns()
                                 ->required()
@@ -149,11 +154,11 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
 
                     // Step 2
-                    Wizard\Step::make('Map columns to location levels')
+                    Wizard\Step::make(t('Map columns to location levels'))
                         ->schema(
 
                             [
-                                Section::make('Column Mapping')
+                                Section::make(t('Column Mapping'))
                                     ->columns(2)
                                     ->schema(function ($livewire) {
 
@@ -169,12 +174,12 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                         $parentQuestions = $parents->reverse()->map(callback: function ($parent) {
                                             return collect([
                                                 Select::make("parent_{$parent->id}_code_column")
-                                                    ->label(fn($livewire) => "Which column contains the {$parent->name} unique code?")
+                                                    ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('unique code?'))
                                                     ->options(fn(Get $get) => $get('header_columns'))
                                                     ->notIn(['na'])
                                                     ->required(),
                                                 Select::make("parent_{$parent->id}_name_column")
-                                                    ->label(fn($livewire) => "Which column contains the {$parent->name} name?")
+                                                    ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('name?'))
                                                     ->options(fn(Get $get) => $get('header_columns'))
                                                     ->notIn(['na'])
                                                     ->required(),
@@ -183,12 +188,12 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
                                         $currentLevelQuestions = collect([
                                             Select::make('code_column')
-                                                ->label(fn($livewire) => "Which column contains the {$hasFarmLevel->name} unique code?")
+                                                ->label(t('Which column contains the') . ' ' . $hasFarmLevel->name . ' ' . t('unique code?'))
                                                 ->options(fn(Get $get) => $get('header_columns'))
                                                 ->notIn(['na'])
                                                 ->required(),
                                             Select::make('name_column')
-                                                ->label(fn($livewire) => "Which column contains the {$hasFarmLevel->name} name?")
+                                                ->label(t('Which column contains the') . ' ' . $hasFarmLevel->name . ' ' . t('name?'))
                                                 ->options(fn(Get $get) => $get('header_columns'))
                                                 ->notIn(['na'])
                                                 ->required(),
@@ -198,12 +203,12 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                     }),
 
                                 Select::make('override')
-                                    ->label('Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)')
+                                    ->label(t('Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)'))
                                     ->options([
-                                        'no' => 'No',
-                                        'yes' => 'Yes',
+                                        'no' => t('No'),
+                                        'yes' => t('Yes'),
                                     ])
-                                    ->helperText('If you select "No", all existing locations will be kept. If you select "Yes", all existing locations will be deleted and replaced with the data from this import.')
+                                    ->helperText(t('If you select "No", all existing locations will be kept. If you select "Yes", all existing locations will be deleted and replaced with the data from this import.'))
                                     ->default('no'),
 
                                 Hidden::make('header_columns')
@@ -225,47 +230,47 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
 
                     // Step 3
-                    Wizard\Step::make('Map columns to farm')
+                    Wizard\Step::make(t('Map columns to farm'))
                         ->schema([
 
                             Hidden::make('header_columns')
                                 ->default(['na' => '~~upload a file to see the column headers~~'])
                                 ->live(),
 
-                            Section::make('Location')
+                            Section::make(t('Location'))
                                 ->schema([
 
                                     // Question:
                                     // 1. can one team has more than one location levels that have farms?
                                     // 2. can we set default value to simplify the import process?
                                     Select::make('location_level_id')
-                                        ->label('Which location level are the farms linked to?')
+                                        ->label(t('Which location level are the farms linked to?'))
                                         ->options(
                                             LocationLevel::where('has_farms', true)->get()->pluck('name', 'id')
                                         )
-                                        ->placeholder('Select a location level')
-                                        ->helperText('For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places.')
+                                        ->placeholder(t('Select a location level'))
+                                        ->helperText(t('For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places.'))
                                         ->live(),
 
                                     Select::make('location_code_column')
                                         ->options(fn(Get $get) => $get('header_columns'))
-                                        ->label(fn(Get $get) => 'Which column contains the ' . (LocationLevel::find($get('location_level_id'))?->name ?? 'location') . ' unique code?')
-                                        ->placeholder('Select a column'),
+                                        ->label(fn(Get $get) => t('Which column contains the') . ' ' . (LocationLevel::find($get('location_level_id'))?->name ?? t('location')) . ' ' . t('unique code?'))
+                                        ->placeholder(t('Select a column')),
                                 ]),
 
-                            Section::make('Farm Information')
+                            Section::make(t('Farm Information'))
                                 ->columns(1)
                                 ->schema([
                                     Select::make('farm_code_column')
-                                        ->label('Which column contains the farm unique code?')
-                                        ->placeholder('Select a column')
-                                        ->helperText('e.g. farm_id or farm_code')
+                                        ->label(t('Which column contains the farm unique code?'))
+                                        ->placeholder(t('Select a column'))
+                                        ->helperText(t('e.g. farm_id or farm_code'))
                                         ->live()
                                         ->options(fn(Get $get) => $get('header_columns')),
 
                                     CheckboxList::make('farm_identifiers')
-                                        ->label('Are there any additional columns that contain identifiers for the farm? Tick all that apply.')
-                                        ->helperText('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.')
+                                        ->label(t('Are there any additional columns that contain identifiers for the farm? Tick all that apply.'))
+                                        ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.'))
                                         ->options(fn(Get $get): array => $get('header_columns'))
                                         ->disableOptionWhen(
                                             fn(string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
@@ -276,8 +281,8 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                         ->columnSpanFull(),
 
                                     CheckboxList::make('farm_properties')
-                                        ->label('Are there any additional columns that contain properties of the farm? Tick all that apply.')
-                                        ->helperText('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.')
+                                        ->label(t('Are there any additional columns that contain properties of the farm? Tick all that apply.'))
+                                        ->helperText(t('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.'))
                                         ->options(fn(Get $get) => $get('header_columns'))
                                         ->disableOptionWhen(
                                             fn(string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||

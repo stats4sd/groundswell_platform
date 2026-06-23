@@ -8,8 +8,6 @@ use App\Services\HelperService;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
-use Laravel\Sail\Console\Concerns\InteractsWithDockerComposeServices;
-
 class SurveyLocationsIndex extends Page
 {
 
@@ -21,14 +19,10 @@ class SurveyLocationsIndex extends Page
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Survey Locations';
-
     public static function canAccess(): bool
     {
         return auth()->user()->can('view survey locations');
     }
-
-    protected ?string $summary = 'Add the details of the farms you will visit, to allow the enumerators to carry out data collection.';
 
     protected $listeners = ['refreshPage' => '$refresh'];
 
@@ -57,7 +51,7 @@ class SurveyLocationsIndex extends Page
             'subheading' => $this->getSubheading(),
             'actions' => $this->getHeaderActions(),
             'breadcrumbs' => $this->getBreadcrumbs(),
-            'summary' => $this->summary,
+            'summary' => $this->getSummary(),
         ]);
     }
 

@@ -21,6 +21,16 @@ class FarmResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
+    public static function getModelLabel(): string
+    {
+        return t('Farm');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return t('Farms');
+    }
+
     protected static ?string $cluster = LocationLevels::class;
 
     protected static ?string $tenantOwnershipRelationshipName = 'owner';
@@ -38,50 +48,54 @@ class FarmResource extends Resource
                 Forms\Components\Hidden::make('owner_id')
             ->default(HelperService::getCurrentOwner()->id),
                 Forms\Components\Select::make('location_id')
-                    ->label('Select the ' . $locationLevelWithFarms->name . ' for this farm')
+                    ->label(t('Select the') . ' ' . $locationLevelWithFarms->name . ' ' . t('for this farm'))
                     ->options($locationLevelWithFarms->locations->pluck('name', 'id')),
 
                 Forms\Components\TextInput::make('team_code')
-                    ->label('Unique code')
-                    ->helperText('Please enter a unique code to identify this farm for your team')
+                    ->label(t('Unique code'))
+                    ->helperText(t('Please enter a unique code to identify this farm for your team'))
                     // team code should be unique per team, as other teams may have the same team code
                     ->unique(modifyRuleUsing: function (Unique $rule) {
                         return $rule->where('owner_id', HelperService::getCurrentOwner()->id);
                     })
                     ->maxLength(255),
 
-                Forms\Components\Section::make('Personally Identifiable information')
-                    ->description('This section lets you add any information about the farm or farmer that lets your enumerators personally identify the farm / farmer.')
+                Forms\Components\Section::make(t('Personally Identifiable information'))
+                    ->description(t('This section lets you add any information about the farm or farmer that lets your enumerators personally identify the farm / farmer.'))
                     ->schema([
                         Forms\Components\KeyValue::make('identifiers')
-                            ->hint('For example: farm name, name of household head, phone number, physical address.')
-                            ->helperText('Information added here will be available to your team through data downloads, and if required can be included in the ODK survey to help enumerators ensure they reach the correct farms. However, it will never be included in any final data products that are intended for sharing beyond your team, and no-one outside of your team will have access to it.'),
+                            ->hint(t('For example: farm name, name of household head, phone number, physical address.'))
+                            ->helperText(t('Information added here will be available to your team through data downloads, and if required can be included in the ODK survey to help enumerators ensure they reach the correct farms. However, it will never be included in any final data products that are intended for sharing beyond your team, and no-one outside of your team will have access to it.')),
                     ]),
 
-                Forms\Components\Section::make('Other Farm Information')
-                    ->description('This section lets you add information about the farm that is not personally identifiable.')
+                Forms\Components\Section::make(t('Other Farm Information'))
+                    ->description(t('This section lets you add information about the farm that is not personally identifiable.'))
                     ->schema([
                         Forms\Components\KeyValue::make('properties')
-                            ->hint('For example: gender of household head, active member of (name of your intervention project) - yes / no, farm typology information')
-                            ->helperText('The purpose of information here is to allow you to disaggregate results by these variables. For example, if you are interested in comparing results from farms that took part in a specific training activity with farms that did not take part, you should include that as a variable here. Variables entered here will be available in exported datasets so they can be used in your analysis.'),
+                            ->hint(t('For example: gender of household head, active member of (name of your intervention project) - yes / no, farm typology information'))
+                            ->helperText(t('The purpose of information here is to allow you to disaggregate results by these variables. For example, if you are interested in comparing results from farms that took part in a specific training activity with farms that did not take part, you should include that as a variable here. Variables entered here will be available in exported datasets so they can be used in your analysis.')),
                     ]),
 
-                Forms\Components\Section::make('GPS')
-                    ->description('Optionally, add the GPS co-ordinates for the farm')
+                Forms\Components\Section::make(t('GPS'))
+                    ->description(t('Optionally, add the GPS co-ordinates for the farm'))
                     ->schema([
                         Forms\Components\TextInput::make('latitude')
+                            ->label(t('Latitude'))
                             ->numeric()
                             ->minValue(-90)
                             ->maxValue(90),
                         Forms\Components\TextInput::make('longitude')
+                            ->label(t('Longitude'))
                             ->numeric()
                             ->minValue(-180)
                             ->maxValue(180),
                         Forms\Components\TextInput::make('altitude')
+                            ->label(t('Altitude'))
                             ->numeric()
                             ->minValue(-1240)
                             ->maxValue(60000),
                         Forms\Components\TextInput::make('accuracy')
+                            ->label(t('Accuracy'))
                             ->numeric(),
                     ])->columns(2),
 
@@ -116,7 +130,7 @@ class FarmResource extends Resource
         return $table
             ->columns([
                 ...$locationLevelColumns,
-                Tables\Columns\TextColumn::make('team_code')->label('Unique Code')
+                Tables\Columns\TextColumn::make('team_code')->label(fn () => t('Unique code'))
                     ->sortable()
                     ->searchable(),
                 ...$idColumns,

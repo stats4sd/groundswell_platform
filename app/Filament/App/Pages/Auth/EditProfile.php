@@ -60,18 +60,19 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
             'form' => $this->form(
                 $this->makeForm()
                     ->schema([
-                        Section::make('Profile Information')
+                        Section::make(fn () => t('Profile Information'))
                             ->schema([
                                 $this->getNameFormComponent()
                                     ->disabled(fn () => !auth()->user()->can('maintain my account')),
                                 $this->getEmailFormComponent()
                                     ->disabled(fn () => !auth()->user()->can('maintain my account')),
                             ]),
-                        Section::make('Change Password')
+                        Section::make(fn () => t('Change Password'))
                             ->columns(1)
                             ->schema([
                                 Shout::make('password-info')
-                                    ->content('To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password.'),
+                                    ->label(fn () => t('Password info'))
+                                    ->content(fn () => t('To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password.')),
                                 $this->getCurrentPasswordFormComponent()
                                     ->disabled(fn () => !auth()->user()->can('maintain my account')),
                                 $this->getPasswordFormComponent()
@@ -92,7 +93,7 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
     {
         // user should only enter current password when changing to a new password
         return TextInput::make('current_password')
-            ->label(__('Current Password'))
+            ->label(fn () => t('Current Password'))
             ->password()
             ->revealable(filament()->arePasswordsRevealable())
             // current password is required when new password is entered

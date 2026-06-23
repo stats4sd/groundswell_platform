@@ -166,12 +166,23 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     }
 
     /**
-     * The HDDS module version selected into this team's form(s), if any.
-     * The version is linked via the selected_xlsform_module_versions pivot, and
-     * the "HDDS" name lives on the related XlsformModule.
+     * The HDDS module version for this team.
+     *
+     * Returns the team-owned copy if one has been created (via the lazy clone
+     * on first HddsHints page visit). Falls back to the global version that is
+     * currently selected into the team's xlsforms, if any.
      */
     public function hddsModuleVersion(): ?XlsformModuleVersion
     {
+        $teamVersion = XlsformModuleVersion::query()
+            ->where('owner_id', $this->id)
+            ->whereHas('xlsformModule', fn ($q) => $q->where('name', 'HDDS'))
+            ->first();
+
+        if ($teamVersion) {
+            return $teamVersion;
+        }
+
         return XlsformModuleVersion::query()
             ->whereHas('xlsformModule', fn ($q) => $q->where('name', 'HDDS'))
             ->whereHas('xlsforms', fn ($q) => $q->where('owner_id', $this->id))

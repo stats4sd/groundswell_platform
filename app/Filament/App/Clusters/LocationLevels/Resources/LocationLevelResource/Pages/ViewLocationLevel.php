@@ -17,18 +17,21 @@ class ViewLocationLevel extends ViewRecord
 {
     protected static string $resource = LocationLevelResource::class;
 
-    protected ?string $heading = 'Survey locations';
+    public function getHeading(): string
+    {
+        return t('Survey locations');
+    }
 
     public function getSubheading(): string|Htmlable
     {
-        return 'List of '.Str::of($this->record->name)->plural()->title();
+        return t('List of') . ' ' . Str::of($this->record->name)->plural()->title();
     }
 
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            SurveyLocationsIndex::getUrl() => 'Survey locations',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLocationsIndex::getUrl() => t('Survey locations'),
             route('filament.app.location-levels.resources.location-levels.view', [
                 'tenant' => HelperService::getCurrentOwner()->id,
                 'record' => $this->record->slug,
@@ -42,7 +45,7 @@ class ViewLocationLevel extends ViewRecord
             ImportLocationsAction::make()
                 ->use(LocationImport::class)
                 ->color('primary')
-                ->label('Import '.Str::of($this->record->name)->plural()),
+                ->label(t('Import') . ' ' . Str::of($this->record->name)->plural()),
         ];
     }
 

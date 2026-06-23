@@ -41,6 +41,8 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public bool $canSave = false;
 
+    public bool $canMaintain = false;
+
     public function mount()
     {
         $this->form->fill($this->locale->toArray());
@@ -62,7 +64,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
                                     // download existing translations if they exist
                                     Actions\Action::make('download_' . $xlsformTemplate->id)
                                         // ->link()
-                                        ->label('Download existing translations')
+                                        ->label(t('Download existing translations'))
                                         ->extraAttributes(['class' => 'buttona w-full'])
                                         ->action(fn() => Excel::download(new XlsformTemplateTranslationsExport(
                                             $xlsformTemplate,
@@ -74,7 +76,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
                                     Actions\Action::make('download_' . $xlsformTemplate->id)
                                         ->extraAttributes(['class' => 'buttona w-full'])
                                         ->visible(fn() => $this->locale->is_editable)
-                                        ->label('Download empty translation template')
+                                        ->label(t('Download empty translation template'))
                                         ->action(fn() => Excel::download(new XlsformTemplateTranslationsExport($xlsformTemplate, $this->locale, withExistingStrings: true), "{$xlsformTemplate->title} translation - {$this->locale->language_label}.xlsx")),
                                 ]),
                                 SpatieMediaLibraryFileUpload::make('upload_for_template_' . $xlsformTemplate->id)

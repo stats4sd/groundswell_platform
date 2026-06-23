@@ -66,17 +66,18 @@ class LocationLevelResource extends Resource
         return $form
             ->schema([
                 Select::make('parent_id')
-                    ->label('Is this location level a sub-level of another level?')
-                    ->helperText('E.g. "Village" may be a sub-level of "District", and "District" may be a sub-level of "Province".')
+                    ->label(fn () => t('Is this location level a sub-level of another level?'))
+                    ->helperText(fn () => t('E.g. "Village" may be a sub-level of "District", and "District" may be a sub-level of "Province".'))
                     // exclude the current location level record, to prevent self-referencing loops
                     ->relationship('parent', 'name', ignoreRecord: true)
                     ->hidden(fn (?LocationLevel $record) => $record && $record->top_level === 1),
                 TextInput::make('name')
+                    ->label(fn () => t('Name'))
                     ->required()
                     ->maxLength(255),
                 Toggle::make('has_farms')
-                    ->label('Are there farms at this level?')
-                    ->helperText('Only say yes if there are farms directly at this location level, not in a lower location level. E.g. "Village" may have farms, but "District" may not.'),
+                    ->label(fn () => t('Are there farms at this level?'))
+                    ->helperText(fn () => t('Only say yes if there are farms directly at this location level, not in a lower location level. E.g. "Village" may have farms, but "District" may not.')),
                 Hidden::make('owner_id')
                     ->default(fn () => HelperService::getCurrentOwner()->id),
             ])->columns(1);
@@ -87,15 +88,18 @@ class LocationLevelResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label(fn () => t('Name'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('parent.name')
+                    ->label(fn () => t('Parent'))
                     ->sortable()
-                    ->placeholder('Top Level'),
+                    ->placeholder(fn () => t('Top Level')),
                 Tables\Columns\TextColumn::make('locations_count')
                     ->counts('locations')
-                    ->label('No. of Entries')
+                    ->label(fn () => t('No. of Entries'))
                     ->sortable(),
                 Tables\Columns\IconColumn::make('has_farms')
+                    ->label(fn () => t('Has farms'))
                     ->boolean()
                     ->sortable(),
             ])
@@ -121,10 +125,10 @@ class LocationLevelResource extends Resource
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            Section::make('Key Details')
+            Section::make(fn () => t('Key Details'))
                 ->schema([
-                    TextEntry::make('name')->label('Level'),
-                    TextEntry::make('parent.name')->label('Parent Level')->hidden(fn (LocationLevel $record) => $record->top_level === 1),
+                    TextEntry::make('name')->label(fn () => t('Level')),
+                    TextEntry::make('parent.name')->label(fn () => t('Parent Level'))->hidden(fn (LocationLevel $record) => $record->top_level === 1),
                 ]),
         ])
             ->columns(2);

@@ -20,16 +20,17 @@ class ListFarms extends ListRecords
 {
     protected static string $resource = FarmResource::class;
 
-    protected ?string $heading = 'Survey locations';
-
-    // protected ?string $subheading = 'List of farms';
+    public function getHeading(): string
+    {
+        return t('Survey locations');
+    }
 
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
-            SurveyLocationsIndex::getUrl() => 'Survey locations',
-            static::getUrl() => static::getTitle(),
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLocationsIndex::getUrl() => t('Survey locations'),
+            static::getUrl() => t('Farms'),
         ];
     }
 
@@ -46,9 +47,9 @@ class ListFarms extends ListRecords
 
             // add a button to divert to import custom page
             Actions\Action::make('import')
-                ->label('Import Locations and Farm List')
+                ->label(fn () => t('Import Locations and Farm List'))
                 ->extraAttributes(['class' => 'buttonb'])
-                ->tooltip('Use this if you have your location and farm data all in one spreadsheet.')
+                ->tooltip(fn () => t('Use this if you have your location and farm data all in one spreadsheet.'))
                 ->visible(fn () => auth()->user()->can('maintain list of farms'))
                 // disable if there is no location level with farms
                 ->disabled(fn() => HelperService::getCurrentOwner()->locationLevels()->where('has_farms', 1)->count() < 1)
@@ -57,12 +58,12 @@ class ListFarms extends ListRecords
             ImportFarmsAction::make()
                 ->color('primary')
                 ->extraAttributes(['class' => 'buttonb'])
-                ->tooltip('Use this if you have already added your locations')
+                ->tooltip(fn () => t('Use this if you have already added your locations'))
                 ->visible(fn () => auth()->user()->can('maintain list of farms'))
                 // disable if there is no location level with farms
                 ->disabled(fn() => HelperService::getCurrentOwner()->locationLevels()->where('has_farms', 1)->count() < 1)
                 ->use(FarmImport::class)
-                ->label('Import Farm list'),
+                ->label(fn () => t('Import Farm list')),
         ];
     }
 

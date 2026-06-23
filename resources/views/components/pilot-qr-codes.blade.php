@@ -7,12 +7,10 @@
 
 
         <div class="basis-3/4 px-12">
-            {{ t("Your project team has been setup. To link your Android device, install and open") }}
-            <b>{{ t("ODK Collect") }}</b>.
+            {!! t("Your project team has been setup. To link your Android device, install and open <b>ODK Collect.</b>") !!}
             {{ t("When asked for project details, scan the QR code on this page. Your device will be linked and you will have access to the forms listed below.") }}
             <br/><br/>
-            {{ t("Both forms will be available to you. The platform will automatically update the forms when you make local adaptations. If for some reason the survey is not fully up to date with your latest changes, you may manually deploy the latest version by clicking the") }}
-            <b>{{ t("Deploy") }}</b> {{ t("button in the table below.") }}
+            {!! t("Both forms will be available to you. The platform will automatically update the forms when you make local adaptations. If for some reason the survey is not fully up to date with your latest changes, you may manually deploy the latest version by clicking the <b>Deploy</b> button in the table below.") !!}
         </div>
 
     </div>

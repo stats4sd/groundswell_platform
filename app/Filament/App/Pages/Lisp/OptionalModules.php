@@ -25,11 +25,17 @@ class OptionalModules extends Page implements HasForms
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Localisation: Optional Modules';
+    public function getTitle(): string
+    {
+        return t('Localisation: Optional Modules');
+    }
 
     protected static string $view = 'filament.app.pages.lisp.optional-modules';
 
-    protected ?string $summary = 'Please select the optional modules to be included in your survey.';
+    public function getSummary(): string
+    {
+        return t('Please select the optional modules to be included in your survey.');
+    }
 
     public Team $team;
 
@@ -54,7 +60,7 @@ class OptionalModules extends Page implements HasForms
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey Dashboard',
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
             static::getUrl() => static::getTitle(),
         ];
     }
@@ -66,7 +72,7 @@ class OptionalModules extends Page implements HasForms
             'subheading'  => $this->getSubheading(),
             'actions'     => $this->getHeaderActions(),
             'breadcrumbs' => $this->getBreadcrumbs(),
-            'summary'     => $this->summary,
+            'summary'     => $this->getSummary(),
         ]);
     }
 
@@ -81,13 +87,13 @@ class OptionalModules extends Page implements HasForms
             ->statePath('data')
             ->schema([
                 Select::make('xlsform_id')
-                    ->label('Survey Form')
+                    ->label(fn () => t('Survey Form'))
                     ->options(fn () => $this->team->xlsforms()->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(function () {
                         $this->setupLists();
                     })
-                    ->placeholder('Select a survey form...')
+                    ->placeholder(fn () => t('Select a survey form...'))
                     ->required(),
             ]);
     }

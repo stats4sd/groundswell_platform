@@ -22,7 +22,10 @@ class ListChoiceListEntries extends ListRecords
 {
     protected static string $resource = ChoiceListEntryResource::class;
 
-    protected ?string $heading = 'Contextualise choice lists';
+    public function getHeading(): string
+    {
+        return t('Contextualise choice lists');
+    }
 
     #[Url]
     public string $choiceListName = '';
@@ -53,9 +56,9 @@ class ListChoiceListEntries extends ListRecords
     public function getBreadcrumbs(): array
     {
         return [
-            SurveyDashboard::getUrl() => 'Survey dashboard',
-            PlaceAdaptationsIndex::getUrl() => 'Place-based adaptations',
-            static::getUrl() => static::getHeading(),
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            PlaceAdaptationsIndex::getUrl() => t('Place-based adaptations'),
+            static::getUrl() => t('Contextualise choice lists'),
         ];
     }
 
@@ -72,13 +75,13 @@ class ListChoiceListEntries extends ListRecords
                     ->form(fn(Form $form) => $form->schema(fn() => $this->getResource()::getFormSchema($this->choiceList))),
                 DeleteAction::make()->visible(fn(ChoiceListEntry $record) => !$record->is_global_entry),
                 \Filament\Tables\Actions\Action::make('Toggle Removed')
-                    ->label(fn(ChoiceListEntry $record) => $record->isRemoved(HelperService::getCurrentOwner()) ? 'Restore to Context' : 'Remove from Context')
+                    ->label(fn(ChoiceListEntry $record) => $record->isRemoved(HelperService::getCurrentOwner()) ? t('Restore to Context') : t('Remove from Context'))
                     ->visible(fn(ChoiceListEntry $record) => $record->is_global_entry)
                     ->action(fn(ChoiceListEntry $record) => $record->toggleRemoved(HelperService::getCurrentOwner())),
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('Add new ' . Str::singular($this->choiceListName))
+                    ->label(fn () => t('Add new') . ' ' . Str::singular($this->choiceListName))
                     ->form(fn(Form $form) => $form
                         ->schema(fn() => $this->getResource()::getFormSchema($this->choiceList))),
                 ]);

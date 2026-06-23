@@ -23,8 +23,6 @@ class SurveyCountry extends Page implements HasForms
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Survey Country & Languages';
-
     public Team $team;
 
     public array $formData = [];
@@ -75,20 +73,20 @@ class SurveyCountry extends Page implements HasForms
                         // add validations
                         Select::make('region_id')
                             ->relationship('region', 'name')
-                            ->label(fn() => t('Select the region for this country'))
+                            ->label(t('Select the region for this country'))
                             ->required(),
                         TextInput::make('name')
-                            ->label(fn() => t('Enter the name of this country'))
+                            ->label(t('Enter the name of this country'))
                             ->required()
                             ->unique()
                             ->maxLength(255),
                         TextInput::make('iso_alpha2')
-                            ->label(fn() => t('Enter the ISO Alpha-2 code for this country'))
+                            ->label(t('Enter the ISO Alpha-2 code for this country'))
                             ->required()
                             ->unique()
                             ->maxLength(2),
                         TextInput::make('iso_alpha3')
-                            ->label(fn() => t('Enter the ISO Alpha-3 code for this country'))
+                            ->label(t('Enter the ISO Alpha-3 code for this country'))
                             ->required()
                             ->unique()
                             ->maxLength(3),
@@ -136,8 +134,7 @@ class SurveyCountry extends Page implements HasForms
         $syncData = [];
         foreach ($state['languages'] ?? [] as $langId) {
             $language = Language::find($langId);
-            $locale = $language->defaultLocale ?? $language->locales()->create(['is_default' => true]);
-            $syncData[$langId] = ['locale_id' => $locale->id];
+            $syncData[$langId] = ['locale_id' => $language->defaultLocale?->id];
         }
         $this->team->languages()->sync($syncData);
     }
