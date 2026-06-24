@@ -2,9 +2,9 @@
 
 namespace App\Filament\Admin\Resources\TeamResource\RelationManagers;
 
-use Awcodes\Shout\Components\Shout;
 use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Callout;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Teams\RelationManagers\UsersRelationManager as BaseUsersRelationManager;
@@ -17,9 +17,9 @@ class UsersRelationManager extends BaseUsersRelationManager
             ->headerActions([
                 Tables\Actions\Action::make('invite users')
                     ->form([
-                        Shout::make('info')
-                            ->type('info')
-                            ->content('Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address.')
+                        Callout::make()
+                            ->info()
+                            ->description('Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address.')
                             ->columnSpanFull(),
                         Forms\Components\Repeater::make('users')
                             ->label('Email Addresses to Invite')

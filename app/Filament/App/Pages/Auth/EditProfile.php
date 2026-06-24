@@ -2,10 +2,10 @@
 
 namespace App\Filament\App\Pages\Auth;
 
-use Awcodes\Shout\Components\Shout;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Callout;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\ConnectionException;
@@ -70,9 +70,9 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
                         Section::make(fn () => t('Change Password'))
                             ->columns(1)
                             ->schema([
-                                Shout::make('password-info')
-                                    ->label(fn () => t('Password info'))
-                                    ->content(fn () => t('To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password.')),
+                                Callout::make(fn () => t('Password info'))
+                                    ->info()
+                                    ->description(fn () => t('To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password.')),
                                 $this->getCurrentPasswordFormComponent()
                                     ->disabled(fn () => !auth()->user()->can('maintain my account')),
                                 $this->getPasswordFormComponent()
