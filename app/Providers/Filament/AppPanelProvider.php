@@ -150,7 +150,7 @@ class AppPanelProvider extends PanelProvider
             )
             ->renderHook(
                 PanelsRenderHook::TOPBAR_END,
-                fn() => view('languageSelector'),
+                fn () => view('languageSelector'),
             )
             ->middleware([
                 EncryptCookies::class,
@@ -169,28 +169,28 @@ class AppPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make()
-                    ->label(fn() => t('Survey Dashboard'))
+                    ->label(fn () => t('Survey Dashboard'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('survey-dashboard')),
                 NavigationItem::make()
-                    ->label(fn() => t('Admin Panel'))
+                    ->label(fn () => t('Admin Panel'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('admin'))
                     ->visible(fn () => auth()->user()->can('access admin panel')),
                 NavigationItem::make()
-                    ->label(fn() => t('Program Admin Panel'))
+                    ->label(fn () => t('Program Admin Panel'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('program'))
                     ->visible(fn () => auth()->user()->can('access program admin panel')),
                 NavigationItem::make()
-                ->label(fn() => t('My Team'))
-                ->icon('heroicon-o-home')
-                ->url(fn() => ViewTeam::getUrl(['record' => Filament::getTenant()])),
+                    ->label(fn () => t('My Team'))
+                    ->icon('heroicon-o-home')
+                    ->url(fn () => ViewTeam::getUrl(['record' => Filament::getTenant()])),
                 NavigationItem::make()
-                ->label(fn() => t('Download User Guide'))
-                ->icon('heroicon-o-arrow-down-tray')
-                ->url('#')
-                ->visible(fn () => auth()->user()->can('view download user guide')),
+                    ->label(fn () => t('Download User Guide'))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url('#')
+                    ->visible(fn () => auth()->user()->can('view download user guide')),
             ])
             ->tenantMenu(fn () => auth()->check() && auth()->user()->can('view team selection box'))
             ->darkMode(false)
@@ -198,6 +198,7 @@ class AppPanelProvider extends PanelProvider
             ->renderHook(PanelsRenderHook::SCRIPTS_BEFORE, fn () => view('filament.app.scripts'))
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()
+                    ->switchable(false)
                     ->enabled(env('ADMIN_PANEL_LOCAL_LOGINS_ENABLED', app()->environment('local')))
                     ->users(
                         collect(array_filter(array_map('trim', explode(',', (string) env('ADMIN_PANEL_LOCAL_LOGIN_EMAILS', '')))))

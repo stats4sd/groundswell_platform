@@ -508,6 +508,10 @@ fieldset {
     white-space: nowrap;
 }
 
+.fi-topbar-nav-groups .fi-topbar-item {
+    white-space: wrap;
+}
+
 /* Keep the right-hand cluster (user menu + language button) spaced and
    prevent the dropdown trigger from shrinking onto the avatar. */
 .fi-topbar-end {
