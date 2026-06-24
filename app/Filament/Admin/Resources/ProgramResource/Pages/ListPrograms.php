@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\ProgramResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Admin\Resources\ProgramResource;
 use Filament\Actions;
 
@@ -12,7 +13,7 @@ class ListPrograms extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resou
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

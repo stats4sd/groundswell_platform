@@ -2,6 +2,8 @@
 
 namespace App\Filament\App\Resources\TeamResource\Pages;
 
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use App\Filament\App\Resources\TeamResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
@@ -21,8 +23,8 @@ class ViewTeam extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make()
+            EditAction::make(),
+            DeleteAction::make()
                 ->modalDescription(fn () => t('WARNING: Please do not delete when there is actual survey data collected, as deletion is irreversible. Are you sure you would like to do this?'))
                 ->successRedirectUrl(url('/app')),
         ];

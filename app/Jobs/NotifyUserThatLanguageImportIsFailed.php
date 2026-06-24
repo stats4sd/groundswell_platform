@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\LanguageImportIsComplete;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -49,6 +50,6 @@ class NotifyUserThatLanguageImportIsFailed implements ShouldQueue
             ->persistent()
             ->send();
 
-        \App\Events\LanguageImportIsComplete::dispatch($this->locale->id, $this->xlsformTemplate->id, $this->user->id);
+        LanguageImportIsComplete::dispatch($this->locale->id, $this->xlsformTemplate->id, $this->user->id);
     }
 }

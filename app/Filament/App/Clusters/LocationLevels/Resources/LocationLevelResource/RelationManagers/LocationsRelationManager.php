@@ -2,10 +2,20 @@
 
 namespace App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Hidden;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Exception;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -29,11 +39,11 @@ class LocationsRelationManager extends RelationManager
         return false;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('parent_id')
+        return $schema
+            ->components([
+                Select::make('parent_id')
                     ->label(fn () => $this->getOwnerRecord()->parent->name)
                     ->relationship('parent', 'name', function ($query) {
                         $parent_location_level_id = $this->getOwnerRecord()->parent->id;
@@ -46,7 +56,7 @@ class LocationsRelationManager extends RelationManager
 
                 // location name should be uniqeu per team, as other teams may have the same location name.
                 // ignore the current record to allow user update current record with same location name
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label(t('Name'))
                     ->required()
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
@@ -56,7 +66,7 @@ class LocationsRelationManager extends RelationManager
 
                 // location code should be unique per team, as other teams may have the same location code
                 // ignore the current record to allow user update current record with same location code
-                Forms\Components\TextInput::make('code')
+                TextInput::make('code')
                     ->label(t('Code'))
                     ->required()
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
@@ -64,7 +74,7 @@ class LocationsRelationManager extends RelationManager
                     })
                     ->maxLength(255),
 
-                Forms\Components\Hidden::make('owner_id')
+                Hidden::make('owner_id')
                     ->default(HelperService::getCurrentOwner()->id)
             ])
             ->columns(1);
@@ -79,16 +89,16 @@ class LocationsRelationManager extends RelationManager
         $filters = [];
 
         if ($this->getOwnerRecord()->parent) {
-            $columns[] = Tables\Columns\TextColumn::make('parent.name')->label(fn () => $this->getOwnerRecord()->parent->name)->sortable();
-            $filters[] = Tables\Filters\SelectFilter::make('parent')
+            $columns[] = TextColumn::make('parent.name')->label(fn () => $this->getOwnerRecord()->parent->name)->sortable();
+            $filters[] = SelectFilter::make('parent')
                 ->label(fn () => $this->getOwnerRecord()->parent->name)
                 ->relationship('parent', 'name', fn (Builder $query) => $query->where('location_level_id', $this->getOwnerRecord()->parent->id));
         }
 
-        $columns[] = Tables\Columns\TextColumn::make('name')->label($this->getOwnerRecord()->name);
-        $columns[] = Tables\Columns\TextColumn::make('code');
+        $columns[] = TextColumn::make('name')->label($this->getOwnerRecord()->name);
+        $columns[] = TextColumn::make('code');
 
-        $columns[] = Tables\Columns\TextColumn::make('farms_all_count')
+        $columns[] = TextColumn::make('farms_all_count')
             ->label(fn () => t('# of Farms'));
 
         return $table
@@ -96,16 +106,16 @@ class LocationsRelationManager extends RelationManager
             ->columns($columns)
             ->filters($filters)
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label(fn () => t('Add new') . ' ' . $this->getOwnerRecord()->name),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -2,6 +2,8 @@
 
 namespace App\Filament\App\Resources\SubmissionResource\Pages;
 
+use Filament\Support\Enums\Width;
+use Filament\Actions\Action;
 use App\Filament\App\Resources\SubmissionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
@@ -17,9 +19,9 @@ class ViewSubmission extends ViewRecord
 {
     protected static string $resource = SubmissionResource::class;
 
-    protected static string $view = 'filament.app.resources.submission-resource.pages.view-submission';
+    protected string $view = 'filament.app.resources.submission-resource.pages.view-submission';
 
-    protected ?string $maxContentWidth = '7xl';
+    protected Width|string|null $maxContentWidth = '7xl';
 
     /** @var Collection<SurveyRow> */
     public Collection $surveyRows;
@@ -49,7 +51,7 @@ class ViewSubmission extends ViewRecord
     {
 
         return [
-            Actions\Action::make('edit_on_central')
+            Action::make('edit_on_central')
                 ->openUrlInNewTab(true)
                 ->label(fn () => t('Edit Submission'))
                 ->modalWidth('2xl')

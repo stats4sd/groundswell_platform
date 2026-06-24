@@ -2,26 +2,32 @@
 
 namespace App\Filament\App\Resources;
 
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
+use Filament\Schemas\Schema;
+use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions;
+use App\Filament\App\Resources\SubmissionResource\Pages\ViewSubmission;
 use App\Filament\App\Resources\SubmissionResource\Pages;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class SubmissionResource extends Resource
 {
-    protected static ?string $model = \Stats4sd\FilamentOdkLink\Models\OdkLink\Submission::class;
+    protected static ?string $model = Submission::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static bool $isScopedToTenant = false;
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -35,12 +41,12 @@ class SubmissionResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -55,8 +61,8 @@ class SubmissionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSubmissions::route('/'),
-            'view' => Pages\ViewSubmission::route('/{record}'),
+            'index' => ListSubmissions::route('/'),
+            'view' => ViewSubmission::route('/{record}'),
         ];
     }
 }

@@ -34,7 +34,7 @@ class CoverPage extends Component implements HasActions, HasForms
         return Action::make('registerInterest')
             ->extraAttributes(['class' => 'button bg-orange hover:bg-white b-white border-2 rounded-full px-4 py-2 text-white hover:text-orange font-semibold w-auto flex justify-center items-center text-center px-4 mx-2'])
             ->label(t('Register Interest'))
-            ->form([
+            ->schema([
                 Callout::make()
                     ->info()
                     ->description(t('Please fill in your details below - your email address will be used to contact you.')),

@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Clusters\Localisations\Resources;
 
+use Filament\Schemas\Components\Utilities\Get;
 use App\Filament\App\Clusters\Localisations;
 use App\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries;
 use App\Models\Team;
@@ -9,7 +10,6 @@ use App\Services\HelperService;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
 use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\IconColumn;
@@ -28,7 +28,7 @@ class ChoiceListEntryResource extends Resource
 {
     protected static ?string $model = ChoiceListEntry::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-list-bullet';
 
     protected static ?int $navigationSort = 2;
 
@@ -198,7 +198,7 @@ class ChoiceListEntryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ChoiceListEntryResource\Pages\ListChoiceListEntries::route('/'),
+            'index' => ListChoiceListEntries::route('/'),
         ];
     }
 }

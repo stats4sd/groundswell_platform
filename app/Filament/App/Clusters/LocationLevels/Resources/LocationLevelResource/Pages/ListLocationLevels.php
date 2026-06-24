@@ -12,7 +12,7 @@ class ListLocationLevels extends ListRecords
 {
     protected static string $resource = LocationLevelResource::class;
 
-    protected static string $view = 'filament.app.clusters.location-levels.resources.location-level-resource.pages.list-location-levels';
+    protected string $view = 'filament.app.clusters.location-levels.resources.location-level-resource.pages.list-location-levels';
 
     public function getHeading(): string
     {

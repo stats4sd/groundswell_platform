@@ -10,7 +10,7 @@ class ProgramPolicy
 {
     private function isProgramPanel(): bool
     {
-        return Filament::getCurrentPanel()?->getId() === 'program';
+        return Filament::getCurrentOrDefaultPanel()?->getId() === 'program';
     }
 
     // view permissions cover both panels:

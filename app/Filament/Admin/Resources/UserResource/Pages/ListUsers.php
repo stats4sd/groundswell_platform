@@ -2,6 +2,10 @@
 
 namespace App\Filament\Admin\Resources\UserResource\Pages;
 
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Get;
 use App\Filament\Admin\Resources\UserResource;
 use App\Models\Team;
 use Filament\Actions;
@@ -29,34 +33,34 @@ class ListUsers extends BaseListUsers
                                 ->info()
                                 ->description('Add the email address(es) of the user(s) you would like to invite with a role. An invitation will be sent to each address.')
                                 ->columnSpanFull(),
-                            Forms\Components\Repeater::make('users')
+                            Repeater::make('users')
                                 ->label('Email Addresses to Invite')
                                 ->schema([
-                                    Forms\Components\TextInput::make('email')
+                                    TextInput::make('email')
                                         ->email()
                                         ->required(),
 
-                                    Forms\Components\Select::make('role')
+                                    Select::make('role')
                                         ->relationship('roles', 'name')
                                         ->live()
                                         ->required(),
 
-                                    Forms\Components\Select::make('program_id')
+                                    Select::make('program_id')
                                         ->label('Program')
                                         ->options(fn () => Program::query()->pluck('name', 'id'))
                                         ->searchable()
                                         ->required()
-                                        ->visible(fn (Forms\Get $get) => in_array(
+                                        ->visible(fn (Get $get) => in_array(
                                             Role::find($get('role'))?->name,
                                             ['Program Admin', 'Program Viewer'],
                                         )),
 
-                                    Forms\Components\Select::make('team_id')
+                                    Select::make('team_id')
                                         ->label('Team')
                                         ->options(fn () => Team::query()->pluck('name', 'id'))
                                         ->searchable()
                                         ->required()
-                                        ->visible(fn (Forms\Get $get) => Role::find($get('role'))?->name === 'Team Admin'),
+                                        ->visible(fn (Get $get) => Role::find($get('role'))?->name === 'Team Admin'),
                                 ])
                                 ->reorderable(false)
                                 ->addActionLabel('Add Another Email Address'),

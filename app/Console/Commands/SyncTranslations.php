@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Tio\Laravel\Console\Commands\Sync;
 use Illuminate\Console\Command;
 
 class SyncTranslations extends Command
@@ -14,7 +15,7 @@ class SyncTranslations extends Command
     {
         try {
             $this->call(GenerateTranslationStubs::class);
-            $this->call(\Tio\Laravel\Console\Commands\Sync::class);
+            $this->call(Sync::class);
         } finally {
             foreach (glob(resource_path('text/*.php')) as $stub) {
                 unlink($stub);

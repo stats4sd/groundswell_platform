@@ -2,6 +2,7 @@
 
 namespace App\Filament\Program\ManageProgram;
 
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Livewire;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
@@ -25,17 +26,17 @@ class ManageProgram extends BaseManageProgram
                 Tabs::make('User Management')
                     ->contained(false)
                     ->tabs([
-                        Tabs\Tab::make('Projects')
+                        Tab::make('Projects')
                             ->schema([
                                 Livewire::make(ManageProgramProjects::class)
                                     ->key('manage-program-projects'),
                             ]),
-                        Tabs\Tab::make('Members')
+                        Tab::make('Members')
                             ->schema([
                                 Livewire::make(ManageProgramMembers::class)
                                     ->key('manage-program-members'),
                             ]),
-                        Tabs\Tab::make('Invites')
+                        Tab::make('Invites')
                             ->schema([
                                 Livewire::make(ManageProgramInvites::class)
                                     ->key('manage-program-invites'),

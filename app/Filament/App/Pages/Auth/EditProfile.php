@@ -2,8 +2,9 @@
 
 namespace App\Filament\App\Pages\Auth;
 
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Component;
+use Exception;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Callout;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -15,7 +16,7 @@ use Illuminate\Validation\Rules\Password;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithOdkCentralAccount;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
-class EditProfile extends \Filament\Pages\Auth\EditProfile
+class EditProfile extends \Filament\Auth\Pages\EditProfile
 {
 
     protected static ?string $navigationLabel = 'My Account';
@@ -42,7 +43,7 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getFormActions(): array
     {

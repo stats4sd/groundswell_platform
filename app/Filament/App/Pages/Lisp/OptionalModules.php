@@ -2,6 +2,10 @@
 
 namespace App\Filament\App\Pages\Lisp;
 
+use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\Width;
+use Filament\Schemas\Schema;
+use Filament\Actions\Action;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\Shared\WithCompletionStatusBar;
 use App\Models\Team;
@@ -9,10 +13,7 @@ use App\Services\HelperService;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -37,7 +38,7 @@ class OptionalModules extends Page implements HasForms, HasTable
         return t('Localisation: Optional Modules');
     }
 
-    protected static string $view = 'filament.app.pages.lisp.optional-modules';
+    protected string $view = 'filament.app.pages.lisp.optional-modules';
 
     public function getSummary(): string
     {
@@ -68,7 +69,7 @@ class OptionalModules extends Page implements HasForms, HasTable
         ];
     }
 
-    public function getHeader(): ?\Illuminate\Contracts\View\View
+    public function getHeader(): ?View
     {
         return view('components.small-header', [
             'heading'     => $this->getHeading(),
@@ -79,14 +80,14 @@ class OptionalModules extends Page implements HasForms, HasTable
         ]);
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->statePath('data')
             ->schema([
                 Select::make('xlsform_id')
@@ -189,7 +190,7 @@ class OptionalModules extends Page implements HasForms, HasTable
                     ->boolean()
                     ->state(fn (XlsformModuleVersion $record): bool => $this->isSelected($record)),
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('add')
                     ->label(fn () => t('Add to Survey'))
                     ->icon('heroicon-o-plus-circle')

@@ -2,18 +2,18 @@
 
 namespace App\Filament\App\Pages\SurveyLanguages;
 
+use Filament\Support\Enums\Width;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Models\Team;
 use App\Services\HelperService;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Collection;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Language;
 
 class SurveyTranslations extends Page
 {
-    protected static string $view = 'filament.app.pages.survey-languages.survey-translations';
+    protected string $view = 'filament.app.pages.survey-languages.survey-translations';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -45,9 +45,9 @@ class SurveyTranslations extends Page
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
     public function mount(): void

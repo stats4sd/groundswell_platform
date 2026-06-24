@@ -2,14 +2,18 @@
 
 namespace App\Livewire\SurveyLanguages;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
+use Illuminate\Contracts\View\View;
+use Filament\Actions\Action;
+use Filament\Support\Enums\Width;
+use Closure;
 use App\Models\Team;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -44,7 +48,7 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
         $this->selectedLocale = Locale::find($this->language->pivot->locale_id);
     }
 
-    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\View\View|null
+    public function render(): Factory|Application|View|\Illuminate\View\View|null
     {
         return view('livewire.survey-languages.team-translation-entry');
     }
@@ -73,7 +77,7 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                             ->disabled(fn (Locale $record) => $record->is_default == 1)
 
                             ->modalHeading(fn (Locale $record) => t('Update Translation Label for') . ' ' . $record->description)
-                            ->form([
+                            ->schema([
                                 TextInput::make('description')
                                     ->label(fn () => t('Enter a new label for the translation'))
                                     ->helperText(fn () => t('E.g. "Portuguese (Brazil)"')),
@@ -103,7 +107,7 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                     ->extraAttributes(['class' => 'buttonb my-4 shadow-none !py-21'])
                     ->icon('heroicon-o-plus-circle')
                     ->visible(fn () => auth()->user()->can('maintain survey translations'))
-                    ->form([
+                    ->schema([
                         TextInput::make('description')
                             ->label(t('Enter a label for the translation'))
                             ->helperText(t('E.g. "Portuguese (Brazil)"'))
@@ -120,7 +124,7 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                         ]);
                     }),
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('Select')
                     ->extraAttributes(['class' => ' mx-auto'])
                     ->icon(fn (Locale $record) => $record->id === $this->selectedLocale?->id ? 'heroicon-o-check-circle' : '')
@@ -144,7 +148,7 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
                         'team' => $this->team,
                         'canMaintain' => auth()->user()->can('maintain survey translations'),
                     ]))
-                    ->modalWidth(MaxWidth::SixExtraLarge)
+                    ->modalWidth(Width::SixExtraLarge)
                     ->extraModalWindowAttributes(['class' => 'py-4 px-10'])
                     ->modalSubmitAction(false)
                     ->modalCancelAction(false),
@@ -155,9 +159,9 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
     #[On('closeModal')]
     public function closeModal() {}
 
-    public function validateFileUpload(array $upload, Locale $record, XlsformTemplate $xlsformTemplate): \Closure
+    public function validateFileUpload(array $upload, Locale $record, XlsformTemplate $xlsformTemplate): Closure
     {
-        return function (string $attribute, string $value, \Closure $fail) use ($upload, $record, $xlsformTemplate) {
+        return function (string $attribute, string $value, Closure $fail) use ($upload, $record, $xlsformTemplate) {
 
             $file = collect($upload)->first();
 

@@ -2,13 +2,13 @@
 
 namespace App\Livewire;
 
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use App\Filament\App\Resources\SubmissionResource;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -45,11 +45,11 @@ class SubmissionsTableView extends Component implements HasActions, HasForms, Ha
             ->heading(fn() => $this->test ? t('Pilot Test Submissions') : t('Survey Submissions'))
             ->description(fn() => $this->test ? t('These are the submissions that have been submitted during the pilot test. You can review them here, even after the pilot is complete.') : '')
             ->groups([
-                \Filament\Tables\Grouping\Group::make('xlsformVersion.xlsform.title')->label('Form'),
+                Group::make('xlsformVersion.xlsform.title')->label('Form'),
                 Group::make('primary_data_subject_id')
                     ->label('Farm ID'),
             ])
-            ->defaultGroup(\Filament\Tables\Grouping\Group::make('xlsformVersion.xlsform.title')->label(''))
+            ->defaultGroup(Group::make('xlsformVersion.xlsform.title')->label(''))
             ->query(fn() => Submission::whereHas('xlsformVersion',
                 fn($query) => $query->whereHas('xlsform',
                     fn($query) => $query->where('owner_id', HelperService::getCurrentOwner()->id)
@@ -64,13 +64,13 @@ class SubmissionsTableView extends Component implements HasActions, HasForms, Ha
                     ->label('Updated at'),
 
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('view')
                     ->label('View Raw Data')
                     ->icon('heroicon-o-eye')
                     ->url(fn(Submission $record) => SubmissionResource::getUrl('view', ['record' => $record])),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkAction::make('toggle_live')
                     ->label(function() {
 

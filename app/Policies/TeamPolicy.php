@@ -10,7 +10,7 @@ class TeamPolicy
 {
     private function isAppPanel(): bool
     {
-        return Filament::getCurrentPanel()?->getId() === 'app';
+        return Filament::getCurrentOrDefaultPanel()?->getId() === 'app';
     }
 
     public function viewAny(User $user): bool

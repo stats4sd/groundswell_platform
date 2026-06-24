@@ -2,6 +2,13 @@
 
 namespace App\Filament\Admin\Resources;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\RestoreAction;
+use Filament\Tables\Filters\TrashedFilter;
+use App\Filament\Admin\Resources\TeamResource\Pages\ListTeams;
+use App\Filament\Admin\Resources\TeamResource\Pages\CreateTeam;
+use App\Filament\Admin\Resources\TeamResource\Pages\EditTeam;
+use App\Filament\Admin\Resources\TeamResource\Pages\ViewTeam;
 use App\Filament\Admin\Resources\TeamResource\Pages;
 use App\Filament\Admin\Resources\TeamResource\RelationManagers\XlsformsRelationManager;
 use App\Models\Team;
@@ -21,46 +28,46 @@ class TeamResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resou
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('programs.name')
+                TextColumn::make('programs.name')
                     ->searchable()
                     ->badge()
                     ->color('success')
                     ->visible(config('filament-team-management.use_programs')),
-                Tables\Columns\TextColumn::make('users_count')
+                TextColumn::make('users_count')
                     ->label('# Users')
                     ->counts('users')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('invites_count')
+                TextColumn::make('invites_count')
                     ->label('# Invites')
                     ->counts('invites')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('xlsforms_count')
+                TextColumn::make('xlsforms_count')
                     ->label('# Xlsforms')
                     ->counts('xlsforms')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->sortable(),
             ])
-            ->actions([
-                Tables\Actions\ForceDeleteAction::make()
+            ->recordActions([
+                ForceDeleteAction::make()
                 ->modalDescription('WARNING: Force Deleting a team will permanently remove all associated data, including users, xlsforms, and any survey data collected through this platform. This action is irreversible. Please ensure that you have backed up any important data before proceeding. Are you sure you would like to force delete this team?'),
-                Tables\Actions\RestoreAction::make()
+                RestoreAction::make()
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTeams::route('/'),
-            'create' => Pages\CreateTeam::route('/create'),
-            'edit' => Pages\EditTeam::route('/{record}/edit'),
-            'view' => Pages\ViewTeam::route('/{record}'),
+            'index' => ListTeams::route('/'),
+            'create' => CreateTeam::route('/create'),
+            'edit' => EditTeam::route('/{record}/edit'),
+            'view' => ViewTeam::route('/{record}'),
         ];
     }
 

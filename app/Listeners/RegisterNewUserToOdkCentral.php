@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use Throwable;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -31,7 +32,7 @@ class RegisterNewUserToOdkCentral
 
         try {
             $user->registerOnOdkCentral($event->data['original_password']);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e);
         }
     }

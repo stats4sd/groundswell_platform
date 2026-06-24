@@ -2,6 +2,13 @@
 
 namespace App\Filament\App\Resources\TeamResource\RelationManagers;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -27,26 +34,26 @@ class InvitesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('email')
             ->columns([
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label(t('Email'))
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('team.name')
+                TextColumn::make('team.name')
                     ->label(t('Team'))
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('inviter.name')
+                TextColumn::make('inviter.name')
                     ->label(t('Invited By'))
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_confirmed')
+                IconColumn::make('is_confirmed')
                     ->label(t('Confirmed'))
                     ->boolean()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(t('Invited At'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(t('Updated At'))
                     ->sortable(),
             ])
@@ -54,15 +61,15 @@ class InvitesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

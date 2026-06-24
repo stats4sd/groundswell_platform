@@ -2,10 +2,17 @@
 
 namespace App\Filament\App\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use App\Filament\App\Resources\TeamResource\Pages\ListTeams;
+use App\Filament\App\Resources\TeamResource\Pages\CreateTeam;
+use App\Filament\App\Resources\TeamResource\Pages\EditTeam;
+use App\Filament\App\Resources\TeamResource\Pages\ViewTeam;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,7 +25,7 @@ use App\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManage
 
 class TeamResource extends Resource
 {
-    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-building-office-2';
 
     // Teams are top-level entities — not children of the current tenant team.
     // Without this, Filament tries to associate a new team with the tenant via a
@@ -32,17 +39,17 @@ class TeamResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make(fn () => t('Team Details'))
+        return $schema
+            ->components([
+                Section::make(fn () => t('Team Details'))
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->label(fn () => t('Name'))
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\Textarea::make('description')
+                        Textarea::make('description')
                             ->label(fn () => t('Description'))
                     ]),
             ]);
@@ -52,21 +59,21 @@ class TeamResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(t('Name'))
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('programs.name')
+                TextColumn::make('programs.name')
                     ->label(t('Program'))
                     ->searchable()
                     ->badge()
                     ->color('success')
                     ->visible(config('filament-team-management.use_programs')),
-                Tables\Columns\TextColumn::make('users_count')
+                TextColumn::make('users_count')
                     ->label(fn() => t('# Users'))
                     ->counts('users')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('invites_count')
+                TextColumn::make('invites_count')
                     ->label(fn() => t('# Invites'))
                     ->counts('invites')
                     ->sortable(),
@@ -74,7 +81,7 @@ class TeamResource extends Resource
                 //     ->label('# Xlsforms')
                 //     ->counts('xlsforms')
                 //     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(t('Created At'))
                     ->sortable(),
             ]);
@@ -83,10 +90,10 @@ class TeamResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTeams::route('/'),
-            'create' => Pages\CreateTeam::route('/create'),
-            'edit' => Pages\EditTeam::route('/{record}/edit'),
-            'view' => Pages\ViewTeam::route('/{record}'),
+            'index' => ListTeams::route('/'),
+            'create' => CreateTeam::route('/create'),
+            'edit' => EditTeam::route('/{record}/edit'),
+            'view' => ViewTeam::route('/{record}'),
         ];
     }
 
@@ -99,10 +106,10 @@ class TeamResource extends Resource
         ];
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 TextEntry::make('description')->hiddenLabel(),
             ]);
     }

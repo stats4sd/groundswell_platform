@@ -2,6 +2,7 @@
 
 namespace App\Models\SampleFrame;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -41,12 +42,12 @@ class Location extends Model
         return $this->belongsTo(self::class, 'parent_id');
     }
 
-    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    public function farms(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function farms(): HasMany
     {
         return $this->hasMany(Farm::class);
     }

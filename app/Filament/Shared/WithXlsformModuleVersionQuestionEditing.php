@@ -2,18 +2,17 @@
 
 namespace App\Filament\Shared;
 
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
+use Filament\Support\Enums\Width;
+use Filament\Actions\DeleteAction;
 use App\Services\HelperService;
-use Filament\Actions\StaticAction;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
@@ -207,12 +206,12 @@ trait WithXlsformModuleVersionQuestionEditing
                     ->button()
                     ->color('danger')
                     ->extraAttributes(['class' => 'add_questions_btn'])
-                    ->modalWidth(MaxWidth::SevenExtraLarge)
+                    ->modalWidth(Width::SevenExtraLarge)
                     ->modalHeading(fn () => t('ADD QUESTION'))
                     ->extraModalWindowAttributes(['class' => 'add_questions_modal'])
-                    ->modalSubmitAction(fn(StaticAction $action) => $action
+                    ->modalSubmitAction(fn(Action $action) => $action
                         ->extraAttributes(['class' => 'buttona shadow-none !ring-0 border-0']))
-                    ->modalCancelAction(fn(StaticAction $action) => $action
+                    ->modalCancelAction(fn(Action $action) => $action
                         ->extraAttributes(['class' => 'buttonb shadow-none !ring-0 ']))
                     ->createAnother(false)
                     ->form($questionForm)
@@ -220,16 +219,16 @@ trait WithXlsformModuleVersionQuestionEditing
             ])
 
             // show form content in modal popup
-            ->actions([
+            ->recordActions([
 
                 Action::make('view_edit_question')
                     ->label(fn () => t('EDIT QUESTION'))
                     ->icon('heroicon-m-pencil')
                     ->extraAttributes(['class' => 'py-2 shadow-none'])
                     ->extraModalWindowAttributes(['class' => 'add_questions_modal'])
-                    ->modalSubmitAction(fn(StaticAction $action) => $action
+                    ->modalSubmitAction(fn(Action $action) => $action
                         ->extraAttributes(['class' => 'buttona shadow-none !ring-0 border-0']))
-                    ->modalCancelAction(fn(StaticAction $action) => $action
+                    ->modalCancelAction(fn(Action $action) => $action
                         ->extraAttributes(['class' => 'buttonb shadow-none !ring-0 ']))
                     ->button()
                     ->color('blue')
@@ -240,7 +239,7 @@ trait WithXlsformModuleVersionQuestionEditing
                     ->disabled(fn(self $livewire, SurveyRow $record) => $record->path != null || $livewire->processing)
                     ->tooltip(fn(SurveyRow $record) => $record->path == null ? t('You cannot directly edit questions created via an Excel Import. Please download the template above and edit the question inside Excel') : '')
                     // set more horizontal space for modal popup
-                    ->modalWidth(MaxWidth::SevenExtraLarge)
+                    ->modalWidth(Width::SevenExtraLarge)
                     // fill the form with existing data
                     ->fillForm(fn(SurveyRow $record): array => [
                         'xlsform_module_version_id' => $xlsformModuleVersion->id,
@@ -248,7 +247,7 @@ trait WithXlsformModuleVersionQuestionEditing
                         'type' => $record->type,
                         'name' => $record->name,
                     ])
-                    ->form($questionForm)
+                    ->schema($questionForm)
                     ->icon(fn(self $livewire) => $livewire->processing ? 'heroicon-o-arrow-path' : 'heroicon-o-pencil'),
 
 

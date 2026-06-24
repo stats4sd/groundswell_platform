@@ -2,6 +2,8 @@
 
 namespace App\Filament\App\Pages\SurveyLanguages;
 
+use Filament\Support\Enums\Width;
+use Filament\Schemas\Schema;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Models\Team;
 use App\Services\HelperService;
@@ -9,9 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 use Stats4sd\FilamentOdkLink\Models\Country;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Language;
 
@@ -19,7 +19,7 @@ class SurveyCountry extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string $view = 'filament.app.pages.survey-languages.survey-country';
+    protected string $view = 'filament.app.pages.survey-languages.survey-country';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -52,14 +52,14 @@ class SurveyCountry extends Page implements HasForms
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth|string|null
+    public function getMaxContentWidth(): Width|string|null
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->statePath('formData')
             ->model($this->team)
             ->schema([

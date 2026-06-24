@@ -11,7 +11,7 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\SurveyRow;
 
 class ChoiceListEntriesInfo extends Widget
 {
-    protected static string $view = 'filament.app.clusters.lookup-tables.resources.choice-list-entry-resource.widgets.choice-list-entries-info';
+    protected string $view = 'filament.app.clusters.lookup-tables.resources.choice-list-entry-resource.widgets.choice-list-entries-info';
 
     protected int|string|array $columnSpan = 'full';
 
