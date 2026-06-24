@@ -10,7 +10,6 @@
     "require": {
         "php": "^8.4",
         "althinect/filament-spatie-roles-permissions": "^2.2",
-        "awcodes/filament-table-repeater": "^v3.1.0",
         "dutchcodingcompany/filament-developer-logins": "^2.1",
         "eightynine/filament-excel-import": "3.x-dev",
         "filament/filament": "^3.3.3",
