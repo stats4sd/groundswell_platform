@@ -2,7 +2,6 @@
 
 namespace App\Filament\App\Pages\Auth;
 
-use BetterFuturesStudio\FilamentLocalLogins\Concerns\HasLocalLogins;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Checkbox;
@@ -19,8 +18,6 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithOdkCentralAccount;
 
 class Login extends \Filament\Pages\Auth\Login
 {
-    use HasLocalLogins;
-
     /**
      * @throws RequestException
      * @throws BindingResolutionException

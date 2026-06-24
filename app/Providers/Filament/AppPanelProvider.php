@@ -7,7 +7,7 @@ use App\Filament\App\Pages\Auth\Login;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\App\Resources\TeamResource\Pages\ViewTeam;
 use App\Models\Team;
-use BetterFuturesStudio\FilamentLocalLogins\LocalLogins;
+use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Exception;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
@@ -192,7 +192,13 @@ class AppPanelProvider extends PanelProvider
             ->topNavigation()
             ->renderHook(PanelsRenderHook::SCRIPTS_BEFORE, fn () => view('filament.app.scripts'))
             ->plugins([
-                new LocalLogins,
+                FilamentDeveloperLoginsPlugin::make()
+                    ->enabled(env('ADMIN_PANEL_LOCAL_LOGINS_ENABLED', app()->environment('local')))
+                    ->users(
+                        collect(array_filter(array_map('trim', explode(',', (string) env('ADMIN_PANEL_LOCAL_LOGIN_EMAILS', '')))))
+                            ->mapWithKeys(fn (string $email): array => [$email => $email])
+                            ->all()
+                    ),
             ]);
     }
 }
