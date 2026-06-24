@@ -127,8 +127,8 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
                     ->orderBy('row_number'),
             )
             ->columns([
-                TextColumn::make('type')->label(t('Type'))->size(TextColumnSize::ExtraSmall),
-                TextColumn::make('name')->label(t('Variable name'))->wrap()->size(TextColumnSize::ExtraSmall),
+                TextColumn::make('type')->label(t('Type'))->size(TextSize::ExtraSmall),
+                TextColumn::make('name')->label(t('Variable name'))->wrap()->size(TextSize::ExtraSmall),
                 ...$localeColumns,
             ])
             ->recordClasses(fn (SurveyRow $record): string => match ($record->type) {
