@@ -31,7 +31,9 @@
       "Bash(git ls-tree *)",
       "Bash(./vendor/bin/pest --compact)",
       "Bash(./vendor/bin/pest)",
-      "Bash(./vendor/bin/pest tests/Feature/Smoke/PublicRoutesTest.php)"
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/PublicRoutesTest.php)",
+      "Bash(./vendor/bin/pest --filter=ArchTest)",
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AdminPanelTest.php)"
     ]
   }
 }

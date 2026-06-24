@@ -8,11 +8,19 @@ return [
     'models' => [
 
         /**
-         * Tells the system which Team model in use.
-         * By default, it is "\Stats4sd\FilamentOdkLink\Models\TeamManagement\Team"
-         * User can define custom Team model in .env file config item "ODK_TEAM_MODEL"
+         * The single model type that owns forms / datasets / locales etc.
+         * The package has standardised on this key; it replaces the old polymorphic
+         * owner and the deprecated `team_model` key below.
+         */
+        'form_owner' => env('ODK_FORM_OWNER_MODEL', Team::class),
+
+        /**
+         * @deprecated The package no longer reads `team_model` — it uses `form_owner`.
+         * Kept only until the app's own migrations/code that still reference
+         * `models.team_model` have been moved over.
          */
         'team_model' => env('ODK_TEAM_MODEL', Team::class),
+
         'user_model' => env('ODK_USER_MODEL', User::class),
 
     ],
