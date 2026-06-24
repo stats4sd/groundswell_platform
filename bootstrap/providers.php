@@ -6,6 +6,5 @@ return [
     App\Providers\Filament\AppPanelProvider::class,
     App\Providers\Filament\ProgramPanelProvider::class,
     App\Providers\HorizonServiceProvider::class,
-    App\Providers\LivewireDiscoverServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
 ];
