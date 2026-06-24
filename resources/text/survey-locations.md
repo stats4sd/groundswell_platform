@@ -12,9 +12,9 @@ On the location levels page, you first need to add the names of the different le
 *   Indicate whether there are farms at this level - This means that they are within this level but not in a lower sub-level; for example, there are farms at the village level but not the province level.
 *   Click to create the level, or to create and immediately add another level.
 
-Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have the option to import them from an excel file or add them manually.
+Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have the option to import them from an Excel file or add them manually.
 
-To import locations, upload an excel spreadsheet with the required details:
+To import locations, upload an Excel spreadsheet with the required details:
 
 *   A column with the name of the location
 *   A column with the unique IDs for the locations. (These can be generated however you like, but each one must be unique)

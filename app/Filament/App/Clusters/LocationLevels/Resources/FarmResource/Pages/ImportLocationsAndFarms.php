@@ -250,7 +250,7 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                             LocationLevel::where('has_farms', true)->get()->pluck('name', 'id')
                                         )
                                         ->placeholder(t('Select a location level'))
-                                        ->helperText(t('For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places.'))
+                                        ->helperText(t('For many sampling strategies, this will be obvious (the lowest level). It may be less obvious when there are different hierarchies of locations in different places.'))
                                         ->live(),
 
                                     Select::make('location_code_column')
