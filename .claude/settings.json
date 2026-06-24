@@ -38,7 +38,13 @@
       "Bash(./vendor/bin/pest tests/Feature/Crud/AdminPanelCrudTest.php --filter=\"team\")",
       "Bash(./vendor/bin/pest tests/Feature/Smoke/AppPanelTest.php tests/Feature/Crud/AppPanelCrudTest.php)",
       "Bash(./vendor/bin/pest tests/Feature/Smoke/AppPanelTest.php --filter=\"monitor data collection\")",
-      "Bash(./vendor/bin/pest tests/Feature/Crud/AppPanelCrudTest.php --filter=\"can create location level|can bulk delete location level\")"
+      "Bash(./vendor/bin/pest tests/Feature/Crud/AppPanelCrudTest.php --filter=\"can create location level|can bulk delete location level\")",
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AdminPanelTest.php tests/Feature/Crud/AdminPanelCrudTest.php)",
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AdminPanelTest.php --verbose)",
+      "Bash(npm run *)",
+      "Bash(which node *)",
+      "Read(//Users/dave/.nvm/versions/node/**)",
+      "Bash(./vendor/bin/pest --version)"
     ]
   }
 }

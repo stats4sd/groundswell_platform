@@ -1,6 +1,32 @@
-@import '/vendor/filament/filament/resources/css/theme.css';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@config 'tailwind.config.js';
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+/* Tailwind v4 source detection — the Filament theme import disables automatic
+   detection (source(none)), so the host app must list its template sources. */
+@source '../../../../app/**/*.php';
+@source '../../../../resources/views/**/*.blade.php';
+@source '../../../../resources/js/**/*.{js,vue}';
+@source '../../../../vendor/filament/**/*.blade.php';
+@source '../../../../packages/*/src/**/*.php';
+@source '../../../../packages/*/resources/views/**/*.blade.php';
+
+/* Custom palette + font as Tailwind v4 theme tokens. These generate the
+   utilities (bg-green, text-brown, font-montserrat, …) the templates and the
+   rules below rely on, mapped to the CSS variables defined in :root. */
+@theme {
+    --font-montserrat: 'Montserrat', sans-serif;
+
+    --color-brown: var(--brown);
+    --color-green: var(--green);
+    --color-orange: var(--orange);
+    --color-blue: var(--blue);
+    --color-dark-orange: var(--dark-orange);
+    --color-light-orange: var(--light-orange);
+    --color-lightgreen: var(--lightgreen);
+    --color-light-grey: var(--light-grey);
+    --color-grey: var(--grey);
+    --color-hyellow: var(--hyellow);
+}
 
 :root {
     --brown: #392022;
@@ -148,7 +174,9 @@ button {
     text-decoration: none !important;
 }
 
-.buttonb{
+/* Defined as a Tailwind v4 @utility so it can be both used in markup and
+   pulled into other rules via @apply (see .fi-modal-slide-over-window .fi-btn). */
+@utility buttonb {
     @apply bg-orange font-semibold text-xs text-white py-2 px-4 rounded-full;
     text-transform: uppercase;
 }
@@ -605,7 +633,7 @@ blockquote {
 
 .instruction_panel .fi-modal-content {
     @apply px-12;
-    @apply gap-y-0 !important;
+    @apply gap-y-0!;
 }
 
 .instruction_panel p {

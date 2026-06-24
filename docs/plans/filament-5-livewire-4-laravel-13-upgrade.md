@@ -1,5 +1,7 @@
 # Upgrade: Filament 3→5, Livewire 3→4, Laravel 11→13 (single combined update)
 
+**Status:** In Progress. Steps 1–4 (package removals, constraint bumps, `composer update` to Filament 5.6.7 / Livewire 4.3.1 / Laravel 13.17.0, the v4+v5 codemods, manual breaking changes) landed in prior commits. **Step 5 (Tailwind v4 theme migration) and Step 6 (config) are now complete** — see [change-log](../change-logs/filament-5-tailwind-v4-theme-and-config.md); `npm run build` is green. Remaining: the **Validation / bug-fixing phase**. Test baseline after steps 5–6 is **14 failed / 71 passed** (unchanged by the frontend/config work — the failures are step-4-class app issues: `ComponentNotFoundException` on Admin CRUD, `ActionNotResolvableException` on App CRUD, `ViewException` in HddsHints, 500s on Admin/App smoke routes, 404 on the Program-panel `programs` route — to be fixed next).
+
 ## Context
 
 The platform runs Filament 3.3 / Livewire 3 / Laravel 11 (PHP already `^8.4`). The goal is Filament 5 + Livewire 4 + Laravel 13. The work is **mostly the Filament 3→4 jump** — Filament 4→5 is purely Livewire-4 compatibility (an automated script, no functional changes per the [v5 release notes](https://laravel-news.com/filament-5)), Livewire 3→4 is small, and Laravel 11→12→13 is a sequence of low-breakage steps ([Laravel 13](https://laravel.com/docs/13.x/releases) shipped with "zero breaking changes", min PHP 8.3 — already satisfied).
