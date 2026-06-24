@@ -9,7 +9,8 @@ use App\Filament\App\Resources\TeamResource\Pages\EditTeam;
 use App\Filament\App\Resources\TeamResource\Pages\ListTeams;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Http;
 
 describe('App panel CRUD — Team', function () {
@@ -64,11 +65,11 @@ describe('App panel CRUD — LocationLevel', function () {
         withAppTenant($this->team);
 
         livewire(ListLocationLevels::class)
-            ->callTableAction(\Filament\Tables\Actions\CreateAction::class, data: [
+            ->callTableAction(CreateAction::class, data: [
                 'name'     => 'Region',
                 'owner_id' => $this->team->id,
             ])
-            ->assertHasNoTableActionErrors();
+            ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('location_levels', ['name' => 'Region', 'owner_id' => $this->team->id]);
     });

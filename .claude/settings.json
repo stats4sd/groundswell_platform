@@ -44,7 +44,10 @@
       "Bash(npm run *)",
       "Bash(which node *)",
       "Read(//Users/dave/.nvm/versions/node/**)",
-      "Bash(./vendor/bin/pest --version)"
+      "Bash(./vendor/bin/pest --version)",
+      "Bash(./vendor/bin/pest --filter=\"xlsform templates list loads\")",
+      "Bash(./vendor/bin/pest tests/Feature/Crud/)",
+      "Bash(./vendor/bin/pest tests/Feature/Crud/AdminPanelCrudTest.php)"
     ]
   }
 }

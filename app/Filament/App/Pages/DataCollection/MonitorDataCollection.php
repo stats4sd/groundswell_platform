@@ -65,7 +65,8 @@ class MonitorDataCollection extends Page implements HasActions, HasForms
         ### Temporarily don't send this information - use the shiny .env vars instead for demo
 
 
-            'odk_project_id' => $this->team->odkProject->id,
+            'odk_project_id' => $this->team->odkProject?->id ?? 'none', // something must be passed for the monitoring shiny app to load properly.
+            // in the case where there is no odkProject, it's assumed that the shiny app then has an override in the .env file to load a specific odk project.
 
             # 'reg_form_xml_id' => $regForm->odk_id ?? null,
             # 'reg_form_enketo_id' => $regForm->enketo_id ?? null,
