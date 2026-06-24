@@ -7,16 +7,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-18T14:25:56+00:00\n"
-"PO-Revision-Date: 2026-06-18 14:25+0000\n"
+"POT-Creation-Date: 2026-06-24T11:45:07+00:00\n"
+"PO-Revision-Date: 2026-06-24 11:45+0000\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:27
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:61
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:51
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:56
 msgid "Contextualise choice lists"
-msgstr ""
+msgstr "Mettre en contexte les listes de choix"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:59
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:31
@@ -27,7 +27,7 @@ msgstr ""
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:59
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:66
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:53
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:93
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:96
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:76
 #: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:42
 #: app\Filament\App\Pages\SurveyDashboard.php:31
@@ -44,7 +44,7 @@ msgid "Survey Dashboard"
 msgstr "Tableau de bord des enquêtes"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:60
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:94
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:97
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:77
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:182
 msgid "Place-based adaptations"
@@ -52,29 +52,29 @@ msgstr "Adaptations liées au territoire"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:78
 msgid "Restore to Context"
-msgstr ""
+msgstr "Remettre dans son contexte"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:78
 msgid "Remove from Context"
-msgstr ""
+msgstr "Supprimer du contexte"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:84
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:100
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:102
 msgid "Add new"
-msgstr ""
+msgstr "Ajouter un nouvel élément"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:41
 msgid "choice list entry"
-msgstr ""
+msgstr "entrée de la liste de sélection"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:46
 msgid "choice list entries"
-msgstr ""
+msgstr "entrées de la liste de sélection"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:85
 msgid "Choice Lists"
-msgstr ""
+msgstr "Listes de choix"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:117
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:182
@@ -89,55 +89,57 @@ msgstr "Nom"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:124
 msgid "Add Labels for the following languages:"
-msgstr ""
+msgstr "Ajouter des étiquettes pour les langues suivantes :"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:148
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:166
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:111
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:167
 msgid "Label"
-msgstr ""
+msgstr "Étiquette"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:181
 msgid "List Name"
-msgstr ""
+msgstr "Nom de la liste"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:185
 msgid "Localised Entry"
-msgstr ""
+msgstr "Entrée localisée"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:43
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:50
 msgid "Import Locations and Farm List"
-msgstr ""
+msgstr "Importer les emplacements et la liste des exploitations agricoles"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:114
 msgid "Locations and farms are being imported."
-msgstr ""
+msgstr "Les lieux et les exploitations agricoles sont en cours d'importation."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:115
 msgid "The file will be processed in the background and the data will appear below once complete. You may leave this page without interrupting this process."
-msgstr ""
+msgstr "Le fichier sera traité en arrière-plan et les données s'afficheront ci-dessous une fois le traitement terminé. Vous pouvez quitter cette page sans interrompre ce processus."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:131
-msgid "Upload your farm list excel file"
-msgstr ""
+msgid "Upload your farm list Excel file"
+msgstr "Importez votre fichier Excel contenant la liste de vos exploitations agricoles"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:136
 msgid "Location Levels and Farm List Excel Data"
-msgstr ""
+msgstr "Données Excel relatives aux niveaux de localisation et à la liste des exploitations agricoles"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:137
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:66
 msgid "Please make sure your data is in the first worksheet of the Excel file, and that the first row contains the column headers."
-msgstr ""
+msgstr "Veuillez vous assurer que vos données se trouvent dans la première feuille de calcul du fichier Excel et que la première ligne contient les en-têtes de colonnes."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:157
 msgid "Map columns to location levels"
-msgstr ""
+msgstr "Mettre en correspondance les colonnes avec les niveaux de localisation"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:161
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:67
 msgid "Column Mapping"
-msgstr ""
+msgstr "Mappage des colonnes"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:177
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:182
@@ -150,7 +152,7 @@ msgstr ""
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:95
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:100
 msgid "Which column contains the"
-msgstr ""
+msgstr "Quelle colonne contient le"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:177
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:191
@@ -159,19 +161,19 @@ msgstr ""
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:81
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:95
 msgid "unique code?"
-msgstr ""
+msgstr "code unique ?"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:182
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:196
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:86
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:100
 msgid "name?"
-msgstr ""
+msgstr "nom ?"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:206
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:110
 msgid "Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)"
-msgstr ""
+msgstr "Souhaitez-vous remplacer tous les lieux par cette importation ? (Cela supprimera tous les lieux existants à tous les niveaux !)"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:208
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:112
@@ -186,78 +188,78 @@ msgstr "Oui"
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:211
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:115
 msgid "If you select \"No\", all existing locations will be kept. If you select \"Yes\", all existing locations will be deleted and replaced with the data from this import."
-msgstr ""
+msgstr "Si vous sélectionnez « Non », tous les lieux existants seront conservés. Si vous sélectionnez « Oui », tous les lieux existants seront supprimés et remplacés par les données issues de cette importation."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:233
 msgid "Map columns to farm"
-msgstr ""
+msgstr "Associer les colonnes à la ferme"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:240
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:86
 msgid "Location"
-msgstr ""
+msgstr "Localisation"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:247
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:89
 msgid "Which location level are the farms linked to?"
-msgstr ""
+msgstr "À quel niveau géographique les exploitations agricoles sont-elles rattachées ?"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:251
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:93
 msgid "Select a location level"
-msgstr ""
+msgstr "Sélectionnez un niveau de localisation"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:252
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:94
-msgid "For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places."
+msgid "For many sampling strategies, this will be obvious (the lowest level). It may be less obvious when there are different hierarchies of locations in different places."
 msgstr ""
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:257
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:99
 msgid "location"
-msgstr ""
+msgstr "emplacement"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:258
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:266
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:100
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:108
 msgid "Select a column"
-msgstr ""
+msgstr "Sélectionnez une colonne"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:261
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:103
 msgid "Farm Information"
-msgstr ""
+msgstr "Informations sur l'exploitation agricole"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:265
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:107
 msgid "Which column contains the farm unique code?"
-msgstr ""
+msgstr "Quelle colonne contient le code unique de la ferme ?"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:267
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:109
 msgid "e.g. farm_id or farm_code"
-msgstr ""
+msgstr "par exemple : farm_id ou farm_code"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:272
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:114
 msgid "Are there any additional columns that contain identifiers for the farm? Tick all that apply."
-msgstr ""
+msgstr "Y a-t-il d'autres colonnes contenant des identifiants pour la ferme ? Cochez toutes les cases correspondantes."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:273
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:115
 msgid "For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes."
-msgstr ""
+msgstr "Par exemple : nom de famille, nom de l'exploitation, numéros de téléphone, etc. Il s'agit de colonnes qui peuvent être utiles aux enquêteurs ou aux membres de l'équipe du projet pour identifier l'exploitation, mais qui ne doivent pas être communiquées en dehors du projet pour des raisons de protection des données."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:284
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:126
 msgid "Are there any additional columns that contain properties of the farm? Tick all that apply."
-msgstr ""
+msgstr "Y a-t-il d'autres colonnes contenant des propriétés de la ferme ? Cochez toutes les cases correspondantes."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:285
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:127
 msgid "These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes."
-msgstr ""
+msgstr "Il ne s'agit pas d'identifiants, mais de caractéristiques de l'exploitation utiles à des fins d'analyse. Par exemple : la taille de l'exploitation, l'année de la première intervention, etc. Ces colonnes peuvent éventuellement être partagées en dehors du projet à des fins d'analyse."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:25
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:32
@@ -271,96 +273,96 @@ msgstr "Lieux d'enquête"
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:33
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:31
 msgid "Farms"
-msgstr ""
+msgstr "Exploitations agricoles"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:52
 msgid "Use this if you have your location and farm data all in one spreadsheet."
-msgstr ""
+msgstr "Utilisez cette option si toutes vos données relatives à votre emplacement et à votre exploitation sont regroupées dans une seule feuille de calcul."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:61
 msgid "Use this if you have already added your locations"
-msgstr ""
+msgstr "Utilisez cette option si vous avez déjà ajouté vos lieux"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:66
 msgid "Import Farm list"
-msgstr ""
+msgstr "Importer la liste des exploitations agricoles"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:26
 msgid "Farm"
-msgstr ""
+msgstr "Exploitation agricole"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:51
 msgid "Select the"
-msgstr ""
+msgstr "Sélectionnez le"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:51
 msgid "for this farm"
-msgstr ""
+msgstr "pour cette exploitation agricole"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:55
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:133
 msgid "Unique code"
-msgstr ""
+msgstr "Code unique"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:56
 msgid "Please enter a unique code to identify this farm for your team"
-msgstr ""
+msgstr "Veuillez saisir un code unique permettant à votre équipe d'identifier cette exploitation agricole."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:63
 msgid "Personally Identifiable information"
-msgstr ""
+msgstr "Données à caractère personnel"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:64
 msgid "This section lets you add any information about the farm or farmer that lets your enumerators personally identify the farm / farmer."
-msgstr ""
+msgstr "Cette section vous permet d'ajouter toute information concernant l'exploitation ou l'agriculteur permettant à vos enquêteurs d'identifier personnellement l'exploitation ou l'agriculteur."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:67
 msgid "For example: farm name, name of household head, phone number, physical address."
-msgstr ""
+msgstr "Par exemple : nom de l'exploitation, nom du chef de famille, numéro de téléphone, adresse postale."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:68
 msgid "Information added here will be available to your team through data downloads, and if required can be included in the ODK survey to help enumerators ensure they reach the correct farms. However, it will never be included in any final data products that are intended for sharing beyond your team, and no-one outside of your team will have access to it."
-msgstr ""
+msgstr "Les informations ajoutées ici seront mises à la disposition de votre équipe via des téléchargements de données et, si nécessaire, pourront être intégrées à l'enquête ODK afin d'aider les enquêteurs à s'assurer qu'ils se rendent bien dans les bonnes exploitations agricoles. Toutefois, elles ne figureront jamais dans les produits de données finaux destinés à être partagés en dehors de votre équipe, et aucune personne extérieure à celle-ci n'y aura accès."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:71
 msgid "Other Farm Information"
-msgstr ""
+msgstr "Autres informations sur l'exploitation agricole"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:72
 msgid "This section lets you add information about the farm that is not personally identifiable."
-msgstr ""
+msgstr "Cette section vous permet d'ajouter des informations concernant la ferme qui ne permettent pas de vous identifier personnellement."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:75
 msgid "For example: gender of household head, active member of (name of your intervention project) - yes / no, farm typology information"
-msgstr ""
+msgstr "Par exemple : sexe du chef de famille, membre actif de (nom de votre projet d'intervention) - oui / non, informations sur la typologie de l'exploitation agricole"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:76
 msgid "The purpose of information here is to allow you to disaggregate results by these variables. For example, if you are interested in comparing results from farms that took part in a specific training activity with farms that did not take part, you should include that as a variable here. Variables entered here will be available in exported datasets so they can be used in your analysis."
-msgstr ""
+msgstr "Les informations fournies ici ont pour but de vous permettre de ventiler les résultats en fonction de ces variables. Par exemple, si vous souhaitez comparer les résultats des exploitations agricoles ayant participé à une formation spécifique avec ceux des exploitations n’y ayant pas participé, vous devez inclure cette variable ici. Les variables saisies ici seront disponibles dans les jeux de données exportés afin que vous puissiez les utiliser dans votre analyse."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:79
 msgid "GPS"
-msgstr ""
+msgstr "GPS"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:80
 msgid "Optionally, add the GPS co-ordinates for the farm"
-msgstr ""
+msgstr "Vous pouvez également indiquer les coordonnées GPS de l'exploitation agricole"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:83
 msgid "Latitude"
-msgstr ""
+msgstr "Latitude"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:88
 msgid "Longitude"
-msgstr ""
+msgstr "Longitude"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:93
 msgid "Altitude"
-msgstr ""
+msgstr "Altitude"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:98
 msgid "Accuracy"
-msgstr ""
+msgstr "Précision"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels.php:26
 #: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:31
@@ -372,71 +374,71 @@ msgstr "Lieux d'enquête"
 #: app\Filament\App\Clusters\LocationLevels.php:18
 #: app\Filament\App\Clusters\LocationLevels.php:23
 msgid "Location Levels"
-msgstr ""
+msgstr "Niveaux de localisation"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ViewLocationLevel.php:27
 msgid "List of"
-msgstr ""
+msgstr "Liste des"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ViewLocationLevel.php:48
 msgid "Import"
-msgstr ""
+msgstr "Importation"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:24
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:60
 msgid "Code"
-msgstr ""
+msgstr "Code"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:92
 msgid "# of Farms"
-msgstr ""
+msgstr "Nombre d'exploitations agricoles"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:69
 msgid "Is this location level a sub-level of another level?"
-msgstr ""
+msgstr "Ce niveau de localisation est-il un sous-niveau d'un autre niveau ?"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:70
 msgid "E.g. \"Village\" may be a sub-level of \"District\", and \"District\" may be a sub-level of \"Province\"."
-msgstr ""
+msgstr "Par exemple, « Village » peut être un niveau subordonné à « Arrondissement », et « Arrondissement » peut être un niveau subordonné à « Province »."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:79
 msgid "Are there farms at this level?"
-msgstr ""
+msgstr "Y a-t-il des fermes à ce niveau ?"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:80
 msgid "Only say yes if there are farms directly at this location level, not in a lower location level. E.g. \"Village\" may have farms, but \"District\" may not."
-msgstr ""
+msgstr "Ne répondez par « oui » que s'il y a des fermes situées directement à ce niveau géographique, pas à un niveau géographique inférieur. Par exemple, un « village » peut comporter des fermes, mais ce n'est pas forcément le cas d'un « district »."
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:94
 msgid "Parent"
-msgstr ""
+msgstr "Parent"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:96
 msgid "Top Level"
-msgstr ""
+msgstr "Niveau supérieur"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:99
 msgid "No. of Entries"
-msgstr ""
+msgstr "Nombre d'inscriptions"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:102
 msgid "Has farms"
-msgstr ""
+msgstr "Possède des exploitations agricoles"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:128
 msgid "Key Details"
-msgstr ""
+msgstr "Détails clés"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:130
 msgid "Level"
-msgstr ""
+msgstr "Niveau"
 
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:131
 msgid "Parent Level"
-msgstr ""
+msgstr "Niveau parent"
 
 #: app\Filament\App\Pages\Auth\EditProfile.php:30
 #: app\Filament\App\Pages\Auth\EditProfile.php:35
@@ -445,31 +447,31 @@ msgstr "Mon compte"
 
 #: app\Filament\App\Pages\Auth\EditProfile.php:63
 msgid "Profile Information"
-msgstr ""
+msgstr "Informations de profil"
 
 #: app\Filament\App\Pages\Auth\EditProfile.php:70
 msgid "Change Password"
-msgstr ""
+msgstr "Modifier le mot de passe"
 
 #: app\Filament\App\Pages\Auth\EditProfile.php:74
 msgid "Password info"
-msgstr ""
+msgstr "Informations sur le mot de passe"
 
 #: app\Filament\App\Pages\Auth\EditProfile.php:75
 msgid "To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password."
-msgstr ""
+msgstr "Pour modifier votre mot de passe, veuillez d'abord saisir votre mot de passe actuel, puis le nouveau mot de passe. Vous pouvez laisser les champs de mot de passe vides si vous ne souhaitez pas modifier votre mot de passe."
 
 #: app\Filament\App\Pages\Auth\EditProfile.php:96
 msgid "Current Password"
-msgstr ""
+msgstr "Mot de passe actuel"
 
 #: app\Filament\App\Pages\Auth\Login.php:66
 msgid "Sign in"
-msgstr ""
+msgstr "Se connecter"
 
 #: app\Filament\App\Pages\Auth\Login.php:72
 msgid "Email address"
-msgstr ""
+msgstr "Adresse électronique"
 
 #: app\Filament\App\Pages\Auth\Login.php:83
 msgid "Password"
@@ -477,11 +479,11 @@ msgstr "Mot de passe"
 
 #: app\Filament\App\Pages\Auth\Login.php:84
 msgid "Forgot password?"
-msgstr ""
+msgstr "Mot de passe oublié ?"
 
 #: app\Filament\App\Pages\Auth\Login.php:95
 msgid "Remember me"
-msgstr ""
+msgstr "Souvenez-vous de moi"
 
 #: app\Filament\App\Pages\DataAnalysis\DataAnalysisIndex.php:26
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:386
@@ -490,7 +492,7 @@ msgstr "Analyse des données et résultats"
 
 #: app\Filament\App\Pages\DataAnalysis\DataAnalysisIndex.php:52
 msgid "Export Data"
-msgstr ""
+msgstr "Exporter les données"
 
 #: app\Filament\App\Pages\DataCollection\MonitorDataCollection.php:89
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:348
@@ -506,27 +508,27 @@ msgstr "Mettre en place le sondage"
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:83
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:77
 msgid "Switch to live data collection"
-msgstr ""
+msgstr "Passer à la collecte de données en temps réel"
 
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:100
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:95
 msgid "Return to pilot testing mode"
-msgstr ""
+msgstr "Revenir au mode de test pilote"
 
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:101
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:97
 msgid "Are you sure?"
-msgstr ""
+msgstr "Êtes-vous sûr ?"
 
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:102
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:98
 msgid "Any data collected while the pilot is in progress will be marked as \"test\" data, and not included in your final dataset by default"
-msgstr ""
+msgstr "Toutes les données collectées pendant la durée du projet pilote seront identifiées comme des données « de test » et ne seront pas incluses par défaut dans votre ensemble de données final."
 
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:103
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:99
 msgid "Yes, return to pilot test"
-msgstr ""
+msgstr "Oui, revenir à l'essai pilote"
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:37
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:220
@@ -535,36 +537,36 @@ msgstr "Localisation : modules optionnels"
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:44
 msgid "Please select the optional modules to be included in your survey."
-msgstr ""
+msgstr "Veuillez sélectionner les modules optionnels à inclure dans votre enquête."
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:93
 msgid "Survey Form"
-msgstr ""
+msgstr "Formulaire d'enquête"
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:100
 msgid "Select a survey form..."
-msgstr ""
+msgstr "Sélectionnez un formulaire d'enquête..."
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:186
 msgid "# Questions"
-msgstr ""
+msgstr "# Questions"
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:188
 msgid "In Survey"
-msgstr ""
+msgstr "Dans l'enquête"
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:194
 msgid "Add to Survey"
-msgstr ""
+msgstr "Ajouter à l'enquête"
 
 #: app\Filament\App\Pages\Lisp\OptionalModules.php:200
 msgid "Remove"
-msgstr ""
+msgstr "Supprimer"
 
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:42
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:47
 msgid "Survey Testing - Pilot and Enumerator Training"
-msgstr ""
+msgstr "Tests d'enquête - Formation des responsables du projet pilote et des enquêteurs"
 
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:54
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:126
@@ -572,44 +574,72 @@ msgstr ""
 msgid "Localisation: Pilot"
 msgstr "Localisation : projet pilote"
 
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:41
+msgid "Localisation: HDDS hints"
+msgstr "Localisation : conseils HDDS"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:117
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:170
+msgid "Hint"
+msgstr "Conseil"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:129
+msgid "Type"
+msgstr "Type"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:130
+msgid "Variable name"
+msgstr "Nom de la variable"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:151
+msgid "EDIT HINTS"
+msgstr "MODIFIER LES CONSEILS"
+
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:152
+msgid "Edit hints"
+msgstr "Modifier les conseils"
+
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:45
 #: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:46
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:64
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:69
 msgid "Initial Pilot"
 msgstr "Projet pilote initial"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:50
 msgid "Survey Testing - Initial Pilot"
-msgstr ""
+msgstr "Tests d'enquête - Projet pilote initial"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:109
 msgid "Draft Submissions"
-msgstr ""
+msgstr "Soumissions de projet"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:126
 #: app\Livewire\InstructionsSidebarLivewire.php:42
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:130
 msgid "Test on ODK Central"
-msgstr ""
+msgstr "Test sur ODK Central"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:133
+#: app\Livewire\XlsformsTableView.php:91
 msgid "Manually Get Submissions"
-msgstr ""
+msgstr "Récupérer manuellement les soumissions"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:148
+#: app\Livewire\XlsformsTableView.php:84
+#: app\Livewire\XlsformsTableView.php:123
 msgid "Success!"
-msgstr ""
+msgstr "C'est réussi !"
 
 #: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:149
 msgid "submissions have been pulled from the ODK server. (they may take a moment to process)."
-msgstr ""
+msgstr "soumissions ont été extraites du serveur ODK. (Leur traitement peut prendre quelques instants.)"
 
 #: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:31
 msgid "Localisation: Place-based adaptations"
-msgstr ""
+msgstr "Localisation : adaptations en fonction du lieu"
 
 #: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:36
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:183
@@ -638,7 +668,7 @@ msgstr "Sélectionnez la région de ce pays"
 
 #: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:79
 msgid "Enter the name of this country"
-msgstr "Entrez le nom de ce pays"
+msgstr "Saisissez le nom de ce pays"
 
 #: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:84
 msgid "Enter the ISO Alpha-2 code for this country"
@@ -691,7 +721,7 @@ msgstr "Adaptations en fonction du lieu"
 
 #: app\Filament\App\Resources\SubmissionResource\Pages\ViewSubmission.php:54
 msgid "Edit Submission"
-msgstr ""
+msgstr "Modifier la soumission"
 
 #: app\Filament\App\Resources\TeamResource\Pages\EditTeam.php:17
 #: app\Filament\App\Resources\TeamResource\Pages\ViewTeam.php:26
@@ -701,7 +731,7 @@ msgstr "AVERTISSEMENT : veuillez ne pas supprimer ces données tant que des donn
 #: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:31
 #: resources\views\emails\register-interest-email.blade.php:7
 msgid "Email"
-msgstr "Email:"
+msgstr "E-mail:"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:35
 msgid "Team"
@@ -725,48 +755,48 @@ msgstr "Mis à jour le"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:33
 msgid "Team Admins have full access to all team settings and can manage all team members. They can edit or delete data. Non-admins can only collect data and view data."
-msgstr ""
+msgstr "Les administrateurs d'équipe disposent d'un accès complet à tous les paramètres de l'équipe et peuvent gérer tous les membres de l'équipe. Ils peuvent modifier ou supprimer des données. Les utilisateurs non administrateurs peuvent uniquement collecter et consulter des données."
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:65
 msgid "Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address."
-msgstr ""
+msgstr "Ajoutez la ou les adresses e-mail des utilisateurs que vous souhaitez inviter à rejoindre cette équipe. Une invitation sera envoyée à chacune de ces adresses."
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:68
 msgid "Email Addresses to Invite"
-msgstr ""
+msgstr "Adresses e-mail à inviter"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:75
 msgid "Add Another Email Address"
-msgstr ""
+msgstr "Ajouter une autre adresse e-mail"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:86
 msgid "Add Existing User to team"
-msgstr ""
+msgstr "Ajouter un utilisateur existant à l'équipe"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:94
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:95
 msgid "Remove User"
-msgstr ""
+msgstr "Supprimer un utilisateur"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:96
 msgid "Remove User from Team"
-msgstr ""
+msgstr "Supprimer un utilisateur de l'équipe"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:100
 msgid "Remove selected"
-msgstr ""
+msgstr "Supprimer la sélection"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:101
 msgid "Remove Selected Users"
-msgstr ""
+msgstr "Supprimer les utilisateurs sélectionnés"
 
 #: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:102
 msgid "Remove Selected Users from Team"
-msgstr ""
+msgstr "Supprimer les utilisateurs sélectionnés de l'équipe"
 
 #: app\Filament\App\Resources\TeamResource.php:39
 msgid "Team Details"
-msgstr ""
+msgstr "Informations sur l'équipe"
 
 #: app\Filament\App\Resources\TeamResource.php:46
 msgid "Description"
@@ -790,130 +820,130 @@ msgstr "Créé à"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:68
 msgid "Question Information"
-msgstr ""
+msgstr "Informations sur la question"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:106
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:187
 msgid "Variable Name"
-msgstr ""
+msgstr "Nom de la variable"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:107
 msgid "The variable name should only have alphanumeric characters or underscores. Any spaces will be automatically replaced with underscores when saving this question."
-msgstr ""
+msgstr "Le nom de la variable ne doit comporter que des caractères alphanumériques ou des traits de soulignement. Les espaces seront automatiquement remplacés par des traits de soulignement lors de l'enregistrement de cette question."
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:130
 msgid "Choice List"
-msgstr ""
+msgstr "Liste de choix"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:146
 msgid "Options list for the select question"
-msgstr ""
+msgstr "Liste des options pour la question à choix multiples"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:150
 msgid "Option name"
-msgstr ""
+msgstr "Nom de l'option"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:151
 msgid "This is the \"name\" column in ODK, and is the value that appears in the data when the option is selected"
-msgstr ""
+msgstr "Il s'agit de la colonne « nom » dans ODK ; c'est la valeur qui apparaît dans les données lorsque cette option est sélectionnée."
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:186
 msgid "Question Type"
-msgstr ""
+msgstr "Type de question"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:188
 msgid "Default Label"
-msgstr ""
+msgstr "Étiquette par défaut"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:195
 msgid "Disable reordering"
-msgstr ""
+msgstr "Désactiver le réordonnancement"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:195
 msgid "Enable reordering"
-msgstr ""
+msgstr "Activer le réordonnancement"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:205
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:211
 msgid "ADD QUESTION"
-msgstr ""
+msgstr "AJOUTER UNE QUESTION"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:226
 msgid "EDIT QUESTION"
-msgstr ""
+msgstr "MODIFIER LA QUESTION"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:241
 msgid "You cannot directly edit questions created via an Excel Import. Please download the template above and edit the question inside Excel"
-msgstr ""
+msgstr "Vous ne pouvez pas modifier directement les questions créées via une importation Excel. Veuillez télécharger le modèle ci-dessus et modifier la question dans Excel."
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:258
 msgid "DELETE QUESTION"
-msgstr ""
+msgstr "SUPPRIMER LA QUESTION"
 
 #: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:261
 msgid "Delete Question"
-msgstr ""
+msgstr "Supprimer la question"
 
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:55
 msgid "Import Farms"
-msgstr ""
+msgstr "Importer la liste des exploitations agricoles"
 
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:56
 msgid "Import Farms from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings. You must have already created or imported the locations that the farms will be associated with."
-msgstr ""
+msgstr "Importer des fermes à partir d'un fichier Excel. La première feuille de calcul du fichier Excel doit contenir les données à importer. La première ligne de la feuille de calcul doit contenir les en-têtes de colonnes. Vous devez avoir déjà créé ou importé les emplacements auxquels les fermes seront associées."
 
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:65
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:52
 msgid "Excel Data"
-msgstr ""
+msgstr "Données Excel"
 
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:83
 msgid "Upload a file to see the column headers"
-msgstr ""
+msgstr "Téléchargez un fichier pour afficher les en-têtes des colonnes"
 
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:44
 msgid "Import Locations"
-msgstr ""
+msgstr "Lieux d'importation"
 
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:45
 msgid "Import Locations from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings."
-msgstr ""
+msgstr "Importer des emplacements à partir d'un fichier Excel. La première feuille de calcul du fichier Excel doit contenir les données à importer. La première ligne de la feuille de calcul doit contenir les en-têtes de colonnes."
 
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:119
 msgid "Upload a file to see the headers"
-msgstr ""
+msgstr "Téléchargez un fichier pour voir les en-têtes"
 
 #: app\Livewire\CoverPage.php:36
 msgid "Register Interest"
-msgstr ""
+msgstr "Manifester son intérêt"
 
 #: app\Livewire\CoverPage.php:39
 msgid "Please fill in your details below - your email address will be used to contact you."
-msgstr ""
+msgstr "Veuillez remplir le formulaire ci-dessous : votre adresse e-mail nous servira à vous contacter."
 
 #: app\Livewire\CoverPage.php:42
 msgid "Enter your email address"
-msgstr ""
+msgstr "Saisissez votre adresse électronique"
 
 #: app\Livewire\CoverPage.php:44
 msgid "Enter your name"
-msgstr ""
+msgstr "Saisissez votre nom"
 
 #: app\Livewire\CoverPage.php:46
 msgid "Enter your organisation name"
-msgstr ""
+msgstr "Saisissez le nom de votre organisation"
 
 #: app\Livewire\CoverPage.php:49
 msgid "Do you intend to implement Groundswell International Surveys? If so, please give some details about your project / work, etc."
-msgstr ""
+msgstr "Avez-vous l'intention de mettre en œuvre les enquêtes de Groundswell International ? Si oui, veuillez fournir quelques détails sur votre projet, votre travail, etc."
 
 #: app\Livewire\CoverPage.php:57
 msgid "Thank you"
-msgstr ""
+msgstr "Merci"
 
 #: app\Livewire\CoverPage.php:58
 msgid "Thank you for your interest in Groundswell International Surveys. You should receive an automated email to confirm your registration of interest."
-msgstr ""
+msgstr "Nous vous remercions de l'intérêt que vous portez à Groundswell International Surveys. Vous devriez recevoir un e-mail automatique confirmant votre inscription."
 
 #: app\Livewire\InstructionsSidebarLivewire.php:35
 #: resources\views\filament\app\clusters\location-levels\resources\location-level-resource\pages\list-location-levels.blade.php:15
@@ -943,89 +973,134 @@ msgstr "Soumissions pour l'essai pilote"
 
 #: app\Livewire\SubmissionsTableView.php:45
 msgid "Survey Submissions"
-msgstr ""
+msgstr "Soumissions d'enquête"
 
 #: app\Livewire\SubmissionsTableView.php:46
 msgid "These are the submissions that have been submitted during the pilot test. You can review them here, even after the pilot is complete."
-msgstr ""
+msgstr "Voici les contributions qui ont été soumises au cours de la phase pilote. Vous pouvez les consulter ici, même une fois la phase pilote terminée."
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:63
 msgid "Available Translations"
-msgstr ""
+msgstr "Traductions disponibles"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:68
 msgid "Click to update this translation label"
-msgstr ""
+msgstr "Cliquez ici pour mettre à jour cette étiquette de traduction"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:75
 msgid "Update Translation Label for"
-msgstr ""
+msgstr "Mettre à jour l'étiquette de traduction pour"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:78
 msgid "Enter a new label for the translation"
-msgstr ""
+msgstr "Saisissez un nouveau titre pour la traduction"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:79
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:109
 msgid "E.g. \"Portuguese (Brazil)\""
-msgstr ""
+msgstr "Par exemple : « Portugais (Brésil) »"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:88
-#: app\Livewire\XlsformsTableView.php:62
+#: app\Livewire\XlsformsTableView.php:63
 msgid "Status"
 msgstr "Etat"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:90
 msgid "Ready for use"
-msgstr ""
+msgstr "Prêt à l'emploi"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:91
 msgid "Not uploaded"
-msgstr ""
+msgstr "Pas téléchargé"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:92
 msgid "Translations incomplete"
-msgstr ""
+msgstr "Traductions incomplètes"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:93
 msgid "Needs updating"
-msgstr ""
+msgstr "À mettre à jour"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:98
 msgid "No translations available."
-msgstr ""
+msgstr "Aucune traduction disponible."
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:108
 msgid "Enter a label for the translation"
-msgstr ""
+msgstr "Saisissez un titre pour la traduction"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:128
 msgid "Selected"
-msgstr ""
+msgstr "Sélectionné"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:128
 msgid "Select"
-msgstr ""
+msgstr "Sélectionner"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:130
 msgid "Select this translation for your survey"
-msgstr ""
+msgstr "Sélectionnez cette traduction pour votre enquête"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:139
 msgid "View / Edit Translation"
-msgstr ""
+msgstr "Afficher / Modifier la traduction"
 
 #: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:140
 msgid "View / Edit Translation for"
-msgstr ""
+msgstr "Afficher / Modifier la traduction de"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:65
+#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:67
 msgid "Download existing translations"
-msgstr ""
+msgstr "Télécharger les traductions existantes"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:77
+#: app\Livewire\SurveyLanguages\TeamTranslationReviewEditForm.php:79
 msgid "Download empty translation template"
-msgstr ""
+msgstr "Télécharger un modèle de traduction vierge"
+
+#: app\Livewire\XlsformsTableView.php:44
+msgid "Title"
+msgstr "Titre"
+
+#: app\Livewire\XlsformsTableView.php:62
+msgid "updates available to publish"
+msgstr "mises à jour disponibles pour publication"
+
+#: app\Livewire\XlsformsTableView.php:66
+#: app\Livewire\XlsformsTableView.php:68
+msgid "No. of Submissions"
+msgstr "Nombre de soumissions"
+
+#: app\Livewire\XlsformsTableView.php:66
+msgid "in ODK Central"
+msgstr "dans ODK Central"
+
+#: app\Livewire\XlsformsTableView.php:68
+msgid "in database"
+msgstr "dans la base de données"
+
+#: app\Livewire\XlsformsTableView.php:77
+msgid "Publish changes"
+msgstr "Publier les modifications"
+
+#: app\Livewire\XlsformsTableView.php:85
+msgid "The form :title is being compiled and will be deployed shortly."
+msgstr "Le formulaire :title est en cours de compilation et sera mis en ligne sous peu."
+
+#: app\Livewire\XlsformsTableView.php:98
+msgid "Form publishing started"
+msgstr "La publication du formulaire a commencé"
+
+#: app\Livewire\XlsformsTableView.php:99
+msgid ":count submissions have been pulled from the ODK server for the form :title (they may take a moment to process)."
+msgstr "Les soumissions :count ont été récupérées depuis le serveur ODK pour le formulaire :title (leur traitement peut prendre quelques instants)."
+
+#: app\Livewire\XlsformsTableView.php:109
+msgid "Download Submissions"
+msgstr "Télécharger les soumissions"
+
+#: app\Livewire\XlsformsTableView.php:124
+msgid "The form has been published successfully."
+msgstr "Le formulaire a bien été envoyé."
 
 #: app\Providers\Filament\AppPanelProvider.php:171
 msgid "Admin Panel"
@@ -1056,8 +1131,7 @@ msgstr ""
 "\n"
 "La section « Contextualiser les listes de choix » propose plusieurs listes de choix à vérifier et à personnaliser. Vous pouvez effectuer une sélection parmi les listes situées à gauche, puis passer en revue les options existantes. Les options peuvent être supprimées du contexte, de sorte qu’elles ne figureront pas dans ce questionnaire, et vous avez la possibilité d’ajouter de nouvelles options en cliquant sur le bouton « Ajouter une nouvelle option ». Pour chaque entrée de la liste de choix, vous devrez ajouter un nom et une libellé, puis cliquer sur « Créer » ou « Créer et ajouter une autre » pour enregistrer l’entrée.\n"
 "\n"
-"Chaque page de liste comprend une option permettant de visualiser les questions qui utiliseront ces options de réponse. Vérifiez-les pour vous assurer que vous proposez des options adaptées.\n"
-""
+"Chaque page de liste comprend une option permettant de visualiser les questions qui utiliseront ces options de réponse. Vérifiez-les pour vous assurer que vous proposez des options adaptées."
 
 #: resources\text\context-questions.php:5
 msgid ""
@@ -1072,7 +1146,7 @@ msgstr ""
 "\n"
 "L'enquête contient déjà un ensemble de questions de « contexte » essentielles : il s'agit de questions portant sur le ménage agricole lui-même, destinées à replacer les indicateurs d'agroécologie et de performance dans leur contexte. Il s’agit notamment de questions sur la composition du ménage, le niveau d’éducation moyen de ses membres, des informations spécifiques sur la personne interrogée (afin d’identifier d’éventuels biais) et sur le fait que les membres du ménage aient suivi ou non des formations spécifiques au cours de l’année écoulée. Ces questions sont posées au début de l’enquête auprès des ménages.\n"
 "\n"
-"Si votre projet l’exige, vous pouvez ajouter un petit nombre de questions supplémentaires à cette section. Par exemple, vous pouvez souhaiter demander si le ménage a participé à des événements spécifiques organisés par votre projet d’intervention, ou poser des questions sur certaines caractéristiques spécifiques du paysage de l’exploitation. Pour ce faire, ajoutez les questions à cette page à l’aide du formulaire fourni. Ces questions seront intégrées à votre questionnaire destiné aux ménages lors de sa prochaine utilisation.\n"
+"Si votre projet l’exige, vous pouvez ajouter un petit nombre de questions supplémentaires à cette section. Par exemple, vous pouvez souhaiter demander si le ménage a participé à des événements spécifiques organisés par votre projet d’intervention, ou poser des questions sur certaines caractéristiques spécifiques du paysage de l’exploitation. Pour faire cela, ajoutez les questions à cette page à l’aide du formulaire fourni. Ces questions seront intégrées à votre questionnaire destiné aux ménages lors de sa prochaine utilisation.\n"
 ""
 
 #: resources\text\data-analysis.php:5
@@ -1144,13 +1218,13 @@ msgstr ""
 "\n"
 "##### Configurer l'enquête\n"
 "\n"
-"Jusqu'à présent, tous les formulaires utilisés pour les tests pilotes ont été identifiés comme des formulaires « de test », et les réponses sont stockées en tant que données de test, qui ne seront pas prises en compte dans les résultats. Pour lancer la collecte de données proprement dite, vous devez utiliser la section « Configurer les formulaires actifs pour la collecte de données » afin de mettre votre enquête en « production ». Cette page contient des remarques vous invitant à vérifier que toutes les tâches nécessaires ont bien été effectuées. Lisez-les attentivement, puis, lorsque vous êtes prêt, cliquez sur le bouton pour mettre votre enquête en production.\n"
+"Jusqu'à présent, tous les formulaires utilisés pour les tests pilotes ont été identifiés comme des formulaires « de test », et les réponses sont stockées en tant que données de test, qui ne seront pas prises en compte dans les résultats. Pour lancer la collecte de données proprement dite, vous devez utiliser la section « Configurer les formulaires actifs pour la collecte de données » afin de mettre votre enquête en « production ». Cette page contient des remarques qui vous invitent à vérifier que toutes les tâches nécessaires ont bien été effectuées. Lisez-les attentivement, puis, lorsque vous êtes prêt, cliquez sur le bouton pour mettre votre enquête en production.\n"
 "\n"
 "Une fois votre enquête en ligne, vous pourrez utiliser un code QR pour configurer de nouveaux appareils avec les formulaires appropriés. Les enquêteurs qui ont déjà rejoint le projet à l’aide du code QR lors de la phase pilote peuvent également synchroniser leurs appareils pour recevoir les formulaires mis à jour.\n"
 "\n"
 "Avant que les enquêteurs ne commencent la collecte de données, ils doivent vérifier que les formulaires figurant dans leur application ODK Collect correspondent bien aux versions actives ; les versions de test seront identifiées comme telles dans le titre du formulaire, par exemple « Formulaire des indicateurs mondiaux – Version de test partagée localement ». Rappel : les enquêteurs ne doivent en aucun cas utiliser les versions préliminaires des formulaires d’enquête accessibles depuis la section « Pilot initial ». Les données issues de ces formulaires ne sont pas enregistrées et seront perdues.\n"
 "\n"
-"Une fois que les enquêteurs auront commencé la collecte de données, vous pourrez consulter les soumissions de formulaires dans la section suivante, « Suivi de la collecte de données ». Au bas de la page, vous pouvez voir les titres et le statut de publication de vos formulaires. Des options vous permettent de publier les modifications si cela s’avère encore nécessaire avant de commencer la collecte de données.\n"
+"Une fois que les enquêteurs auront commencé la collecte de données, vous pourrez consulter les soumissions de formulaires dans la section suivante, « Suivi de la collecte de données ». En bas de la page, vous pouvez voir les titres et le statut de publication de vos formulaires. Des options vous permettent de publier les modifications si cela s’avère encore nécessaire avant de commencer la collecte de données.\n"
 "\n"
 "##### Suivi de la collecte de données\n"
 "\n"
@@ -1176,8 +1250,7 @@ msgid ""
 msgstr ""
 "L'étape suivante consiste à ajouter les informations relatives à toutes les exploitations agricoles que vous visiterez dans le cadre de votre enquête. Comme pour l'ajout de lieux, vous pouvez ajouter les exploitations manuellement ou importer une liste à partir d'un fichier tableur. Ce fichier tableur doit respecter la même structure que celle utilisée pour l'ajout de lieux à d'autres niveaux.\n"
 "\n"
-"Lors de l’importation d’une liste, vous devrez inclure des colonnes contenant le code unique de l’exploitation agricole et le code unique du lieu dans lequel elle se trouve. Lorsque vous importez la liste, vous devez sélectionner le niveau de lieu auquel appartiennent les exploitations agricoles. Vous pouvez également, si vous le souhaitez, inclure des colonnes supplémentaires contenant des informations permettant d’identifier l’exploitation, telles que son nom, son numéro de téléphone, le nom de famille, etc., ou des détails relatifs aux caractéristiques de l’exploitation qui pourraient s’avérer utiles pour une analyse ultérieure, comme sa taille.\n"
-""
+"Lors de l’importation d’une liste, vous devrez inclure des colonnes contenant le code unique de l’exploitation agricole et le code unique du lieu dans lequel elle se trouve. Lorsque vous importez la liste, vous devez sélectionner le niveau de lieu auquel appartiennent les exploitations agricoles. Vous pouvez également, si vous le souhaitez, inclure des colonnes supplémentaires contenant des informations permettant d’identifier l’exploitation, telles que son nom, son numéro de téléphone, le nom de famille, etc., ou des détails relatifs aux caractéristiques de l’exploitation qui pourraient s’avérer utiles pour une analyse ultérieure, comme sa taille."
 
 #: resources\text\hdds-hints.php:5
 msgid ""
@@ -1188,6 +1261,12 @@ msgid ""
 "On this page you can review every HDDS question and edit its hint for each of the languages your team uses. The question type, variable name and label cannot be changed here. When you save a hint, your team's survey is flagged for an update and the change is compiled and sent to ODK Central the next time the survey is synced.\n"
 ""
 msgstr ""
+"##### Adapter les indications du HDDS\n"
+"\n"
+"Le module « Household Dietary Diversity Score » (HDDS) pose des questions sur les différents groupes d’aliments consommés par un ménage. La formulation de chaque question est standardisée afin que les résultats restent comparables d’un projet à l’autre, mais le texte des **indications** — le bref texte d’aide affiché aux enquêteurs et aux répondants à côté de chaque question — doit souvent être adapté pour utiliser des exemples et des termes familiers au niveau local.\n"
+"\n"
+"Sur cette page, vous pouvez passer en revue chaque question du HDDS et modifier son conseil pour chacune des langues utilisées par votre équipe. Le type de question, le nom de la variable et son libellé ne peuvent pas être modifiés ici. Lorsque vous enregistrez un conseil, l’enquête de votre équipe est marquée pour mise à jour et la modification est compilée puis envoyée à ODK Central lors de la prochaine synchronisation de l’enquête.\n"
+""
 
 #: resources\text\initial-pilot.php:5
 msgid ""
@@ -1227,7 +1306,7 @@ msgstr ""
 "2. Utilisez les codes QR ci-dessous pour accéder aux versions préliminaires de l’enquête sur un appareil approprié sur lequel l’application ODK Collect est installée et configurée.\n"
 "3. Les partenaires de Groundswell doivent parcourir l’enquête dans l’application ODK Collect, en vérifiant et en répondant à toutes les questions. L’objectif est de :\n"
 "- Vérifier que la mise en page de l’enquête et les dépendances sont correctement codées ; par exemple, vous devez vous assurer que les questions obligatoires n’apparaissent pas comme facultatives.\n"
-"- S’assurer que toutes les questions et options de réponse sont claires pour les répondants dans le contexte local.\n"
+"- Vous assurer que toutes les questions et options de réponse sont claires pour les répondants dans le contexte local.\n"
 "- Déterminer si des indications ou des exemples sont nécessaires pour les sections susceptibles de prêter à confusion ou d’être mal comprises.\n"
 "4. Lorsque vous soumettez des données à l’aide du questionnaire de test, celles-ci apparaissent dans le tableau « Soumissions provisoires », ce qui vous permet de vérifier que les données ont bien été soumises et prises en compte.\n"
 "\n"
@@ -1253,9 +1332,9 @@ msgid ""
 "- Indicate whether there are farms at this level - This means that they are within this level but not in a lower sub-level; for example, there are farms at the village level but not the province level.\n"
 "- Click to create the level, or to create and immediately add another level.\n"
 "\n"
-"Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have the option to import them from an excel file or add them manually.\n"
+"Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have the option to import them from an Excel file or add them manually.\n"
 "\n"
-"To import locations, upload an excel spreadsheet with the required details:\n"
+"To import locations, upload an Excel spreadsheet with the required details:\n"
 "\n"
 "- A column with the name of the location\n"
 "- A column with the unique IDs for the locations. (These can be generated however you like, but each one must be unique)\n"
@@ -1270,30 +1349,6 @@ msgid ""
 "To add locations manually, click on \"Add new [location name]\", and type in the name and code, then click on \"Create\" or \"Create and create another\". Add locations for all the location levels.\n"
 ""
 msgstr ""
-"Sur la page des niveaux géographiques, vous devez d'abord ajouter les noms des différents niveaux :\n"
-"\n"
-"- Cliquez sur « Nouveau niveau géographique ».\n"
-"- Indiquez si le niveau géographique que vous ajoutez est un sous-niveau d'un autre niveau : dans notre exemple « province &gt; district &gt; village », le district est un sous-niveau de la province et le village est un sous-niveau du district.\n"
-"- Ajoutez le nom du niveau.\n"
-"- Indiquez s'il existe des exploitations agricoles à ce niveau : cela signifie qu'elles se trouvent à ce niveau, mais pas à un sous-niveau inférieur ; par exemple, il y a des exploitations au niveau du village, mais pas au niveau de la province.\n"
-"- Cliquez pour créer le niveau, ou pour créer et ajouter immédiatement un autre niveau.\n"
-"\n"
-"Une fois les niveaux ajoutés, vous pouvez les sélectionner pour afficher la liste des lieux qui y ont été ajoutés et ajouter de nouveaux lieux. Vous avez la possibilité de les importer depuis un fichier Excel ou de les ajouter manuellement.\n"
-"\n"
-"Pour importer des lieux, téléversez une feuille de calcul Excel contenant les informations requises :\n"
-"\n"
-"- Une colonne avec le nom du lieu\n"
-"- Une colonne contenant les identifiants uniques des lieux. (Vous pouvez les générer comme vous le souhaitez, mais chacun doit être unique)\n"
-"- Si le niveau de lieu auquel vous ajoutez un lieu est un sous-niveau d’un autre niveau de lieu, vous devez également inclure une colonne contenant le nom et l’identifiant unique du lieu situé au niveau supérieur (dans notre exemple « province &gt; district &gt; village », le « Village A » pourrait se situer dans le « District C », et vous devriez inclure les informations relatives aux deux.)\n"
-"- La première ligne de la feuille de calcul doit contenir les en-têtes de colonnes, et non votre premier lieu.\n"
-"- Assurez-vous que les données à importer se trouvent dans la première feuille de calcul du tableur.\n"
-"- Vous devez disposer d’une colonne pour le nom de la localité et d’une colonne pour les codes uniques des localités.\n"
-"- L’ordre des colonnes, les en-têtes de colonnes que vous utilisez ou la présence d’autres données dans le tableur n’ont aucune importance.\n"
-"\n"
-"Une fois la liste importée, utilisez les options de mappage des colonnes pour sélectionner la colonne des noms et celle des codes uniques. Vous avez la possibilité de remplacer tous les lieux précédemment ajoutés par les nouveaux lieux issus de la feuille de calcul importée. Lorsque vous êtes prêt, cliquez sur « Soumettre ».\n"
-"\n"
-"Pour ajouter des lieux manuellement, cliquez sur « Ajouter un nouveau [nom du lieu] », saisissez le nom et le code, puis cliquez sur « Créer » ou « Créer et en créer un autre ». Ajoutez des lieux pour tous les niveaux de lieu.\n"
-""
 
 #: resources\text\pilot-index.php:5
 msgid ""
@@ -1323,30 +1378,31 @@ msgid ""
 "\n"
 "You have conducted the pilot and training workshop, and are satisfied that the required adjustments have been made."
 msgstr ""
-"##### Test pilote initial\n"
+"##### Test pilote et formation des enquêteurs\n"
 "\n"
-"Une fois la personnalisation effectuée, un test pilote doit être réalisé afin de vérifier la pertinence et le bon fonctionnement du questionnaire. Sur cette page, vous trouverez le code QR à scanner pour commencer à tester le questionnaire à l’aide d’ODK. Veuillez noter que ce code QR ne doit être utilisé que pour ce test initial : la section « Collecte de données » contient un lien différent pour le test pilote complet et la collecte de données en conditions réelles, et il est important d’utiliser la bonne version du questionnaire.\n"
+"Cette page vous guide tout au long du processus de réalisation du test pilote de votre enquête. Avant de lancer le test pilote, assurez-vous :\n"
 "\n"
-"Le test pilote initial peut être réalisé par un membre de votre équipe en collaboration avec au moins un chercheur ou un praticien local. Pour mener ce test :\n"
+"- d’avoir effectué les modifications et personnalisations souhaitées en suivant les étapes précédentes sur le tableau de bord ;\n"
+"- Si nécessaire, utilisé les premières versions préliminaires du formulaire destinées au test pilote pour vérifier d’éventuelles modifications supplémentaires, telles que l’ajout de questions personnalisées pour vos indicateurs locaux à la suite de l’atelier LISP.\n"
+"- Publié toutes les modifications afin de mettre à jour les formulaires que vous utiliserez lors de l’essai pilote. Cette opération doit être effectuée manuellement ; cela vous permet d’apporter des modifications et de les tester sous forme de versions préliminaires afin de vous assurer qu’elles fonctionnent comme prévu avant de mettre à jour les versions que votre équipe d’enquêteurs verra. Vous trouverez l’option permettant de publier vos modifications dans la section « Accéder aux formulaires » de la page.\n"
 "\n"
-"1. Assurez-vous d’avoir effectué toutes les personnalisations prévues jusqu’à cette étape du processus.\n"
-"2. Utilisez les codes QR ci-dessous pour accéder aux versions préliminaires de l’enquête sur un appareil approprié sur lequel l’application ODK Collect est installée et configurée.\n"
-"3. Les partenaires de Groundswell doivent parcourir l’enquête dans l’application ODK Collect, en vérifiant et en répondant à toutes les questions. L’objectif est de :\n"
-"- Vérifier que la mise en page de l’enquête et les dépendances sont correctement codées ; par exemple, vous devez vous assurer que les questions obligatoires n’apparaissent pas comme facultatives.\n"
-"- S’assurer que toutes les questions et options de réponse sont claires pour les répondants dans le contexte local.\n"
-"- Déterminer si des indications ou des exemples sont nécessaires pour les sections susceptibles de prêter à confusion ou d’être mal comprises.\n"
-"4. Lorsque vous soumettez des données à l’aide du questionnaire de test, celles-ci apparaissent dans le tableau « Soumissions provisoires », ce qui vous permet de vérifier que les données ont bien été soumises et prises en compte.\n"
+"Lorsque vous serez prêt pour le projet pilote, vous devrez organiser l’atelier comme décrit sur cette page. Vous trouverez le code QR permettant aux enquêteurs de configurer les formulaires dans la section « Accéder aux formulaires » de la page. Notez que ces formulaires ne sont pas les mêmes que les versions préliminaires utilisées lors du pilote initial, et que ces formulaires préliminaires ne doivent en aucun cas être utilisés pour ce pilote ni pour la collecte de données en production, car les données soumises via ces formulaires ne sont pas enregistrées. Assurez-vous que tout le monde utilise la bonne version des formulaires avant de lancer le pilote ou toute collecte de données.\n"
 "\n"
-"Une fois ce processus terminé, vous devrez peut-être revenir sur certaines actions de cette étape ou des étapes précédentes (par exemple pour modifier la traduction du questionnaire). Vous pouvez répéter ce test pilote autant de fois que vous le souhaitez. Sachez que chaque fois que vous apportez une modification au formulaire, une version mise à jour est générée. Ce processus peut prendre quelques minutes ; vous devrez donc patienter jusqu’à ce qu’il soit terminé pour accéder à la dernière version des formulaires de test. Toutes les soumissions effectuées via les formulaires de test sont temporaires et seront écrasées lors de la mise à jour des formulaires.\n"
+"##### Accéder aux formulaires\n"
 "\n"
-"&gt; ⚠️ **Les codes QR ci-dessous sont des BESSE.**\n"
-"&gt; Veuillez **ne pas partager** ces codes avec les enquêteurs !\n"
-"&gt; **Toutes les réponses soumises via les formulaires de test sont temporaires** et seront réinitialisées chaque fois que vous effectuerez une action via le tableau de bord de l’enquête qui modifie les formulaires.\n"
-"&gt; N’utilisez pas ces formulaires pour la collecte de données en production.\n"
+"La section « Accéder aux formulaires » contient l’option permettant de publier vos modifications apportées à l’enquête, ainsi que les codes QR permettant de configurer les formulaires sur les appareils mobiles qui seront utilisés pour le projet pilote de collecte de données.\n"
+"\n"
+"##### Formulaires et réponses\n"
+"\n"
+"Dans la section « Formulaires et réponses », vous pouvez consulter un aperçu des formulaires actuels et visualiser les réponses. Si de nouvelles réponses n’apparaissent pas encore sur la page, vous pouvez utiliser l’option « Récupérer manuellement les réponses » dans la vue des formulaires d’enquête pour forcer l’actualisation.\n"
+"\n"
+"La vue des réponses à l’enquête vous présente toutes les réponses à vos formulaires. Vous pouvez consulter chaque réponse individuellement afin d’effectuer des contrôles de qualité. Cela vous aidera à identifier les erreurs ou omissions fréquentes qui pourraient nécessiter une formation supplémentaire des enquêteurs ou des ajustements du formulaire.\n"
+"\n"
+"Une fois le test pilote terminé, vous devrez probablement revenir aux sections précédentes pour apporter des modifications supplémentaires à l’enquête. Revenez sur n’importe quelle section depuis le tableau de bord si nécessaire. Vous pouvez choisir de mener d’autres phases pilotes ou tests techniques avant de lancer la collecte de données en production.\n"
 "\n"
 "##### Marquez cette section comme terminée lorsque :\n"
 "\n"
-"Vous avez effectué le test technique et êtes satisfait des modifications apportées aux formulaires ainsi que du fonctionnement technique de l’enquête jusqu’à ce stade."
+"Vous avez mené la phase pilote et l’atelier de formation, et vous êtes satisfait que les ajustements requis aient été effectués."
 
 #: resources\text\place-adaptations.php:5
 msgid ""
@@ -1563,7 +1619,7 @@ msgstr ""
 "\n"
 "Pour ajouter une nouvelle traduction, cliquez sur « Ajouter une nouvelle traduction » et donnez-lui un nom clair. La traduction apparaîtra dans le tableau. Vous pouvez ensuite utiliser le menu « Afficher/Modifier » pour télécharger le modèle de traduction. Ajoutez le texte traduit dans la colonne indiquée dans les fichiers xls, puis rechargez-les à l’aide du même menu. Une fois que les versions traduites des deux formulaires auront été chargées, la traduction sera disponible. Lorsque vous modifiez ou ajoutez une traduction, veillez à télécharger le fichier correspondant à la langue que vous souhaitez modifier, puis effectuez les modifications dans ce fichier. Si les en-têtes de colonnes ne correspondent pas à ceux du fichier d’origine ou si la colonne destinée au texte traduit est laissée vide, un message d’erreur s’affichera lors du téléchargement des fichiers.\n"
 "\n"
-"Si vous cliquez sur « Afficher/modifier la traduction », cela vous permettra de télécharger les fichiers XLS contenant le texte traduit. Vous pouvez modifier les traductions ajoutées par votre équipe. Pour ce faire, téléchargez les fichiers de traduction existants et suivez la même procédure que pour l’ajout d’une traduction : apportez les modifications dans la colonne correspondant à la langue cible, puis téléchargez le fichier modifié via le même menu. Notez que la traduction doit refléter le texte **tel qu’il est rédigé dans l’enquête** ; ce n’est pas le lieu approprié pour personnaliser le contenu de l’enquête. Les traductions ajoutées par d’autres équipes ou issues des formulaires ODK d’origine ne peuvent pas être modifiées directement, mais vous pouvez dupliquer la traduction pour créer une nouvelle version intégrant vos modifications.\n"
+"Si vous cliquez sur « Afficher/modifier la traduction », cela vous permettra de télécharger les fichiers XLS contenant le texte traduit. Vous pouvez modifier les traductions ajoutées par votre équipe. Pour faire cela, téléchargez les fichiers de traduction existants et suivez la même procédure que pour l’ajout d’une traduction : apportez les modifications dans la colonne correspondant à la langue cible, puis téléchargez le fichier modifié via le même menu. Notez que la traduction doit refléter le texte **tel qu’il est rédigé dans l’enquête** ; ce n’est pas le lieu approprié pour personnaliser le contenu de l’enquête. Les traductions ajoutées par d’autres équipes ou issues des formulaires ODK d’origine ne peuvent pas être modifiées directement, mais vous pouvez dupliquer la traduction pour créer une nouvelle version intégrant vos modifications.\n"
 "\n"
 "La plateforme mettra les traductions téléchargées par les utilisateurs à la disposition de toutes les autres équipes.\n"
 "\n"
@@ -1588,9 +1644,9 @@ msgid ""
 "*   Indicate whether there are farms at this level - This means that they are within this level but not in a lower sub-level; for example, there are farms at the village level but not the province level.\n"
 "*   Click to create the level, or to create and immediately add another level.\n"
 "\n"
-"Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have the option to import them from an excel file or add them manually.\n"
+"Once you have added levels, you can select them to view a list of the locations that have been added at that level and add locations. You have the option to import them from an Excel file or add them manually.\n"
 "\n"
-"To import locations, upload an excel spreadsheet with the required details:\n"
+"To import locations, upload an Excel spreadsheet with the required details:\n"
 "\n"
 "*   A column with the name of the location\n"
 "*   A column with the unique IDs for the locations. (These can be generated however you like, but each one must be unique)\n"
@@ -1616,7 +1672,7 @@ msgid ""
 msgstr ""
 "Pour permettre aux enquêteurs de mener l'enquête, et éventuellement pour l'analyse ultérieure des données, vous devrez ajouter les informations relatives aux exploitations agricoles que vous visiterez, y compris les détails concernant les différents niveaux géographiques. Le système d'organisation et de désignation des localisations géographiques varie d'un endroit à l'autre (certains pays sont divisés en comtés et en villes, d'autres en provinces et en districts) ; vous devrez donc d'abord saisir les détails de la hiérarchie, puis indiquer les localisations spécifiques pour votre enquête.\n"
 "\n"
-"Par exemple, une exploitation agricole peut être située dans un village, qui se trouve dans un arrondissement, lui-même situé dans une province ; vous devrez donc ajouter les niveaux de localisation suivants : province &gt; arrondissement &gt; village. Vous pourrez ensuite ajouter ou importer la liste complète des localisations à chaque niveau ainsi que celle des exploitations agricoles.\n"
+"Par exemple, une exploitation agricole peut être située dans un village, lui-même situé dans un district, lui-même situé dans une province ; vous devrez donc ajouter les niveaux de localisation suivants : province &gt; district &gt; village. Vous pourrez ensuite ajouter ou importer la liste complète des localisations à chaque niveau ainsi que celle des exploitations agricoles.\n"
 "\n"
 "##### Niveaux de localisation\n"
 "\n"
@@ -1634,7 +1690,7 @@ msgstr ""
 "\n"
 "*   Une colonne avec le nom du lieu\n"
 "*   Une colonne contenant les identifiants uniques des lieux. (Vous pouvez les générer comme vous le souhaitez, mais chacun doit être unique)\n"
-"*   Si le niveau de lieu auquel vous ajoutez un lieu est un sous-niveau d’un autre niveau de lieu, vous devez également inclure une colonne contenant le nom et l’identifiant unique du lieu situé au niveau supérieur (dans notre exemple « province &gt; district &gt; village », le « Village A » pourrait se situer dans le « District C », et vous devriez inclure les informations relatives aux deux.)\n"
+"*   Si le niveau de lieu auquel vous ajoutez un lieu est un sous-niveau d’un autre niveau de lieu, vous devez également disposer d’une colonne contenant le nom et l’identifiant unique du lieu situé au niveau supérieur (dans notre exemple « province &gt; district &gt; village », le « Village A » pourrait se situer dans le « District C », et vous devriez inclure les informations relatives aux deux.)\n"
 "*   La première ligne de la feuille de calcul doit contenir les en-têtes de colonnes, et non votre premier lieu.\n"
 "*   Assurez-vous que les données à importer se trouvent dans la première feuille de calcul du tableur.\n"
 "*   Vous devez disposer d’une colonne pour le nom de la localité et d’une colonne pour les codes uniques des localités.\n"
@@ -1648,7 +1704,7 @@ msgstr ""
 "\n"
 "L’étape suivante consiste à ajouter les détails de toutes les exploitations agricoles que vous visiterez dans le cadre de votre enquête. Comme pour l’ajout de lieux, vous pouvez ajouter des exploitations manuellement ou importer une liste à partir d’un fichier tableur. Le tableur doit être structuré de la même manière que pour l’ajout de lieux aux autres niveaux.\n"
 "\n"
-"Lors de l’importation d’une liste, vous devrez inclure des colonnes contenant le code unique de l’exploitation et le code unique du lieu dans lequel elle se trouve. Lorsque vous importez la liste, vous devez sélectionner le niveau de lieu auquel appartiennent les exploitations. Vous pouvez également, si vous le souhaitez, inclure des colonnes supplémentaires contenant des informations permettant d’identifier l’exploitation, telles que son nom, son numéro de téléphone, le nom de famille, etc., ou des détails sur les caractéristiques de l’exploitation qui pourraient s’avérer utiles pour une analyse ultérieure, comme sa taille.\n"
+"Lors de l’importation d’une liste, vous devrez inclure des colonnes contenant le code unique de l’exploitation agricole et le code unique du lieu dans lequel elle se trouve. Lorsque vous importez la liste, vous devez sélectionner le niveau de lieu auquel appartiennent les exploitations agricoles. Vous pouvez également, si vous le souhaitez, inclure des colonnes supplémentaires contenant des informations permettant d’identifier l’exploitation, telles que son nom, son numéro de téléphone, le nom de la famille, etc., ou des détails sur les caractéristiques de l’exploitation qui pourraient s’avérer utiles pour une analyse ultérieure, comme sa taille.\n"
 "\n"
 "##### Marquez cette section comme terminée lorsque :\n"
 "\n"
@@ -1676,9 +1732,9 @@ msgstr ""
 "\n"
 "S'il n'existe aucune traduction ou si les traductions disponibles ne conviennent pas au lieu où votre enquête est menée, vous devez ajouter une nouvelle traduction. Vous pouvez dupliquer une traduction existante pour vous en servir comme point de départ.\n"
 "\n"
-"Pour ajouter une nouvelle traduction, cliquez sur « Ajouter une nouvelle traduction » et donnez-lui un nom clair. La traduction apparaîtra dans le tableau. Vous pouvez ensuite utiliser le menu « Afficher/Modifier » pour télécharger le modèle de traduction. Ajoutez le texte traduit dans la colonne indiquée dans les fichiers xls, puis téléchargez-les à nouveau à l’aide du même menu. Une fois que les versions traduites des deux formulaires auront été téléchargées, la traduction sera disponible. Lorsque vous modifiez ou ajoutez une traduction, veillez à télécharger le fichier correspondant à la langue que vous souhaitez modifier, puis effectuez les modifications dans ce fichier. Si les en-têtes de colonnes ne correspondent pas à ceux du fichier d’origine ou si la colonne destinée au texte traduit est laissée vide, un message d’erreur s’affichera lors du téléchargement des fichiers.\n"
+"Pour ajouter une nouvelle traduction, cliquez sur « Ajouter une nouvelle traduction » et donnez-lui un nom clair. La traduction apparaîtra dans le tableau. Vous pouvez ensuite utiliser le menu « Afficher/Modifier » pour télécharger le modèle de traduction. Ajoutez le texte traduit dans la colonne indiquée dans les fichiers xls, puis téléchargez-les à nouveau à l’aide du même menu. Une fois que les versions traduites des deux formulaires auront été téléchargées, la traduction sera disponible. Lorsque vous modifiez ou ajoutez une traduction, il faut télécharger le fichier correspondant à la langue que vous souhaitez modifier, puis effectuez les modifications dans ce fichier. Si les en-têtes de colonnes ne correspondent pas à ceux du fichier d’origine ou si la colonne destinée au texte traduit est laissée vide, un message d’erreur s’affichera lors du téléchargement des fichiers.\n"
 "\n"
-"Si vous cliquez sur « Afficher/modifier la traduction », cela vous permettra de télécharger les fichiers XLS contenant le texte traduit. Vous pouvez modifier les traductions ajoutées par votre équipe. Pour ce faire, téléchargez les fichiers de traduction existants et suivez la même procédure que pour l’ajout d’une traduction : apportez les modifications dans la colonne correspondant à la langue cible, puis téléversez le fichier modifié via le même menu. Notez que la traduction doit refléter le texte **tel qu’il figure dans l’enquête** ; ce n’est pas le lieu approprié pour personnaliser le contenu de l’enquête. Les traductions ajoutées par d’autres équipes ou issues des formulaires ODK d’origine ne peuvent pas être modifiées directement, mais vous pouvez dupliquer la traduction pour créer une nouvelle version intégrant vos modifications.\n"
+"Si vous cliquez sur « Afficher/modifier la traduction », cela vous permettra de télécharger les fichiers XLS contenant le texte traduit. Vous pouvez modifier les traductions ajoutées par votre équipe. Pour faire cela, téléchargez les fichiers de traduction existants et suivez la même procédure que pour l’ajout d’une traduction : apportez les modifications dans la colonne correspondant à la langue cible, puis téléversez le fichier modifié via le même menu. Notez que la traduction doit refléter le texte **tel qu’il figure dans l’enquête** ; ce n’est pas l'endroit approprié pour personnaliser le contenu de l’enquête. Les traductions ajoutées par d’autres équipes ou issues des formulaires ODK d’origine ne peuvent pas être modifiées directement, mais vous pouvez dupliquer la traduction pour créer une nouvelle version intégrant vos modifications.\n"
 "\n"
 "La plateforme mettra les traductions téléchargées par les utilisateurs à la disposition de toutes les autres équipes.\n"
 "\n"
@@ -1706,7 +1762,7 @@ msgstr "Scanner un code QR dans ODK Collect"
 
 #: resources\views\components\pilot-qr-codes.blade.php:10
 msgid "Your project team has been setup. To link your Android device, install and open <b>ODK Collect.</b>"
-msgstr ""
+msgstr "Votre équipe de projet a été constituée. Pour connecter votre appareil Android, installez et ouvrez l'application <b>ODK Collect.</b>"
 
 #: resources\views\components\pilot-qr-codes.blade.php:12
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:105
@@ -1715,7 +1771,7 @@ msgstr "Si vous souhaitez obtenir plus de détails sur le projet, scannez le cod
 
 #: resources\views\components\pilot-qr-codes.blade.php:15
 msgid "Both forms will be available to you. The platform will automatically update the forms when you make local adaptations. If for some reason the survey is not fully up to date with your latest changes, you may manually deploy the latest version by clicking the <b>Deploy</b> button in the table below."
-msgstr ""
+msgstr "Les deux formulaires seront à votre disposition. La plateforme mettra automatiquement à jour les formulaires lorsque vous y apporterez des adaptations locales. Si, pour une raison quelconque, l'enquête n'est pas entièrement à jour par rapport à vos dernières modifications, vous pouvez déployer manuellement la dernière version en cliquant sur le bouton <b>« Déployer »</b> dans le tableau ci-dessous."
 
 #: resources\views\components\pilot-qr-codes.blade.php:22
 msgid "ODK Project not found. Is this platform connected to an ODK Central server?"
@@ -1789,7 +1845,7 @@ msgstr "La liste ci-dessous présente une série de réponses possibles à certa
 
 #: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:16
 msgid "Questions that use this list"
-msgstr ""
+msgstr "Questions utilisant cette liste"
 
 #: resources\views\filament\app\clusters\lookup-tables\resources\choice-list-entry-resource\widgets\choice-list-entries-info.blade.php:21
 msgid "Variable Name:"
@@ -2009,7 +2065,7 @@ msgstr "et vérifiez qu'elles fonctionnent comme prévu avant de mettre à jour 
 
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:133
 msgid "If there are changes that can be published, you can do so by clicking the <b>Publish</b> button on the table below. We highly recommend reviewing the forms as DRAFT versions before publishing. You can do so on the"
-msgstr ""
+msgstr "Si certaines modifications peuvent être publiées, vous pouvez le faire en cliquant sur le bouton <b>« Publier »</b> dans le tableau ci-dessous. Nous vous recommandons vivement de relire les formulaires en version « BROUILLON » avant de les publier. Vous pouvez le faire sur la"
 
 #: resources\views\filament\app\pages\pilot\pilot-index.blade.php:151
 msgid "Forms and submissions"
@@ -2045,7 +2101,7 @@ msgstr "Utilisez les codes QR ci-dessous pour accéder aux versions préliminair
 
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:33
 msgid "The user and the local practitioner should work through the survey in the ODK collect app, checking and answering all of the questions. The aim is to:"
-msgstr "L'utilisateur et le professionnel de santé local doivent parcourir le questionnaire dans l'application ODK Collect, en vérifiant et en répondant à toutes les questions. L'objectif est de :"
+msgstr "L'utilisateur et le professionnel local doivent parcourir le questionnaire dans l'application ODK Collect, en vérifiant et en répondant à toutes les questions. L'objectif est de :"
 
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:38
 msgid "Check that the survey layout and dependencies are correctly coded; for example, that mandatory questions are not showing as optional."
@@ -2065,7 +2121,7 @@ msgstr "Lorsque vous transmettez des données via le questionnaire test, celles-
 
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:56
 msgid "Draft submissions"
-msgstr "Projets de contributions"
+msgstr "Soumissions de projet"
 
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:56
 msgid "table further down this page, so you can confirm that the data has been submitted and recognised."
@@ -2125,38 +2181,47 @@ msgstr "Code QR indisponible"
 
 #: resources\views\filament\app\pages\place-adaptations\initial-pilot.blade.php:124
 msgid "Any submissions to these DRAFT versions will appear below, so you can confirm that the data you have submitted has been recognised. Note that these DRAFTs are intended as a technical test of the forms themselves, and the DRAFT submissions are not intended to be kept and processed. To conduct a full pilot, including data export and a test of the analysis process, please go to the"
-msgstr "Toutes les soumissions relatives à ces versions PRÉLIMINAIRES apparaîtront ci-dessous, ce qui vous permettra de vérifier que les données que vous avez transmises ont bien été prises en compte. Veuillez noter que ces versions PRÉLIMINAIRES ont pour but de tester les formulaires sur le plan technique et que les soumissions effectuées dans ce cadre ne sont pas destinées à être conservées ni traitées. Pour mener un projet pilote complet, incluant l'exportation des données et un test du processus d'analyse, veuillez vous rendre sur le"
+msgstr "Toutes les soumissions relatives à ces versions PRÉLIMINAIRES apparaîtront ci-dessous, ce qui vous permettra de vérifier que les données que vous avez transmises ont bien été prises en compte. Veuillez noter que ces versions PRÉLIMINAIRES ont pour but de tester les formulaires sur le plan technique et que les soumissions effectuées dans ce cadre ne sont pas destinées à être conservées ni traitées. Pour mener un projet pilote complet, comprenant l'exportation des données et un test du processus d'analyse, veuillez vous rendre sur le"
 
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:31
 msgid "CUSTOM SURVEY"
-msgstr ""
+msgstr "SONDAGE PERSONNALISÉ"
 
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:33
 msgid "You are customising the survey for this project only."
-msgstr ""
+msgstr "Vous personnalisez le questionnaire uniquement pour ce projet."
 
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:35
-msgid "Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. Youi will be prompted to update the translation of your survey in future steps."
+msgid "Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. You will be prompted to update the translation of your survey in future steps."
 msgstr ""
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:52
-msgid "Adapt units, crops, and other choice list entries to be locally relevant."
-msgstr ""
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:43
+msgid "Adapt HDDS hints"
+msgstr "Adapter les conseils HDDS"
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:53
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:44
+msgid "Adjust the help text shown for Household Dietary Diversity questions for each language."
+msgstr "Adaptez le texte d'aide affiché pour les questions relatives à la diversité alimentaire des ménages dans chaque langue."
+
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:45
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:58
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:34
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:42
 #: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:18
 msgid "Update"
 msgstr "Mise à jour"
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:65
-msgid "Initial piloting should be conducted to check the sense and functionality of the survey."
-msgstr ""
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:57
+msgid "Adapt units, crops, and other choice list entries to be locally relevant."
+msgstr "Adapter les unités, les cultures et les autres éléments de la liste de sélection afin qu'ils correspondent aux spécificités locales."
 
-#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:66
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:70
+msgid "Initial piloting should be conducted to check the sense and functionality of the survey."
+msgstr "Il convient de mener une première phase pilote afin de vérifier la pertinence et la fonctionnalité de l'enquête."
+
+#: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:71
 msgid "View details"
-msgstr ""
+msgstr "Voir les détails"
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:35
 msgid "Prepare survey"
@@ -2169,7 +2234,7 @@ msgstr "Préparer l'enquête"
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:325
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:357
 msgid "Not started"
-msgstr "Pas encore commencé"
+msgstr "Pas commencé"
 
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:73
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:135
@@ -2411,7 +2476,7 @@ msgstr "Soumettre"
 #: resources\views\livewire\survey-languages\team-translation-review.blade.php:2
 #: resources\views\team-translation-review.blade.php:2
 msgid "You can review the text for the ODK forms by downloading the files below."
-msgstr ""
+msgstr "Vous pouvez consulter le texte des formulaires ODK en téléchargeant les fichiers ci-dessous."
 
 #: resources\views\livewire\survey-languages\team-translation-review.blade.php:5
 #: resources\views\team-translation-review.blade.php:5
@@ -2454,8 +2519,8 @@ msgstr "Téléchargez à nouveau le fichier Excel dûment rempli ci-dessous. Si 
 
 #: packages\filament-team-management\src\Filament\App\Pages\RegisterTeam.php:16
 msgid "Register New Team"
-msgstr ""
+msgstr "Inscrire une nouvelle équipe"
 
 #: packages\filament-team-management\src\Filament\App\Pages\RegisterTeam.php:24
 msgid "Enter a name for the team"
-msgstr ""
+msgstr "Saisissez un nom pour l'équipe"

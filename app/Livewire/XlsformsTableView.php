@@ -41,6 +41,7 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
             ->recordTitleAttribute('title')
             ->columns([
                 TextColumn::make('title')
+                    ->label(t('Title'))
                     ->grow(false),
                 TextColumn::make('status')
                     ->color(fn($state) => match ($state) {
@@ -58,13 +59,13 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
                         'DRAFT' => 'heroicon-o-pencil',
                         default => 'heroicon-o-information-circle',
                     })
-                    ->description(fn(Xlsform $record): ?HtmlString => $record->live_needs_update || $record->draft_needs_update ? new HtmlString('<span class="text-red-600">updates available to publish</span>') : null)
+                    ->description(fn(Xlsform $record): ?HtmlString => $record->live_needs_update || $record->draft_needs_update ? new HtmlString('<span class="text-red-600">' . t('updates available to publish') . '</span>') : null)
                     ->label(fn () => t('Status')),
 
                 TextColumn::make('live_submissions_count')
-                    ->label(fn() => new HtmlString('No. of Submissions <br/>in ODK Central')),
+                    ->label(fn() => new HtmlString(t('No. of Submissions') . ' <br/>' . t('in ODK Central'))),
                 TextColumn::make('submissions_count')
-                    ->label(fn() => new HtmlString('No. of Submissions <br/>in database'))
+                    ->label(fn() => new HtmlString(t('No. of Submissions') . ' <br/>' . t('in database')))
                     ->counts('submissions'),
             ])
             ->filters([
@@ -73,29 +74,29 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
             ->recordActions([
                 Action::make('update_published_version')
                     ->visible(fn(Xlsform $record) => $record->live_needs_update || $record->draft_needs_update)
-                    ->label('Publish changes')
+                    ->label(t('Publish changes'))
                     ->extraAttributes(['class' => 'buttona text-white font-normal'])
                     ->action(function (Xlsform $record) {
 
                         $record->publishForm();
 
                         Notification::make('update_success')
-                            ->title('Success!')
-                            ->body("The form {$record->title} is being compiled and will be deployed shortly.")
+                            ->title(t('Success!'))
+                            ->body(t("The form :title is being compiled and will be deployed shortly.", ['title' => $record->title]))
                             ->color('success')
                             ->send();
                     }),
 
                 Action::make('pull-submissions')
-                    ->label('Manually Get Submissions')
+                    ->label(t('Manually Get Submissions'))
                     ->action(function (Xlsform $record) {
 
                         $submissionCount = $record->getSubmissions();
 
                         $record->refresh();
                         Notification::make('update_started')
-                            ->title('Form publishing started')
-                            ->body("{$submissionCount} submissions have been pulled from the ODK server for the form {$record->title} (they may take a moment to process).")
+                            ->title(t('Form publishing started'))
+                            ->body(t(":count submissions have been pulled from the ODK server for the form :title (they may take a moment to process).", ['count' => $submissionCount, 'title' => $record->title]))
                             ->persistent()
                             ->send();
 
@@ -105,7 +106,7 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
             ])
             ->headerActions([
                 Action::make('download-submissions')
-                    ->label('Download Submissions')
+                    ->label(t('Download Submissions'))
                     ->action(function () {
                         return Excel::download(new FarmSurveyDataExport(HelperService::getCurrentOwner()), 'submissions.xlsx');
                     }),
@@ -119,8 +120,8 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
     {
         $this->resetTable();
         Notification::make('publish_success')
-            ->title('Success!')
-            ->body("The form has been published successfully.")
+            ->title(t('Success!'))
+            ->body(t('The form has been published successfully.'))
             ->color('success')
             ->send();
     }
