@@ -34,15 +34,15 @@
                             <span class="mt-2 text-center">{{ t('Prepare survey') }}</span>
                             <!-- Progress bar -->
                             @if ($team->languages_progress === 'not_started')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-1/12"></div>
                                 </div>
                             @elseif ($team->languages_progress === 'in_progress')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-6/12"></div>
                                 </div>
                             @elseif ($team->languages_progress === 'complete')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-full"></div>
                                 </div>
                             @endif
@@ -95,15 +95,15 @@
                             <span class="mt-2 text-center">{{ t("Sampling") }}</span>
                             <!-- Progress bar -->
                             @if ($team->sampling_progress === 'complete')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-full"></div>
                                 </div>
                             @elseif ($team->sampling_progress === 'in_progress')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-6/12"></div>
                                 </div>
                             @else
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-1/12"></div>
                                 </div>
                             @endif
@@ -156,15 +156,15 @@
                             <span class="mt-2 text-center">{{ t("Localisation") }}</span>
                             <!-- Progress bar -->
                             @if ($team->pba_progress === 'not_started' && $team->optional_modules_progress === 'not_started' && $team->pilot_progress === 'not_started')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-1/12"></div>
                                 </div>
                             @elseif ($team->pba_progress === 'complete' && $team->optional_modules_progress === 'complete' && $team->pilot_progress === 'complete')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-full"></div>
                                 </div>
                             @else
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-6/12"></div>
                                 </div>
                             @endif
@@ -286,15 +286,15 @@
                             <span class="mt-2 text-center">{{ t("Live Data Collection") }}</span>
                             <!-- Progress bar -->
                             @if ($team->setup_survey_progress === 'not_started' && $team->data_collection_progress === 'not_started')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-1/12"></div>
                                 </div>
                             @elseif ($team->setup_survey_progress === 'complete' && $team->data_collection_progress === 'complete')
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-full"></div>
                                 </div>
                             @else
-                                <div class="w-3/4 bg-white bg-opacity-50 rounded-full h-2.5 mt-8 lg:mx-auto">
+                                <div class="w-3/4 bg-white/50 rounded-full h-2.5 mt-8 lg:mx-auto">
                                     <div class="bg-white h-2.5 rounded-full w-6/12"></div>
                                 </div>
                             @endif

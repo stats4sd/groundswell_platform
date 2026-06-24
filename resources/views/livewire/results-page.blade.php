@@ -10,7 +10,7 @@
         <img src="images/groundswell-international-bg.jpg" alt="Background Image" class="w-full h-36 object-cover absolute" style="object-position:center; z-index: 0">
 
         <!-- Overlay Content -->
-        <div class="relative inset-0 flex text-center items-center justify-center h-36 bg-black bg-opacity-50 lg:pt-2 z-10">
+        <div class="relative inset-0 flex text-center items-center justify-center h-36 bg-black/50 lg:pt-2 z-10">
             <div class="w-max flex flex-col items-center relative">
                 <!-- Headings -->
                 <div class="relative flex items-center mb-0 text-center px-4">

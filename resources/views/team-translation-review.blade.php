@@ -13,7 +13,7 @@
             <li>{{ t("Re-upload the completed Excel file below. If there is already a file uploaded, you can delete it and upload a replacement.") }}</li>
         </ol>
         </p>
-        <div class=" border-b py-4"></div>
+        <div class=" border-b border-gray-200 py-4"></div>
     @endif
 
     <livewire:survey-languages.team-translation-review-edit-form :locale="$locale" :team="$team" :canMaintain="$canMaintain ?? false"/>

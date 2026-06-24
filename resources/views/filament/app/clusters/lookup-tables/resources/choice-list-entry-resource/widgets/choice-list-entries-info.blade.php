@@ -15,7 +15,7 @@
     <x-filament::section collapsed :heading="$questionsHeading" icon="heroicon-o-information-circle" collapsible>
 
         <ul>
-            <li class="flex w-full border-b mb-2">
+            <li class="flex w-full border-b border-gray-200 mb-2">
                 <span class="w-1/4 text-right font-bold pr-4">{{ t("Variable Name:") }}</span>
                 <span class="w-3/4 font-bold">{{ t("Question text") }}</span>
         @foreach($surveyRows as $surveyRow)

@@ -16,6 +16,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -125,6 +126,10 @@ class AppPanelProvider extends PanelProvider
             //         '216, 234, 208',
             //     ],
             // ])
+            // Brand orange for the Change Language button (and any color="orange" buttons).
+            ->colors([
+                'orange' => Color::hex('#C45D5D'),
+            ])
             ->viteTheme('resources/css/filament/app/theme.css')
             // to include XlsformResource from main repo
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')

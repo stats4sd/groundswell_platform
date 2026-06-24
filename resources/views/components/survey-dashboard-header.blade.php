@@ -15,7 +15,7 @@ use App\Filament\App\Pages\PlaceAdaptations\InitialPilot;
     <img src="/images/groundswell-international-bg.jpg" alt="Background Image" class="w-full h-full md:max-h-[80vh] lg:max-h-[70vh] object-cover absolute" style="object-position:center; z-index: 0">
 
     <!-- Overlay Content -->
-    <div class="relative inset-0 f h-full md:max-h-[80vh] lg:max-h-[70vh] bg-black bg-opacity-50 pt-6 lg:pt-2 z-8 px-8 md:px-24 py-20 pr-36">
+    <div class="relative inset-0 f h-full md:max-h-[80vh] lg:max-h-[70vh] bg-black/50 pt-6 lg:pt-2 z-8 px-8 md:px-24 py-20 pr-36">
 
         <!-- Headings -->
         <div class="container mx-auto xl:px-28">

@@ -94,7 +94,7 @@ $instructions = tfile('pilot-index');
                                     <div class="my-4  bg-red-100 border-2 border-red-700 text-red-700 px-4 py-3 rounded-xl relative flex-col" role="alert">
                                         <div class=" flex flex-col md:flex-row items-center gap-4">
 
-                                            <x-heroicon-o-exclamation-triangle class="w-12 sm:w-16 flex-shrink-0 text-red mb-2 md:mb-0"/>
+                                            <x-heroicon-o-exclamation-triangle class="w-12 sm:w-16 shrink-0 text-red mb-2 md:mb-0"/>
 
                                             <p>
                                                 {{ t("One or more of your forms has changes that have not been published. These changes will not be reflected in the forms used for the pilot test. You can review the form details and and publish changes as necessary using the table below.") }}
