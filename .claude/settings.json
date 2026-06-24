@@ -33,7 +33,12 @@
       "Bash(./vendor/bin/pest)",
       "Bash(./vendor/bin/pest tests/Feature/Smoke/PublicRoutesTest.php)",
       "Bash(./vendor/bin/pest --filter=ArchTest)",
-      "Bash(./vendor/bin/pest tests/Feature/Smoke/AdminPanelTest.php)"
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AdminPanelTest.php)",
+      "Bash(./vendor/bin/pest tests/Feature/Crud/AdminPanelCrudTest.php tests/Feature/Smoke/AdminPanelTest.php)",
+      "Bash(./vendor/bin/pest tests/Feature/Crud/AdminPanelCrudTest.php --filter=\"team\")",
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AppPanelTest.php tests/Feature/Crud/AppPanelCrudTest.php)",
+      "Bash(./vendor/bin/pest tests/Feature/Smoke/AppPanelTest.php --filter=\"monitor data collection\")",
+      "Bash(./vendor/bin/pest tests/Feature/Crud/AppPanelCrudTest.php --filter=\"can create location level|can bulk delete location level\")"
     ]
   }
 }
