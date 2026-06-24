@@ -4,14 +4,19 @@
 
         <div class="flex flex-col gap-y-6">
 
-            <x-filament-panels::form wire:submit="save">
+            <form wire:submit="save">
 
                 {{ $this->form }}
 
-                <x-filament-panels::form.actions
-                    :actions="$this->getFormActions()" />
+                <div class="fi-form-actions mt-6">
+                    <div class="flex flex-wrap items-center gap-3">
+                        @foreach ($this->getFormActions() as $action)
+                            {{ $action }}
+                        @endforeach
+                    </div>
+                </div>
 
-            </x-filament-panels::form>
+            </form>
 
         </div>
 
