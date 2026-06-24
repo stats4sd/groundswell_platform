@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "910ecba2e0aaf115e8a6312ef2d337a1",
+    "content-hash": "606d2c4042741a5b7387a4b06e85df90",
     "packages": [
         {
             "name": "althinect/filament-spatie-roles-permissions",
@@ -13048,6 +13048,46 @@
                 }
             ],
             "time": "2025-08-14T07:29:31+00:00"
+        },
+        {
+            "name": "filament/upgrade",
+            "version": "v5.6.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/filamentphp/upgrade.git",
+                "reference": "1dec8fe9a7d36892dfaca9460f640c4c9fb2dc2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/upgrade/zipball/1dec8fe9a7d36892dfaca9460f640c4c9fb2dc2c",
+                "reference": "1dec8fe9a7d36892dfaca9460f640c4c9fb2dc2c",
+                "shasum": ""
+            },
+            "require": {
+                "nunomaduro/termwind": "^2.0",
+                "php": "^8.2",
+                "rector/rector": "^2.0"
+            },
+            "bin": [
+                "bin/filament-v5"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Filament\\Upgrade\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Upgrade Filament v4 code to Filament v5.",
+            "homepage": "https://github.com/filamentphp/filament",
+            "support": {
+                "issues": "https://github.com/filamentphp/filament/issues",
+                "source": "https://github.com/filamentphp/filament"
+            },
+            "time": "2026-05-20T17:21:47+00:00"
         },
         {
             "name": "filp/whoops",

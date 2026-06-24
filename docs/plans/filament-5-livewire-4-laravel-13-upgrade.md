@@ -10,12 +10,12 @@ This `filament-4` branch is **already mid-migration**: the `filament-odk-link` s
 
 **This is not a staged migration.** The team-management submodule has already been migrated against the package's **Filament 5** structure, and the host-app reference fixes that go with it are already committed. That means the repo cannot return to a green, testable state at any intermediate version — `pest`/`phpstan` cannot run while installed Filament is v3 (the package requires v5), and stopping at Filament 4 would leave the team-management F5 references broken. There is **no useful checkpoint** between "here" and "Filament 5 + Livewire 4 + Laravel 13".
 
-So the plan drives all three frameworks to their targets in one pass, applies every code change the upgrades require, and **validates everything only at the end**. We expect bugs at first green-attempt; those are fixed *after* the update lands, not interleaved with it. Package submodule migrations (finishing odk-link's 3 stragglers, releasing/aligning the F5 tags) are handled separately by Dave; this plan owns the root app and treats compatible package versions as a prerequisite gate.
+So the plan drives all three frameworks to their targets in one pass, applies every code change the upgrades require, and **validates everything only at the end**. We expect bugs at first green-attempt; those are fixed _after_ the update lands, not interleaved with it. Package submodule migrations (finishing odk-link's 3 stragglers, releasing/aligning the F5 tags) are handled separately by Dave; this plan owns the root app and treats compatible package versions as a prerequisite gate.
 
 ## Ground-truth inventory (root app)
 
 *   11 Resources, ~42 Pages, 3 Widgets, 7 RelationManagers, 2 Shared traits — 72 Filament PHP files across Admin/App/Program panels.
-*   Layout components in use: `Section` (~13), `Fieldset` (3, incl. responsive `columns(['sm'=>1,'md'=>2,'lg'=>2])`), `columns()` (~30), `columnSpanFull()` (8), `columnSpan()` (~2). No `Grid`/`Split`.
+*   Layout components in use: `Section` (~13),~ `~Fieldset~` ~(3, incl. responsive~ `~columns(['sm'=>1,'md'=>2,'lg'=>2])~`~),~ `~columns()~` ~(~30), `columnSpanFull()` (8), `columnSpan()` (~2). No `Grid`/`Split`.
 *   10 files use `form(Form $form)` / `Filament\Forms\Form`; 5 use `Filament\Forms\{Get,Set}`. **No** custom Field/Column/Entry classes overriding `make()`.
 *   `FileUpload` ×3 — all on the **local default disk** (Excel import temp files), no S3/`ImageColumn`/`ImageEntry` → the v4 private-visibility default is a non-issue.
 *   Multi-tenancy: App panel (`Team`), Program panel (`Program`), Admin (none). 2 App clusters.
@@ -45,16 +45,16 @@ The single `composer update` cannot resolve until **all** Filament code is F5-co
 
 ## The update (one pass — no testing until Validation)
 
-### 1. Code changes that don't need the new packages installed first
+### 1\. Code changes that don't need the new packages installed first
 
 Do these against the current tree so `composer update` has nothing dangling to resolve:
 
-*   **Drop `joserick/laravel-livewire-discover`.** It is already inert: `config/livewire-discover.php` is the unedited placeholder and its provider `App\Providers\LivewireDiscoverServiceProvider` is listed in `bootstrap/providers.php` but the class file does not exist. Remove the require, delete the provider line from `bootstrap/providers.php`, delete `config/livewire-discover.php`. Existing components (`app/Livewire/DataCollection/*`, `app/Livewire/SurveyLanguages/*`) already resolve via Livewire's default convention-based discovery (`data-collection.*`, `survey-languages.*`) — no functional change.
-*   **`awcodes/shout` → native `Callout`** (`Filament\Schemas\Components\Callout`). Rewrite the 5 root-app usages — `app/Livewire/CoverPage.php`, `app/Filament/App/Resources/TeamResource/RelationManagers/UsersRelationManager.php`, `app/Filament/App/Pages/Auth/EditProfile.php`, `app/Filament/Admin/Resources/UserResource/Pages/ListUsers.php`, `app/Filament/Admin/Resources/TeamResource/RelationManagers/UsersRelationManager.php`. (Shout is no longer used in odk-link after its latest dev version — Dave.) Remove the `awcodes/shout` require. *Note: `Callout` is a Filament 4.2+ class, so these edits only compile after `composer update` lands — write them now but expect red until step 3.*
-*   **`better-futures-studio/filament-local-logins` → [`bramr94/filament-developer-logins`](https://filamentphp.com/plugins/bramr94-developer-logins).** Three sites: the plugin registration in `app/Providers/Filament/AppPanelProvider.php` (`new LocalLogins`), the `HasLocalLogins` trait on `app/Filament/App/Pages/Auth/Login.php`, and `config/filament-local-logins.php`. Port the `ADMIN_PANEL_LOCAL_LOGINS_ENABLED` env gating to the new plugin's config; verify it still hides local logins outside `local`. Remove the old require + config file.
-*   **`awcodes/filament-table-repeater` → native Repeater table layout.** This is the `TableRepeater` usage in the odk-link trait `WithXlsformModuleVersionQuestionEditing` (coordinate with Dave). Remove the require. Fiddliest of the four.
+*   **Drop** `**joserick/laravel-livewire-discover**`**.** It is already inert: `config/livewire-discover.php` is the unedited placeholder and its provider `App\Providers\LivewireDiscoverServiceProvider` is listed in `bootstrap/providers.php` but the class file does not exist. Remove the require, delete the provider line from `bootstrap/providers.php`, delete `config/livewire-discover.php`. Existing components (`app/Livewire/DataCollection/*`, `app/Livewire/SurveyLanguages/*`) already resolve via Livewire's default convention-based discovery (`data-collection.*`, `survey-languages.*`) — no functional change.
+*   `**awcodes/shout**` **→ native** `**Callout**` (`Filament\Schemas\Components\Callout`). Rewrite the 5 root-app usages — `app/Livewire/CoverPage.php`, `app/Filament/App/Resources/TeamResource/RelationManagers/UsersRelationManager.php`, `app/Filament/App/Pages/Auth/EditProfile.php`, `app/Filament/Admin/Resources/UserResource/Pages/ListUsers.php`, `app/Filament/Admin/Resources/TeamResource/RelationManagers/UsersRelationManager.php`. (Shout is no longer used in odk-link after its latest dev version — Dave.) Remove the `awcodes/shout` require. _Note:_ `_Callout_` _is a Filament 4.2+ class, so these edits only compile after_ `_composer update_` _lands — write them now but expect red until step 3._
+*   `**better-futures-studio/filament-local-logins**` **→** [`**bramr94/filament-developer-logins**`](https://filamentphp.com/plugins/bramr94-developer-logins)**.** Three sites: the plugin registration in `app/Providers/Filament/AppPanelProvider.php` (`new LocalLogins`), the `HasLocalLogins` trait on `app/Filament/App/Pages/Auth/Login.php`, and `config/filament-local-logins.php`. Port the `ADMIN_PANEL_LOCAL_LOGINS_ENABLED` env gating to the new plugin's config; verify it still hides local logins outside `local`. Remove the old require + config file.
+*   `**awcodes/filament-table-repeater**` **→ native Repeater table layout.** This is the `TableRepeater` usage in the odk-link trait `WithXlsformModuleVersionQuestionEditing` (coordinate with Dave). Remove the require. Fiddliest of the four.
 
-### 2. Bump every constraint at once
+### 2\. Bump every constraint at once
 
 In root `composer.json`, in a single edit:
 
@@ -68,7 +68,7 @@ In root `composer.json`, in a single edit:
 
 Then `composer update -W`. Livewire 4 comes in transitively via Filament 5; pin it explicitly if the resolver needs help.
 
-### 3. Run the Filament codemods (v4 then v5)
+### 3\. Run the Filament codemods (v4 then v5)
 
 Per the [v4](https://filamentphp.com/docs/4.x/upgrade-guide) and [v5](https://filamentphp.com/docs/5.x/upgrade-guide) upgrade guides. Run the v4 tool first (it does the bulk of namespace/signature rewrites — `Filament\Schemas\Schema`, `form(Schema $schema)`, `Get`/`Set` moves across `app/Filament/`), then the v5 tool (Livewire-4 compatibility pass).
 
@@ -82,24 +82,24 @@ vendor/bin/filament-v5
 
 Review every diff. The codemods do not cover the manual breaking changes in step 4.
 
-### 4. Manual breaking changes (audit each — codemods miss these)
+### 4\. Manual breaking changes (audit each — codemods miss these)
 
 **Filament 3→4 layout / behaviour:**
 
 *   **Layout default-span change**: `Section`/`Fieldset` now span 1 column, not full width. Audit the ~13 `Section` + 3 `Fieldset` sites and the `columns()`/`columnSpanFull()` usage (esp. the responsive `Fieldset` in `app/Filament/Shared/WithXlsformModuleVersionQuestionEditing.php`); add `columnSpanFull()`/`columnSpan()` where full width is expected.
-*   **`columnSpan()` now targets `>= lg`** by default — verify the ~2 sites that pass scalars.
+*   `**columnSpan()**` **now targets** `**>= lg**` by default — verify the ~2 sites that pass scalars.
 *   **Table filters deferred by default** — users must click Apply. Decide per-table vs global `deferFilters(false)` (set in a panel/service provider for prior behaviour) across the ~11 resources.
-*   **`unique()` now ignores the current record by default** — audit form validation; pass `ignoreRecord: false` where the old behaviour was relied on.
+*   `**unique()**` **now ignores the current record by default** — audit form validation; pass `ignoreRecord: false` where the old behaviour was relied on.
 *   **Enum fields always return enum instances** — check Select/state handling on enum-backed attributes.
 *   **URL param renames** (`activeTab`→`tab`, `tableFilters`→`filters`, `tableSort`→`sort`, `activeRelationManager`→`relation`) — fix any hardcoded query strings / links / tests that depend on them.
 *   **Authorization**: replace any overridden `can*()` with `get*AuthorizationResponse()` if used.
-*   **`TableRepeater` → native v4 repeater table layout** (odk-link trait) — same task as the package removal in step 1.
+*   `**TableRepeater**` **→ native v4 repeater table layout** (odk-link trait) — same task as the package removal in step 1.
 *   **Tenancy auto-scoping**: F4 auto-scopes queries and associates new records to the current tenant. Review the App/Program panel providers and any manual tenant scoping / `SetLatest*Middleware` for now-redundant or now-double scoping.
 
 **Livewire 3→4** ([guide](https://livewire.laravel.com/docs/4.x/upgrading)) — codebase is well-positioned (modern attributes, no legacy modifiers):
 
-*   **`<livewire:…>` tags must be explicitly closed** — already self-closing; confirm none left open (notably the looped `team-translation-entry` and `pilot-index` embeds).
-*   **`wire:model` modifier semantics**: `.blur`/`.change` now also gate client-side state sync; add `.live` to restore prior behaviour where used. Audit `wire:` directives in the 13 Livewire blade views + the custom Alpine `sortable.js` directives against the new lifecycle.
+*   `**<livewire:…>**` **tags must be explicitly closed** — already self-closing; confirm none left open (notably the looped `team-translation-entry` and `pilot-index` embeds).
+*   `**wire:model**` **modifier semantics**: `.blur`/`.change` now also gate client-side state sync; add `.live` to restore prior behaviour where used. Audit `wire:` directives in the 13 Livewire blade views + the custom Alpine `sortable.js` directives against the new lifecycle.
 *   Component organisation relies on default convention discovery (discover package dropped in step 1); use [LW4 namespaces](https://livewire.laravel.com/docs/4.x/components#organizing-components) only if custom subfolder names are wanted.
 
 **Laravel 11→13:**
@@ -107,18 +107,18 @@ Review every diff. The codemods do not cover the manual breaking changes in step
 *   Apply the [L12](https://laravel.com/docs/12.x/upgrade) then [L13](https://laravel.com/docs/13.x/releases) upgrade-guide diffs (mostly config/default changes — both are low-breakage). Direct 11→13 is unsupported as a documented path, but since we're not testing intermediate states, apply both guides' diffs in one pass against the current config.
 *   Confirm all first-party packages from the gate table resolve on 13.
 
-### 5. Frontend — Tailwind v4 theme migration
+### 5\. Frontend — Tailwind v4 theme migration
 
 `resources/css/filament/app/theme.css`: upgrade to Tailwind **4.1+**, replace `@config` with `@source`/CSS-based config, port the custom CSS-variable palette (primary/brown/green/orange…) and Montserrat font, drop `resources/css/filament/app/tailwind.config.js`.
 
-### 6. Config
+### 6\. Config
 
 *   `php artisan vendor:publish --tag=filament-config`; review `post-autoload-dump`'s `filament:upgrade`.
 *   Optional: `php artisan filament:upgrade-directory-structure-to-v4 --dry-run` — decide whether to adopt the new resource/cluster directory layout (cosmetic; can defer).
 
 ## Validation (only now — after everything above lands)
 
-Run the full gate. Expect failures on the first attempt; this is the bug-fixing phase, done *after* the update, not interleaved.
+Run the full gate. Expect failures on the first attempt; this is the bug-fixing phase, done _after_ the update, not interleaved.
 
 *   `./vendor/bin/pest` (SQLite in-memory, `DatabaseSeeder` auto-runs). This is the first time the suite can run since the team-management F5 fixes landed.
     *   Re-check the two items flagged in the [team-management change-log](../change-logs/filament-team-management-f5-reference-fixes.md): (a) the exact `EditTenantProfile` `save`/`fillForm` API exercised by `ProgramPanelCrudTest`, and (b) that `Livewire::make()` resolves the un-discovered `ManageProgram*` widgets wired via `tenantProfile()`.
@@ -143,4 +143,4 @@ Then fix bugs to green.
 *   **F4 layout default-span + deferred-filters** are the most likely sources of subtle UI regressions across 42 pages / 11 resources.
 *   **F4 tenancy auto-scoping** may double-apply with existing manual scoping.
 *   **Tailwind v3→v4** theme port is the fiddliest frontend task.
-*   **`eightynine/filament-excel-import`** moving off `3.x-dev` to a stable F5 line may shift the import-action API used by `ImportLocationsAction`/`ImportFarmsAction`.
+*   `**eightynine/filament-excel-import**` moving off `3.x-dev` to a stable F5 line may shift the import-action API used by `ImportLocationsAction`/`ImportFarmsAction`.
