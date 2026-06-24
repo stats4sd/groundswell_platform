@@ -24,9 +24,7 @@ use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModuleResource\P
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModuleVersionResource\Pages\ManageXlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\CreateUser;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\EditUser;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\ListUsers;
+use App\Filament\Admin\Resources\UserResource\Pages\ListUsers;
 
 use function Pest\Livewire\livewire;
 
@@ -282,6 +280,9 @@ describe('Admin panel CRUD — Team', function () {
 
 // ---------------------------------------------------------------------------
 
+// The package no longer ships full-page Create/Edit user pages — users are created
+// via the "invite users" action on the list page and managed inline. The Admin
+// UserResource exposes only the index (list) page.
 describe('Admin panel CRUD — User', function () {
 
     beforeEach(function () {
@@ -294,51 +295,9 @@ describe('Admin panel CRUD — User', function () {
         livewire(ListUsers::class)->assertSuccessful();
     });
 
-    test('user create page loads', function () {
-        $this->get('/admin/users/create')->assertOk();
-    });
-
-    test('can create user', function () {
-        livewire(CreateUser::class)
-            ->fillForm([
-                'name' => 'Test User',
-                'email' => 'testuser@example.com',
-                'password' => 'password123',
-            ])
-            ->call('create')
-            ->assertHasNoFormErrors();
-
-        $this->assertDatabaseHas('users', ['email' => 'testuser@example.com']);
-    });
-
-    test('create user requires name', function () {
-        livewire(CreateUser::class)
-            ->fillForm(['name' => '', 'email' => 'x@example.com', 'password' => 'password123'])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
-    });
-
-    test('create user requires email', function () {
-        livewire(CreateUser::class)
-            ->fillForm(['name' => 'Test', 'email' => '', 'password' => 'password123'])
-            ->call('create')
-            ->assertHasFormErrors(['email' => 'required']);
-    });
-
-    test('user edit page loads', function () {
-        $user = User::factory()->create();
-        $this->get("/admin/users/{$user->id}/edit")->assertOk();
-    });
-
-    test('can edit user name', function () {
-        $user = User::factory()->create();
-
-        livewire(EditUser::class, ['record' => $user->id])
-            ->fillForm(['name' => 'Edited Name'])
-            ->call('save')
-            ->assertHasNoFormErrors();
-
-        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Edited Name']);
+    test('invite users action is available on the list page', function () {
+        livewire(ListUsers::class)
+            ->assertActionExists('invite users');
     });
 
 });

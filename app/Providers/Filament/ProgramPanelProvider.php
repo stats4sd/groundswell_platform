@@ -19,7 +19,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Stats4sd\FilamentTeamManagement\Filament\App\Pages\RegisterProgram;
+use Stats4sd\FilamentTeamManagement\Filament\Program\Pages\RegisterProgram;
+use App\Filament\Program\ManageProgram\ManageProgram;
 use App\Filament\Program\Pages\Dashboard;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\CheckIfProgramAdmin;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\SetLatestProgramMiddleware;
@@ -39,6 +40,9 @@ class ProgramPanelProvider extends PanelProvider
             // disable "Register New Program" option in multi-tenancy
             // new program should be created by admin, user should not be able to create a new program
             ->tenantRegistration(RegisterProgram::class)
+            // Program management UI (members/invites/projects) is now the tenant-profile
+            // page provided by the package, replacing the old Program-panel ProgramResource.
+            ->tenantProfile(ManageProgram::class)
             ->tenantMiddleware([
                 SetLatestProgramMiddleware::class,
             ])
@@ -46,7 +50,6 @@ class ProgramPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
-            ->discoverResources(in: app_path('Filament/Program/Resources'), for: 'App\\Filament\\Program\\Resources')
             ->discoverPages(in: app_path('Filament/Program/Pages'), for: 'App\\Filament\\Program\\Pages')
             ->pages([
                 Dashboard::class,

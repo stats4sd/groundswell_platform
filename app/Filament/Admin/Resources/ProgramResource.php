@@ -6,7 +6,7 @@ use App\Filament\Admin\Resources\ProgramResource\Pages;
 use Filament\Tables\Table;
 use Stats4sd\FilamentTeamManagement\Models\Program;
 
-class ProgramResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\ProgramResource
+class ProgramResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Programs\ProgramResource
 {
     protected static ?string $model = Program::class;
 

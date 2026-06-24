@@ -8,10 +8,10 @@ use App\Models\Team;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\TeamResource\RelationManagers\InvitesRelationManager;
+use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Teams\RelationManagers\InvitesRelationManager;
 use App\Filament\Admin\Resources\TeamResource\RelationManagers\UsersRelationManager;
 
-class TeamResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\TeamResource
+class TeamResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Teams\TeamResource
 {
     protected static ?string $model = Team::class;
 

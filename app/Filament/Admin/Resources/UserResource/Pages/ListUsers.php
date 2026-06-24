@@ -9,7 +9,7 @@ use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Pages\ListRecords;
 use Spatie\Permission\Models\Role;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\ListUsers as BaseListUsers;
+use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Users\Pages\ListUsers as BaseListUsers;
 use Stats4sd\FilamentTeamManagement\Models\Program;
 use Stats4sd\FilamentTeamManagement\Models\User;
 

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Program\Pages;
 
-class Dashboard extends \Stats4sd\FilamentTeamManagement\Filament\Program\Pages\Dashboard
+class Dashboard extends \Filament\Pages\Dashboard
 {
     public static function canAccess(): bool
     {

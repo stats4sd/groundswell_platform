@@ -3,17 +3,15 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\UserResource\Pages;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\CreateUser;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource\Pages\EditUser;
 
-class UserResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\UserResource
+class UserResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Users\UserResource
 {
     public static function getPages(): array
     {
+        // The package no longer ships full-page Create/Edit user pages — users are
+        // created via the "invite users" action on the list page and edited inline.
         return [
             'index' => Pages\ListUsers::route('/'),
-            'create' => CreateUser::route('/create'),
-            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }
