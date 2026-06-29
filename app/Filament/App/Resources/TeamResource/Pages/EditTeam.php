@@ -5,7 +5,7 @@ namespace App\Filament\App\Resources\TeamResource\Pages;
 use Filament\Actions\DeleteAction;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Teams\TeamResource;
+use App\Filament\App\Resources\TeamResource;
 
 class EditTeam extends EditRecord
 {

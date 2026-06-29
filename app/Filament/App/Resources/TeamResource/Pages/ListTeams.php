@@ -5,7 +5,7 @@ namespace App\Filament\App\Resources\TeamResource\Pages;
 use Filament\Actions\CreateAction;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Teams\TeamResource;
+use App\Filament\App\Resources\TeamResource;
 
 class ListTeams extends ListRecords
 {

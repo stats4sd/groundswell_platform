@@ -18,6 +18,7 @@ use Filament\Schemas\Components\Callout;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
+use Illuminate\Database\Eloquent\Model;
 use Stats4sd\FilamentTeamManagement\Models\Interfaces\TeamInterface;
 use Stats4sd\FilamentTeamManagement\Models\User;
 
@@ -25,10 +26,14 @@ class UsersRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
 
-    // turn on Edit mode so that "Add Existing User to team" button will be shown when viewing team record
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return auth()->user()?->can('view my team') ?? false;
+    }
+
     public function isReadOnly(): bool
     {
-        return false;
+        return ! (auth()->user()?->can('maintain my team') ?? false);
     }
 
     public function form(Schema $schema): Schema
@@ -84,9 +89,9 @@ class UsersRelationManager extends RelationManager
                             ->reorderable(false)
                             ->addActionLabel(t('Add Another Email Address')),
                     ])
-                    ->visible(fn () => auth()->user()->can('maintain my team'))
+                    ->visible(! $this->isReadOnly())
                     ->action(function (array $data, RelationManager $livewire) {
-                        if (!auth()->user()->can('maintain my team')) {
+                        if ($this->isReadOnly()) {
                             abort(403);
                         }
 
@@ -94,7 +99,7 @@ class UsersRelationManager extends RelationManager
                     }),
                 AttachAction::make()
                     ->label(fn () => t('Add Existing User to team'))
-                    ->visible(fn () => auth()->user()->can('maintain my team')),
+                    ->visible(! $this->isReadOnly()),
             ])
             ->recordActions([
                 // hide "Edit User Role" button as team admin is not being used in this application
