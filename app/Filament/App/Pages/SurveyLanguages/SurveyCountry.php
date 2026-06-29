@@ -127,12 +127,12 @@ class SurveyCountry extends Page implements HasForms
             abort(403);
         }
 
-        $state = $this->form->getState();
-
-        $this->team->update(['country_id' => $state['country_id']]);
+        // Get data from formData instead of form->getState(), to avoid Filament dehydration double-sync side-effects.
+        // Both country and language do not have validation rules. Bypassing getState() is safe. 
+        $this->team->update(['country_id' => $this->formData['country_id'] ?? null]);
 
         $syncData = [];
-        foreach ($state['languages'] ?? [] as $langId) {
+        foreach ($this->formData['languages'] ?? [] as $langId) {
             $language = Language::find($langId);
             $syncData[$langId] = ['locale_id' => $language->defaultLocale?->id];
         }
