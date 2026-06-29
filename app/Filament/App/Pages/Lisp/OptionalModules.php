@@ -170,6 +170,55 @@ class OptionalModules extends Page implements HasForms, HasTable
         $this->selectedVersionIds = null;
     }
 
+    private function getModuleKeywords(): array
+    {
+        $xlsform = $this->getSelectedXlsform();
+
+        if (! $xlsform) {
+            return [];
+        }
+
+        $title = strtolower($xlsform->title);
+
+        if (str_contains($title, 'global indicators')) {
+            return [
+                'characterization of the agroecological transition',
+                'caet',
+                'agroforestry',
+                'bushmeat',
+                'wild foods',
+                'detailed cattle',
+                'changes in farm environment',
+                'pests and diseases',
+                'cultivated forages',
+                'expenditures',
+                'forest products',
+                'livestock feeding',
+                'membership of groups',
+                'natural resource management',
+                'seed varieties',
+                'slash and burn',
+                'uptake of interventions',
+            ];
+        }
+
+        if (str_contains($title, "women's form")) {
+            return [
+                'coping strategies',
+                'disability',
+                'food environments',
+                'innovation',
+                'gender attitudes',
+                'on farm labour by gender',
+                'relative vulnerability',
+                'value orientations',
+                'wash',
+            ];
+        }
+
+        return [];
+    }
+
     // ── Table ─────────────────────────────────────────────────────────────────
 
     public function table(Table $table): Table
@@ -177,11 +226,23 @@ class OptionalModules extends Page implements HasForms, HasTable
         $xlsformSelected = ($this->data['xlsform_id'] ?? null) !== null;
 
         return $table
-            ->query(
-                XlsformModuleVersion::query()
+            ->query(function () {
+                $query = XlsformModuleVersion::query()
                     ->whereNull('xlsform_module_id')
-                    ->whereNull('owner_id')
-            )
+                    ->whereNull('owner_id');
+
+                $keywords = $this->getModuleKeywords();
+
+                if (empty($keywords)) {
+                    return $query->whereRaw('0 = 1');
+                }
+
+                return $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $keyword) {
+                        $q->orWhereRaw('LOWER(name) LIKE ?', ['%' . $keyword . '%']);
+                    }
+                });
+            })
             ->columns([
                 TextColumn::make('name')
                     ->searchable()
