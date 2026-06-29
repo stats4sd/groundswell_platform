@@ -58,7 +58,7 @@ class OptionalModules extends Page implements HasForms, HasTable
 
         $this->form->fill([
             'xlsform_id' => $this->team->xlsforms()
-                ->whereRaw('LOWER(title) NOT LIKE ?', ['%farm registration%'])
+                ->whereRaw('LOWER(title) NOT LIKE ?', ['%' . config('optional_modules.farm_registration_form_title') . '%'])
                 ->first()?->id,
         ]);
     }
@@ -95,7 +95,7 @@ class OptionalModules extends Page implements HasForms, HasTable
                 Select::make('xlsform_id')
                     ->label(fn () => t('Survey Form'))
                     ->options(fn () => $this->team->xlsforms()
-                        ->whereRaw('LOWER(title) NOT LIKE ?', ['%farm registration%'])
+                        ->whereRaw('LOWER(title) NOT LIKE ?', ['%' . config('optional_modules.farm_registration_form_title') . '%'])
                         ->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(function () {
@@ -180,40 +180,12 @@ class OptionalModules extends Page implements HasForms, HasTable
 
         $title = strtolower($xlsform->title);
 
-        if (str_contains($title, 'global indicators')) {
-            return [
-                'characterization of the agroecological transition',
-                'caet',
-                'agroforestry',
-                'bushmeat',
-                'wild foods',
-                'detailed cattle',
-                'changes in farm environment',
-                'pests and diseases',
-                'cultivated forages',
-                'expenditures',
-                'forest products',
-                'livestock feeding',
-                'membership of groups',
-                'natural resource management',
-                'seed varieties',
-                'slash and burn',
-                'uptake of interventions',
-            ];
+        if (str_contains($title, config('optional_modules.global_indicators_form_title'))) {
+            return config('optional_modules.global_indicators_modules');
         }
 
-        if (str_contains($title, "women's form")) {
-            return [
-                'coping strategies',
-                'disability',
-                'food environments',
-                'innovation',
-                'gender attitudes',
-                'on farm labour by gender',
-                'relative vulnerability',
-                'value orientations',
-                'wash',
-            ];
+        if (str_contains($title, config('optional_modules.womans_form_form_title'))) {
+            return config('optional_modules.womans_form_modules');
         }
 
         return [];
