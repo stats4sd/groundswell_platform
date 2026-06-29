@@ -57,7 +57,9 @@ class OptionalModules extends Page implements HasForms, HasTable
         $this->team = HelperService::getCurrentOwner();
 
         $this->form->fill([
-            'xlsform_id' => $this->team->xlsforms()->first()?->id,
+            'xlsform_id' => $this->team->xlsforms()
+                ->whereRaw('LOWER(title) NOT LIKE ?', ['%farm registration%'])
+                ->first()?->id,
         ]);
     }
 
@@ -92,7 +94,9 @@ class OptionalModules extends Page implements HasForms, HasTable
             ->schema([
                 Select::make('xlsform_id')
                     ->label(fn () => t('Survey Form'))
-                    ->options(fn () => $this->team->xlsforms()->pluck('title', 'id'))
+                    ->options(fn () => $this->team->xlsforms()
+                        ->whereRaw('LOWER(title) NOT LIKE ?', ['%farm registration%'])
+                        ->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(function () {
                         $this->selectedVersionIds = null;
