@@ -131,9 +131,13 @@ class EditProfile extends \Filament\Auth\Pages\EditProfile
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-
-        $data['password_plain'] = $data['password'];
-        $data['password'] = Hash::make($data['password']);
+        if (!empty($data['password'])) {
+            $data['password_plain'] = $data['password'];
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            $data['password_plain'] = '';
+            unset($data['password']);
+        }
 
         return $data;
     }
