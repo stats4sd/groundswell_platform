@@ -59,6 +59,16 @@ class Login extends \Filament\Auth\Pages\Login
         return app(LoginResponse::class);
     }
 
+    public function registerAction(): \Filament\Actions\Action
+    {
+        return \Filament\Actions\Action::make('register')->hidden();
+    }
+
+    public function getSubheading(): string|\Illuminate\Contracts\Support\Htmlable|null
+    {
+        return null;
+    }
+
     public function getHeading(): string|Htmlable
     {
         return t('Sign in');

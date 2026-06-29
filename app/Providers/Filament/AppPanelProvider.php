@@ -48,6 +48,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->profile(EditProfile::class, isSimple: false)
             ->login(Login::class)
+            ->registration(\Stats4sd\FilamentTeamManagement\Filament\Auth\Register::class)
             ->passwordReset()
             ->brandLogo(asset('images/groundswell_international_logo.png'))
             ->brandLogoHeight('3rem')
