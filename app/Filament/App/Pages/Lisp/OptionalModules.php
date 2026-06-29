@@ -14,19 +14,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Table;
-use Illuminate\Support\Collection;
+use Filament\Support\Enums\MaxWidth;
+use Illuminate\Database\Eloquent\Collection;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
-class OptionalModules extends Page implements HasForms, HasTable
+class OptionalModules extends Page implements HasForms
 {
     use InteractsWithForms;
-    use InteractsWithTable;
     use WithCompletionStatusBar;
 
     public string $completionProp = 'optional_modules_complete';
@@ -49,18 +44,22 @@ class OptionalModules extends Page implements HasForms, HasTable
 
     public ?array $data = [];
 
-    // Within-request cache — not serialized by Livewire, rebuilt each render cycle
-    private ?Collection $selectedVersionIds = null;
+    public Collection $availableModules;
+    public Collection $xlsformModules;
 
     public function mount(): void
     {
         $this->team = HelperService::getCurrentOwner();
+        $this->availableModules = new Collection();
+        $this->xlsformModules = new Collection();
 
         $this->form->fill([
             'xlsform_id' => $this->team->xlsforms()
                 ->whereRaw('LOWER(title) NOT LIKE ?', ['%' . config('optional_modules.farm_registration_form_title') . '%'])
                 ->first()?->id,
         ]);
+
+        $this->setupLists();
     }
 
     public function getBreadcrumbs(): array
@@ -99,8 +98,7 @@ class OptionalModules extends Page implements HasForms, HasTable
                         ->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(function () {
-                        $this->selectedVersionIds = null;
-                        $this->resetTable();
+                        $this->setupLists();
                     })
                     ->placeholder(fn () => t('Select a survey form...'))
                     ->required(),
@@ -116,30 +114,33 @@ class OptionalModules extends Page implements HasForms, HasTable
         return $id ? Xlsform::find($id) : null;
     }
 
-    private function getSelectedVersionIds(): Collection
+    private function setupLists(): void
     {
-        if ($this->selectedVersionIds !== null) {
-            return $this->selectedVersionIds;
-        }
-
         $xlsform = $this->getSelectedXlsform();
 
         if (! $xlsform) {
-            return $this->selectedVersionIds = collect();
+            $this->availableModules = new Collection();
+            $this->xlsformModules = new Collection();
+
+            return;
         }
 
-        return $this->selectedVersionIds = $xlsform->xlsformModuleVersions()
-            ->pluck('xlsform_module_versions.id');
-    }
+        $addedIds = $xlsform->xlsformModuleVersions()->pluck('xlsform_module_versions.id');
 
-    private function isSelected(XlsformModuleVersion $record): bool
-    {
-        return $this->getSelectedVersionIds()->contains($record->id);
+        $this->availableModules = XlsformModuleVersion::whereNull('xlsform_module_id')
+            ->whereNull('owner_id')
+            ->whereNotIn('id', $addedIds)
+            ->with('surveyRows')
+            ->get();
+
+        $this->xlsformModules = $xlsform->xlsformModuleVersions()
+            ->with('surveyRows')
+            ->get();
     }
 
     // ── Actions ───────────────────────────────────────────────────────────────
 
-    public function addModule(XlsformModuleVersion $record): void
+    public function updateOrder(array $order): void
     {
         $xlsform = $this->getSelectedXlsform();
 
@@ -147,16 +148,14 @@ class OptionalModules extends Page implements HasForms, HasTable
             return;
         }
 
-        $maxOrder = $xlsform->xlsformModuleVersions()
-            ->max('selected_xlsform_module_versions.order') ?? 0;
-
-        $xlsform->xlsformModuleVersions()->attach($record->id, ['order' => $maxOrder + 1]);
+        $orderWithKeys = collect($order)->mapWithKeys(fn ($item, $key) => [$item => ['order' => $key]]);
+        $xlsform->xlsformModuleVersions()->sync($orderWithKeys);
         $xlsform->update(['draft_needs_update' => true]);
 
-        $this->selectedVersionIds = null;
+        $this->setupLists();
     }
 
-    public function removeModule(XlsformModuleVersion $record): void
+    public function removeModule(int $moduleVersionId): void
     {
         $xlsform = $this->getSelectedXlsform();
 
@@ -164,10 +163,10 @@ class OptionalModules extends Page implements HasForms, HasTable
             return;
         }
 
-        $xlsform->xlsformModuleVersions()->detach($record->id);
+        $xlsform->xlsformModuleVersions()->detach($moduleVersionId);
         $xlsform->update(['draft_needs_update' => true]);
 
-        $this->selectedVersionIds = null;
+        $this->setupLists();
     }
 
     private function getModuleKeywords(): array
