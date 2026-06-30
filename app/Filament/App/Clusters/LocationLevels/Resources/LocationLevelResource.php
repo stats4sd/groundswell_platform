@@ -2,6 +2,17 @@
 
 namespace App\Filament\App\Clusters\LocationLevels\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\CreateAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Schemas\Components\Section;
+use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels;
+use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ViewLocationLevel;
 use App\Filament\App\Clusters\LocationLevels;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager;
@@ -11,10 +22,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -61,10 +69,10 @@ class LocationLevelResource extends Resource
         return array_merge($original, $navItems->toArray(), [$farmNavItem]);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Select::make('parent_id')
                     ->label(fn () => t('Is this location level a sub-level of another level?'))
                     ->helperText(fn () => t('E.g. "Village" may be a sub-level of "District", and "District" may be a sub-level of "Province".'))
@@ -87,18 +95,18 @@ class LocationLevelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(fn () => t('Name'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('parent.name')
+                TextColumn::make('parent.name')
                     ->label(fn () => t('Parent'))
                     ->sortable()
                     ->placeholder(fn () => t('Top Level')),
-                Tables\Columns\TextColumn::make('locations_count')
+                TextColumn::make('locations_count')
                     ->counts('locations')
                     ->label(fn () => t('No. of Entries'))
                     ->sortable(),
-                Tables\Columns\IconColumn::make('has_farms')
+                IconColumn::make('has_farms')
                     ->label(fn () => t('Has farms'))
                     ->boolean()
                     ->sortable(),
@@ -108,23 +116,23 @@ class LocationLevelResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make(fn () => t('Key Details'))
                 ->schema([
                     TextEntry::make('name')->label(fn () => t('Level')),
@@ -144,8 +152,8 @@ class LocationLevelResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListLocationLevels::route('/'),
-            'view' => Pages\ViewLocationLevel::route('/{record}'),
+            'index' => ListLocationLevels::route('/'),
+            'view' => ViewLocationLevel::route('/{record}'),
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Filament\Admin\Resources\TeamResource\RelationManagers;
 
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
@@ -39,7 +39,7 @@ class XlsformsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([])
-            ->actions([
+            ->recordActions([
                 Action::make('download xls file')
                     ->action(function (Xlsform $record) {
 

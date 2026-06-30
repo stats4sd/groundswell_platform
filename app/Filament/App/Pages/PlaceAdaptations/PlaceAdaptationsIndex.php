@@ -2,12 +2,13 @@
 
 namespace App\Filament\App\Pages\PlaceAdaptations;
 
+use Filament\Support\Enums\Width;
+use Illuminate\Contracts\View\View;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\Shared\WithCompletionStatusBar;
 use App\Services\HelperService;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 
 class PlaceAdaptationsIndex extends Page
 {
@@ -15,7 +16,7 @@ class PlaceAdaptationsIndex extends Page
 
     public string $completionProp = 'pba_complete';
 
-    protected static string $view = 'filament.app.pages.place-adaptations.place-adaptations-index';
+    protected string $view = 'filament.app.pages.place-adaptations.place-adaptations-index';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -44,12 +45,12 @@ class PlaceAdaptationsIndex extends Page
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
-    public function getHeader(): ?\Illuminate\Contracts\View\View
+    public function getHeader(): ?View
     {
         return view('components.small-header', [
             'heading' => $this->getHeading(),

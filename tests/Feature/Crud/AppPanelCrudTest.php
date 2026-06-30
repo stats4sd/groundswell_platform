@@ -9,14 +9,15 @@ use App\Filament\App\Resources\TeamResource\Pages\EditTeam;
 use App\Filament\App\Resources\TeamResource\Pages\ListTeams;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Http;
 
 describe('App panel CRUD — Team', function () {
 
     beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        Http::fake();
+        $this->team = Team::factory()->create();
         $this->user = createAppUser($this->team);
         $this->actingAs($this->user);
     });
@@ -50,8 +51,8 @@ describe('App panel CRUD — Team', function () {
 describe('App panel CRUD — LocationLevel', function () {
 
     beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        Http::fake();
+        $this->team = Team::factory()->create();
         $this->user = createAppUser($this->team);
         $this->actingAs($this->user);
     });
@@ -64,11 +65,11 @@ describe('App panel CRUD — LocationLevel', function () {
         withAppTenant($this->team);
 
         livewire(ListLocationLevels::class)
-            ->callTableAction(\Filament\Tables\Actions\CreateAction::class, data: [
+            ->callTableAction(CreateAction::class, data: [
                 'name'     => 'Region',
                 'owner_id' => $this->team->id,
             ])
-            ->assertHasNoTableActionErrors();
+            ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('location_levels', ['name' => 'Region', 'owner_id' => $this->team->id]);
     });
@@ -103,8 +104,8 @@ describe('App panel CRUD — LocationLevel', function () {
 describe('App panel CRUD — Farm', function () {
 
     beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        Http::fake();
+        $this->team = Team::factory()->create();
         $this->user = createAppUser($this->team);
         $this->actingAs($this->user);
     });
@@ -120,8 +121,8 @@ describe('App panel CRUD — Farm', function () {
 describe('App panel CRUD — ChoiceListEntry', function () {
 
     beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        Http::fake();
+        $this->team = Team::factory()->create();
 
         // ChoiceList requires the full parent chain: Template → Module → ModuleVersion
         $xlsformTemplate = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::withoutEvents(
@@ -157,10 +158,9 @@ describe('App panel CRUD — ChoiceListEntry', function () {
 
 describe('App Panel CRUD - Create New Team', function() {
 
-
     beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        Http::fake();
+        $this->team = Team::factory()->create();
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
     });

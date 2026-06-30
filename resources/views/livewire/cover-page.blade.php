@@ -88,7 +88,7 @@
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
             <div id="surveys" class="py-6 grid grid-cols-1 lg:grid-cols-2 gap-5 items-center mb-12">
-                <div class="rounded-2xl h-96 shadow-sm" style="background-image:url('/images/farmers_honduras.jpg'); background-position:center; background-size:cover;"></div>
+                <div class="rounded-2xl h-96 shadow-xs" style="background-image:url('/images/farmers_honduras.jpg'); background-position:center; background-size:cover;"></div>
                 <div>
                     <h3 class="!text-brown !text-3xl !font-extrabold mb-6 leading-tight">{{ t("Surveys") }}</h3>
                     <p class="text-brown/70 leading-relaxed text-sm">{{ t("Groundswell International develops and implements surveys to support data collection, learning, monitoring, and evaluation across a range of programmes and contexts. Surveys can be adapted to different projects, stakeholder groups, and implementation settings, enabling teams to collect meaningful and context-specific information to support decision-making, reporting, and programme improvement. The survey approach supports flexible digital data collection, customised indicators, and streamlined analysis workflows, helping teams manage and interpret data efficiently across multiple locations and activities.") }}</p>
@@ -110,11 +110,11 @@
                         {{ $this->registerInterestAction }}
                     </div>
                 </div>
-                <div class="rounded-2xl h-96 shadow-sm order-1 lg:order-2" style="background-image:url('/images/seeds.jpg'); background-position:center; background-size:cover;"></div>
+                <div class="rounded-2xl h-96 shadow-xs order-1 lg:order-2" style="background-image:url('/images/seeds.jpg'); background-position:center; background-size:cover;"></div>
             </div>
 
             <div id="results" class="py-6 grid grid-cols-1 lg:grid-cols-2 gap-5 items-center mb-12">
-                <div class="rounded-2xl h-96 shadow-sm" style="background-image:url('/images/farmer_haiti.webp'); background-position:center; background-size:cover;"></div>
+                <div class="rounded-2xl h-96 shadow-xs" style="background-image:url('/images/farmer_haiti.webp'); background-position:center; background-size:cover;"></div>
                 <div>
                     <h3 class="!text-brown !text-3xl !font-extrabold mb-6 leading-tight">{{ t("Results") }}</h3>
                     <p class="text-brown/70 leading-relaxed text-sm mb-10">{{ t("The tool has been applied across multiple countries and programme contexts. Results dashboards and country reports enable users to explore findings, compare indicators, and visualise trends across implementations.") }}</p>

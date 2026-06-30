@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Pages\PlaceAdaptations;
 
+use Filament\Support\Enums\Width;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\Shared\WithCompletionStatusBar;
 use App\Models\Team;
@@ -13,8 +14,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -34,7 +33,7 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static string $view = 'filament.app.pages.place-adaptations.initial-pilot';
+    protected string $view = 'filament.app.pages.place-adaptations.initial-pilot';
 
     public static function canAccess(): bool
     {
@@ -53,8 +52,8 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
 
     public Team $team;
 
-    /** @var \Illuminate\Database\Eloquent\Collection<Xlsform> */
-    public \Illuminate\Database\Eloquent\Collection $xlsforms;
+    /** @var Collection<Xlsform> */
+    public Collection $xlsforms;
 
     public function mount(): void
     {
@@ -79,9 +78,9 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
     protected function getHeaderActions(): array
@@ -119,17 +118,17 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
             ->filters([
                 //
             ])
-            ->actions([
-                \Filament\Tables\Actions\Action::make('view')
+            ->recordActions([
+                Action::make('view')
                     ->modalContent(fn(Submission $record) => view('filament.app.pages.submissions.modal_view', ['submission' => $record]))
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel(fn () => t('Close')),
             ])
             ->headerActions([
-                TableAction::make('test-on-odk-central')
+                Action::make('test-on-odk-central')
                     ->label(fn () => t('Test on ODK Central'))
                     ->url(fn() => HelperService::getCurrentOwner()->odkProject?->odk_url),
-                TableAction::make('pull-submissions')
+                Action::make('pull-submissions')
                     ->label(fn () => t('Manually Get Submissions'))
                     ->visible(fn () => auth()->user()->can('maintain initial pilot'))
                     ->action(function (self $livewire) {
@@ -152,6 +151,6 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
                     }),
 
             ])
-            ->bulkActions([]);
+            ->toolbarActions([]);
     }
 }

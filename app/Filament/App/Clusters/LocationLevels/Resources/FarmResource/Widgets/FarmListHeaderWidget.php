@@ -7,7 +7,7 @@ use App\Services\HelperService;
 
 class FarmListHeaderWidget extends Widget
 {
-    protected static string $view = 'filament.app.resources.farm-resource.widgets.farm-list-header-widget';
+    protected string $view = 'filament.app.resources.farm-resource.widgets.farm-list-header-widget';
 
     protected int|string|array $columnSpan = 'full';
 

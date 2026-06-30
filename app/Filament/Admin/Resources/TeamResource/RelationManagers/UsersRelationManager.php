@@ -2,12 +2,16 @@
 
 namespace App\Filament\Admin\Resources\TeamResource\RelationManagers;
 
-use Awcodes\Shout\Components\Shout;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\AttachAction;
 use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Callout;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\TeamResource\RelationManagers\UsersRelationManager as BaseUsersRelationManager;
+use Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Teams\RelationManagers\UsersRelationManager as BaseUsersRelationManager;
 
 class UsersRelationManager extends BaseUsersRelationManager
 {
@@ -15,16 +19,16 @@ class UsersRelationManager extends BaseUsersRelationManager
     {
         return parent::table($table)
             ->headerActions([
-                Tables\Actions\Action::make('invite users')
-                    ->form([
-                        Shout::make('info')
-                            ->type('info')
-                            ->content('Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address.')
+                Action::make('invite users')
+                    ->schema([
+                        Callout::make()
+                            ->info()
+                            ->description('Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address.')
                             ->columnSpanFull(),
-                        Forms\Components\Repeater::make('users')
+                        Repeater::make('users')
                             ->label('Email Addresses to Invite')
                             ->simple(
-                                Forms\Components\TextInput::make('email')
+                                TextInput::make('email')
                                     ->email()
                                     ->required()
                             )
@@ -39,7 +43,7 @@ class UsersRelationManager extends BaseUsersRelationManager
 
                         $this->handleInvitation($data, $livewire->getOwnerRecord());
                     }),
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
                     ->label('Add Existing User to team')
                     ->visible(fn () => auth()->user()->can('maintain teams')),
             ]);

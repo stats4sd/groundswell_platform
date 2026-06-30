@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use App\Models\Holpa\Theme;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -21,8 +20,6 @@ abstract class TestCase extends BaseTestCase
     public User $user;
     public Team $team;
     public Program $program;
-
-    public Theme $theme;
 
     public XlsformTemplate $xlsformTemplate;
     public XlsformModule $xlsformModule;

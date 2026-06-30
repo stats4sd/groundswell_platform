@@ -2,18 +2,19 @@
 
 namespace App\Filament\Admin\Resources;
 
+use App\Filament\Admin\Resources\ProgramResource\Pages\ListPrograms;
 use App\Filament\Admin\Resources\ProgramResource\Pages;
 use Filament\Tables\Table;
 use Stats4sd\FilamentTeamManagement\Models\Program;
 
-class ProgramResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\ProgramResource
+class ProgramResource extends \Stats4sd\FilamentTeamManagement\Filament\Admin\Resources\Programs\ProgramResource
 {
     protected static ?string $model = Program::class;
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPrograms::route('/'),
+            'index' => ListPrograms::route('/'),
         ];
     }
 

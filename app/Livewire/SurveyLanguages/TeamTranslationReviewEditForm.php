@@ -2,18 +2,18 @@
 
 namespace App\Livewire\SurveyLanguages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Actions;
 use App\Jobs\NotifyUserThatLanguageImportIsComplete;
 use App\Imports\XlsformTemplateLanguageImport;
 use App\Models\Team;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -48,9 +48,9 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
         $this->form->fill($this->locale->toArray());
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->statePath('data')
             ->model($this->locale)
             ->columns(2)
@@ -62,7 +62,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
                                 Actions::make([
 
                                     // download existing translations if they exist
-                                    Actions\Action::make('download_' . $xlsformTemplate->id)
+                                    Action::make('download_' . $xlsformTemplate->id)
                                         // ->link()
                                         ->label(t('Download existing translations'))
                                         ->extraAttributes(['class' => 'buttona w-full'])
@@ -73,7 +73,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
                                         ), "{$xlsformTemplate->title} translation - {$this->locale->language_label}.xlsx")),
 
                                     // download blank template if needed
-                                    Actions\Action::make('download_' . $xlsformTemplate->id)
+                                    Action::make('download_' . $xlsformTemplate->id)
                                         ->extraAttributes(['class' => 'buttona w-full'])
                                         ->visible(fn() => $this->locale->is_editable)
                                         ->label(t('Download empty translation template'))

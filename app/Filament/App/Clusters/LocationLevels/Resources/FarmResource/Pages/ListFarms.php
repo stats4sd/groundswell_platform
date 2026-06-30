@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages;
 
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Widgets\FarmListHeaderWidget;
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
@@ -37,7 +38,7 @@ class ListFarms extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            FarmResource\Widgets\FarmListHeaderWidget::class,
+            FarmListHeaderWidget::class,
         ];
     }
 

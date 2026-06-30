@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Pages\DataCollection;
 
+use Filament\Support\Enums\Width;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\Shared\WithCompletionStatusBar;
 use App\Models\Team;
@@ -12,7 +13,6 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 use Livewire\Attributes\Url;
 
 
@@ -26,7 +26,7 @@ class SetUpSurvey extends Page implements HasActions, HasForms
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static string $view = 'filament.app.pages.data-collection.set-up-survey';
+    protected string $view = 'filament.app.pages.data-collection.set-up-survey';
 
     public static function canAccess(): bool
     {
@@ -61,9 +61,9 @@ class SetUpSurvey extends Page implements HasActions, HasForms
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
     protected function getHeaderActions(): array

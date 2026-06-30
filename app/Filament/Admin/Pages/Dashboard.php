@@ -9,9 +9,9 @@ use Illuminate\Contracts\View\View;
 
 class Dashboard extends Page
 {
-    protected static string $view = 'filament.admin.pages.dashboard';
+    protected string $view = 'filament.admin.pages.dashboard';
 
-    protected static ?string $navigationIcon = 'heroicon-o-home';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-home';
 
     protected static ?int $navigationSort = 0;
 

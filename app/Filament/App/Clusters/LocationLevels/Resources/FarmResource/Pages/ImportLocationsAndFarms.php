@@ -2,10 +2,13 @@
 
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use App\Models\Import;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Forms\Form;
 use App\Imports\FarmImport;
 use Filament\Actions\Action;
 use App\Imports\LocationImport;
@@ -16,9 +19,7 @@ use App\Models\SampleFrame\Location;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Wizard;
 use Filament\Support\Exceptions\Halt;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\HeadingRowImport;
@@ -36,7 +37,7 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
     protected static string $resource = FarmResource::class;
 
-    protected static string $view = 'filament.app.clusters.location-levels.resources.farm-resource.pages.import-locations-and-farms';
+    protected string $view = 'filament.app.clusters.location-levels.resources.farm-resource.pages.import-locations-and-farms';
 
     public function getTitle(): string
     {
@@ -120,15 +121,15 @@ class ImportLocationsAndFarms extends Page implements HasForms
         redirect(FarmResource::getUrl('index'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
 
                 Wizard::make([
 
                     // Step 1
-                    Wizard\Step::make(t('Upload your farm list Excel file'))
+                    Step::make(t('Upload your farm list excel file'))
                         ->schema([
 
                             // Question: is the file upload works for ExcelImportAction's subclass only?
@@ -154,7 +155,7 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
 
                     // Step 2
-                    Wizard\Step::make(t('Map columns to location levels'))
+                    Step::make(t('Map columns to location levels'))
                         ->schema(
 
                             [
@@ -230,7 +231,7 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
 
                     // Step 3
-                    Wizard\Step::make(t('Map columns to farm'))
+                    Step::make(t('Map columns to farm'))
                         ->schema([
 
                             Hidden::make('header_columns')

@@ -1,13 +1,14 @@
 <?php
 
-use Stats4sd\FilamentTeamManagement\Filament\Program\Resources\ProgramResource\Pages\CreateProgram;
-use Stats4sd\FilamentTeamManagement\Filament\Program\Resources\ProgramResource\Pages\EditProgram;
-use Stats4sd\FilamentTeamManagement\Filament\Program\Resources\ProgramResource\Pages\ListPrograms;
+use App\Filament\Admin\Resources\ProgramResource\Pages\ListPrograms;
+use App\Filament\Program\ManageProgram\ManageProgram;
 use Stats4sd\FilamentTeamManagement\Models\Program;
 
 use function Pest\Livewire\livewire;
 
-describe('Program panel CRUD — Program', function () {
+// The Program panel no longer exposes a ProgramResource. A program is managed via the
+// ManageProgram tenant-profile page; programs themselves are created by admins.
+describe('Program panel — manage program', function () {
 
     beforeEach(function () {
         $this->program = Program::create(['name' => 'Test Program']);
@@ -16,17 +17,13 @@ describe('Program panel CRUD — Program', function () {
         withProgramTenant($this->program);
     });
 
-    test('program list shows current program', function () {
-        livewire(ListPrograms::class)
-            ->assertCanSeeTableRecords([$this->program]);
+    test('manage program page loads', function () {
+        livewire(ManageProgram::class)
+            ->assertSuccessful();
     });
 
-    test('program edit page loads', function () {
-        $this->get("/program/{$this->program->id}/programs/{$this->program->id}/edit")->assertOk();
-    });
-
-    test('can edit program', function () {
-        livewire(EditProgram::class, ['record' => $this->program->id])
+    test('can edit program name', function () {
+        livewire(ManageProgram::class)
             ->fillForm(['name' => 'Updated Program'])
             ->call('save')
             ->assertHasNoFormErrors();
@@ -35,33 +32,26 @@ describe('Program panel CRUD — Program', function () {
     });
 });
 
-// Only admin users can create programs, so describe a different set of tests for 'create' operations:
-describe('Program panel CRUD - Admin User', function () {
+// Only admin users can create programs (done from the Admin panel ProgramResource).
+describe('Program creation — Admin user', function () {
 
     beforeEach(function () {
-        $this->program = Program::create(['name' => 'Test Program']);
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
-        withProgramTenant($this->program);
-    });
-
-    test('program create page loads', function () {
-        $this->get("/program/{$this->program->id}/programs/create")->assertOk();
+        withAdminPanel();
     });
 
     test('can create program', function () {
-        livewire(CreateProgram::class)
-            ->fillForm(['name' => 'New Program'])
-            ->call('create')
-            ->assertHasNoFormErrors();
+        livewire(ListPrograms::class)
+            ->callAction('create', data: ['name' => 'New Program'])
+            ->assertHasNoActionErrors();
 
         $this->assertDatabaseHas('programs', ['name' => 'New Program']);
     });
 
     test('create program requires name', function () {
-        livewire(CreateProgram::class)
-            ->fillForm(['name' => ''])
-            ->call('create')
-            ->assertHasFormErrors(['name' => 'required']);
+        livewire(ListPrograms::class)
+            ->callAction('create', data: ['name' => ''])
+            ->assertHasActionErrors(['name' => 'required']);
     });
 });

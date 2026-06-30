@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource;
@@ -13,7 +14,7 @@ class EditLocationLevel extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

@@ -15,7 +15,7 @@ class ListSubmissions extends ListRecords
 
     protected ?string $heading = 'Test Submissions';
 
-    protected static string $view = 'filament.app.resources.submission-resource.pages.view-submission';
+    protected string $view = 'filament.app.resources.submission-resource.pages.view-submission';
 
     public function getHeading(): string
     {

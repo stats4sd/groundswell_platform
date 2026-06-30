@@ -1,14 +1,13 @@
 <?php
 
 use App\Models\Team;
+use Illuminate\Support\Facades\Http;
 
 describe('App panel routes load for authenticated team member', function () {
 
     beforeEach(function () {
-        $this->team = Team::withoutEvents(fn () => Team::factory()->create());
-        // Team::withoutEvents suppresses the 'created' boot hook, which normally creates localContextModuleVersion.
-        // Pages like ContextQuestions call $team->localContextModuleVersion->load(...) and fatal-error if it is null.
-        $this->team->localContextModuleVersion()->create(['name' => 'Local Context']);
+        Http::fake();
+        $this->team = Team::factory()->create();
         $this->user = createAppUser($this->team);
     });
 

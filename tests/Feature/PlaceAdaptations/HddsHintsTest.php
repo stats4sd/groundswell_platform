@@ -97,11 +97,16 @@ describe('HDDS hints page', function () {
     test('page loads and lists HDDS questions with label and hint', function () {
         withAppTenant($this->team);
 
-        livewire(HddsHints::class)
+        $component = livewire(HddsHints::class)
             ->assertSuccessful()
-            ->assertCanSeeTableRecords([$this->surveyRow])
             ->assertSee('cereals')
             ->assertSee('Original hint');
+
+        // First visit clones the global HDDS version into a team-owned copy with
+        // fresh SurveyRow ids; assert against the cloned row (matched by name).
+        $clonedRow = $this->team->hddsModuleVersion()->surveyRows()->where('name', 'cereals')->first();
+
+        $component->assertCanSeeTableRecords([$clonedRow]);
     });
 
     test('editing a hint updates the language string and flags the form for update', function () {
@@ -109,13 +114,19 @@ describe('HDDS hints page', function () {
 
         expect($this->xlsform->fresh()->draft_needs_update)->toBeFalsy();
 
-        livewire(HddsHints::class)
-            ->callTableAction('edit_hints', $this->surveyRow, data: [
+        $component = livewire(HddsHints::class);
+
+        // First visit clones the global HDDS version; the edit action operates on
+        // the cloned SurveyRow, not the global original created in the fixture.
+        $clonedRow = $this->team->hddsModuleVersion()->surveyRows()->where('name', 'cereals')->first();
+
+        $component
+            ->callTableAction('edit_hints', $clonedRow, data: [
                 'hints' => [$this->locale->id => 'Updated hint text'],
             ])
             ->assertHasNoTableActionErrors();
 
-        expect($this->surveyRow->getLanguageString('hint', $this->locale))->toBe('Updated hint text');
+        expect($clonedRow->getLanguageString('hint', $this->locale))->toBe('Updated hint text');
         expect($this->xlsform->fresh()->draft_needs_update)->toBeTruthy();
     });
 });

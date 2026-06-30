@@ -7,7 +7,7 @@ use App\Filament\App\Pages\Auth\Login;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\App\Resources\TeamResource\Pages\ViewTeam;
 use App\Models\Team;
-use BetterFuturesStudio\FilamentLocalLogins\LocalLogins;
+use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Exception;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
@@ -16,6 +16,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -47,6 +48,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->profile(EditProfile::class, isSimple: false)
             ->login(Login::class)
+            ->registration(\Stats4sd\FilamentTeamManagement\Filament\Auth\Register::class)
             ->passwordReset()
             ->brandLogo(asset('images/groundswell_international_logo.png'))
             ->brandLogoHeight('3rem')
@@ -125,6 +127,10 @@ class AppPanelProvider extends PanelProvider
             //         '216, 234, 208',
             //     ],
             // ])
+            // Brand orange for the Change Language button (and any color="orange" buttons).
+            ->colors([
+                'orange' => Color::hex('#C45D5D'),
+            ])
             ->viteTheme('resources/css/filament/app/theme.css')
             // to include XlsformResource from main repo
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
@@ -145,7 +151,7 @@ class AppPanelProvider extends PanelProvider
             )
             ->renderHook(
                 PanelsRenderHook::TOPBAR_END,
-                fn() => view('languageSelector'),
+                fn () => view('languageSelector'),
             )
             ->middleware([
                 EncryptCookies::class,
@@ -164,35 +170,42 @@ class AppPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make()
-                    ->label(fn() => t('Survey Dashboard'))
+                    ->label(fn () => t('Survey Dashboard'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('survey-dashboard')),
                 NavigationItem::make()
-                    ->label(fn() => t('Admin Panel'))
+                    ->label(fn () => t('Admin Panel'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('admin'))
                     ->visible(fn () => auth()->user()->can('access admin panel')),
                 NavigationItem::make()
-                    ->label(fn() => t('Program Admin Panel'))
+                    ->label(fn () => t('Program Admin Panel'))
                     ->icon('heroicon-o-adjustments-horizontal')
                     ->url(url('program'))
                     ->visible(fn () => auth()->user()->can('access program admin panel')),
                 NavigationItem::make()
-                ->label(fn() => t('My Team'))
-                ->icon('heroicon-o-home')
-                ->url(fn() => ViewTeam::getUrl(['record' => Filament::getTenant()])),
+                    ->label(fn () => t('My Team'))
+                    ->icon('heroicon-o-home')
+                    ->url(fn () => ViewTeam::getUrl(['record' => Filament::getTenant()])),
                 NavigationItem::make()
-                ->label(fn() => t('Download User Guide'))
-                ->icon('heroicon-o-arrow-down-tray')
-                ->url('#')
-                ->visible(fn () => auth()->user()->can('view download user guide')),
+                    ->label(fn () => t('Download User Guide'))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url('#')
+                    ->visible(fn () => auth()->user()->can('view download user guide')),
             ])
             ->tenantMenu(fn () => auth()->check() && auth()->user()->can('view team selection box'))
             ->darkMode(false)
             ->topNavigation()
             ->renderHook(PanelsRenderHook::SCRIPTS_BEFORE, fn () => view('filament.app.scripts'))
             ->plugins([
-                new LocalLogins,
+                FilamentDeveloperLoginsPlugin::make()
+                    ->switchable(false)
+                    ->enabled(env('ADMIN_PANEL_LOCAL_LOGINS_ENABLED', app()->environment('local')))
+                    ->users(
+                        collect(array_filter(array_map('trim', explode(',', (string) env('ADMIN_PANEL_LOCAL_LOGIN_EMAILS', '')))))
+                            ->mapWithKeys(fn (string $email): array => [$email => $email])
+                            ->all()
+                    ),
             ]);
     }
 }

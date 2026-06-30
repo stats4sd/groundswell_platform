@@ -2,10 +2,11 @@
 
 namespace App\Filament\App\Pages\Auth;
 
-use Awcodes\Shout\Components\Shout;
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Component;
+use Exception;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Callout;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\ConnectionException;
@@ -15,13 +16,13 @@ use Illuminate\Validation\Rules\Password;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithOdkCentralAccount;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
-class EditProfile extends \Filament\Pages\Auth\EditProfile
+class EditProfile extends \Filament\Auth\Pages\EditProfile
 {
 
     protected static ?string $navigationLabel = 'My Account';
     protected static ?string $navigationUri = '/my-account';
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-circle';
 
     protected ?string $heading = 'My Account';
 
@@ -42,7 +43,7 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
 
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getFormActions(): array
     {
@@ -70,9 +71,9 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
                         Section::make(fn () => t('Change Password'))
                             ->columns(1)
                             ->schema([
-                                Shout::make('password-info')
-                                    ->label(fn () => t('Password info'))
-                                    ->content(fn () => t('To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password.')),
+                                Callout::make(fn () => t('Password info'))
+                                    ->info()
+                                    ->description(fn () => t('To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password.')),
                                 $this->getCurrentPasswordFormComponent()
                                     ->disabled(fn () => !auth()->user()->can('maintain my account')),
                                 $this->getPasswordFormComponent()
@@ -130,9 +131,13 @@ class EditProfile extends \Filament\Pages\Auth\EditProfile
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-
-        $data['password_plain'] = $data['password'];
-        $data['password'] = Hash::make($data['password']);
+        if (!empty($data['password'])) {
+            $data['password_plain'] = $data['password'];
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            $data['password_plain'] = '';
+            unset($data['password']);
+        }
 
         return $data;
     }

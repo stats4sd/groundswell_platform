@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Pages\DataCollection;
 
+use Filament\Support\Enums\Width;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\Shared\WithCompletionStatusBar;
 use App\Livewire\SubmissionsTableView;
@@ -14,7 +15,6 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Url;
@@ -28,9 +28,9 @@ class MonitorDataCollection extends Page implements HasActions, HasForms
     use WithCompletionStatusBar;
 
     public string $completionProp = 'data_collection_complete';
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
-    protected static string $view = 'filament.app.pages.data-collection.monitor-data-collection';
+    protected string $view = 'filament.app.pages.data-collection.monitor-data-collection';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -42,9 +42,9 @@ class MonitorDataCollection extends Page implements HasActions, HasForms
     public Team $team;
     public Collection $shinyData;
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
     public function mount(): void
@@ -65,7 +65,8 @@ class MonitorDataCollection extends Page implements HasActions, HasForms
         ### Temporarily don't send this information - use the shiny .env vars instead for demo
 
 
-            'odk_project_id' => $this->team->odkProject->id,
+            'odk_project_id' => $this->team->odkProject?->id ?? 'none', // something must be passed for the monitoring shiny app to load properly.
+            // in the case where there is no odkProject, it's assumed that the shiny app then has an override in the .env file to load a specific odk project.
 
             # 'reg_form_xml_id' => $regForm->odk_id ?? null,
             # 'reg_form_enketo_id' => $regForm->enketo_id ?? null,

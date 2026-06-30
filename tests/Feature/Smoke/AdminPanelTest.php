@@ -12,24 +12,6 @@ describe('Admin panel routes load for Super Admin', function () {
             ->assertOk();
     });
 
-    test('domains list loads', function () {
-        $this->actingAs($this->superAdmin)
-            ->get('/admin/domains')
-            ->assertOk();
-    });
-
-    test('global indicators list loads', function () {
-        $this->actingAs($this->superAdmin)
-            ->get('/admin/global-indicators')
-            ->assertOk();
-    });
-
-    test('themes list loads', function () {
-        $this->actingAs($this->superAdmin)
-            ->get('/admin/themes')
-            ->assertOk();
-    });
-
     test('programs list loads', function () {
         $this->actingAs($this->superAdmin)
             ->get('/admin/programs')

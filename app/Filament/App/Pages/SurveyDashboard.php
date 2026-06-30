@@ -2,18 +2,18 @@
 
 namespace App\Filament\App\Pages;
 
+use Filament\Support\Enums\Width;
 use App\Models\Team;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 use App\Services\HelperService;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
 
 class SurveyDashboard extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-home';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-home';
 
-    protected static string $view = 'filament.app.pages.survey-dashboard';
+    protected string $view = 'filament.app.pages.survey-dashboard';
 
     protected static ?string $navigationLabel = 'Survey Dashboard';
 
@@ -46,9 +46,9 @@ class SurveyDashboard extends Page
         $this->team = HelperService::getCurrentOwner();
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
 }

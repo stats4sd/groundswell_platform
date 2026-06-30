@@ -2,13 +2,23 @@
 
 namespace App\Filament\App\Resources\TeamResource\RelationManagers;
 
-use Awcodes\Shout\Components\Shout;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Checkbox;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\AttachAction;
+use Filament\Actions\DetachAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DetachBulkAction;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Callout;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
+use Illuminate\Database\Eloquent\Model;
 use Stats4sd\FilamentTeamManagement\Models\Interfaces\TeamInterface;
 use Stats4sd\FilamentTeamManagement\Models\User;
 
@@ -16,19 +26,24 @@ class UsersRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
 
-    // turn on Edit mode so that "Add Existing User to team" button will be shown when viewing team record
-    public function isReadOnly(): bool
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
-        return false;
+        return auth()->user()?->can('view my team') ?? false;
     }
 
-    public function form(Form $form): Form
+    public function isReadOnly(): bool
     {
-        return $form
-            ->schema([
-                Shout::make('info')
-                    ->content(fn (User $record) => new HtmlString("Edit user's role within this team<br/>$record->name ($record->email)")),
-                Forms\Components\Checkbox::make('is_admin')
+        return ! (auth()->user()?->can('maintain my team') ?? false);
+    }
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Callout::make()
+                    ->info()
+                    ->description(fn (User $record) => new HtmlString("Edit user's role within this team<br/>$record->name ($record->email)")),
+                Checkbox::make('is_admin')
                     ->label(fn (User $record): string => "$record->name is a Team Admin")
                     ->helperText(t('Team Admins have full access to all team settings and can manage all team members. They can edit or delete data. Non-admins can only collect data and view data.')),
             ])->columns(1);
@@ -39,10 +54,10 @@ class UsersRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
 
@@ -52,52 +67,52 @@ class UsersRelationManager extends RelationManager
                 //     ->label('Is a Team Admin?')
                 //     ->boolean(),
 
-                Tables\Columns\TextColumn::make('created_at'),
+                TextColumn::make('created_at'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\Action::make('invite users')
-                    ->form([
-                        Shout::make('info')
-                            ->type('info')
-                            ->content(t('Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address.'))
+                Action::make('invite users')
+                    ->schema([
+                        Callout::make()
+                            ->info()
+                            ->description(t('Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address.'))
                             ->columnSpanFull(),
-                        Forms\Components\Repeater::make('users')
+                        Repeater::make('users')
                             ->label(t('Email Addresses to Invite'))
                             ->simple(
-                                Forms\Components\TextInput::make('email')
+                                TextInput::make('email')
                                     ->email()
                                     ->required()
                             )
                             ->reorderable(false)
                             ->addActionLabel(t('Add Another Email Address')),
                     ])
-                    ->visible(fn () => auth()->user()->can('maintain my team'))
+                    ->visible(! $this->isReadOnly())
                     ->action(function (array $data, RelationManager $livewire) {
-                        if (!auth()->user()->can('maintain my team')) {
+                        if ($this->isReadOnly()) {
                             abort(403);
                         }
 
                         $this->handleInvitation($data, $livewire->getOwnerRecord());
                     }),
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
                     ->label(fn () => t('Add Existing User to team'))
-                    ->visible(fn () => auth()->user()->can('maintain my team')),
+                    ->visible(! $this->isReadOnly()),
             ])
-            ->actions([
+            ->recordActions([
                 // hide "Edit User Role" button as team admin is not being used in this application
                 // keep below commented code, it will be used in other application
                 // Tables\Actions\EditAction::make()->label('Edit User Role'),
 
-                Tables\Actions\DetachAction::make()->label(fn () => t('Remove User'))
+                DetachAction::make()->label(fn () => t('Remove User'))
                     ->modalSubmitActionLabel(fn () => t('Remove User'))
                     ->modalHeading(fn () => t('Remove User from Team')),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DetachBulkAction::make()->label(fn () => t('Remove selected'))
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DetachBulkAction::make()->label(fn () => t('Remove selected'))
                         ->modalSubmitActionLabel(fn () => t('Remove Selected Users'))
                         ->modalHeading(fn () => t('Remove Selected Users from Team')),
                 ]),

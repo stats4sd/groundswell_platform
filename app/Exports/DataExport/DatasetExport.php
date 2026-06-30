@@ -32,7 +32,7 @@ class DatasetExport implements FromCollection, WithHeadings, WithTitle
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function collection(): Collection
     {

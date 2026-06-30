@@ -2,12 +2,15 @@
 
 namespace App\Filament\App\Pages\PlaceAdaptations;
 
+use Filament\Support\Enums\Width;
+use Filament\Support\Enums\TextSize;
+use Filament\Actions\EditAction;
+use Filament\Schemas\Components\Fieldset;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Models\Team;
 use App\Services\HelperService;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -15,8 +18,6 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Columns\TextColumn\TextColumnSize;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -34,7 +35,7 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static string $view = 'filament.app.pages.place-adaptations.hdds-hints';
+    protected string $view = 'filament.app.pages.place-adaptations.hdds-hints';
 
     public function getTitle(): string
     {
@@ -45,7 +46,7 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
 
     public XlsformModuleVersion $xlsformModuleVersion;
 
-    protected ?string $maxContentWidth = 'max-w-10xl';
+    protected Width|string|null $maxContentWidth = 'max-w-10xl';
 
 
     public static function canAccess(): bool
@@ -74,7 +75,7 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
         // all of this team's xlsforms to reference the new team-owned version.
         if ($moduleVersion->owner_id !== $team->id) {
             $globalVersion = $moduleVersion;
-            $moduleVersion = $globalVersion->cloneForTeam($team);
+            $moduleVersion = $globalVersion->cloneForOwner($team);
 
             $xlsformIds = $team->xlsforms()->pluck('xlsforms.id');
             foreach ($xlsformIds as $xlsformId) {
@@ -126,8 +127,8 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
                     ->orderBy('row_number'),
             )
             ->columns([
-                TextColumn::make('type')->label(t('Type'))->size(TextColumnSize::ExtraSmall),
-                TextColumn::make('name')->label(t('Variable name'))->wrap()->size(TextColumnSize::ExtraSmall),
+                TextColumn::make('type')->label(t('Type'))->size(TextSize::ExtraSmall),
+                TextColumn::make('name')->label(t('Variable name'))->wrap()->size(TextSize::ExtraSmall),
                 ...$localeColumns,
             ])
             ->recordClasses(fn (SurveyRow $record): string => match ($record->type) {
@@ -136,7 +137,7 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
                 default => '',
             })
             ->paginated(false)
-            ->actions([
+            ->recordActions([
                 EditAction::make('edit_hints')
                     ->hidden(function (SurveyRow $record) use ($locales): bool {
                         foreach ($locales as $locale) {
@@ -159,7 +160,7 @@ class HddsHints extends Page implements HasActions, HasForms, HasTable
 
                         return ['hints' => $hints];
                     })
-                    ->form(array_map(
+                    ->schema(array_map(
                         fn (Locale $locale) => Fieldset::make($locale->language_label)
                             ->columns(1)
                             ->schema([

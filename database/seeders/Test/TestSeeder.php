@@ -45,24 +45,31 @@ class TestSeeder extends Seeder
             'name' => 'Test Super Admin',
             'email' => 'admin@example.com',
             'password' => bcrypt('password123'),
+            'latest_team_id' => 3,
         ]);
 
         $globalViewer = User::create([
             'name' => 'Test Global Viewer',
             'email' => 'global_viewer@example.com',
             'password' => bcrypt('password123'),
+            'latest_team_id' => 3,
+            'latest_program_id' => 1,
         ]);
 
         $programAdmin = User::create([
             'name' => 'Test Program Admin',
             'email' => 'program_admin@example.com',
             'password' => bcrypt('password123'),
+            'latest_team_id' => 3,
+            'latest_program_id' => 1,
         ]);
 
         $programViewer = User::create([
             'name' => 'Test Program Viewer',
             'email' => 'program_viewer@example.com',
             'password' => bcrypt('password123'),
+            'latest_team_id' => 3,
+            'latest_program_id' => 1,
         ]);
 
         $teamAdmin = User::create([

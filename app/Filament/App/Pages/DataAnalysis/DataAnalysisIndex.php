@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Pages\DataAnalysis;
 
+use Filament\Support\Enums\Width;
 use App\Filament\Actions\ExportDataAction;
 use App\Filament\App\Pages\SurveyDashboard;
 use Filament\Actions\Action;
@@ -10,14 +11,13 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 
 class DataAnalysisIndex extends Page implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
 
-    protected static string $view = 'filament.app.pages.data-analysis.data-analysis-index';
+    protected string $view = 'filament.app.pages.data-analysis.data-analysis-index';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -41,9 +41,9 @@ class DataAnalysisIndex extends Page implements HasActions, HasForms
         ];
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
     public function exportDataAction(): Action

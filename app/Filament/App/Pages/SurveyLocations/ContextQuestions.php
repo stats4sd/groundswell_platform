@@ -23,9 +23,9 @@ class ContextQuestions extends Page implements HasActions, HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
-    protected static string $view = 'filament.app.pages.survey-locations.context-questions';
+    protected string $view = 'filament.app.pages.survey-locations.context-questions';
 
     public function getBreadcrumbs(): array
     {
@@ -76,7 +76,7 @@ class ContextQuestions extends Page implements HasActions, HasForms, HasTable
         $table = $this->customModuleQuestionTable($table, $locales, $this->xlsformModuleVersion);
 
         if (!auth()->user()->can('maintain context questions')) {
-            return $table->headerActions([])->actions([])->reorderable(null);
+            return $table->headerActions([])->recordActions([])->reorderable(null);
         }
 
         return $table;

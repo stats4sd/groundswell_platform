@@ -1,3 +1,7 @@
+/* Tailwind v4: this file only layers overrides on top of the Filament theme,
+   so reference Tailwind (no extra CSS emitted) to resolve the @apply usages. */
+@reference 'tailwindcss';
+
 /* Hide global search in top header  */
 .fi-topbar .fi-global-search {
     display: none;
@@ -69,7 +73,9 @@
 }
 
 .category-card {
-    @apply bg-yellowgreen text-darkgreen p-6 flex flex-col justify-end rounded-lg text-left h-28;
+    background-color: var(--yellowgreen);
+    color: var(--darkgreen);
+    @apply p-6 flex flex-col justify-end rounded-lg text-left h-28;
 }
 
 .explore-card {

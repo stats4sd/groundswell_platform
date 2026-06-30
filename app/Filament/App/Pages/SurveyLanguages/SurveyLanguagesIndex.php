@@ -2,10 +2,11 @@
 
 namespace App\Filament\App\Pages\SurveyLanguages;
 
+use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\Width;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\Shared\WithCompletionStatusBar;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 
 class SurveyLanguagesIndex extends Page
 {
@@ -13,7 +14,7 @@ class SurveyLanguagesIndex extends Page
 
     public string $completionProp = 'languages_complete';
 
-    protected static string $view = 'filament.app.pages.survey-languages.survey-languages-index';
+    protected string $view = 'filament.app.pages.survey-languages.survey-languages-index';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -46,7 +47,7 @@ class SurveyLanguagesIndex extends Page
         ];
     }
 
-    public function getHeader(): ?\Illuminate\Contracts\View\View
+    public function getHeader(): ?View
     {
         return view('components.small-header', [
             'heading' => $this->getHeading(),
@@ -57,9 +58,9 @@ class SurveyLanguagesIndex extends Page
         ]);
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width
     {
-        return MaxWidth::Full;
+        return Width::Full;
     }
 
 }

@@ -2,13 +2,13 @@
 
 namespace App\Livewire;
 
+use Filament\Actions\Action;
 use App\Exports\DataExport\FarmSurveyDataExport;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Livewire\Attributes\On;
 use App\Services\HelperService;
 use Illuminate\Support\HtmlString;
-use Filament\Tables\Actions\Action;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -71,7 +71,7 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('update_published_version')
                     ->visible(fn(Xlsform $record) => $record->live_needs_update || $record->draft_needs_update)
                     ->label(t('Publish changes'))
@@ -112,7 +112,7 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
                     }),
 
             ])
-            ->bulkActions([]);
+            ->toolbarActions([]);
     }
 
     #[On('echo:xlsforms,.FilamentOdkLink.XlsformWasPublished')]
