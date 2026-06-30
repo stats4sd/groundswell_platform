@@ -54,7 +54,9 @@ class OptionalModules extends Page implements HasForms
         $this->xlsformModules = new Collection();
 
         $this->form->fill([
-            'xlsform_id' => $this->team->xlsforms()->first()?->id,
+            'xlsform_id' => $this->team->xlsforms()
+                ->whereRaw('LOWER(title) NOT LIKE ?', ['%' . config('optional_modules.farm_registration_form_title') . '%'])
+                ->first()?->id,
         ]);
 
         $this->setupLists();
@@ -91,7 +93,9 @@ class OptionalModules extends Page implements HasForms
             ->schema([
                 Select::make('xlsform_id')
                     ->label(fn () => t('Survey Form'))
-                    ->options(fn () => $this->team->xlsforms()->pluck('title', 'id'))
+                    ->options(fn () => $this->team->xlsforms()
+                        ->whereRaw('LOWER(title) NOT LIKE ?', ['%' . config('optional_modules.farm_registration_form_title') . '%'])
+                        ->pluck('title', 'id'))
                     ->live()
                     ->afterStateUpdated(function () {
                         $this->setupLists();
@@ -165,8 +169,77 @@ class OptionalModules extends Page implements HasForms
         $this->setupLists();
     }
 
-    public function confirmOrdering(): void
+    private function getModuleKeywords(): array
     {
-        $this->redirect(SurveyDashboard::getUrl());
+        $xlsform = $this->getSelectedXlsform();
+
+        if (! $xlsform) {
+            return [];
+        }
+
+        $title = strtolower($xlsform->title);
+
+        if (str_contains($title, config('optional_modules.global_indicators_form_title'))) {
+            return config('optional_modules.global_indicators_modules');
+        }
+
+        if (str_contains($title, config('optional_modules.womans_form_form_title'))) {
+            return config('optional_modules.womans_form_modules');
+        }
+
+        return [];
+    }
+
+    // ── Table ─────────────────────────────────────────────────────────────────
+
+    public function table(Table $table): Table
+    {
+        $xlsformSelected = ($this->data['xlsform_id'] ?? null) !== null;
+
+        return $table
+            ->query(function () {
+                $query = XlsformModuleVersion::query()
+                    ->whereNull('xlsform_module_id')
+                    ->whereNull('owner_id');
+
+                $keywords = $this->getModuleKeywords();
+
+                if (empty($keywords)) {
+                    return $query->whereRaw('0 = 1');
+                }
+
+                return $query->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $keyword) {
+                        $q->orWhereRaw('LOWER(name) LIKE ?', ['%' . $keyword . '%']);
+                    }
+                });
+            })
+            ->columns([
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('survey_rows_count')
+                    ->counts('surveyRows')
+                    ->label(fn () => t('# Questions')),
+                IconColumn::make('is_selected')
+                    ->label(fn () => t('In Survey'))
+                    ->boolean()
+                    ->state(fn (XlsformModuleVersion $record): bool => $this->isSelected($record)),
+            ])
+            ->recordActions([
+                Action::make('add')
+                    ->label(fn () => t('Add to Survey'))
+                    ->icon('heroicon-o-plus-circle')
+                    ->color('success')
+                    ->visible(fn (XlsformModuleVersion $record): bool => $xlsformSelected && ! $this->isSelected($record))
+                    ->action(fn (XlsformModuleVersion $record) => $this->addModule($record)),
+                Action::make('remove')
+                    ->label(fn () => t('Remove'))
+                    ->icon('heroicon-o-minus-circle')
+                    ->color('danger')
+                    ->visible(fn (XlsformModuleVersion $record): bool => $xlsformSelected && $this->isSelected($record))
+                    ->action(fn (XlsformModuleVersion $record) => $this->removeModule($record)),
+            ])
+            ->paginated(false);
     }
 }
