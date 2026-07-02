@@ -6,6 +6,7 @@ use App\Models\Holpa\Domain;
 use App\Models\Holpa\GlobalIndicator;
 use App\Models\Holpa\Theme;
 use App\Models\SampleFrame\Farm;
+use App\Models\SampleFrame\FarmEntity;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use App\Models\User;
@@ -13,6 +14,7 @@ use App\Policies\ChoiceListPolicy;
 use App\Policies\DatasetPolicy;
 use App\Policies\DatasetVariablePolicy;
 use App\Policies\DomainPolicy;
+use App\Policies\FarmEntityPolicy;
 use App\Policies\FarmPolicy;
 use App\Policies\GlobalIndicatorPolicy;
 use App\Policies\LocationLevelPolicy;
@@ -74,6 +76,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(DatasetVariable::class, DatasetVariablePolicy::class);
         Gate::policy(LocationLevel::class, LocationLevelPolicy::class);
         Gate::policy(Farm::class, FarmPolicy::class);
+        Gate::policy(FarmEntity::class, FarmEntityPolicy::class);
 
         // Enable migrations in subfolders
         $migrationsPath = database_path('migrations');
