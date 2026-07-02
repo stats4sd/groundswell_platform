@@ -1,6 +1,18 @@
 # Plan: Farm CRUD on ODK Central Entities (generic entity framework, take 1)
 
-**Status: In Progress** — Phase 0 and Phase 1 (List + Create) are implemented and **confirmed working against a real ODK Central server**. Phase 2 (Update) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested. Delete and both import flows are not started. Each phase is meant to be tested by Dan before the next begins.
+**Status: In Progress** — Phase 0, Phase 1 (List + Create), and Phase 2 (Update) are implemented and **confirmed working against a real ODK Central server**. Phase 3 (Delete) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested. Both import flows are not started. Each phase is meant to be tested by Dan before the next begins.
+
+### Phase 3 (Delete) implementation notes
+
+`OdkFarmEntityService::deleteFarm()` soft-deletes the entity on Central via `deleteOdkEntity()`, then soft-deletes the local `FarmEntity` row (kept, not hard-deleted, for future FK references once this is wired into `FarmSurveyData` at cutover). Wired into the table's `DeleteAction` via `->action()`, overriding Filament's default plain-Eloquent-delete behaviour while keeping its confirmation modal and notification.
+
+### Bug found during Delete testing: restoring on Central collided with the local soft-delete
+
+Restoring a deleted entity directly in Central's UI made the list page throw a duplicate-key error on `farm_entities.odk_uuid`. Cause: `refreshFromCentral()`'s lookup query didn't include trashed `FarmEntity` rows (Eloquent's default `SoftDeletes` scope excludes them), so it treated the now-active-again uuid as brand new and tried to `INSERT` a fresh row with the same `odk_uuid` the trashed row already held.
+
+Fixed by looking up `withTrashed()` and calling `->restore()` on a matched trashed row before continuing.
+
+**Flagged, not fixed (out of scope for this bug):** the reverse case - an entity deleted directly on Central (bypassing this app's Delete action) - isn't mirrored locally; the local `FarmEntity` stays active since it's simply absent from the feed and nothing currently reacts to that. A full fix needs to also confirm the OData feed isn't paginated first (soft-deleting every local farm not seen in a partial page of results would be a worse bug than the one it fixes).
 
 ### Phase 2 (Update) implementation notes
 

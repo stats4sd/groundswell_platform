@@ -10,6 +10,7 @@ use App\Models\SampleFrame\FarmEntity;
 use App\Services\HelperService;
 use App\Services\OdkFarmEntityService;
 use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\KeyValue;
@@ -122,6 +123,10 @@ class FarmEntityResource extends Resource
             ->filters([])
             ->recordActions([
                 EditAction::make(),
+                // Overrides the default delete behaviour - a farm's ODK Central entity
+                // must be soft-deleted too, not just the local row.
+                DeleteAction::make()
+                    ->action(fn (FarmEntity $record) => app(OdkFarmEntityService::class)->deleteFarm($record)),
             ])
             ->headerActions([
                 CreateAction::make()

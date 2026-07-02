@@ -425,6 +425,29 @@ class OdkFarmEntityService
     }
 
     /**
+     * Soft-deletes a farm's entity on ODK Central, then soft-deletes the local FarmEntity
+     * row (not hard-deleted - keeps it around for any future FK references, e.g. from
+     * FarmSurveyData once this is wired up at cutover).
+     */
+    public function deleteFarm(FarmEntity $farmEntity): void
+    {
+        if ($farmEntity->odk_uuid === null) {
+            throw new \RuntimeException("Farm {$farmEntity->id} has no linked ODK Central entity to delete.");
+        }
+
+        $team = $farmEntity->owner;
+        $entityListName = $this->resolveEntityListName($team);
+
+        if ($entityListName === null) {
+            throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot determine which ODK Central entity list to delete from.");
+        }
+
+        $this->odkLinkService->deleteOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid);
+
+        $farmEntity->delete();
+    }
+
+    /**
      * Refreshes local EntityValue rows for every farm belonging to $team from Central's
      * live OData feed - the "read-through, no stale cache" read path. Called before
      * rendering the farm list/detail views.
@@ -463,7 +486,11 @@ class OdkFarmEntityService
 
         $feed = $this->odkLinkService->getOdkDatasetEntitiesFeed($odkProject, $entityListName);
 
-        $farmsByUuid = FarmEntity::query()
+        // withTrashed(): the feed only returns Central's currently-active entities, but a
+        // uuid in it may belong to a farm we soft-deleted locally that was since restored
+        // on Central - that needs restoring, not re-inserting (which would collide on the
+        // unique odk_uuid constraint).
+        $farmsByUuid = FarmEntity::withTrashed()
             ->where('owner_id', $team->id)
             ->whereNotNull('odk_uuid')
             ->with('entity')
@@ -481,6 +508,10 @@ class OdkFarmEntityService
 
             $farmEntity = $farmsByUuid->get($uuid);
             $entity = $farmEntity?->entity;
+
+            if ($farmEntity?->trashed()) {
+                $farmEntity->restore();
+            }
 
             if (! $farmEntity) {
                 $farmEntity = FarmEntity::create([
