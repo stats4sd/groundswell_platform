@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\SampleFrame\FarmEntity;
 use App\Models\Team;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
@@ -289,6 +290,99 @@ class OdkFarmEntityService
             );
 
             return $farmEntity;
+        });
+    }
+
+    /**
+     * Bulk-creates many farms in a single Central API call - used by the Excel import
+     * flow instead of calling createFarm() per row, which would mean one Central round
+     * trip per row on top of the reconciliation calls. Rows whose team_code already
+     * exists for the team are skipped (mirrors the old FarmSheetImport dedup rule); a
+     * team_code repeated within $rows itself is also deduped, keeping the first occurrence.
+     *
+     * @param  Collection<int, array{locationId: int, teamCode: string, identifiers: array<string, string>, properties: array<string, string>}>  $rows
+     * @return Collection<int, FarmEntity>
+     */
+    public function bulkCreateFarms(Team $team, Collection $rows, ?string $sourceName = null): Collection
+    {
+        $entityListName = $this->resolveEntityListName($team);
+
+        if ($entityListName === null) {
+            throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot import farms.");
+        }
+
+        $dataset = $this->ensureDataset();
+        $this->ensureOdkDataset($team, $dataset, $entityListName);
+
+        $existingCodes = FarmEntity::where('owner_id', $team->id)->pluck('team_code')->all();
+
+        $newRows = $rows
+            ->reject(fn ($row) => in_array($row['teamCode'], $existingCodes, true))
+            ->unique('teamCode')
+            ->values();
+
+        if ($newRows->isEmpty()) {
+            return collect();
+        }
+
+        // Reconcile every identifier/property key used across the whole batch up front,
+        // rather than once per row.
+        $keyTypes = ['team_code' => 'property'];
+
+        foreach ($newRows as $row) {
+            $keyTypes = [
+                ...$keyTypes,
+                ...array_fill_keys(array_keys($row['identifiers']), 'identifier'),
+                ...array_fill_keys(array_keys($row['properties']), 'property'),
+            ];
+        }
+
+        $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
+
+        return DB::transaction(function () use ($team, $dataset, $entityListName, $newRows, $propertyMap, $sourceName) {
+
+            $prepared = $newRows->map(function ($row) use ($team, $dataset, $propertyMap) {
+                $rawData = [...$row['identifiers'], ...$row['properties'], 'team_code' => $row['teamCode']];
+
+                $data = [];
+                foreach ($rawData as $key => $value) {
+                    $data[$propertyMap[$key]] = (string) $value;
+                }
+
+                $farmEntity = FarmEntity::create([
+                    'owner_id' => $team->id,
+                    'location_id' => $row['locationId'],
+                    'team_code' => $row['teamCode'],
+                    // Assigned client-side (rather than left to Central to generate) so
+                    // the bulk-create response doesn't need to be matched back to rows.
+                    'odk_uuid' => (string) Str::uuid(),
+                ]);
+
+                $entity = Entity::create([
+                    'dataset_id' => $dataset->id,
+                    'owner_id' => $team->id,
+                    'model_type' => FarmEntity::class,
+                    'model_id' => $farmEntity->id,
+                ]);
+
+                $entity->addValues(
+                    collect($data)->map(fn ($value, $name) => new EntityValue([
+                        'dataset_variable_name' => $name,
+                        'value' => $value,
+                    ]))->values()
+                );
+
+                return ['farmEntity' => $farmEntity, 'uuid' => $farmEntity->odk_uuid, 'label' => $row['teamCode'], 'data' => $data];
+            });
+
+            $this->odkLinkService->bulkCreateOdkEntities(
+                $team->odkProject,
+                $entityListName,
+                $prepared->map(fn ($p) => ['uuid' => $p['uuid'], 'label' => $p['label'], 'data' => $p['data']])->values()->all(),
+                $sourceName,
+            );
+
+            return $prepared->pluck('farmEntity');
         });
     }
 

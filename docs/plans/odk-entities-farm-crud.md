@@ -1,6 +1,28 @@
 # Plan: Farm CRUD on ODK Central Entities (generic entity framework, take 1)
 
-**Status: In Progress** — Phase 0, Phase 1 (List + Create), and Phase 2 (Update) are implemented and **confirmed working against a real ODK Central server**. Phase 3 (Delete) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested. Both import flows are not started. Each phase is meant to be tested by Dan before the next begins.
+**Status: In Progress** — Phase 0 through Phase 3 (List, Create, Update, Delete) are implemented and **confirmed working against a real ODK Central server**. Phase 4 (Import farms only) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested. Phase 5 (combined locations+farms import wizard) not started. Each phase is meant to be tested by Dan before the next begins.
+
+### Phase 4 (Import farms only) implementation notes
+
+Reuses the existing `ImportFarmsAction` modal (column-mapping UI) unchanged - it's purely about parsing an uploaded spreadsheet and is independent of storage backend. Only swapped which import class it dispatches (`->use(FarmEntityImport::class)` instead of `FarmImport::class`).
+
+New `FarmEntityImport`/`FarmEntitySheetImport` mirror `FarmImport`/`FarmSheetImport`'s structure (same validation rules, same queued/chunked/notification pattern) but hand valid rows to a new `OdkFarmEntityService::bulkCreateFarms()` instead of inserting into a local table directly. That method:
+- Skips rows whose `team_code` already exists for the team (same dedup rule as before), and also dedupes repeats of the same `team_code` *within* the uploaded file itself (the old row-by-row insert loop got this for free by checking against already-inserted rows; a batch approach doesn't unless done explicitly).
+- Reconciles every identifier/property key used across the whole batch once, rather than once per row.
+- Generates each entity's UUID client-side before creating it locally, then includes that UUID in Central's bulk-create payload - avoids needing to match the bulk response back to rows by position/order (which wasn't confirmed reliable).
+- Wraps the batch in a transaction so a failed bulk API call doesn't leave locally-created rows Central never actually received.
+
+**Known gap carried over from the old code, not addressed here:** the queued job resolves the team via `Team::findOrFail($this->data['owner_id'])` (captured at form-submission time) rather than `HelperService::getCurrentOwner()`, since a queued job runs with no Filament tenancy context - this matches how `FarmSheetImport` already worked, not a new limitation.
+
+**Cosmetic-only gap:** the `Import` audit record `ImportFarmsAction::importData()` creates is hardcoded to `model_type => Farm::class` regardless of which import class is actually used - harmless for behaviour, just slightly misleading if someone reviews that record for an entity-backed import.
+
+### Bug found during Import testing: bulk-create requires `source`, unlike single-entity create
+
+The import ran without a visible error to the end user, but created nothing locally or on Central - the `imports` table's `errors` column had `HTTP 400: Required parameter source missing`. Cause: `OdkDatasetService::bulkCreateOdkEntities()` treated `source` as optional and used `array_filter()` to drop it when no name was given - but Central's bulk-create endpoint requires it (unlike single-entity create, which doesn't). Fixed by always sending `source.name`, defaulting to `'Bulk import'` when the caller doesn't supply one; `bulkCreateFarms()`/`FarmEntitySheetImport` now thread the uploaded file's name through as that source name. Confirmed the failed attempt left no orphaned local rows, since the whole batch is wrapped in a DB transaction that rolled back with the API call.
+
+### Pre-existing bug found while testing (unrelated to this feature, fixed anyway since both import flows share the action)
+
+While testing the *old* Farm import for an apples-to-apples comparison, Dan hit a `TypeError` in `ImportFarmsAction`'s file-upload `afterStateUpdated` closure - it declared `?TemporaryUploadedFile $state` but was invoked with a plain string. Cause: `$state` is only a `TemporaryUploadedFile` on the initial upload event; a later Livewire re-render of the field (e.g. after a validation error elsewhere in the form) passes back the already-stored path as a string instead, and the closure's strict type didn't allow for that. Not introduced by this branch's work, but shared by both the old and new import actions, so fixed in place: the closure now accepts an untyped `$state` and returns early unless it's actually a `TemporaryUploadedFile`.
 
 ### Phase 3 (Delete) implementation notes
 
