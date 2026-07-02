@@ -2,9 +2,6 @@
 
 namespace App\Filament\Tables\Actions;
 
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
 use App\Models\Import;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\LocationLevel;
@@ -15,6 +12,9 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -69,8 +69,16 @@ class ImportFarmsAction extends ExcelImportAction
                 ->required()
                 ->live()
                 ->preserveFilenames()
-                ->afterStateUpdated(function (?TemporaryUploadedFile $state, Set $set) {
-                    $headings = (new HeadingRowImport)->toArray($state?->getRealPath());
+                ->afterStateUpdated(function ($state, Set $set) {
+                    // $state is only a TemporaryUploadedFile on the initial upload event;
+                    // a later Livewire re-render of this field (e.g. after a validation
+                    // error elsewhere in the form) passes back the already-stored path as
+                    // a plain string instead - nothing new to parse in that case.
+                    if (! $state instanceof TemporaryUploadedFile) {
+                        return;
+                    }
+
+                    $headings = (new HeadingRowImport)->toArray($state->getRealPath());
 
                     // $headings is an array(sheets) of arrays(headers)
                     // We only want the first sheet
@@ -96,7 +104,7 @@ class ImportFarmsAction extends ExcelImportAction
 
                     Select::make('location_code_column')
                         ->options(fn (Get $get) => $get('header_columns'))
-                        ->label(fn (Get $get) => t('Which column contains the') . ' ' . (LocationLevel::find($get('location_level_id'))?->name ?? t('location')) . ' ' . t('unique code?'))
+                        ->label(fn (Get $get) => t('Which column contains the').' '.(LocationLevel::find($get('location_level_id'))?->name ?? t('location')).' '.t('unique code?'))
                         ->placeholder(t('Select a column')),
                 ]),
 
