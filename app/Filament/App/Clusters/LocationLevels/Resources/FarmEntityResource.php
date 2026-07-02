@@ -4,11 +4,13 @@ namespace App\Filament\App\Clusters\LocationLevels\Resources;
 
 use App\Filament\App\Clusters\LocationLevels;
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\CreateFarmEntity;
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\EditFarmEntity;
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities;
 use App\Models\SampleFrame\FarmEntity;
 use App\Services\HelperService;
 use App\Services\OdkFarmEntityService;
 use Filament\Actions\CreateAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
@@ -118,6 +120,9 @@ class FarmEntityResource extends Resource
                 ...$propertyColumns,
             ])
             ->filters([])
+            ->recordActions([
+                EditAction::make(),
+            ])
             ->headerActions([
                 CreateAction::make()
                     // disable New Farm button if there is no location level with farms
@@ -137,6 +142,7 @@ class FarmEntityResource extends Resource
         return [
             'index' => ListFarmEntities::route('/'),
             'create' => CreateFarmEntity::route('/create'),
+            'edit' => EditFarmEntity::route('/{record}/edit'),
         ];
     }
 }

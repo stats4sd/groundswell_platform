@@ -1,6 +1,26 @@
 # Plan: Farm CRUD on ODK Central Entities (generic entity framework, take 1)
 
-**Status: In Progress** — Phase 0 (foundations) is implemented and confirmed working. Phase 1's List half is implemented and **confirmed working against a real ODK Central server** (correctly shows farms created via a registration form's `entities` sheet, not just ones created through this app). Phase 1's Create half is implemented but not yet tested. Update, Delete, and both import flows are not started. Each phase is meant to be tested by Dan before the next begins.
+**Status: In Progress** — Phase 0 and Phase 1 (List + Create) are implemented and **confirmed working against a real ODK Central server**. Phase 2 (Update) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested. Delete and both import flows are not started. Each phase is meant to be tested by Dan before the next begins.
+
+### Phase 2 (Update) implementation notes
+
+`OdkFarmEntityService::updateFarm()` uses `odk_version` as `baseVersion` for optimistic concurrency against Central, and removes any identifier/property key the user deleted from the KeyValue fields (`entity->values()->whereNotIn(...)->delete()` before re-upserting).
+
+The identifiers/properties split doesn't survive a round trip through Central on its own - Central only stores flat property data, no PII/non-PII distinction. Fixed by tagging each `DatasetVariable` with `description` = `'identifier'` or `'property'` when it's first reconciled (`reconcileProperties()` now takes `[rawKey => type]` instead of a plain key list), and `getEntityData()` uses that tag to reconstruct the two KeyValue fields when editing. Properties discovered from entities created outside this app (the adopt path) default to `'property'` since there's no way to know their PII status.
+
+### Bug found during Update testing: OData's `label` field leaking into entity data
+
+Editing *any* farm (including one created through this app's own Create page) failed with `400: You specified the dataset property [label] which does not exist`. Cause: `refreshFromCentral()`'s system-field filter only excluded `__`-prefixed keys, but Central's OData feed returns each entity's `label` field unprefixed. It got auto-registered as a fake local property (via the adopt path's `ensurePropertyRegistered()`), pulled into the Properties KeyValue field on Edit, and then included in the `data` object on save - which Central rejects since `label` is a reserved top-level field, not a data property.
+
+Fixed by excluding a `RESERVED_ODATA_KEYS` set (`label`, `geometry`) in addition to the `__` prefix. This was local-only contamination - `ensurePropertyRegistered()` never pushes to Central, so nothing needed fixing server-side - but the bogus local `DatasetVariable` + its `EntityValue` rows (7, across all 4 discovered farms + the app-created one) were manually cleaned up in Dan's dev DB via tinker.
+
+### Second bug found during Update testing: deleting a KeyValue row didn't clear it on Central
+
+Removing rows from the Properties KeyValue field and saving made them disappear locally, but they were still present in Central's entity, and reappeared after `refreshFromCentral()` ran again on the next Edit visit. Root cause, confirmed against ODK's own docs: Central's entity `PATCH` **merges** the given `data` with the entity's existing data - omitted properties keep their old value. Central's own guidance: *"To unset the value of any property, you can set it to empty string."*
+
+Fixed `updateFarm()` to compute which property names were previously set **on this specific entity** (not the whole shared dataset - it's shared across teams, so blanking every dataset property would wrongly touch other teams' farms too) and explicitly send `""` for any that are no longer submitted. That part stays.
+
+The accompanying `getEntityData()` change (hiding empty-string values so a cleared key disappears from the KeyValue UI) was reverted per Dan's direction - all properties should show, including empty ones. Deferred: once cleared, a key currently reappears in the Edit form with a blank value rather than looking fully removed. Revisit later (options include: an explicit "empty vs. never-set" indicator, or accepting that ODK Central's model has no true "property absent" state, only "empty value").
 
 ### Ready for testing (Phase 1)
 
@@ -66,6 +86,10 @@ This plan was arrived at over two rounds of design discussion. Key decisions tak
 - **Phase 4 — Import farms only** (adapt the `FarmSheetImport` dedup logic to push via `bulkCreateOdkEntities`).
 - **Phase 5 — Import locations + farms combined wizard.**
 - **Phase 6 — Cutover.** Backfill existing `farms` rows into Central, wire `FarmEntity` into whatever `FarmSurveyData`/submission-processing needs, retire the old `FarmResource`/`Farm` model, surface ODK Central conflict state in the UI, and revisit extracting the generic package-level Filament base classes once a second entity type is on the roadmap.
+
+## Deferred UX feedback from testing
+
+- **Create form fields don't match the Farm Registration form's fields.** Dan noted after testing Create that the free-form identifiers/properties KeyValue UI doesn't match the fixed fields (household_id, participant_name, GPS, loc1/loc2, etc.) that the real Farm Registration XLSForm collects. Deferred by Dan's own call - relevant once cutover (Phase 6) is closer, likely resolved by driving the Create form from the resolved entity list's actual `DatasetVariable`s (the same ones a registration-form-submitted entity already carries) rather than a free-form KeyValue widget.
 
 ## Known gaps / deliberate deferrals
 
