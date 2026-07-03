@@ -6,6 +6,8 @@
 
 After comparing the two pages side by side, Dan asked for `ListFarmEntities` to match `ListFarms`'s layout: breadcrumbs (Survey Dashboard > Survey locations > Farms), page heading ("Survey locations", not "Farms (ODK Entities - preview)"), and the "Instructions" panel in the top-right, which was missing entirely. Fixed by copying `getBreadcrumbs()`/`getHeading()` from `ListFarms` and reusing `FarmResource\Widgets\FarmListHeaderWidget` as-is via `getHeaderWidgets()` - that widget has no `Farm`-model-specific logic, it just renders a translation-file-driven instructions panel.
 
+`FarmEntityResource::getPluralModelLabel()` also returned `"Farms (ODK Entities)"`, which - since neither the resource nor `ImportLocationsAndFarmEntities` override breadcrumbs - is what Filament's default breadcrumb auto-generation (cluster label + resource plural label + page title) was pulling from, producing "Location Levels > Farms (ODK Entities) > Import Locations and Farm List" instead of the desired "Location Levels > Farms > Import Locations and Farm List". Fixed by changing it to plain "Farms", matching `FarmResource`. Confirmed (via `grep`) it was the only occurrence of that string in the new resource's files.
+
 ### Navigation retargeted to the new page
 
 Per Dan's direction, the original `FarmResource` stays in place (routes, pages, everything) for future comparison, but is no longer linked to from anywhere in the UI. Two call sites found (only two - confirmed by search) and retargeted to `FarmEntityResource`:

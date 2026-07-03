@@ -46,7 +46,7 @@ class FarmEntityResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        return t('Farms (ODK Entities)');
+        return t('Farms');
     }
 
     public static function form(Schema $schema): Schema
