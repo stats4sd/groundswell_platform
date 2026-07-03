@@ -5,6 +5,7 @@ namespace App\Filament\App\Clusters\LocationLevels\Resources;
 use App\Filament\App\Clusters\LocationLevels;
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\CreateFarmEntity;
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\EditFarmEntity;
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities;
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities;
 use App\Models\SampleFrame\FarmEntity;
 use App\Services\HelperService;
@@ -148,6 +149,7 @@ class FarmEntityResource extends Resource
             'index' => ListFarmEntities::route('/'),
             'create' => CreateFarmEntity::route('/create'),
             'edit' => EditFarmEntity::route('/{record}/edit'),
+            'import' => ImportLocationsAndFarmEntities::route('/import'),
         ];
     }
 }

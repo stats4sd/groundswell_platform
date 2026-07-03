@@ -7,6 +7,7 @@ use App\Filament\Tables\Actions\ImportFarmsAction;
 use App\Imports\FarmEntityImport;
 use App\Services\HelperService;
 use App\Services\OdkFarmEntityService;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
 
 class ListFarmEntities extends ListRecords
@@ -30,6 +31,16 @@ class ListFarmEntities extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            // Divert to the combined wizard - identical to ListFarms' equivalent button,
+            // just pointed at this resource's own import route.
+            Action::make('import')
+                ->label(fn () => t('Import Locations and Farm List'))
+                ->extraAttributes(['class' => 'buttonb'])
+                ->tooltip(fn () => t('Use this if you have your location and farm data all in one spreadsheet.'))
+                ->visible(fn () => auth()->user()->can('maintain list of farms'))
+                ->disabled(fn () => HelperService::getCurrentOwner()->locationLevels()->where('has_farms', 1)->count() < 1)
+                ->url(fn () => FarmEntityResource::getUrl('import')),
+
             // Reuses the existing column-mapping modal as-is (it's about parsing a
             // spreadsheet, independent of storage backend) - only the underlying import
             // class differs. NOTE: the Import audit record this creates is tagged

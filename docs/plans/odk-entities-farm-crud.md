@@ -1,6 +1,10 @@
 # Plan: Farm CRUD on ODK Central Entities (generic entity framework, take 1)
 
-**Status: In Progress** — Phase 0 through Phase 3 (List, Create, Update, Delete) are implemented and **confirmed working against a real ODK Central server**. Phase 4 (Import farms only) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested. Phase 5 (combined locations+farms import wizard) not started. Each phase is meant to be tested by Dan before the next begins.
+**Status: In Progress** — Phase 0 through Phase 4 (List, Create, Update, Delete, Import farms only) are implemented and **confirmed working against a real ODK Central server**, feature-parity confirmed against the old page for both import flows. Phase 5 (combined locations+farms import wizard) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested.
+
+### Phase 5 (combined Import Locations and Farm List wizard) implementation notes
+
+New `ImportLocationsAndFarmEntities` page mirrors `FarmResource\Pages\ImportLocationsAndFarms` almost exactly - the 3-step wizard (upload, map to location hierarchy, map to farm columns) is entirely about spreadsheet/location parsing, independent of storage backend, so it's copied with only two changes: the farm half of `save()` dispatches `FarmEntityImport` instead of `FarmImport`, and it redirects to `FarmEntityResource::getUrl('index')`. Locations stay fully local either way - unchanged. Reuses the original page's Blade view directly (it's generic form+actions boilerplate, not worth duplicating). New route registered as `farm-entities/import`; header button added to `ListFarmEntities` mirroring `ListFarms`'s equivalent, pointed at the new route via `FarmEntityResource::getUrl('import')` rather than the old page's hardcoded relative URL string.
 
 ### Phase 4 (Import farms only) implementation notes
 
@@ -23,6 +27,8 @@ The import ran without a visible error to the end user, but created nothing loca
 ### Pre-existing bug found while testing (unrelated to this feature, fixed anyway since both import flows share the action)
 
 While testing the *old* Farm import for an apples-to-apples comparison, Dan hit a `TypeError` in `ImportFarmsAction`'s file-upload `afterStateUpdated` closure - it declared `?TemporaryUploadedFile $state` but was invoked with a plain string. Cause: `$state` is only a `TemporaryUploadedFile` on the initial upload event; a later Livewire re-render of the field (e.g. after a validation error elsewhere in the form) passes back the already-stored path as a string instead, and the closure's strict type didn't allow for that. Not introduced by this branch's work, but shared by both the old and new import actions, so fixed in place: the closure now accepts an untyped `$state` and returns early unless it's actually a `TemporaryUploadedFile`.
+
+The same bug existed a second time in `FarmResource\Pages\ImportLocationsAndFarms` (the combined wizard has its own separate `FileUpload` field, not routed through `ImportFarmsAction`) - hit when Dan tested the *original* combined-import button for comparison. Fixed identically. `ImportLocationsAndFarmEntities` (this branch's new combined-wizard page) already had the fix from the start, since it was written after the first occurrence was found.
 
 ### Phase 3 (Delete) implementation notes
 
