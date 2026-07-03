@@ -2,6 +2,14 @@
 
 **Status: In Progress** — Phase 0 through Phase 4 (List, Create, Update, Delete, Import farms only) are implemented and **confirmed working against a real ODK Central server**, feature-parity confirmed against the old page for both import flows. Phase 5 (combined locations+farms import wizard) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested.
 
+### Navigation retargeted to the new page
+
+Per Dan's direction, the original `FarmResource` stays in place (routes, pages, everything) for future comparison, but is no longer linked to from anywhere in the UI. Two call sites found (only two - confirmed by search) and retargeted to `FarmEntityResource`:
+- `LocationLevelResource::getNavigationItems()` - the "Farms" sidebar nav item under the LocationLevels cluster.
+- `resources/views/filament/app/pages/survey-locations/survey-locations-index.blade.php` - the "List of farms" card on the Survey Locations index page.
+
+`FarmEntityResource` itself is still `shouldRegisterNavigation = false` - these are hand-built links, not Filament's automatic nav registration, so that flag doesn't need to change. The old `FarmResource` route (`location-levels/farms`) still works if visited directly by URL; it's just unreachable via any in-app link now.
+
 ### Phase 5 (combined Import Locations and Farm List wizard) implementation notes
 
 New `ImportLocationsAndFarmEntities` page mirrors `FarmResource\Pages\ImportLocationsAndFarms` almost exactly - the 3-step wizard (upload, map to location hierarchy, map to farm columns) is entirely about spreadsheet/location parsing, independent of storage backend, so it's copied with only two changes: the farm half of `save()` dispatches `FarmEntityImport` instead of `FarmImport`, and it redirects to `FarmEntityResource::getUrl('index')`. Locations stay fully local either way - unchanged. Reuses the original page's Blade view directly (it's generic form+actions boilerplate, not worth duplicating). New route registered as `farm-entities/import`; header button added to `ListFarmEntities` mirroring `ListFarms`'s equivalent, pointed at the new route via `FarmEntityResource::getUrl('import')` rather than the old page's hardcoded relative URL string.
