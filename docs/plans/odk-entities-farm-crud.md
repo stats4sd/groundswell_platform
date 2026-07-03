@@ -2,6 +2,10 @@
 
 **Status: In Progress** — Phase 0 through Phase 4 (List, Create, Update, Delete, Import farms only) are implemented and **confirmed working against a real ODK Central server**, feature-parity confirmed against the old page for both import flows. Phase 5 (combined locations+farms import wizard) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested.
 
+### Layout parity with the old page
+
+After comparing the two pages side by side, Dan asked for `ListFarmEntities` to match `ListFarms`'s layout: breadcrumbs (Survey Dashboard > Survey locations > Farms), page heading ("Survey locations", not "Farms (ODK Entities - preview)"), and the "Instructions" panel in the top-right, which was missing entirely. Fixed by copying `getBreadcrumbs()`/`getHeading()` from `ListFarms` and reusing `FarmResource\Widgets\FarmListHeaderWidget` as-is via `getHeaderWidgets()` - that widget has no `Farm`-model-specific logic, it just renders a translation-file-driven instructions panel.
+
 ### Navigation retargeted to the new page
 
 Per Dan's direction, the original `FarmResource` stays in place (routes, pages, everything) for future comparison, but is no longer linked to from anywhere in the UI. Two call sites found (only two - confirmed by search) and retargeted to `FarmEntityResource`:

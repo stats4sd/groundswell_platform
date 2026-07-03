@@ -3,6 +3,9 @@
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages;
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Widgets\FarmListHeaderWidget;
+use App\Filament\App\Pages\SurveyDashboard;
+use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
 use App\Filament\Tables\Actions\ImportFarmsAction;
 use App\Imports\FarmEntityImport;
 use App\Services\HelperService;
@@ -16,7 +19,25 @@ class ListFarmEntities extends ListRecords
 
     public function getHeading(): string
     {
-        return t('Farms (ODK Entities - preview)');
+        return t('Survey locations');
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            SurveyDashboard::getUrl() => t('Survey Dashboard'),
+            SurveyLocationsIndex::getUrl() => t('Survey locations'),
+            static::getUrl() => t('Farms'),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // Reused as-is from FarmResource - it's a generic instructions panel with no
+            // Farm-model-specific logic.
+            FarmListHeaderWidget::class,
+        ];
     }
 
     // Read-through refresh: pull the current state from ODK Central's live feed once per
