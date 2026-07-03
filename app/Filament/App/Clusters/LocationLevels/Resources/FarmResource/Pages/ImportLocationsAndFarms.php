@@ -2,34 +2,33 @@
 
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Wizard;
-use Filament\Schemas\Components\Wizard\Step;
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-use App\Models\Import;
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource;
 use App\Imports\FarmImport;
-use Filament\Actions\Action;
 use App\Imports\LocationImport;
-use App\Services\HelperService;
+use App\Models\Import;
 use App\Models\SampleFrame\Farm;
-use Filament\Resources\Pages\Page;
 use App\Models\SampleFrame\Location;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\SampleFrame\LocationLevel;
+use App\Services\HelperService;
+use Filament\Actions\Action;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use Filament\Support\Exceptions\Halt;
-use Filament\Forms\Contracts\HasForms;
-use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\HeadingRowImport;
-use Filament\Notifications\Notification;
-use App\Models\SampleFrame\LocationLevel;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\Page;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
+use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\HeadingRowImport;
 
 class ImportLocationsAndFarms extends Page implements HasForms
 {
@@ -68,7 +67,6 @@ class ImportLocationsAndFarms extends Page implements HasForms
         ];
     }
 
-
     // add a function to handle the submitted form
     public function save(): void
     {
@@ -77,8 +75,7 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
         // the uploaded excel file will be stored with import model for locations
         // copy the uploaded excel file as a duplicate file, which will be stored with the import model for farms
-        Storage::copy($data['upload'], $data['upload'] . '_duplicate');
-
+        Storage::copy($data['upload'], $data['upload'].'_duplicate');
 
         // import locations
         if ($data['override'] === 'yes') {
@@ -96,7 +93,6 @@ class ImportLocationsAndFarms extends Page implements HasForms
         // import locations
         Excel::import(new LocationImport($data), $locationImport->getFirstMediaPath());
 
-        
         // import farms
         // create import record - for review and error tracking by users
         $farmImport = Import::create([
@@ -104,7 +100,7 @@ class ImportLocationsAndFarms extends Page implements HasForms
             'model_type' => Farm::class,
         ]);
 
-        $farmImport->addMedia(Storage::path($data['upload']) . '_duplicate')->toMediaCollection();
+        $farmImport->addMedia(Storage::path($data['upload']).'_duplicate')->toMediaCollection();
         $data['import_id'] = $farmImport->id;
 
         // import farms
@@ -141,8 +137,16 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                 ->required()
                                 ->live()
                                 ->preserveFilenames()
-                                ->afterStateUpdated(function (?TemporaryUploadedFile $state, Set $set) {
-                                    $headings = (new HeadingRowImport)->toArray($state?->getRealPath());
+                                ->afterStateUpdated(function ($state, Set $set) {
+                                    // $state is only a TemporaryUploadedFile on the initial upload event;
+                                    // a later Livewire re-render of this field (e.g. after a validation
+                                    // error elsewhere in the form) passes back the already-stored path as
+                                    // a plain string instead - nothing new to parse in that case.
+                                    if (! $state instanceof TemporaryUploadedFile) {
+                                        return;
+                                    }
+
+                                    $headings = (new HeadingRowImport)->toArray($state->getRealPath());
 
                                     // $headings is an array(sheets) of arrays(headers)
                                     // We only want the first sheet
@@ -152,7 +156,6 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                 }),
 
                         ]),
-
 
                     // Step 2
                     Step::make(t('Map columns to location levels'))
@@ -175,13 +178,13 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                         $parentQuestions = $parents->reverse()->map(callback: function ($parent) {
                                             return collect([
                                                 Select::make("parent_{$parent->id}_code_column")
-                                                    ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('unique code?'))
-                                                    ->options(fn(Get $get) => $get('header_columns'))
+                                                    ->label(t('Which column contains the').' '.$parent->name.' '.t('unique code?'))
+                                                    ->options(fn (Get $get) => $get('header_columns'))
                                                     ->notIn(['na'])
                                                     ->required(),
                                                 Select::make("parent_{$parent->id}_name_column")
-                                                    ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('name?'))
-                                                    ->options(fn(Get $get) => $get('header_columns'))
+                                                    ->label(t('Which column contains the').' '.$parent->name.' '.t('name?'))
+                                                    ->options(fn (Get $get) => $get('header_columns'))
                                                     ->notIn(['na'])
                                                     ->required(),
                                             ]);
@@ -189,13 +192,13 @@ class ImportLocationsAndFarms extends Page implements HasForms
 
                                         $currentLevelQuestions = collect([
                                             Select::make('code_column')
-                                                ->label(t('Which column contains the') . ' ' . $hasFarmLevel->name . ' ' . t('unique code?'))
-                                                ->options(fn(Get $get) => $get('header_columns'))
+                                                ->label(t('Which column contains the').' '.$hasFarmLevel->name.' '.t('unique code?'))
+                                                ->options(fn (Get $get) => $get('header_columns'))
                                                 ->notIn(['na'])
                                                 ->required(),
                                             Select::make('name_column')
-                                                ->label(t('Which column contains the') . ' ' . $hasFarmLevel->name . ' ' . t('name?'))
-                                                ->options(fn(Get $get) => $get('header_columns'))
+                                                ->label(t('Which column contains the').' '.$hasFarmLevel->name.' '.t('name?'))
+                                                ->options(fn (Get $get) => $get('header_columns'))
                                                 ->notIn(['na'])
                                                 ->required(),
                                         ]);
@@ -222,13 +225,12 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                     ->default(LocationLevel::where('has_farms', 1)->first()),
 
                                 Hidden::make('user_id')
-                                    ->default(fn() => auth()->id()),
+                                    ->default(fn () => auth()->id()),
 
                                 Hidden::make('owner_id')
                                     ->default(HelperService::getCurrentOwner()->id),
                             ]
                         ),
-
 
                     // Step 3
                     Step::make(t('Map columns to farm'))
@@ -254,8 +256,8 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                         ->live(),
 
                                     Select::make('location_code_column')
-                                        ->options(fn(Get $get) => $get('header_columns'))
-                                        ->label(fn(Get $get) => t('Which column contains the') . ' ' . (LocationLevel::find($get('location_level_id'))?->name ?? t('location')) . ' ' . t('unique code?'))
+                                        ->options(fn (Get $get) => $get('header_columns'))
+                                        ->label(fn (Get $get) => t('Which column contains the').' '.(LocationLevel::find($get('location_level_id'))?->name ?? t('location')).' '.t('unique code?'))
                                         ->placeholder(t('Select a column')),
                                 ]),
 
@@ -267,14 +269,14 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                         ->placeholder(t('Select a column'))
                                         ->helperText(t('e.g. farm_id or farm_code'))
                                         ->live()
-                                        ->options(fn(Get $get) => $get('header_columns')),
+                                        ->options(fn (Get $get) => $get('header_columns')),
 
                                     CheckboxList::make('farm_identifiers')
                                         ->label(t('Are there any additional columns that contain identifiers for the farm? Tick all that apply.'))
                                         ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.'))
-                                        ->options(fn(Get $get): array => $get('header_columns'))
+                                        ->options(fn (Get $get): array => $get('header_columns'))
                                         ->disableOptionWhen(
-                                            fn(string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
+                                            fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||
                                                 collect($get('farm_properties'))->contains($value) ||
                                                 $value === 'na'
                                         )
@@ -284,9 +286,9 @@ class ImportLocationsAndFarms extends Page implements HasForms
                                     CheckboxList::make('farm_properties')
                                         ->label(t('Are there any additional columns that contain properties of the farm? Tick all that apply.'))
                                         ->helperText(t('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.'))
-                                        ->options(fn(Get $get) => $get('header_columns'))
+                                        ->options(fn (Get $get) => $get('header_columns'))
                                         ->disableOptionWhen(
-                                            fn(string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
+                                            fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||
                                                 collect($get('farm_identifiers'))->contains($value) ||
                                                 $value === 'na'
                                         )
