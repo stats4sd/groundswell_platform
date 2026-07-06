@@ -40,13 +40,19 @@ class ListFarmEntities extends ListRecords
         ];
     }
 
-    // Read-through refresh: pull the current state from ODK Central's live feed once per
-    // page load, rather than trusting whatever is already in the local EntityValue rows.
+    /**
+     * The live feed fetched once per page load - keyed by odk_uuid, each entry
+     * ['label' => ..., 'data' => [propertyName => value]]. Read by the table's dynamic
+     * property columns (see FarmEntityResource::table()) via Filament's $livewire closure
+     * injection - nothing about a farm's values is persisted locally.
+     */
+    public array $liveFarmData = [];
+
     public function mount(): void
     {
         parent::mount();
 
-        app(OdkFarmEntityService::class)->refreshFromCentral(HelperService::getCurrentOwner());
+        $this->liveFarmData = app(OdkFarmEntityService::class)->refreshFromCentral(HelperService::getCurrentOwner());
     }
 
     protected function getHeaderActions(): array

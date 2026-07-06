@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\Entity;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\EntityValue;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\OdkDataset;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
@@ -21,12 +19,19 @@ use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
  * dataset/entity API calls this delegates to on OdkLinkService are generic and
  * dataset-agnostic, and are the part expected to move into the package later.
  *
+ * A farm's actual identifiers/properties are never persisted locally - no local mirror of
+ * per-record values exists (see docs/plans/farm-entities-simplify-and-gps-sync.md). Every
+ * read goes live to Central (getEntityData() for one farm, refreshFromCentral() for a
+ * team's whole list). `Dataset`/`DatasetVariable` are schema-level bookkeeping only (which
+ * properties exist, their identifier/property type tag) and do stay local - only per-record
+ * `Entity`/`EntityValue` writes were removed.
+ *
  * Two separate names are in play here, deliberately kept distinct so this feature's local
  * bookkeeping never collides with the app's existing "Farms" Dataset (id 3, seeded for
  * unrelated entities-upload work):
  * - LOCAL_DATASET_NAME: this feature's own local Dataset row (schema bookkeeping only).
- * - the ODK Central entity list name: whatever a team's active Xlsform's `entities` sheet
- *   actually calls it (e.g. "Farm_Summary") - resolved per-team via resolveEntityListName().
+ * - the ODK Central entity list name: hardcoded via resolveEntityListName() - see that
+ *   method's own doc comment.
  */
 class OdkFarmEntityService
 {
@@ -204,8 +209,8 @@ class OdkFarmEntityService
     }
 
     /**
-     * Creates a farm both on ODK Central and locally (structural row + generic Entity/
-     * EntityValue rows, which act as the read-through cache refreshed by refreshFromCentral()).
+     * Creates a farm both on ODK Central and locally (structural row only - identifiers/
+     * properties are never persisted locally, only read live via getEntityData()).
      *
      * @param  array<string, string>  $identifiers
      * @param  array<string, string>  $properties
@@ -243,7 +248,7 @@ class OdkFarmEntityService
             $data[$propertyMap[$key]] = (string) $value;
         }
 
-        return DB::transaction(function () use ($team, $locationId, $teamCode, $latitude, $longitude, $altitude, $accuracy, $dataset, $entityListName, $data) {
+        return DB::transaction(function () use ($team, $locationId, $teamCode, $latitude, $longitude, $altitude, $accuracy, $entityListName, $data) {
 
             $farmEntity = FarmEntity::create([
                 'owner_id' => $team->id,
@@ -268,20 +273,6 @@ class OdkFarmEntityService
                 'odk_uuid' => $odkEntity['uuid'],
                 'odk_version' => $odkEntity['currentVersion']['version'] ?? 1,
             ]);
-
-            $entity = Entity::create([
-                'dataset_id' => $dataset->id,
-                'owner_id' => $team->id,
-                'model_type' => FarmEntity::class,
-                'model_id' => $farmEntity->id,
-            ]);
-
-            $entity->addValues(
-                collect($data)->map(fn ($value, $name) => new EntityValue([
-                    'dataset_variable_name' => $name,
-                    'value' => $value,
-                ]))->values()
-            );
 
             return $farmEntity;
         });
@@ -333,9 +324,9 @@ class OdkFarmEntityService
 
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
 
-        return DB::transaction(function () use ($team, $dataset, $entityListName, $newRows, $propertyMap, $sourceName) {
+        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $sourceName) {
 
-            $prepared = $newRows->map(function ($row) use ($team, $dataset, $propertyMap) {
+            $prepared = $newRows->map(function ($row) use ($team, $propertyMap) {
                 $rawData = [...$row['identifiers'], ...$row['properties'], 'team_code' => $row['teamCode']];
 
                 $data = [];
@@ -352,20 +343,6 @@ class OdkFarmEntityService
                     'odk_uuid' => (string) Str::uuid(),
                 ]);
 
-                $entity = Entity::create([
-                    'dataset_id' => $dataset->id,
-                    'owner_id' => $team->id,
-                    'model_type' => FarmEntity::class,
-                    'model_id' => $farmEntity->id,
-                ]);
-
-                $entity->addValues(
-                    collect($data)->map(fn ($value, $name) => new EntityValue([
-                        'dataset_variable_name' => $name,
-                        'value' => $value,
-                    ]))->values()
-                );
-
                 return ['farmEntity' => $farmEntity, 'uuid' => $farmEntity->odk_uuid, 'label' => $row['teamCode'], 'data' => $data];
             });
 
@@ -381,36 +358,46 @@ class OdkFarmEntityService
     }
 
     /**
-     * Splits a farm's current identifiers/properties back out for editing, using each
-     * value's DatasetVariable.description ('identifier'/'property') tag - see
-     * reconcileProperties(). Values with no such tag (e.g. discovered from an entity
-     * created outside this app) default to 'property'. Excludes team_code, which has its
-     * own dedicated form field. Callers should refreshFromCentral() first for current data.
+     * Splits a farm's current identifiers/properties back out for editing. Fetches the
+     * entity's current data live from Central (no local mirror of values exists), then
+     * looks each property name up against local DatasetVariable rows (schema metadata,
+     * not per-record data) for its label and its 'identifier'/'property' type tag - see
+     * reconcileProperties(). A name with no known DatasetVariable (e.g. discovered from an
+     * entity created outside this app, not yet seen by reconcileProperties/
+     * ensurePropertyRegistered) defaults to 'property'. Excludes team_code, which has its
+     * own dedicated form field.
      *
      * @return array{identifiers: array<string, string>, properties: array<string, string>}
      */
     public function getEntityData(FarmEntity $farmEntity): array
     {
+        if ($farmEntity->odk_uuid === null) {
+            return ['identifiers' => [], 'properties' => []];
+        }
+
+        $team = $farmEntity->owner;
+        $entityListName = $this->resolveEntityListName($team);
+        $dataset = $this->ensureDataset();
+
+        $data = $this->odkLinkService->getOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid)['currentVersion']['data'] ?? [];
+
+        $typeByName = $dataset->variables()->pluck('description', 'name');
+        $labelByName = $dataset->variables()->pluck('label', 'name');
+
         $identifiers = [];
         $properties = [];
 
-        // createFarm()/refreshFromCentral() always create the linked Entity in the same
-        // step as the FarmEntity, so an existing FarmEntity always has one.
-        $entity = $farmEntity->entity()->with('values.datasetVariable')->firstOrFail();
-
-        foreach ($entity->values as $value) {
-            if ($value->dataset_variable_name === 'team_code') {
+        foreach ($data as $name => $value) {
+            if ($name === 'team_code') {
                 continue;
             }
 
-            // dataset_variable_name has a real FK to dataset_variables.name, so this
-            // relation is always resolvable - no nullsafe needed.
-            $label = $value->datasetVariable->label;
+            $label = $labelByName[$name] ?? $name;
 
-            if ($value->datasetVariable->description === 'identifier') {
-                $identifiers[$label] = $value->value;
+            if (($typeByName[$name] ?? 'property') === 'identifier') {
+                $identifiers[$label] = $value;
             } else {
-                $properties[$label] = $value->value;
+                $properties[$label] = $value;
             }
         }
 
@@ -450,10 +437,11 @@ class OdkFarmEntityService
         $dataset = $this->ensureDataset();
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
-        // createFarm()/refreshFromCentral() always create the linked Entity alongside the
-        // FarmEntity, so an existing FarmEntity (odk_uuid checked above) always has one.
-        $entity = $farmEntity->entity()->firstOrFail();
-        $previouslySetNames = $entity->values()->pluck('dataset_variable_name');
+        // No local mirror of values exists - fetch the entity's current data live to know
+        // what it previously had, so anything no longer submitted can be explicitly cleared
+        // below (Central's update merges, it doesn't replace - see the comment further down).
+        $currentData = $this->odkLinkService->getOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid)['currentVersion']['data'] ?? [];
+        $previouslySetNames = array_keys($currentData);
 
         $rawData = [...$identifiers, ...$properties, 'team_code' => $teamCode];
         $keyTypes = [
@@ -478,7 +466,7 @@ class OdkFarmEntityService
             }
         }
 
-        return DB::transaction(function () use ($farmEntity, $entity, $team, $locationId, $teamCode, $latitude, $longitude, $altitude, $accuracy, $entityListName, $data) {
+        return DB::transaction(function () use ($farmEntity, $team, $locationId, $teamCode, $latitude, $longitude, $altitude, $accuracy, $entityListName, $data) {
 
             // NOTE: verify against a live server - baseVersion defaults to 1 if we never
             // recorded one (e.g. a farm adopted from an entity created outside this app).
@@ -500,13 +488,6 @@ class OdkFarmEntityService
                 'accuracy' => $accuracy,
                 'odk_version' => $odkEntity['currentVersion']['version'] ?? ($farmEntity->odk_version ?? 1) + 1,
             ]);
-
-            foreach ($data as $name => $value) {
-                EntityValue::updateOrCreate(
-                    ['entity_id' => $entity->id, 'dataset_variable_name' => $name],
-                    ['value' => $value],
-                );
-            }
 
             return $farmEntity->fresh();
         });
@@ -536,25 +517,25 @@ class OdkFarmEntityService
     }
 
     /**
-     * Refreshes local EntityValue rows for every farm belonging to $team from Central's
-     * live OData feed - the "read-through, no stale cache" read path. Called before
-     * rendering the farm list/detail views.
-     *
-     * Entities that exist on Central but have no matching local FarmEntity (e.g. created
-     * directly by a registration form's `entities` sheet, not through this app's Create
-     * page) are "adopted": a FarmEntity/Entity row is created for them on the fly, with
-     * location left unset since we have no way to infer it from an externally-created entity.
+     * Syncs structural FarmEntity rows for every farm belonging to $team from Central's
+     * live OData feed (creating/restoring rows for farms that exist on Central but not
+     * locally yet, e.g. created directly by a registration form's `entities` sheet -
+     * "adopted" with location left unset since we have no way to infer it), and returns
+     * the fetched feed as a live data map for the caller to use directly - nothing about
+     * a farm's actual property values is persisted locally.
      *
      * NOTE: the `__id` key for an entity's uuid in the OData response is based on ODK's
      * documented convention, not yet confirmed against a live response - verify during testing.
+     *
+     * @return array<string, array{label: ?string, data: array<string, string>}>
      */
-    public function refreshFromCentral(Team $team): void
+    public function refreshFromCentral(Team $team): array
     {
         $entityListName = $this->resolveEntityListName($team);
 
         if ($entityListName === null) {
             // No active form with an entities sheet for this team yet - nothing to read.
-            return;
+            return [];
         }
 
         $dataset = $this->ensureDataset();
@@ -563,13 +544,13 @@ class OdkFarmEntityService
         if ($odkDataset === null) {
             // Nothing has ever been created for this team, either through this app or
             // directly on Central - there is genuinely nothing to fetch yet.
-            return;
+            return [];
         }
 
         $odkProject = $team->odkProject()->first();
 
         if ($odkProject === null) {
-            return;
+            return [];
         }
 
         $feed = $this->odkLinkService->getOdkDatasetEntitiesFeed($odkProject, $entityListName);
@@ -581,9 +562,10 @@ class OdkFarmEntityService
         $farmsByUuid = FarmEntity::withTrashed()
             ->where('owner_id', $team->id)
             ->whereNotNull('odk_uuid')
-            ->with('entity')
             ->get()
             ->keyBy('odk_uuid');
+
+        $liveData = [];
 
         foreach ($feed as $row) {
             $uuid = $row['__id'] ?? null;
@@ -594,15 +576,16 @@ class OdkFarmEntityService
 
             $values = collect($row)->filter(fn ($value, $key) => ! Str::startsWith($key, '__') && ! in_array($key, self::RESERVED_ODATA_KEYS, true));
 
+            $liveData[$uuid] = ['label' => $row['label'] ?? null, 'data' => $values->all()];
+
             $farmEntity = $farmsByUuid->get($uuid);
-            $entity = $farmEntity?->entity;
 
             if ($farmEntity?->trashed()) {
                 $farmEntity->restore();
             }
 
             if (! $farmEntity) {
-                $farmEntity = FarmEntity::create([
+                FarmEntity::create([
                     'owner_id' => $team->id,
                     'location_id' => null,
                     'team_code' => (string) ($values->get('team_code') ?? $row['label'] ?? $uuid),
@@ -610,23 +593,11 @@ class OdkFarmEntityService
                 ]);
             }
 
-            if (! $entity) {
-                $entity = Entity::create([
-                    'dataset_id' => $dataset->id,
-                    'owner_id' => $team->id,
-                    'model_type' => FarmEntity::class,
-                    'model_id' => $farmEntity->id,
-                ]);
-            }
-
             foreach ($values as $name => $value) {
                 $this->ensurePropertyRegistered($dataset, $name);
-
-                EntityValue::updateOrCreate(
-                    ['entity_id' => $entity->id, 'dataset_variable_name' => $name],
-                    ['value' => (string) $value],
-                );
             }
         }
+
+        return $liveData;
     }
 }

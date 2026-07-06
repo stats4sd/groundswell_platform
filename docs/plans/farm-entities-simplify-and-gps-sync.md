@@ -1,6 +1,12 @@
 # Plan: Simplify entity-list resolution, drop entity/entity_values persistence, close the GPS gap
 
-**Status: In Progress** — Part A (hardcode `resolveEntityListName()`) done, passing `phpstan`/`pint`/the full test suite. Parts B and C not started.
+**Status: In Progress** — Parts A and B done, confirmed working (Part A) / passing `phpstan`/`pint`/the full test suite, awaiting Dan's manual test (Part B). Part C not started.
+
+## Part B implementation notes
+
+Implemented as planned: added `OdkDatasetService::getOdkEntity()` (package), removed all `Entity`/`EntityValue` reads/writes from `createFarm()`, `bulkCreateFarms()`, `updateFarm()`, `getEntityData()`, `refreshFromCentral()` (now returns `array` instead of `void` - the live feed, for callers to use directly). Removed `FarmEntity::entity()` (unused now). `ListFarmEntities` holds the fetched feed in a public `$liveFarmData` property; `FarmEntityResource::table()`'s dynamic columns read from it via Filament's `$livewire` closure injection instead of `$record->entity->values`. `EditFarmEntity::mutateFormDataBeforeFill()` no longer calls the whole-team refresh, since `getEntityData()` does its own single-entity live fetch now.
+
+Cleaned up leftover test data from before this change: 23 `Entity` rows (798 `EntityValue` rows) that the old code had created for farms, deleted via tinker - the tables themselves aren't touched (shared with unrelated package functionality), just no longer written to by this feature.
 
 Follow-up to [odk-entities-farm-crud.md](odk-entities-farm-crud.md) (the main Farm-on-ODK-Central-Entities feature, Phases 0–5 complete and confirmed working). This plan covers three further simplifications identified during an architecture-reconsideration discussion after that feature was built, agreed to be reviewed together since they all touch the same file (`app/Services/OdkFarmEntityService.php`) and are easiest to reason about as one coherent end-state.
 

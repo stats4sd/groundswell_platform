@@ -4,7 +4,6 @@ namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
 use App\Models\SampleFrame\FarmEntity;
-use App\Services\HelperService;
 use App\Services\OdkFarmEntityService;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -13,12 +12,11 @@ class EditFarmEntity extends EditRecord
 {
     protected static string $resource = FarmEntityResource::class;
 
-    // Refreshes from Central then splits the farm's current entity data back into the
+    // getEntityData() does its own live single-entity fetch, so no whole-team refresh
+    // is needed here - splits the farm's current entity data back into the
     // identifiers/properties KeyValue fields before the form is filled.
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        app(OdkFarmEntityService::class)->refreshFromCentral(HelperService::getCurrentOwner());
-
         return [...$data, ...app(OdkFarmEntityService::class)->getEntityData($this->getFarmEntity())];
     }
 

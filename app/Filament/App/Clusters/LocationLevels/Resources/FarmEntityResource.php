@@ -104,16 +104,17 @@ class FarmEntityResource extends Resource
         $team = HelperService::getCurrentOwner();
         $dataset = app(OdkFarmEntityService::class)->ensureDataset();
 
-        // Dynamic identifier/property columns are driven by DatasetVariable, not by scanning
-        // records' JSON keys like the old FarmResource does - the schema now lives in ODK
-        // Central's dataset properties (mirrored locally as DatasetVariable rows).
+        // Dynamic identifier/property columns are driven by DatasetVariable (schema-level,
+        // stays local), not by scanning records' JSON keys like the old FarmResource does.
+        // Values themselves are never persisted locally - $livewire->liveFarmData is the
+        // live feed ListFarmEntities::mount() fetched for this page load (see
+        // OdkFarmEntityService::refreshFromCentral()).
         $propertyColumns = $dataset->variables()
             ->where('name', '!=', 'team_code')
             ->get()
             ->map(fn ($variable) => TextColumn::make("property_{$variable->name}")
                 ->label($variable->label)
-                ->getStateUsing(fn (FarmEntity $record) => $record->entity?->values
-                    ->firstWhere('dataset_variable_name', $variable->name)?->value));
+                ->getStateUsing(fn (FarmEntity $record, $livewire) => $livewire->liveFarmData[$record->odk_uuid]['data'][$variable->name] ?? null));
 
         return $table
             ->columns([
