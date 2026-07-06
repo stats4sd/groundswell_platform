@@ -13,7 +13,6 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Entity;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\EntityValue;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\OdkDataset;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 /**
@@ -53,19 +52,14 @@ class OdkFarmEntityService
     }
 
     /**
-     * Resolves the actual ODK Central entity list name for a team, from whichever of its
-     * currently-active Xlsforms has an `entities` sheet defined on its template. Returns
-     * null if the team has no active form with an entity list yet.
+     * The ODK Central entity list name, hardcoded - every team's active Xlsform template
+     * checked so far uses "Farm_Summary" for its `entities` sheet. Previously resolved
+     * per-team via Xlsform -> XlsformTemplate -> TemplateEntityList.list_name; see git
+     * history if that ever needs restoring (e.g. a future template uses a different name).
      */
     public function resolveEntityListName(Team $team): ?string
     {
-        $xlsform = Xlsform::where('owner_id', $team->id)
-            ->where('is_active', true)
-            ->whereHas('xlsformTemplate.templateEntityLists')
-            ->with('xlsformTemplate.templateEntityLists')
-            ->first();
-
-        return $xlsform?->xlsformTemplate?->templateEntityLists->first()?->list_name;
+        return 'Farm_Summary';
     }
 
     public function ensureOdkDataset(Team $team, Dataset $dataset, string $entityListName): OdkDataset
