@@ -37,6 +37,12 @@ class OdkFarmEntityService
 {
     public const LOCAL_DATASET_NAME = 'farm_entities';
 
+    // GPS is synced to Central as fixed properties (like team_code) rather than stored
+    // locally - each field's own name doubles as its DatasetVariable.description tag, so
+    // getEntityData() can route it to a dedicated key instead of the identifiers/properties
+    // KeyValue split. See docs/plans/farm-entities-simplify-and-gps-sync.md.
+    public const GPS_FIELDS = ['latitude', 'longitude', 'altitude', 'accuracy'];
+
     // Top-level fields ODK Central's OData entity feed returns alongside the dataset's
     // actual data properties - `label` in particular is not `__`-prefixed, so it isn't
     // caught by the generic system-field filter below and must be excluded explicitly.
@@ -235,10 +241,18 @@ class OdkFarmEntityService
         $dataset = $this->ensureDataset();
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
-        $rawData = [...$identifiers, ...$properties, 'team_code' => $teamCode];
+        $gpsData = array_filter([
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'altitude' => $altitude,
+            'accuracy' => $accuracy,
+        ], fn ($value) => $value !== null);
+
+        $rawData = [...$identifiers, ...$properties, ...$gpsData, 'team_code' => $teamCode];
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
+            ...array_combine(array_keys($gpsData), array_keys($gpsData)),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -248,16 +262,12 @@ class OdkFarmEntityService
             $data[$propertyMap[$key]] = (string) $value;
         }
 
-        return DB::transaction(function () use ($team, $locationId, $teamCode, $latitude, $longitude, $altitude, $accuracy, $entityListName, $data) {
+        return DB::transaction(function () use ($team, $locationId, $teamCode, $entityListName, $data) {
 
             $farmEntity = FarmEntity::create([
                 'owner_id' => $team->id,
                 'location_id' => $locationId,
                 'team_code' => $teamCode,
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-                'altitude' => $altitude,
-                'accuracy' => $accuracy,
             ]);
 
             // NOTE: verify against the real ODK Central response during testing - the
@@ -358,21 +368,23 @@ class OdkFarmEntityService
     }
 
     /**
-     * Splits a farm's current identifiers/properties back out for editing. Fetches the
+     * Splits a farm's current identifiers/properties/GPS back out for editing. Fetches the
      * entity's current data live from Central (no local mirror of values exists), then
      * looks each property name up against local DatasetVariable rows (schema metadata,
-     * not per-record data) for its label and its 'identifier'/'property' type tag - see
-     * reconcileProperties(). A name with no known DatasetVariable (e.g. discovered from an
-     * entity created outside this app, not yet seen by reconcileProperties/
-     * ensurePropertyRegistered) defaults to 'property'. Excludes team_code, which has its
-     * own dedicated form field.
+     * not per-record data) for its label and its 'identifier'/'property'/GPS-field type
+     * tag - see reconcileProperties(). A name with no known DatasetVariable (e.g.
+     * discovered from an entity created outside this app, not yet seen by
+     * reconcileProperties/ensurePropertyRegistered) defaults to 'property'. Excludes
+     * team_code, which has its own dedicated form field.
      *
-     * @return array{identifiers: array<string, string>, properties: array<string, string>}
+     * @return array{identifiers: array<string, string>, properties: array<string, string>, latitude: ?string, longitude: ?string, altitude: ?string, accuracy: ?string}
      */
     public function getEntityData(FarmEntity $farmEntity): array
     {
+        $gps = array_fill_keys(self::GPS_FIELDS, null);
+
         if ($farmEntity->odk_uuid === null) {
-            return ['identifiers' => [], 'properties' => []];
+            return ['identifiers' => [], 'properties' => [], ...$gps];
         }
 
         $team = $farmEntity->owner;
@@ -392,16 +404,24 @@ class OdkFarmEntityService
                 continue;
             }
 
+            $type = $typeByName[$name] ?? 'property';
+
+            if (in_array($type, self::GPS_FIELDS, true)) {
+                $gps[$type] = $value;
+
+                continue;
+            }
+
             $label = $labelByName[$name] ?? $name;
 
-            if (($typeByName[$name] ?? 'property') === 'identifier') {
+            if ($type === 'identifier') {
                 $identifiers[$label] = $value;
             } else {
                 $properties[$label] = $value;
             }
         }
 
-        return ['identifiers' => $identifiers, 'properties' => $properties];
+        return ['identifiers' => $identifiers, 'properties' => $properties, ...$gps];
     }
 
     /**
@@ -443,10 +463,18 @@ class OdkFarmEntityService
         $currentData = $this->odkLinkService->getOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid)['currentVersion']['data'] ?? [];
         $previouslySetNames = array_keys($currentData);
 
-        $rawData = [...$identifiers, ...$properties, 'team_code' => $teamCode];
+        $gpsData = array_filter([
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'altitude' => $altitude,
+            'accuracy' => $accuracy,
+        ], fn ($value) => $value !== null);
+
+        $rawData = [...$identifiers, ...$properties, ...$gpsData, 'team_code' => $teamCode];
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
+            ...array_combine(array_keys($gpsData), array_keys($gpsData)),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -466,7 +494,7 @@ class OdkFarmEntityService
             }
         }
 
-        return DB::transaction(function () use ($farmEntity, $team, $locationId, $teamCode, $latitude, $longitude, $altitude, $accuracy, $entityListName, $data) {
+        return DB::transaction(function () use ($farmEntity, $team, $locationId, $teamCode, $entityListName, $data) {
 
             // NOTE: verify against a live server - baseVersion defaults to 1 if we never
             // recorded one (e.g. a farm adopted from an entity created outside this app).
@@ -482,10 +510,6 @@ class OdkFarmEntityService
             $farmEntity->update([
                 'location_id' => $locationId,
                 'team_code' => $teamCode,
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-                'altitude' => $altitude,
-                'accuracy' => $accuracy,
                 'odk_version' => $odkEntity['currentVersion']['version'] ?? ($farmEntity->odk_version ?? 1) + 1,
             ]);
 

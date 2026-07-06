@@ -1,6 +1,10 @@
 # Plan: Simplify entity-list resolution, drop entity/entity_values persistence, close the GPS gap
 
-**Status: In Progress** — Parts A and B done, confirmed working (Part A) / passing `phpstan`/`pint`/the full test suite, awaiting Dan's manual test (Part B). Part C not started.
+**Status: In Progress** — Parts A and B confirmed working end-to-end. Part C implemented as planned, passing `phpstan`/`pint`/the full test suite, awaiting Dan's manual test.
+
+## Part C implementation notes
+
+Implemented as planned: `OdkFarmEntityService::GPS_FIELDS` constant added; `createFarm()`/`updateFarm()` fold any provided GPS values into `$rawData`/`$keyTypes` as fixed optional properties (each tagged with its own name, reusing the `reconcileProperties()`/`DatasetVariable.description` mechanism); `getEntityData()` routes GPS-tagged properties to dedicated `latitude`/`longitude`/`altitude`/`accuracy` return keys instead of the identifiers/properties KeyValue split. `FarmEntity::$casts` and the GPS columns themselves are removed (migration, confirmed no existing non-null GPS data first). `FarmEntityResource::table()` excludes GPS-tagged variables from the dynamic property columns, matching the old `FarmResource` (which never showed GPS as list columns either).
 
 ## Part B implementation notes
 
