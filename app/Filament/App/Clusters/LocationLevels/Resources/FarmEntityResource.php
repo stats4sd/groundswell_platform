@@ -112,7 +112,7 @@ class FarmEntityResource extends Resource
         // own dedicated form fields, not shown as list columns, matching the old FarmResource.
         $propertyColumns = $dataset->variables()
             ->where('name', '!=', 'team_code')
-            ->whereNotIn('description', OdkFarmEntityService::GPS_FIELDS)
+            ->whereNotIn('name', OdkFarmEntityService::GPS_FIELDS)
             ->get()
             ->map(fn ($variable) => TextColumn::make("property_{$variable->name}")
                 ->label($variable->label)

@@ -1,10 +1,16 @@
 # Plan: Simplify entity-list resolution, drop entity/entity_values persistence, close the GPS gap
 
-**Status: In Progress** — Parts A and B confirmed working end-to-end. Part C implemented as planned, passing `phpstan`/`pint`/the full test suite, awaiting Dan's manual test.
+**Status: In Progress** — Parts A and B confirmed working end-to-end. Part C implemented, one bug found and fixed during Dan's testing (see below), passing `phpstan`/`pint`/the full test suite, awaiting retest.
 
 ## Part C implementation notes
 
-Implemented as planned: `OdkFarmEntityService::GPS_FIELDS` constant added; `createFarm()`/`updateFarm()` fold any provided GPS values into `$rawData`/`$keyTypes` as fixed optional properties (each tagged with its own name, reusing the `reconcileProperties()`/`DatasetVariable.description` mechanism); `getEntityData()` routes GPS-tagged properties to dedicated `latitude`/`longitude`/`altitude`/`accuracy` return keys instead of the identifiers/properties KeyValue split. `FarmEntity::$casts` and the GPS columns themselves are removed (migration, confirmed no existing non-null GPS data first). `FarmEntityResource::table()` excludes GPS-tagged variables from the dynamic property columns, matching the old `FarmResource` (which never showed GPS as list columns either).
+Implemented as planned: `OdkFarmEntityService::GPS_FIELDS` constant added; `createFarm()`/`updateFarm()` fold any provided GPS values into `$rawData`/`$keyTypes` as fixed optional properties; `getEntityData()` routes them to dedicated `latitude`/`longitude`/`altitude`/`accuracy` return keys instead of the identifiers/properties KeyValue split. `FarmEntity::$casts` and the GPS columns themselves are removed (migration, confirmed no existing non-null GPS data first). `FarmEntityResource::table()` excludes GPS from the dynamic property columns, matching the old `FarmResource` (which never showed GPS as list columns either).
+
+### Bug found during testing: GPS showed up in "Personally Identifiable information" instead of the GPS section
+
+Cause: the initial implementation detected GPS via the `DatasetVariable.description` tag (each GPS field tagged with its own name). But `reconcileProperties()` matches an incoming key against *existing* `DatasetVariable`s by label and reuses them **without correcting their tag** if already present. `latitude`/`longitude`/`altitude`/`accuracy` already existed as `DatasetVariable` rows tagged `description = 'identifier'` from earlier testing (before Part C existed - likely typed manually into the identifiers KeyValue field back then), so every subsequent GPS write kept reusing those stale, wrongly-tagged rows.
+
+Fixed by detecting GPS by property **name** instead of the tag - matching how `team_code` was already detected (also by name, not by tag). The property names were already correctly `latitude`/`longitude`/`altitude`/`accuracy` regardless of the stale tag, so this fixes it with no data migration needed; the tag itself no longer carries any GPS-specific meaning (GPS fields are now just tagged plain `'property'`, like `team_code`).
 
 ## Part B implementation notes
 

@@ -38,9 +38,11 @@ class OdkFarmEntityService
     public const LOCAL_DATASET_NAME = 'farm_entities';
 
     // GPS is synced to Central as fixed properties (like team_code) rather than stored
-    // locally - each field's own name doubles as its DatasetVariable.description tag, so
-    // getEntityData() can route it to a dedicated key instead of the identifiers/properties
-    // KeyValue split. See docs/plans/farm-entities-simplify-and-gps-sync.md.
+    // locally. Detected by property NAME (not the DatasetVariable.description tag used for
+    // the identifier/property split) - matches how team_code is already detected, and
+    // avoids trusting a tag that a pre-existing DatasetVariable might carry from before it
+    // was ever reconciled as GPS (reconcileProperties() reuses an existing name match
+    // without correcting its tag). See docs/plans/farm-entities-simplify-and-gps-sync.md.
     public const GPS_FIELDS = ['latitude', 'longitude', 'altitude', 'accuracy'];
 
     // Top-level fields ODK Central's OData entity feed returns alongside the dataset's
@@ -252,7 +254,9 @@ class OdkFarmEntityService
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
-            ...array_combine(array_keys($gpsData), array_keys($gpsData)),
+            // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
+            // tag, so a plain 'property' tag is fine here.
+            ...array_fill_keys(array_keys($gpsData), 'property'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -404,17 +408,15 @@ class OdkFarmEntityService
                 continue;
             }
 
-            $type = $typeByName[$name] ?? 'property';
-
-            if (in_array($type, self::GPS_FIELDS, true)) {
-                $gps[$type] = $value;
+            if (in_array($name, self::GPS_FIELDS, true)) {
+                $gps[$name] = $value;
 
                 continue;
             }
 
             $label = $labelByName[$name] ?? $name;
 
-            if ($type === 'identifier') {
+            if (($typeByName[$name] ?? 'property') === 'identifier') {
                 $identifiers[$label] = $value;
             } else {
                 $properties[$label] = $value;
@@ -474,7 +476,9 @@ class OdkFarmEntityService
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
-            ...array_combine(array_keys($gpsData), array_keys($gpsData)),
+            // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
+            // tag, so a plain 'property' tag is fine here.
+            ...array_fill_keys(array_keys($gpsData), 'property'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
