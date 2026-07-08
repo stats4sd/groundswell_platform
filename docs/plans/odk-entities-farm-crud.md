@@ -2,6 +2,18 @@
 
 **Status: In Progress** — Phase 0 through Phase 4 (List, Create, Update, Delete, Import farms only) are implemented and **confirmed working against a real ODK Central server**, feature-parity confirmed against the old page for both import flows. Phase 5 (combined locations+farms import wizard) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested.
 
+### Bug found during Phase 5 testing: deleting a location hard-deletes linked farm_entities
+
+Testing the "replace all locations" checkbox on the combined import wizard revealed a real bug: `farm_entities.location_id` has `->cascadeOnDelete()` (a database-level FK cascade), inherited unchanged from the old `farms` table. `Location` has no `SoftDeletes`, so deleting a location is a genuine hard delete - the DB-level cascade fires and hard-deletes (bypassing `FarmEntity`'s own `SoftDeletes` entirely, since a raw SQL cascade doesn't go through Eloquent) every local `FarmEntity` row that referenced it. Confirmed this isn't limited to the import wizard's checkbox - `LocationsRelationManager` already has ordinary `DeleteAction`/`DeleteBulkAction` for locations, so any routine location deletion anywhere in the app triggers the same thing.
+
+This made sense for the old `Farm` model (which *was* the actual data - wiping it alongside its location was a legitimate full reset) but not for `FarmEntity` (a structural link only - the real content stays on Central regardless of what happens locally). Consequences observed: farms silently hard-deleted (not recoverable via the new soft-delete/restore feature, since the cascade bypasses it), then re-"adopted" from Central on the next list view with `location_id` lost (adoption can't infer it), and - because the farm import's dedup check is local-only (`farm_entities.team_code`) - any subsequent farm import in the same request no longer recognizes those farms as existing, and pushes duplicate entities to Central.
+
+Two-part fix, agreed with Dan:
+1. **Remove the "replace all locations" checkbox** from `ImportLocationsAndFarmEntities` only (the old `FarmResource\Pages\ImportLocationsAndFarms` keeps it unchanged - kept for comparison, not modified). It's a blunt, dangerous action not needed for this architecture.
+2. **Change `farm_entities.location_id` from `cascadeOnDelete()` to `nullOnDelete()`** (new migration) - the root cause, fixed everywhere a location can be deleted, not just in this one wizard. Deleting a location now just clears `location_id` on any linked farm, landing it in the same "unassigned location" state an adopted farm already has (already handled by the existing `placeholder('Unknown (created outside app)')` on the list table).
+
+Both implemented: checkbox removed from `ImportLocationsAndFarmEntities` (old `FarmResource` wizard untouched); new migration `2026_07_08_144226_change_farm_entities_location_id_to_null_on_delete.php` drops and re-adds the FK with `nullOnDelete()`, confirmed via `information_schema.REFERENTIAL_CONSTRAINTS` that `farm_entities.location_id`'s delete rule is now `SET NULL`. Passing `phpstan`/`pint`/the full test suite (88 passed), not yet manually retested.
+
 ### Phase 3 extended: soft-delete/restore UI, synced with ODK Central's own soft-delete
 
 The original `FarmResource` (database-backed) never supported soft-delete. `FarmEntityResource`'s Delete action already soft-deleted both locally and on Central (`FarmEntity` uses `SoftDeletes`; `deleteFarm()` already called Central's `DELETE` entity endpoint, which is itself a soft-delete), but the table had no way to view trashed records or restore them. Added:

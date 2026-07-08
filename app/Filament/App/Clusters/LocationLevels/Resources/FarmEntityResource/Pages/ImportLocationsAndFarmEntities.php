@@ -79,10 +79,11 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         // copy it as a duplicate, which will be stored with the import model for farms
         Storage::copy($data['upload'], $data['upload'].'_duplicate');
 
-        if ($data['override'] === 'yes') {
-            HelperService::getCurrentOwner()->locations()->delete();
-        }
-
+        // No "replace all locations" option here (unlike the old FarmResource wizard) -
+        // farm_entities.location_id used to cascadeOnDelete, which combined with mass
+        // location deletion here into a real bug (see docs/plans/odk-entities-farm-crud.md).
+        // The FK is now nullOnDelete instead, but a bulk "delete every location" action is
+        // still a blunt, dangerous operation this architecture doesn't need to offer.
         $locationImport = Import::create([
             'team_id' => HelperService::getCurrentOwner()->id,
             'model_type' => Location::class,
@@ -192,15 +193,6 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
 
                                         return $parentQuestions->merge($currentLevelQuestions)->toArray();
                                     }),
-
-                                Select::make('override')
-                                    ->label(t('Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)'))
-                                    ->options([
-                                        'no' => t('No'),
-                                        'yes' => t('Yes'),
-                                    ])
-                                    ->helperText(t('If you select "No", all existing locations will be kept. If you select "Yes", all existing locations will be deleted and replaced with the data from this import.'))
-                                    ->default('no'),
 
                                 Hidden::make('header_columns')
                                     ->default(['na' => '~~upload a file to see the headers~~'])
