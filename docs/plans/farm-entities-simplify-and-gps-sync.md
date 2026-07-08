@@ -1,6 +1,6 @@
 # Plan: Simplify entity-list resolution, drop entity/entity_values persistence, close the GPS gap
 
-**Status: In Progress** — Parts A and B confirmed working end-to-end. Part C implemented, one bug found and fixed during Dan's testing (see below), passing `phpstan`/`pint`/the full test suite, awaiting retest.
+**Status: Completed** — Parts A, B, and C all confirmed working end-to-end against a real ODK Central server. See the [change log](../change-logs/farm-entities-simplify-and-gps-sync.md).
 
 ## Part C implementation notes
 

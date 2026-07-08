@@ -545,6 +545,28 @@ class OdkFarmEntityService
     }
 
     /**
+     * Restores a soft-deleted farm's entity on ODK Central, then restores the local
+     * FarmEntity row.
+     */
+    public function restoreFarm(FarmEntity $farmEntity): void
+    {
+        if ($farmEntity->odk_uuid === null) {
+            throw new \RuntimeException("Farm {$farmEntity->id} has no linked ODK Central entity to restore.");
+        }
+
+        $team = $farmEntity->owner;
+        $entityListName = $this->resolveEntityListName($team);
+
+        if ($entityListName === null) {
+            throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot determine which ODK Central entity list to restore from.");
+        }
+
+        $this->odkLinkService->restoreOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid);
+
+        $farmEntity->restore();
+    }
+
+    /**
      * Syncs structural FarmEntity rows for every farm belonging to $team from Central's
      * live OData feed (creating/restoring rows for farms that exist on Central but not
      * locally yet, e.g. created directly by a registration form's `entities` sheet -

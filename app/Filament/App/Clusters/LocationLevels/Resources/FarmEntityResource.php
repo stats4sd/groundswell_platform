@@ -13,6 +13,7 @@ use App\Services\OdkFarmEntityService;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
@@ -21,6 +22,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rules\Unique;
 
@@ -124,13 +126,22 @@ class FarmEntityResource extends Resource
                 TextColumn::make('team_code')->label(fn () => t('Unique code'))->sortable()->searchable(),
                 ...$propertyColumns,
             ])
-            ->filters([])
+            ->filters([
+                // Central soft-deletes an entity rather than removing it, mirrored locally
+                // via FarmEntity's SoftDeletes - this exposes the with/without/only-trashed
+                // toggle Filament already knows how to build for a soft-deleting model.
+                TrashedFilter::make(),
+            ])
             ->recordActions([
                 EditAction::make(),
-                // Overrides the default delete behaviour - a farm's ODK Central entity
-                // must be soft-deleted too, not just the local row.
+                // Overrides the default delete/restore behaviour - a farm's ODK Central
+                // entity must be soft-deleted/restored too, not just the local row.
+                // DeleteAction/RestoreAction already auto-hide/auto-show based on
+                // $record->trashed(), so no extra visibility wiring is needed here.
                 DeleteAction::make()
                     ->action(fn (FarmEntity $record) => app(OdkFarmEntityService::class)->deleteFarm($record)),
+                RestoreAction::make()
+                    ->action(fn (FarmEntity $record) => app(OdkFarmEntityService::class)->restoreFarm($record)),
             ])
             ->headerActions([
                 CreateAction::make()

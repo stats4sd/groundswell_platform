@@ -2,6 +2,15 @@
 
 **Status: In Progress** — Phase 0 through Phase 4 (List, Create, Update, Delete, Import farms only) are implemented and **confirmed working against a real ODK Central server**, feature-parity confirmed against the old page for both import flows. Phase 5 (combined locations+farms import wizard) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested.
 
+### Phase 3 extended: soft-delete/restore UI, synced with ODK Central's own soft-delete
+
+The original `FarmResource` (database-backed) never supported soft-delete. `FarmEntityResource`'s Delete action already soft-deleted both locally and on Central (`FarmEntity` uses `SoftDeletes`; `deleteFarm()` already called Central's `DELETE` entity endpoint, which is itself a soft-delete), but the table had no way to view trashed records or restore them. Added:
+- `OdkDatasetService::restoreOdkEntity()` (package) - `POST .../entities/{uuid}/restore`, Central's dedicated restore endpoint.
+- `OdkFarmEntityService::restoreFarm()` - restores on Central first, then locally, mirroring `deleteFarm()`'s Central-then-local ordering (so a failed Central call doesn't leave local/Central out of sync).
+- `FarmEntityResource::table()` - added `Filament\Tables\Filters\TrashedFilter` (handles the with/without/only-trashed toggle and its own soft-delete scope removal, nothing else needed) and `Filament\Actions\RestoreAction`, wired to `restoreFarm()`. Both `DeleteAction`/`RestoreAction` already auto-hide/auto-show based on `$record->trashed()` out of the box - no extra visibility logic needed.
+
+Force-delete was deliberately not added - Central's Entities API has no permanent-delete endpoint to mirror, and it wasn't asked for.
+
 ### Revisited: can farm_entities be removed? (still no, as of Parts A/B/C)
 
 Raised a second time after Parts A/B/C landed - table is now down to `id`, `owner_id`, `location_id`, `team_code`, `odk_uuid`, `odk_version`, soft-delete. Dan confirmed there's no new consideration prompting this beyond wanting to check whether it'd get written down; conclusion from `docs/prompts/why-local-table-for-externally-stored-data.md` still stands unchanged: Filament's Create/Edit/Delete/route-binding lifecycle is Eloquent-typed at its core (verified against vendor source, not just docs), a future `FarmSurveyData` database-level FK needs a real local row regardless of Filament, and live-API import dedup would be both slower and less correct than the current indexed local query. Every remaining column has one of those concrete justifications - nothing left to cut without hitting one of those three walls.
