@@ -133,7 +133,10 @@ class FarmEntityResource extends Resource
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                EditAction::make(),
+                // Unlike Delete/Restore, EditAction has no built-in trashed-awareness -
+                // hidden explicitly so a soft-deleted farm can't be edited.
+                EditAction::make()
+                    ->hidden(fn (FarmEntity $record) => $record->trashed()),
                 // Overrides the default delete/restore behaviour - a farm's ODK Central
                 // entity must be soft-deleted/restored too, not just the local row.
                 // DeleteAction/RestoreAction already auto-hide/auto-show based on

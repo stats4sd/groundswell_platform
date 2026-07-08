@@ -11,6 +11,8 @@ The original `FarmResource` (database-backed) never supported soft-delete. `Farm
 
 Force-delete was deliberately not added - Central's Entities API has no permanent-delete endpoint to mirror, and it wasn't asked for.
 
+Confirmed working (cross-checked in ODK Central directly) - both soft-delete and restore correctly sync. Follow-up: `EditAction` has no built-in trashed-awareness (unlike Delete/Restore), so a soft-deleted farm could still be edited - fixed with an explicit `->hidden(fn ($record) => $record->trashed())`.
+
 ### Revisited: can farm_entities be removed? (still no, as of Parts A/B/C)
 
 Raised a second time after Parts A/B/C landed - table is now down to `id`, `owner_id`, `location_id`, `team_code`, `odk_uuid`, `odk_version`, soft-delete. Dan confirmed there's no new consideration prompting this beyond wanting to check whether it'd get written down; conclusion from `docs/prompts/why-local-table-for-externally-stored-data.md` still stands unchanged: Filament's Create/Edit/Delete/route-binding lifecycle is Eloquent-typed at its core (verified against vendor source, not just docs), a future `FarmSurveyData` database-level FK needs a real local row regardless of Filament, and live-API import dedup would be both slower and less correct than the current indexed local query. Every remaining column has one of those concrete justifications - nothing left to cut without hitting one of those three walls.
