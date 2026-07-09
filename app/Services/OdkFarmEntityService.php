@@ -191,11 +191,6 @@ class OdkFarmEntityService
                 'description' => $type,
             ]);
 
-            ray($entityListName);
-            ray($name);
-            ray($key);
-            ray($type);
-
             $this->odkLinkService->addOdkDatasetProperty($team->odkProject, $entityListName, $name);
 
             $existing[$key] = $name;
