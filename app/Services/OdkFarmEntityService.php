@@ -191,6 +191,11 @@ class OdkFarmEntityService
                 'description' => $type,
             ]);
 
+            ray($entityListName);
+            ray($name);
+            ray($key);
+            ray($type);
+
             $this->odkLinkService->addOdkDatasetProperty($team->odkProject, $entityListName, $name);
 
             $existing[$key] = $name;
@@ -200,10 +205,23 @@ class OdkFarmEntityService
         return $map;
     }
 
+    /**
+     * Property names that ODK Central reserves and will reject on an Entity list.
+     * `name` and `label` are built-in Entity fields; `__` is a system prefix.
+     */
+    protected const BANNED_PROPERTY_NAMES = ['name', 'label', '__'];
+
     protected function uniquePropertyName(Dataset $dataset, string $key): string
     {
         $base = Str::of($key)->trim()->snake()->replaceMatches('/[^a-z0-9_]/', '')->value();
         $base = $base !== '' ? $base : 'property';
+
+        // ODK Central rejects a fixed set of reserved property names. When the derived
+        // name collides with one, append the snake-cased dataset name to disambiguate.
+        if (in_array($base, self::BANNED_PROPERTY_NAMES, true)) {
+            $datasetName = Str::of($dataset->name)->snake()->replaceMatches('/[^a-z0-9_]/', '')->value();
+            $base = $datasetName !== '' ? "{$base}_{$datasetName}" : "{$base}_property";
+        }
 
         $name = $base;
         $suffix = 1;
@@ -296,7 +314,7 @@ class OdkFarmEntityService
      * Bulk-creates many farms in a single Central API call - used by the Excel import
      * flow instead of calling createFarm() per row, which would mean one Central round
      * trip per row on top of the reconciliation calls. Rows whose team_code already
-     * exists for the team are skipped (mirrors the old FarmSheetImport dedup rule); a
+     * exists for the team are skipped (mirrors the FarmImport dedup rule); a
      * team_code repeated within $rows itself is also deduped, keeping the first occurrence.
      *
      * @param  Collection<int, array{locationId: int, teamCode: string, identifiers: array<string, string>, properties: array<string, string>}>  $rows

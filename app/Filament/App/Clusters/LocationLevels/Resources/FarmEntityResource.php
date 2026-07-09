@@ -110,7 +110,7 @@ class FarmEntityResource extends Resource
         // stays local), not by scanning records' JSON keys like the old FarmResource does.
         // Values themselves are never persisted locally - $livewire->liveFarmData is the
         // live feed ListFarmEntities::mount() fetched for this page load (see
-        // OdkFarmEntityService::refreshFromCentral()). GPS is excluded here - it has its
+        // OdkFarmEntityService::refreshFromCentral()). GPS is excluded here - it has itsTHis
         // own dedicated form fields, not shown as list columns, matching the old FarmResource.
         $propertyColumns = $dataset->variables()
             ->where('name', '!=', 'team_code')

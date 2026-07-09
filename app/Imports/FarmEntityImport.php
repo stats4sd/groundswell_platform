@@ -3,38 +3,117 @@
 namespace App\Imports;
 
 use App\Models\Import;
+use App\Models\SampleFrame\Location;
+use App\Models\SampleFrame\LocationLevel;
+use App\Models\Team;
 use App\Models\User;
+use App\Services\OdkFarmEntityService;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\ImportFailed;
 use Maatwebsite\Excel\Validators\ValidationException;
 
 /**
- * ODK-Entities-backed counterpart to FarmImport - see FarmEntitySheetImport for where the
- * actual per-row behaviour differs (pushes to ODK Central rather than a local farms table).
+ * ODK-Entities-backed counterpart to FarmImport: same column-mapping/validation rules, but
+ * rows are pushed to ODK Central (via OdkFarmEntityService::bulkCreateFarms()) instead of
+ * being inserted into a local farms table.
  *
- * NOTE - here we use the WithMultipleSheets interface, *even though* we are only interested in one worksheet. This is to make sure we only retrieve data from a single worksheet, no matter how many are in the file. (Otherwise the import would fail if the file had more than one worksheet with different formats of data on different sheets).
+ * WithMultipleSheets + sheets() => [0 => $this] restricts the import to the first worksheet
+ * only while keeping all row-handling logic on this single class, delegating the sheet back
+ * to itself (mirrors Stats4sd\FilamentOdkLink\Imports\XlsformTemplate\XlsformModuleImport).
+ *
+ * This single-class shape is also what makes CSV files work. The PhpSpreadsheet Csv reader
+ * does not expose listWorksheetNames(), so maatwebsite/excel bypasses sheets() for CSV and
+ * applies THIS object as the row handler directly (see the "Csv doesn't have worksheets"
+ * branch of vendor/maatwebsite/excel/src/Reader.php::getWorksheets). Because collection() and
+ * the validation rules live here, CSV and Excel are handled by the same code.
  */
-class FarmEntityImport implements ShouldQueue, WithBatchInserts, WithChunkReading, WithEvents, WithMultipleSheets
+class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithEvents, WithHeadingRow, WithMultipleSheets, WithStrictNullComparison, WithValidation
 {
+    // The $data array is the data that is passed from the import form
     public function __construct(public array $data) {}
 
     public function sheets(): array
     {
         return [
-            0 => new FarmEntitySheetImport($this->data),
+            0 => $this,
         ];
     }
 
-    public function batchSize(): int
+    public function collection(Collection $rows): array
     {
-        return 1000;
+        $headers = $this->data['header_columns'];
+
+        $farmCodeColumn = $headers[$this->data['farm_code_column']];
+        $locationLevel = LocationLevel::find($this->data['location_level_id']);
+        $locationCodeColumn = $headers[$this->data['location_code_column']];
+
+        $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
+        $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
+
+        $preparedRows = $rows
+            ->map(function ($row) use ($farmCodeColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns) {
+                $location = Location::where('code', $row[$locationCodeColumn])
+                    ->where('location_level_id', $locationLevel->id)
+                    ->first();
+
+                return [
+                    'locationId' => $location?->id,
+                    'teamCode' => (string) $row[$farmCodeColumn],
+                    'identifiers' => $identifierColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
+                    'properties' => $propertyColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
+                ];
+            })
+            // the location code was already validated by rules(), but a row could still
+            // slip through with no match if two location levels share a code
+            ->filter(fn ($row) => $row['locationId'] !== null)
+            ->map(fn ($row) => [...$row, 'locationId' => (int) $row['locationId']])
+            ->values();
+
+        // The queued job runs outside any Filament panel/tenancy context, so the team
+        // must come from data captured at form-submission time, not HelperService.
+        $team = Team::findOrFail($this->data['owner_id']);
+
+        $sourceName = isset($this->data['upload']) ? basename($this->data['upload']) : null;
+
+        return app(OdkFarmEntityService::class)->bulkCreateFarms($team, $preparedRows, $sourceName)->all();
+    }
+
+    public function rules(): array
+    {
+        $headers = $this->data['header_columns'];
+        $locationCodeColumn = $headers[$this->data['location_code_column']];
+        $farmCodeColumn = $headers[$this->data['farm_code_column']];
+
+        return [
+            $locationCodeColumn => 'required|exists:locations,code',
+            $farmCodeColumn => 'required',
+        ];
+    }
+
+    public function customValidationMessages(): array
+    {
+        $headers = $this->data['header_columns'];
+        $locationCodeColumn = $headers[$this->data['location_code_column']];
+        $farmCodeColumn = $headers[$this->data['farm_code_column']];
+
+        return [
+            "$locationCodeColumn.required" => "The $locationCodeColumn cannot be empty.",
+            "$locationCodeColumn.exists" => 'The location with this code does not exist in the database.',
+            "$farmCodeColumn.required" => 'The farm code cannot be empty.',
+        ];
     }
 
     public function chunkSize(): int
@@ -98,7 +177,6 @@ class FarmEntityImport implements ShouldQueue, WithBatchInserts, WithChunkReadin
                     ->success()
                     ->sendToDatabase($recipient, isEventDispatched: true)
                     ->broadcast($recipient);
-
             },
         ];
     }
