@@ -2,22 +2,17 @@
 
 namespace App\Filament\App\Clusters\LocationLevels\Resources;
 
-use Filament\Schemas\Schema;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Actions\ViewAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\CreateAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Schemas\Components\Section;
+use App\Filament\App\Clusters\LocationLevels;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ViewLocationLevel;
-use App\Filament\App\Clusters\LocationLevels;
-use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager;
 use App\Models\SampleFrame\LocationLevel;
 use App\Services\HelperService;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -25,10 +20,12 @@ use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Builder;
 
 class LocationLevelResource extends Resource
 {
@@ -62,9 +59,12 @@ class LocationLevelResource extends Resource
                     });
             });
 
+        // Points at the new ODK-Entities-backed Farms page - the original FarmResource is
+        // kept around (unlinked) for comparison during the migration. See
+        // docs/plans/odk-entities-farm-crud.md.
         $farmNavItem = NavigationItem::make('Farms')
-            ->url(FarmResource::getUrl())
-            ->isActiveWhen(fn () => request()->routeIs(FarmResource::getRouteBaseName().'.index'));
+            ->url(FarmEntityResource::getUrl())
+            ->isActiveWhen(fn () => request()->routeIs(FarmEntityResource::getRouteBaseName().'.index'));
 
         return array_merge($original, $navItems->toArray(), [$farmNavItem]);
     }

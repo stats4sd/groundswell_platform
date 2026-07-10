@@ -2,10 +2,6 @@
 
 namespace App\Filament\Tables\Actions;
 
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-use RuntimeException;
 use App\Models\Import;
 use App\Models\SampleFrame\Location;
 use App\Services\HelperService;
@@ -14,10 +10,14 @@ use EightyNine\ExcelImport\ExcelImportAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
+use RuntimeException;
 
 class ImportLocationsAction extends ExcelImportAction
 {
@@ -55,7 +55,11 @@ class ImportLocationsAction extends ExcelImportAction
                 ->columns()
                 ->required()
                 ->live()
-                ->afterStateUpdated(function (?TemporaryUploadedFile $state, Set $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
+                    if (! $state instanceof TemporaryUploadedFile) {
+                        return;
+                    }
+
                     $headings = (new HeadingRowImport)->toArray($state->getRealPath());
 
                     // $headings is an array(sheets) of arrays(headers)
@@ -79,12 +83,12 @@ class ImportLocationsAction extends ExcelImportAction
                     $parentQuestions = $parents->reverse()->map(callback: function ($parent) {
                         return collect([
                             Select::make("parent_{$parent->id}_code_column")
-                                ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('unique code?'))
+                                ->label(t('Which column contains the').' '.$parent->name.' '.t('unique code?'))
                                 ->options(fn (Get $get) => $get('header_columns'))
                                 ->notIn(['na'])
                                 ->required(),
                             Select::make("parent_{$parent->id}_name_column")
-                                ->label(t('Which column contains the') . ' ' . $parent->name . ' ' . t('name?'))
+                                ->label(t('Which column contains the').' '.$parent->name.' '.t('name?'))
                                 ->options(fn (Get $get) => $get('header_columns'))
                                 ->notIn(['na'])
                                 ->required(),
@@ -93,12 +97,12 @@ class ImportLocationsAction extends ExcelImportAction
 
                     $currentLevelQuestions = collect([
                         Select::make('code_column')
-                            ->label(fn ($livewire) => t('Which column contains the') . ' ' . $livewire->getRecord()->name . ' ' . t('unique code?'))
+                            ->label(fn ($livewire) => t('Which column contains the').' '.$livewire->getRecord()->name.' '.t('unique code?'))
                             ->options(fn (Get $get) => $get('header_columns'))
                             ->notIn(['na'])
                             ->required(),
                         Select::make('name_column')
-                            ->label(fn ($livewire) => t('Which column contains the') . ' ' . $livewire->getRecord()->name . ' ' . t('name?'))
+                            ->label(fn ($livewire) => t('Which column contains the').' '.$livewire->getRecord()->name.' '.t('name?'))
                             ->options(fn (Get $get) => $get('header_columns'))
                             ->notIn(['na'])
                             ->required(),

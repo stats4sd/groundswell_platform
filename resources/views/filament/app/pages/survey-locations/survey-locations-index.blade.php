@@ -1,9 +1,12 @@
 <?php
 
-    use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource;
+    use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
     use App\Filament\App\Pages\SurveyDashboard;
 
-    $farmUrl = FarmResource::getUrl();
+    // Points at the new ODK-Entities-backed Farms page - the original FarmResource is
+    // kept around (unlinked) for comparison during the migration. See
+    // docs/plans/odk-entities-farm-crud.md.
+    $farmUrl = FarmEntityResource::getUrl();
     $surveyDashboardUrl = SurveyDashboard::getUrl();
 
     $manageLocationLevelsHeading = t("Manage location levels");

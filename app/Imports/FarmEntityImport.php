@@ -3,10 +3,11 @@
 namespace App\Imports;
 
 use App\Models\Import;
-use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
+use App\Models\Team;
 use App\Models\User;
+use App\Services\OdkFarmEntityService;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
@@ -25,8 +26,9 @@ use Maatwebsite\Excel\Events\ImportFailed;
 use Maatwebsite\Excel\Validators\ValidationException;
 
 /**
- * Imports farms (into the local farms table) from the FIRST worksheet of an uploaded
- * spreadsheet.
+ * ODK-Entities-backed counterpart to FarmImport: same column-mapping/validation rules, but
+ * rows are pushed to ODK Central (via OdkFarmEntityService::bulkCreateFarms()) instead of
+ * being inserted into a local farms table.
  *
  * WithMultipleSheets + sheets() => [0 => $this] restricts the import to the first worksheet
  * only while keeping all row-handling logic on this single class, delegating the sheet back
@@ -38,9 +40,9 @@ use Maatwebsite\Excel\Validators\ValidationException;
  * branch of vendor/maatwebsite/excel/src/Reader.php::getWorksheets). Because collection() and
  * the validation rules live here, CSV and Excel are handled by the same code.
  */
-class FarmImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithEvents, WithHeadingRow, WithMultipleSheets, WithStrictNullComparison, WithValidation
+class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithEvents, WithHeadingRow, WithMultipleSheets, WithStrictNullComparison, WithValidation
 {
-    // The $data array is the data that is passed from the ImportFarmsAction form
+    // The $data array is the data that is passed from the import form
     public function __construct(public array $data) {}
 
     public function sheets(): array
@@ -52,51 +54,41 @@ class FarmImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalcu
 
     public function collection(Collection $rows): array
     {
-        $importedFarms = [];
+        $headers = $this->data['header_columns'];
 
-        foreach ($rows as $row) {
-            $headers = $this->data['header_columns'];
+        $farmCodeColumn = $headers[$this->data['farm_code_column']];
+        $locationLevel = LocationLevel::find($this->data['location_level_id']);
+        $locationCodeColumn = $headers[$this->data['location_code_column']];
 
-            $farmCodeColumn = $headers[$this->data['farm_code_column']];
-            $locationLevel = LocationLevel::find($this->data['location_level_id']);
-            $locationCodeColumn = $headers[$this->data['location_code_column']];
-            $location = Location::where('code', $row[$locationCodeColumn])
-                ->where('location_level_id', $locationLevel->id)
-                ->first();
+        $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
+        $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
 
-            // Find the identifier columns;
-            $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
-            // Get the data from those columns;
-            $identifierData = $identifierColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
+        $preparedRows = $rows
+            ->map(function ($row) use ($farmCodeColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns) {
+                $location = Location::where('code', $row[$locationCodeColumn])
+                    ->where('location_level_id', $locationLevel->id)
+                    ->first();
 
-            // Find the property columns;
-            $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
-            // Get the data from those columns;
-            $propertyData = $propertyColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
+                return [
+                    'locationId' => $location?->id,
+                    'teamCode' => (string) $row[$farmCodeColumn],
+                    'identifiers' => $identifierColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
+                    'properties' => $propertyColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
+                ];
+            })
+            // the location code was already validated by rules(), but a row could still
+            // slip through with no match if two location levels share a code
+            ->filter(fn ($row) => $row['locationId'] !== null)
+            ->map(fn ($row) => [...$row, 'locationId' => (int) $row['locationId']])
+            ->values();
 
-            // check if farm with unique code existed in this team.
-            // it is not advised to use upsert here. The old farm and new farm with unique code could be two different farms.
-            // human intervention is required to handle this sitation.
-            // If they are two different farms, this can be resolved by assigning a new unique code to the new farm.
-            $noOfRecords = Farm::where('owner_id', $this->data['owner_id'])->where('team_code', $row[$farmCodeColumn])->count();
+        // The queued job runs outside any Filament panel/tenancy context, so the team
+        // must come from data captured at form-submission time, not HelperService.
+        $team = Team::findOrFail($this->data['owner_id']);
 
-            // only create farms record if unique code is not existed for this team
-            if ($noOfRecords == 0) {
-                // Create the farm
-                $farm = new Farm([
-                    'owner_id' => $this->data['owner_id'],
-                    'location_id' => $location->id,
-                    'team_code' => $row[$farmCodeColumn],
-                    'identifiers' => $identifierData,
-                    'properties' => $propertyData,
-                ]);
-                $farm->save();
+        $sourceName = isset($this->data['upload']) ? basename($this->data['upload']) : null;
 
-                $importedFarms[] = $farm;
-            }
-        }
-
-        return $importedFarms;
+        return app(OdkFarmEntityService::class)->bulkCreateFarms($team, $preparedRows, $sourceName)->all();
     }
 
     public function rules(): array
