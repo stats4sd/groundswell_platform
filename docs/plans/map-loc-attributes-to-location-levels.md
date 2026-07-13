@@ -1,12 +1,15 @@
 # Plan: Auto-map `loc{n}`/`loc{n}_name`/`loc{n}_type` entity attributes to Location Levels
 
-**Status: In Progress**
+**Status: Completed**
 
 Implemented the core resolution + wiring described below, narrowed by decisions made
 2026-07-13 (see "Revised decisions" below): match-only against existing Locations (no
 auto-create), matched by name **and** hierarchy position (`location_level_id`), and no
-`loc{n}_type` sanity-check. Unit/feature test coverage (this plan's own "Verification"
-section) is deliberately deferred to a follow-up. See
+`loc{n}_type` sanity-check. Both directions (`resolveLocationFromAttributes()` read side,
+`buildLocationAttributes()` write side) now have unit test coverage -
+`tests/Feature/Services/OdkFarmEntityServiceLocationTest.php`. A live-feed feature test for
+`refreshFromCentral()` itself (faking the OData response) remains out of scope - see
+"Deferred" in the change log. See
 [change log](../change-logs/map-loc-attributes-to-location-levels.md).
 
 ## Revised decisions (2026-07-13, supersede the corresponding items below)
@@ -82,11 +85,11 @@ Also apply it when an *existing* local `FarmEntity` currently has `location_id =
 - `app/Models/SampleFrame/LocationLevel.php` — add `farmLevelChain(Team $team): Collection`.
 - `app/Filament/App/Clusters/LocationLevels/Resources/FarmEntityResource/Pages/ImportLocationsAndFarmEntities.php` — refactor its inline parent-walk (lines 156-164) to use the new shared method.
 - `app/Services/OdkFarmEntityService.php` — add `resolveLocationFromAttributes()`; call it from `refreshFromCentral()`'s adopt loop, and to retry resolution for existing `FarmEntity` rows with `location_id === null`.
-- Tests: **deferred** (per Dan, 2026-07-13) — unit coverage for the `loc{n}_name` parsing/cap logic, and a feature test exercising `refreshFromCentral()` against a faked OData feed asserting `FarmEntity.location_id` resolves to the correct existing `Location`. Follow-up work.
+- Tests (2026-07-13): `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php` — unit coverage for `resolveLocationFromAttributes()` (deepest-position resolution, chain-length capping, case-insensitive match, position-scoped match to avoid same-name collisions, owner/team scoping, no-match/no-config null returns) and `buildLocationAttributes()` (arbitrary-depth chain walk, empty result for an unknown location, round-trip symmetry with `resolveLocationFromAttributes()`). A feature test exercising `refreshFromCentral()` itself against a faked OData feed remains deferred - out of scope for this pass, see change log.
 
 ## Verification
 
-- `./vendor/bin/phpstan analyse`, `./vendor/bin/pint` (run for this change; pest coverage deferred, see above).
+- `./vendor/bin/phpstan analyse`, `./vendor/bin/pint`, `./vendor/bin/pest` — all pass (99 tests, 171 assertions as of 2026-07-13).
 - Manual test against the real ODK Central server (per this feature's existing pattern): submit a Farm Registration form in Enketo with `loc1`/`loc2` values matching an existing Location, load the Farms list in the app, confirm the farm's location resolves without any manual import step.
 
 ## Reverse direction: writing `loc{n}` attributes when the app creates/updates a farm (2026-07-13)

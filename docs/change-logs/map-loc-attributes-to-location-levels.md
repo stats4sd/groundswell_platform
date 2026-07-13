@@ -1,6 +1,6 @@
 # Change log: Resolve FarmEntity.location_id from `loc{n}_name` entity attributes
 
-Implements [the plan](../plans/map-loc-attributes-to-location-levels.md), narrowed per decisions made 2026-07-13: match-only against existing Locations (no auto-create), matched by name **and** hierarchy position, no `loc{n}_type` check. Unit/feature test coverage is deliberately deferred to a follow-up.
+Implements [the plan](../plans/map-loc-attributes-to-location-levels.md), narrowed per decisions made 2026-07-13: match-only against existing Locations (no auto-create), matched by name **and** hierarchy position, no `loc{n}_type` check.
 
 ## Changes
 
@@ -28,9 +28,17 @@ Diagnosing the two test farms above (imported via "Import Farm list", ended up w
 
 - **`loc{n}` (bare, not `_name`) revised to a hardcoded `"1"`** — per Dan, not `Location.code`; only its presence signals the level has data, the value isn't consumed downstream.
 - **Real bug found and fixed**: `FarmEntityImport.php`'s location lookup had no `owner_id` scope (`Location` has no automatic tenant global scope, unlike `LocationLevel`) - could match/miss against a different team's `Location` row on a shared `code`. Fixed by resolving `$team` before the row-mapping loop and adding `->where('owner_id', $team->id)`.
-- **Temporary `ray()` calls added** (per this repo's established debugging convention) in `FarmEntityImport::collection()` (per-row location match attempt + final `$preparedRows`) and `OdkFarmEntityService::bulkCreateFarms()` (prepared entity `data` payload right before the Central API call) - queued-job-safe, unlike `dd()`. Should be removed once the import is confirmed working end-to-end (see prior `ray()` removal precedent in this same service's git history).
+- **Temporary `ray()` calls added then removed** (per this repo's established debugging convention - see prior `ray()` removal precedent in this same service's git history) in `FarmEntityImport::collection()` (per-row location match attempt + final `$preparedRows`) and `OdkFarmEntityService::bulkCreateFarms()` (prepared entity `data` payload right before the Central API call) - queued-job-safe, unlike `dd()`. Used to confirm the owner-scoping fix above, then removed once confirmed.
+
+## Tests (2026-07-13)
+
+Added `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php`, covering both directions with no Central API calls involved (pure local-DB logic):
+
+- **`resolveLocationFromAttributes()`**: resolves the deepest `loc{n}_name` to the matching `Location`; caps at the team's configured chain length (a `loc3_name` beyond a 2-level chain is ignored); case-insensitive name match; position-scoped match (doesn't false-match a name reused at a different level, e.g. a Cluster and a Group both named "Central"); scoped to the given team (doesn't match another team's `Location` on a shared code/name); returns `null` when there's no usable `loc{n}_name`, no match, or the team has no `has_farms` level configured yet.
+- **`buildLocationAttributes()`**: walks an arbitrary-depth chain (tested with 3 levels) producing `loc1`..`loc3` correctly rather than anything hardcoded to 2; returns `[]` for a non-existent location id; round-trips through `resolveLocationFromAttributes()` back to the same location id.
+- Full suite (`./vendor/bin/pest`) still passes at 99 tests / 171 assertions; `phpstan`/`pint` clean.
 
 ## Deferred
 
-- Unit tests for the parsing/cap logic and a feature test for `refreshFromCentral()` against a faked OData feed - per Dan, added in a follow-up. Same applies to `buildLocationAttributes()` and its wiring.
+- A feature test for `refreshFromCentral()` itself against a faked OData feed (exercising the full adopt-from-Central path, not just the pure resolution/build methods) remains out of scope for this pass.
 - `loc{n}_type` sanity-check logging and auto-creating missing `Location` rows were both in the original plan but dropped for this pass (see the plan doc's "Revised decisions").
