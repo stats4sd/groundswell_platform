@@ -63,11 +63,24 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
         $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
 
+        // The queued job runs outside any Filament panel/tenancy context, so the team
+        // must come from data captured at form-submission time, not HelperService.
+        $team = Team::findOrFail($this->data['owner_id']);
+
         $preparedRows = $rows
-            ->map(function ($row) use ($farmCodeColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns) {
+            ->map(function ($row) use ($team, $farmCodeColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns) {
                 $location = Location::where('code', $row[$locationCodeColumn])
                     ->where('location_level_id', $locationLevel->id)
+                    ->where('owner_id', $team->id)
                     ->first();
+
+                ray('FarmEntityImport row location match', [
+                    'raw_location_code' => $row[$locationCodeColumn],
+                    'location_level_id' => $locationLevel->id,
+                    'location_level_name' => $locationLevel->name,
+                    'matched_location_id' => $location?->id,
+                    'matched_location_owner_id' => $location?->owner_id,
+                ]);
 
                 return [
                     'locationId' => $location?->id,
@@ -82,9 +95,7 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
             ->map(fn ($row) => [...$row, 'locationId' => (int) $row['locationId']])
             ->values();
 
-        // The queued job runs outside any Filament panel/tenancy context, so the team
-        // must come from data captured at form-submission time, not HelperService.
-        $team = Team::findOrFail($this->data['owner_id']);
+        ray('FarmEntityImport preparedRows (post-filter, sent to bulkCreateFarms)', $preparedRows->all());
 
         $sourceName = isset($this->data['upload']) ? basename($this->data['upload']) : null;
 

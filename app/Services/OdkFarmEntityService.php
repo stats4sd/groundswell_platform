@@ -122,6 +122,43 @@ class OdkFarmEntityService
         return $location?->id;
     }
 
+    /**
+     * Derives the `loc{n}`/`loc{n}_name`/`loc{n}_type` properties Central-side cascading
+     * selects (and resolveLocationFromAttributes() on the read side) expect, from a Location
+     * the app already resolved - the reverse of resolveLocationFromAttributes(). Walks the
+     * Location's parent chain up to the root; `n` is each level's `pos` (1-indexed
+     * root-first, matching the Farm Registration XLSForm's own `loc{n}` convention).
+     * `loc{n}` is a fixed placeholder value `"1"` (per Dan, 2026-07-13 - not the Location's
+     * `code`; only its presence signals "this level has data", the value itself isn't
+     * consumed), `loc{n}_name` is the Location's `name`, `loc{n}_type` a fixed placeholder
+     * string - the deployed template's own `loc{n}_type` calculation only ever emits this
+     * same placeholder rather than the real level name, so it's reproduced verbatim here
+     * rather than being made meaningful.
+     *
+     * @return array<string, string>
+     */
+    public function buildLocationAttributes(int $locationId): array
+    {
+        $location = Location::find($locationId);
+
+        if (! $location) {
+            return [];
+        }
+
+        $attributes = [];
+        $current = $location;
+
+        while ($current) {
+            $pos = $current->locationLevel->pos;
+            $attributes["loc{$pos}"] = '1';
+            $attributes["loc{$pos}_name"] = (string) $current->name;
+            $attributes["loc{$pos}_type"] = "Loc{$pos} name";
+            $current = $current->parent;
+        }
+
+        return $attributes;
+    }
+
     public function ensureOdkDataset(Team $team, Dataset $dataset, string $entityListName): OdkDataset
     {
         $odkDataset = $this->findOdkDataset($team, $dataset, $entityListName);
@@ -310,13 +347,16 @@ class OdkFarmEntityService
             'accuracy' => $accuracy,
         ], fn ($value) => $value !== null);
 
-        $rawData = [...$identifiers, ...$properties, ...$gpsData, 'team_code' => $teamCode];
+        $locationAttributes = $this->buildLocationAttributes($locationId);
+
+        $rawData = [...$identifiers, ...$properties, ...$gpsData, ...$locationAttributes, 'team_code' => $teamCode];
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
             // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
             // tag, so a plain 'property' tag is fine here.
             ...array_fill_keys(array_keys($gpsData), 'property'),
+            ...array_fill_keys(array_keys($locationAttributes), 'property'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -384,6 +424,11 @@ class OdkFarmEntityService
             return collect();
         }
 
+        // Computed once per distinct location - most rows in a batch share a handful of
+        // locations, and this saves re-walking the same parent chain per row.
+        $locationAttributesByLocationId = $newRows->pluck('locationId')->unique()
+            ->mapWithKeys(fn ($locationId) => [$locationId => $this->buildLocationAttributes($locationId)]);
+
         // Reconcile every identifier/property key used across the whole batch up front,
         // rather than once per row.
         $keyTypes = ['team_code' => 'property'];
@@ -393,15 +438,16 @@ class OdkFarmEntityService
                 ...$keyTypes,
                 ...array_fill_keys(array_keys($row['identifiers']), 'identifier'),
                 ...array_fill_keys(array_keys($row['properties']), 'property'),
+                ...array_fill_keys(array_keys($locationAttributesByLocationId[$row['locationId']]), 'property'),
             ];
         }
 
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
 
-        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $sourceName) {
+        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $locationAttributesByLocationId, $sourceName) {
 
-            $prepared = $newRows->map(function ($row) use ($team, $propertyMap) {
-                $rawData = [...$row['identifiers'], ...$row['properties'], 'team_code' => $row['teamCode']];
+            $prepared = $newRows->map(function ($row) use ($team, $propertyMap, $locationAttributesByLocationId) {
+                $rawData = [...$row['identifiers'], ...$row['properties'], ...$locationAttributesByLocationId[$row['locationId']], 'team_code' => $row['teamCode']];
 
                 $data = [];
                 foreach ($rawData as $key => $value) {
@@ -419,6 +465,14 @@ class OdkFarmEntityService
 
                 return ['farmEntity' => $farmEntity, 'uuid' => $farmEntity->odk_uuid, 'label' => $row['teamCode'], 'data' => $data];
             });
+
+            ray('bulkCreateFarms: prepared entities about to be sent to Central', $prepared->map(fn ($p) => [
+                'farm_entity_id' => $p['farmEntity']->id,
+                'location_id' => $p['farmEntity']->location_id,
+                'uuid' => $p['uuid'],
+                'label' => $p['label'],
+                'data' => $p['data'],
+            ])->all());
 
             $this->odkLinkService->bulkCreateOdkEntities(
                 $team->odkProject,
@@ -532,13 +586,16 @@ class OdkFarmEntityService
             'accuracy' => $accuracy,
         ], fn ($value) => $value !== null);
 
-        $rawData = [...$identifiers, ...$properties, ...$gpsData, 'team_code' => $teamCode];
+        $locationAttributes = $this->buildLocationAttributes($locationId);
+
+        $rawData = [...$identifiers, ...$properties, ...$gpsData, ...$locationAttributes, 'team_code' => $teamCode];
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
             // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
             // tag, so a plain 'property' tag is fine here.
             ...array_fill_keys(array_keys($gpsData), 'property'),
+            ...array_fill_keys(array_keys($locationAttributes), 'property'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);

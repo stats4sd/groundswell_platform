@@ -14,7 +14,23 @@ Implements [the plan](../plans/map-loc-attributes-to-location-levels.md), narrow
 - Confirmed working end-to-end by Dan against real ODK Central data.
 - Name matching in `resolveLocationFromAttributes()` changed to case-insensitive (`whereRaw('LOWER(name) = ?', [Str::lower(...)])`) to avoid unmatched locations purely from case differences between ODK data entry and the app's `Location.name` values.
 
+## Reverse direction (2026-07-13): writing `loc{n}` attributes on app-side create/update
+
+Farms created through the app (not Enketo) already had a correct `location_id`, but nothing pushed `loc{n}`/`loc{n}_name`/`loc{n}_type` to Central for them - so Central-side cascading selects/filtering by cluster/group never saw those farms in the right place, even though the app itself had them filed correctly.
+
+- **`OdkFarmEntityService::buildLocationAttributes(int $locationId): array`** (new) — the reverse of `resolveLocationFromAttributes()`. Walks a `Location`'s `parent` chain to the root; each level's `loc{n}` position comes from `LocationLevel->pos`, so it's not hardcoded to any fixed depth - works for however many levels a team has configured. Produces `loc{n}` (fixed placeholder `"1"` - see revision below), `loc{n}_name` (its `name`), `loc{n}_type` (fixed placeholder `"Loc{n} name"`, matching the deployed template's own non-meaningful placeholder).
+- Wired into `createFarm()`, `bulkCreateFarms()` (computed once per distinct `location_id` in the batch), and `updateFarm()` - merged into the same identifiers/properties/GPS reconciliation pipeline each already had.
+- **Backfill**: the two farms already imported before this change need one more edit-and-save (or any `updateFarm()` call) to pick up the new properties on Central - this only affects future writes, not what's already there.
+
+## Debugging + owner scoping fix (2026-07-13)
+
+Diagnosing the two test farms above (imported via "Import Farm list", ended up with no `location_id` and empty `loc{n}*` on Central):
+
+- **`loc{n}` (bare, not `_name`) revised to a hardcoded `"1"`** — per Dan, not `Location.code`; only its presence signals the level has data, the value isn't consumed downstream.
+- **Real bug found and fixed**: `FarmEntityImport.php`'s location lookup had no `owner_id` scope (`Location` has no automatic tenant global scope, unlike `LocationLevel`) - could match/miss against a different team's `Location` row on a shared `code`. Fixed by resolving `$team` before the row-mapping loop and adding `->where('owner_id', $team->id)`.
+- **Temporary `ray()` calls added** (per this repo's established debugging convention) in `FarmEntityImport::collection()` (per-row location match attempt + final `$preparedRows`) and `OdkFarmEntityService::bulkCreateFarms()` (prepared entity `data` payload right before the Central API call) - queued-job-safe, unlike `dd()`. Should be removed once the import is confirmed working end-to-end (see prior `ray()` removal precedent in this same service's git history).
+
 ## Deferred
 
-- Unit tests for the parsing/cap logic and a feature test for `refreshFromCentral()` against a faked OData feed - per Dan, added in a follow-up.
+- Unit tests for the parsing/cap logic and a feature test for `refreshFromCentral()` against a faked OData feed - per Dan, added in a follow-up. Same applies to `buildLocationAttributes()` and its wiring.
 - `loc{n}_type` sanity-check logging and auto-creating missing `Location` rows were both in the original plan but dropped for this pass (see the plan doc's "Revised decisions").
