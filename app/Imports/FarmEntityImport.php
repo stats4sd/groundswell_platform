@@ -74,14 +74,6 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
                     ->where('owner_id', $team->id)
                     ->first();
 
-                ray('FarmEntityImport row location match', [
-                    'raw_location_code' => $row[$locationCodeColumn],
-                    'location_level_id' => $locationLevel->id,
-                    'location_level_name' => $locationLevel->name,
-                    'matched_location_id' => $location?->id,
-                    'matched_location_owner_id' => $location?->owner_id,
-                ]);
-
                 return [
                     'locationId' => $location?->id,
                     'teamCode' => (string) $row[$farmCodeColumn],
@@ -94,8 +86,6 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
             ->filter(fn ($row) => $row['locationId'] !== null)
             ->map(fn ($row) => [...$row, 'locationId' => (int) $row['locationId']])
             ->values();
-
-        ray('FarmEntityImport preparedRows (post-filter, sent to bulkCreateFarms)', $preparedRows->all());
 
         $sourceName = isset($this->data['upload']) ? basename($this->data['upload']) : null;
 

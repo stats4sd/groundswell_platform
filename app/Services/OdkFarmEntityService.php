@@ -466,14 +466,6 @@ class OdkFarmEntityService
                 return ['farmEntity' => $farmEntity, 'uuid' => $farmEntity->odk_uuid, 'label' => $row['teamCode'], 'data' => $data];
             });
 
-            ray('bulkCreateFarms: prepared entities about to be sent to Central', $prepared->map(fn ($p) => [
-                'farm_entity_id' => $p['farmEntity']->id,
-                'location_id' => $p['farmEntity']->location_id,
-                'uuid' => $p['uuid'],
-                'label' => $p['label'],
-                'data' => $p['data'],
-            ])->all());
-
             $this->odkLinkService->bulkCreateOdkEntities(
                 $team->odkProject,
                 $entityListName,
