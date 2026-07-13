@@ -81,9 +81,11 @@ class OdkFarmEntityService
      * Resolves the `location_id` for an entity adopted from Central, from its `loc{n}_name`
      * attributes (e.g. `loc1_name`, `loc2_name`, ... - the Farm Registration XLSForm's
      * `entities` sheet convention, one triplet per location level, `loc1` topmost). Matches
-     * only against Locations the team already has - never creates one. Returns null if the
-     * data has no usable `loc{n}_name`, or the deepest one present doesn't match an existing
-     * Location for this team at that hierarchy position.
+     * only against Locations the team already has - never creates one. The name match is
+     * case-insensitive, since ODK data entry and the app's own Location names may differ
+     * only in case. Returns null if the data has no usable `loc{n}_name`, or the deepest
+     * one present doesn't match an existing Location for this team at that hierarchy
+     * position.
      *
      * @param  array<string, mixed>  $data
      */
@@ -114,7 +116,7 @@ class OdkFarmEntityService
 
         $location = Location::where('owner_id', $team->id)
             ->where('location_level_id', $level->id)
-            ->where('name', $names[$highestPos])
+            ->whereRaw('LOWER(name) = ?', [Str::lower($names[$highestPos])])
             ->first();
 
         return $location?->id;

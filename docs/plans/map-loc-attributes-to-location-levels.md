@@ -22,6 +22,9 @@ section) is deliberately deferred to a follow-up. See
    `location_level_id` (the `LocationLevel` at the resolved `loc{n}` position in the team's
    `farmLevelChain()`), not just `owner_id` + `name`, to avoid a false match when the same
    name is reused at a different level (e.g. a district and a village both named "Kasese").
+   The name comparison itself is case-insensitive (`LOWER(name) = LOWER(loc{n}_name)`,
+   added 2026-07-13 after Dan's manual testing) - avoids unmatched locations purely from
+   inconsistent casing between ODK data entry and the app's Location records.
 3. **No `loc{n}_type` mismatch check.** Decision 3 below (log a warning on a `loc{n}_type`/
    level-name mismatch) was dropped as unnecessary for this pass.
 
@@ -57,7 +60,7 @@ Inline in `resolveLocationFromAttributes()` (no standalone class - there's only 
 - Parses `loc{n}_name` attributes from `$data` (per step 1), discarding any position beyond the chain's length (an entity's `loc{n}` numbering can run deeper than the team's configured Location levels - the extra positions are farm/household-level data, not Locations).
 - If nothing remains, returns `null`.
 - Otherwise takes the **highest remaining position** (the deepest resolvable `loc{n}_name` - your step 1's "highest location name") and matches:
-  `Location::where('owner_id', $team->id)->where('location_level_id', $chain[pos]->id)->where('name', $names[pos])->first()`.
+  `Location::where('owner_id', $team->id)->where('location_level_id', $chain[pos]->id)->whereRaw('LOWER(name) = ?', [Str::lower($names[pos])])->first()`.
 - Returns the matched `Location`'s id, or `null` if nothing matches - no creation (revised decision 1).
 
 ### 4. Wire into `refreshFromCentral()`

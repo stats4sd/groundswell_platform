@@ -9,6 +9,11 @@ Implements [the plan](../plans/map-loc-attributes-to-location-levels.md), narrow
 - **`App\Services\OdkFarmEntityService::resolveLocationFromAttributes(Team $team, array $data): ?int`** (new) — parses `loc{n}_name` keys from an entity's flat property data, caps at the team's configured `farmLevelChain()` length (so a `loc4_name` beyond a 3-level chain is ignored - it's farm/household data, not a Location), takes the deepest remaining position, and matches it against an existing `Location` by `owner_id` + `location_level_id` + `name`. Returns `null` (no creation) if nothing matches.
 - **`OdkFarmEntityService::refreshFromCentral()`** — the adopt branch now calls `resolveLocationFromAttributes()` instead of hardcoding `location_id => null`. Also retries resolution for existing `FarmEntity` rows that still have `location_id === null` on every refresh, since this method already re-runs the whole feed on every list-page view.
 
+## Follow-up (2026-07-13, after manual testing)
+
+- Confirmed working end-to-end by Dan against real ODK Central data.
+- Name matching in `resolveLocationFromAttributes()` changed to case-insensitive (`whereRaw('LOWER(name) = ?', [Str::lower(...)])`) to avoid unmatched locations purely from case differences between ODK data entry and the app's `Location.name` values.
+
 ## Deferred
 
 - Unit tests for the parsing/cap logic and a feature test for `refreshFromCentral()` against a faked OData feed - per Dan, added in a follow-up.
