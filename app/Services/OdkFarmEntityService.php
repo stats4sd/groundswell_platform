@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\SampleFrame\FarmEntity;
+use App\Models\SampleFrame\Location;
+use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
@@ -73,6 +75,49 @@ class OdkFarmEntityService
     public function resolveEntityListName(Team $team): ?string
     {
         return 'Farm_Summary';
+    }
+
+    /**
+     * Resolves the `location_id` for an entity adopted from Central, from its `loc{n}_name`
+     * attributes (e.g. `loc1_name`, `loc2_name`, ... - the Farm Registration XLSForm's
+     * `entities` sheet convention, one triplet per location level, `loc1` topmost). Matches
+     * only against Locations the team already has - never creates one. Returns null if the
+     * data has no usable `loc{n}_name`, or the deepest one present doesn't match an existing
+     * Location for this team at that hierarchy position.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function resolveLocationFromAttributes(Team $team, array $data): ?int
+    {
+        $chain = LocationLevel::farmLevelChain($team);
+
+        if ($chain->isEmpty()) {
+            return null;
+        }
+
+        $names = [];
+
+        foreach ($data as $key => $value) {
+            if (preg_match('/^loc(\d+)_name$/', $key, $matches) && $value !== null && $value !== '') {
+                $names[(int) $matches[1]] = $value;
+            }
+        }
+
+        $names = array_filter($names, fn ($name, $pos) => $pos <= $chain->count(), ARRAY_FILTER_USE_BOTH);
+
+        if (empty($names)) {
+            return null;
+        }
+
+        $highestPos = max(array_keys($names));
+        $level = $chain->values()->get($highestPos - 1);
+
+        $location = Location::where('owner_id', $team->id)
+            ->where('location_level_id', $level->id)
+            ->where('name', $names[$highestPos])
+            ->first();
+
+        return $location?->id;
     }
 
     public function ensureOdkDataset(Team $team, Dataset $dataset, string $entityListName): OdkDataset
@@ -650,10 +695,18 @@ class OdkFarmEntityService
             if (! $farmEntity) {
                 FarmEntity::create([
                     'owner_id' => $team->id,
-                    'location_id' => null,
+                    'location_id' => $this->resolveLocationFromAttributes($team, $values->all()),
                     'team_code' => (string) ($values->get('team_code') ?? $row['label'] ?? $uuid),
                     'odk_uuid' => $uuid,
                 ]);
+            } elseif ($farmEntity->location_id === null) {
+                // Adopted before its location attributes were resolvable (or before this
+                // feature existed) - worth retrying every refresh until it succeeds.
+                $locationId = $this->resolveLocationFromAttributes($team, $values->all());
+
+                if ($locationId !== null) {
+                    $farmEntity->update(['location_id' => $locationId]);
+                }
             }
 
             foreach ($values as $name => $value) {

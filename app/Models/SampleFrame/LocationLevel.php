@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
@@ -31,7 +32,6 @@ class LocationLevel extends Model
                 $query->where('owner_id', Filament::getTenant()->id);
             });
         }
-
 
     }
 
@@ -81,6 +81,27 @@ class LocationLevel extends Model
         return new Attribute(
             get: fn () => $this->getPos(),
         );
+    }
+
+    // Root-to-leaf chain of this team's location levels, ending at the level farms attach
+    // to directly (has_farms = true). Position N in the chain (1-indexed) corresponds to
+    // the `loc{N}` convention used in the Farm Registration XLSForm's entities sheet.
+    public static function farmLevelChain(Team $team): Collection
+    {
+        $level = static::where('owner_id', $team->id)->where('has_farms', true)->first();
+
+        if (! $level) {
+            return collect();
+        }
+
+        $chain = collect([$level]);
+
+        while ($level->parent) {
+            $level = $level->parent;
+            $chain->prepend($level);
+        }
+
+        return $chain;
     }
 
     public function getCsvContentsForOdk(?WithXlsforms $team = null): array

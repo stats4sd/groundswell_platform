@@ -1,6 +1,29 @@
 # Plan: Auto-map `loc{n}`/`loc{n}_name`/`loc{n}_type` entity attributes to Location Levels
 
-**Status: Not Started**
+**Status: In Progress**
+
+Implemented the core resolution + wiring described below, narrowed by decisions made
+2026-07-13 (see "Revised decisions" below): match-only against existing Locations (no
+auto-create), matched by name **and** hierarchy position (`location_level_id`), and no
+`loc{n}_type` sanity-check. Unit/feature test coverage (this plan's own "Verification"
+section) is deliberately deferred to a follow-up. See
+[change log](../change-logs/map-loc-attributes-to-location-levels.md).
+
+## Revised decisions (2026-07-13, supersede the corresponding items below)
+
+1. **No auto-creation.** `resolveLocationFromAttributes()` only matches against Locations
+   the team already has (`Location::where('owner_id', ...)->where('location_level_id', ...)
+   ->where('name', ...)`) - it never `firstOrCreate`s a Location. If nothing matches,
+   `location_id` is left `null`, same as today's behavior for entities with no location data
+   at all. This was judged simpler and safer than auto-creating from unverified ODK data,
+   at the cost of not resolving farms whose location doesn't exist locally yet (those farms
+   simply stay unresolved until the location is created and the entity is re-adopted).
+2. **Matched by name + hierarchy position, not name alone.** The match includes
+   `location_level_id` (the `LocationLevel` at the resolved `loc{n}` position in the team's
+   `farmLevelChain()`), not just `owner_id` + `name`, to avoid a false match when the same
+   name is reused at a different level (e.g. a district and a village both named "Kasese").
+3. **No `loc{n}_type` mismatch check.** Decision 3 below (log a warning on a `loc{n}_type`/
+   level-name mismatch) was dropped as unnecessary for this pass.
 
 ## Context
 
@@ -18,25 +41,24 @@ The only existing hierarchy-from-columns logic is the manual import wizard (`Loc
 
 ## Design
 
-### 1. Parsing helper
+### 1. Parsing helper (as built)
 
-A small regex-based parser recognizing attribute keys of the shape `loc(\d+)`, `loc(\d+)_name`, `loc(\d+)_type` from an entity's flat property array, grouping them by `n` into `[n => ['code' => ..., 'name' => ..., 'type' => ...]]`. Lives alongside the resolution logic (see below) rather than as a standalone class — there's only one caller.
+Inline in `resolveLocationFromAttributes()` (no standalone class - there's only one caller): a regex over the entity's flat property array matching `loc(\d+)_name` keys, collected into `[n => name]`. `loc{n}`/`loc{n}_type` are not parsed - not needed once decision 3 above dropped the type check.
 
-### 2. Shared level-chain lookup
+### 2. Shared level-chain lookup (as built)
 
-Extract the root→leaf `LocationLevel` walk currently duplicated inline in `ImportLocationsAndFarmEntities.php:156-164` into a reusable method, e.g. `LocationLevel::farmLevelChain(Team $team): Collection` — starts at the team's `has_farms=true` level, walks `parent` to the root, returns the ordered list root-first. Both the import wizard and the new resolver use this one implementation.
+`LocationLevel::farmLevelChain(Team $team): Collection` (`app/Models/SampleFrame/LocationLevel.php`) — starts at the team's `has_farms=true` level, walks `parent` to the root, returns the ordered list root-first. Both the import wizard (`ImportLocationsAndFarmEntities.php`) and the new resolver use this one implementation.
 
-### 3. New resolution method
+### 3. New resolution method (as built, revised per decisions above)
 
-New method, e.g. `OdkFarmEntityService::resolveLocationFromAttributes(Team $team, array $data): ?int`:
+`OdkFarmEntityService::resolveLocationFromAttributes(Team $team, array $data): ?int`:
 
-- Parses `loc{n}` attributes from `$data` (per step 1).
-- Fetches `LocationLevel::farmLevelChain($team)` (per step 2).
-- Walks levels in order (position 1..N); for each position present in both the parsed attributes and the team's configured chain:
-  - Logs a warning if `loc{n}_type` doesn't match the level's `name` (trimmed, case-insensitive) — resolution continues regardless.
-  - `Location::firstOrCreate(['owner_id' => $team->id, 'code' => $code], ['name' => $name, 'location_level_id' => $level->id, 'parent_id' => $previousLocation?->id])`, matching `LocationImport::collection()`'s existing create shape.
-  - If a position from the parsed attributes exceeds the team's configured chain length, stop and log a warning (level provisioning is out of scope per decision 2).
-- Returns the deepest resolved `Location`'s id, or `null` if no `loc1` attribute was present at all (non-farm-hierarchy entities, or entities with no location data yet).
+- Fetches `LocationLevel::farmLevelChain($team)`; returns `null` immediately if the team has no `has_farms` level configured yet.
+- Parses `loc{n}_name` attributes from `$data` (per step 1), discarding any position beyond the chain's length (an entity's `loc{n}` numbering can run deeper than the team's configured Location levels - the extra positions are farm/household-level data, not Locations).
+- If nothing remains, returns `null`.
+- Otherwise takes the **highest remaining position** (the deepest resolvable `loc{n}_name` - your step 1's "highest location name") and matches:
+  `Location::where('owner_id', $team->id)->where('location_level_id', $chain[pos]->id)->where('name', $names[pos])->first()`.
+- Returns the matched `Location`'s id, or `null` if nothing matches - no creation (revised decision 1).
 
 ### 4. Wire into `refreshFromCentral()`
 
@@ -47,19 +69,19 @@ Also apply it when an *existing* local `FarmEntity` currently has `location_id =
 ## Out of scope / deliberately deferred
 
 - Auto-creating `LocationLevel` records — teams configure these themselves (decision 2).
-- Any UI surfacing of the `loc{n}_type` mismatch warning beyond application logs — revisit if this proves to be a real signal worth showing admins.
+- Auto-creating `Location` records at all — dropped per revised decision 1; a farm whose location doesn't exist locally yet stays unresolved (`location_id = null`) until the location is created and the entity is re-adopted on a later refresh.
+- Any `loc{n}_type` sanity check or its logging — dropped per revised decision 3.
 - Applying this to `getEntityData()`/`updateFarm()`/the app's own Create form — those paths already have an explicit `location_id` supplied by a human via the app UI; this plan only closes the gap for entities created outside the app.
-- Changing the Farm Registration XLSForm template itself (e.g. the `loc{n}_type` calculation currently appears to emit a static placeholder string rather than the real level name in Dan's test template) — that's data-entry-side, not app-side, and not needed for this plan since `_type` is only a sanity check, not load-bearing.
+- Changing the Farm Registration XLSForm template itself — not needed since `_type` is no longer consulted at all.
 
 ## Implementation touchpoints
 
 - `app/Models/SampleFrame/LocationLevel.php` — add `farmLevelChain(Team $team): Collection`.
 - `app/Filament/App/Clusters/LocationLevels/Resources/FarmEntityResource/Pages/ImportLocationsAndFarmEntities.php` — refactor its inline parent-walk (lines 156-164) to use the new shared method.
-- `app/Services/OdkFarmEntityService.php` — add `resolveLocationFromAttributes()`; call it from `refreshFromCentral()`'s adopt loop.
-- Tests: unit coverage for the parser (`loc1`/`loc1_name`/`loc1_type` grouping, ignoring unrelated keys), and a feature test exercising `refreshFromCentral()` against a faked OData feed response with `loc1`/`loc2` attributes, asserting the created `FarmEntity.location_id` resolves to the correct nested `Location`.
+- `app/Services/OdkFarmEntityService.php` — add `resolveLocationFromAttributes()`; call it from `refreshFromCentral()`'s adopt loop, and to retry resolution for existing `FarmEntity` rows with `location_id === null`.
+- Tests: **deferred** (per Dan, 2026-07-13) — unit coverage for the `loc{n}_name` parsing/cap logic, and a feature test exercising `refreshFromCentral()` against a faked OData feed asserting `FarmEntity.location_id` resolves to the correct existing `Location`. Follow-up work.
 
 ## Verification
 
-- `./vendor/bin/pest --filter=OdkFarmEntityService` (extend existing test coverage for this service).
-- `./vendor/bin/phpstan analyse`, `./vendor/bin/pint`.
-- Manual test against the real ODK Central server (per this feature's existing pattern): submit a Farm Registration form in Enketo with `loc1`/`loc2` values, load the Farms list in the app, confirm the farm's location resolves/creates the correct nested `Location` rows without any manual import step.
+- `./vendor/bin/phpstan analyse`, `./vendor/bin/pint` (run for this change; pest coverage deferred, see above).
+- Manual test against the real ODK Central server (per this feature's existing pattern): submit a Farm Registration form in Enketo with `loc1`/`loc2` values matching an existing Location, load the Farms list in the app, confirm the farm's location resolves without any manual import step.

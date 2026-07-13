@@ -154,16 +154,11 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
                                 Section::make(t('Column Mapping'))
                                     ->columns(2)
                                     ->schema(function ($livewire) {
-                                        $hasFarmLevel = LocationLevel::where('has_farms', 1)->first();
-                                        $currentLevel = $hasFarmLevel;
-                                        $parents = collect([]);
+                                        $chain = LocationLevel::farmLevelChain(HelperService::getCurrentOwner());
+                                        $hasFarmLevel = $chain->last();
+                                        $parents = $chain->slice(0, -1)->values();
 
-                                        while ($currentLevel->parent) {
-                                            $parents->push($currentLevel->parent);
-                                            $currentLevel = $currentLevel->parent;
-                                        }
-
-                                        $parentQuestions = $parents->reverse()->map(callback: function ($parent) {
+                                        $parentQuestions = $parents->map(callback: function ($parent) {
                                             return collect([
                                                 Select::make("parent_{$parent->id}_code_column")
                                                     ->label(t('Which column contains the').' '.$parent->name.' '.t('unique code?'))
