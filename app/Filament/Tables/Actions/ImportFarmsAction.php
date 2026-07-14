@@ -132,7 +132,7 @@ class ImportFarmsAction extends ExcelImportAction
 
                     CheckboxList::make('farm_properties')
                         ->label(t('Are there any additional columns that contain properties of the farm? Tick all that apply.'))
-                        ->helperText(t('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes. A column literally named Latitude, Longitude, Altitude, or Accuracy is automatically used as the farm\'s GPS instead, if ticked here.'))
+                        ->helperText(t('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.'))
                         ->options(fn (Get $get) => $get('header_columns'))
                         ->disableOptionWhen(
                             fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||

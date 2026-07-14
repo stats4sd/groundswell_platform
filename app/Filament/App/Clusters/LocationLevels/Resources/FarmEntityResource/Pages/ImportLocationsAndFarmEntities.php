@@ -241,7 +241,7 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
 
                                     CheckboxList::make('farm_identifiers')
                                         ->label(t('Are there any additional columns that contain identifiers for the farm? Tick all that apply.'))
-                                        ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.'))
+                                        ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes. A column literally named Latitude, Longitude, Altitude, or Accuracy is automatically used as the farm\'s GPS instead, if ticked here.'))
                                         ->options(fn (Get $get): array => $get('header_columns'))
                                         ->disableOptionWhen(
                                             fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||
