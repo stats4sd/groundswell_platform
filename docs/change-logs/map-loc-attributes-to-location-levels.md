@@ -38,6 +38,17 @@ Added `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php`, covering bo
 - **`buildLocationAttributes()`**: walks an arbitrary-depth chain (tested with 3 levels) producing `loc1`..`loc3` correctly rather than anything hardcoded to 2; returns `[]` for a non-existent location id; round-trips through `resolveLocationFromAttributes()` back to the same location id.
 - Full suite (`./vendor/bin/pest`) still passes at 99 tests / 171 assertions; `phpstan`/`pint` clean.
 
+## Hardcoded internal group/cluster IDs for loc1/loc2 (2026-07-15)
+
+Dan compared a farm registered directly via Enketo against one created through the app and found app-created farms always showed up under the *first* cluster and first group downstream, regardless of their actual cluster/group in the app. The `"1"` placeholder for `loc{n}` wasn't safe for `loc1`/`loc2` specifically for this team's form - those two carry real internal cluster/group IDs defined in the ODK form's own choice list, which this app has no other way to derive.
+
+- **`OdkFarmEntityService::GROUP_CLUSTER_LOOKUP`** (new protected const) - hardcoded `array<group name, array{groupId, clusterId}>`, transcribed from Dan's reference table (30 entries).
+- **`OdkFarmEntityService::resolveGroupClusterIds(?string $groupName): ?array`** (new protected method) - case-insensitive/trimmed lookup; `null` if no match.
+- **`buildLocationAttributes()`** - for the farm's own Location ("Group") and its immediate parent ("Cluster"), `loc{n}` is now the looked-up `groupId`/`clusterId` (matched by the Group's name) instead of the flat `"1"`. Falls back to `"1"` for both if the name isn't in the table, and for any level beyond these two.
+- **No changes needed anywhere else** - `buildLocationAttributes()` is already the single method wired into every write path (`createFarm()`, `updateFarm()`, `bulkCreateFarms()`) and both import flows already resolve/create the `Location` with the right `name` before calling it, so fixing this one method covered creating/editing a farm, importing a farm list, and importing locations + farm list together, all before the Central API call - Dan's steps 1-4.
+- **Tests**: 3 new cases in `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php` - exact lookup match, case-insensitive match, fallback to `"1"` for an unrecognized name.
+- **Flagged as a known limitation, not fixed**: this lookup is hardcoded per-app, not scoped to a specific team - a coincidental name collision with another team's group would pick up this table's IDs. Fine for the single-deployment need it was built for; would need to become a real per-team table if this app starts serving other teams with the same requirement.
+
 ## Deferred
 
 - A feature test for `refreshFromCentral()` itself against a faked OData feed (exercising the full adopt-from-Central path, not just the pure resolution/build methods) remains out of scope for this pass.
