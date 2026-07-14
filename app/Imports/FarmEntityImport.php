@@ -12,6 +12,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
@@ -63,12 +64,32 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
         $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
 
+        // No dedicated GPS column-mapping step - if a selected identifier/property column's
+        // header name matches "latitude"/"longitude"/"altitude"/"accuracy" (case-insensitive),
+        // it's pulled out as GPS instead, so it isn't also treated as a generic
+        // identifier/property. Matches how GPS is detected by name elsewhere in this app
+        // (see OdkFarmEntityService::GPS_FIELDS).
+        $gpsColumnsByName = $identifierColumns->merge($propertyColumns)
+            ->filter(fn ($column) => in_array(Str::lower($column), ['latitude', 'longitude', 'altitude', 'accuracy'], true))
+            ->mapWithKeys(fn ($column) => [Str::lower($column) => $column]);
+
+        $latitudeColumn = $gpsColumnsByName->get('latitude');
+        $longitudeColumn = $gpsColumnsByName->get('longitude');
+        $altitudeColumn = $gpsColumnsByName->get('altitude');
+        $accuracyColumn = $gpsColumnsByName->get('accuracy');
+
+        $identifierColumns = $identifierColumns->reject(fn ($column) => $gpsColumnsByName->contains($column))->values();
+        $propertyColumns = $propertyColumns->reject(fn ($column) => $gpsColumnsByName->contains($column))->values();
+
+        $toFloat = fn (mixed $value): ?float => $value !== null ? (float) $value : null;
+        $toInt = fn (mixed $value): ?int => $value !== null ? (int) $value : null;
+
         // The queued job runs outside any Filament panel/tenancy context, so the team
         // must come from data captured at form-submission time, not HelperService.
         $team = Team::findOrFail($this->data['owner_id']);
 
         $preparedRows = $rows
-            ->map(function ($row) use ($team, $farmCodeColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns) {
+            ->map(function ($row) use ($team, $farmCodeColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns, $latitudeColumn, $longitudeColumn, $altitudeColumn, $accuracyColumn, $toFloat, $toInt) {
                 $location = Location::where('code', $row[$locationCodeColumn])
                     ->where('location_level_id', $locationLevel->id)
                     ->where('owner_id', $team->id)
@@ -79,6 +100,10 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
                     'teamCode' => (string) $row[$farmCodeColumn],
                     'identifiers' => $identifierColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
                     'properties' => $propertyColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
+                    'latitude' => $latitudeColumn !== null ? $toFloat($row[$latitudeColumn]) : null,
+                    'longitude' => $longitudeColumn !== null ? $toFloat($row[$longitudeColumn]) : null,
+                    'altitude' => $altitudeColumn !== null ? $toInt($row[$altitudeColumn]) : null,
+                    'accuracy' => $accuracyColumn !== null ? $toFloat($row[$accuracyColumn]) : null,
                 ];
             })
             // the location code was already validated by rules(), but a row could still

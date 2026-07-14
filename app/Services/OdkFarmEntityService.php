@@ -183,7 +183,26 @@ class OdkFarmEntityService
             return null;
         }
 
-        return implode(' ', [$latitude, $longitude, $altitude ?? 0, $accuracy ?? 0]);
+        return implode(' ', [
+            $this->formatGpsFloat($latitude),
+            $this->formatGpsFloat($longitude),
+            $altitude ?? 0,
+            $this->formatGpsFloat($accuracy ?? 0),
+        ]);
+    }
+
+    /**
+     * PHP's plain (string) cast drops the decimal point for a whole-number float (e.g.
+     * (string) 45.0 === '45'), which reads as an integer once written into `geometry` -
+     * this forces latitude/longitude/accuracy to always render with one, matching the
+     * Farm Registration form's own geopoint output (e.g. "45.4215 -75.6972 70.0 4.5" -
+     * every component shown with a decimal, including whole-number ones).
+     */
+    protected function formatGpsFloat(float $value): string
+    {
+        $formatted = (string) $value;
+
+        return str_contains($formatted, '.') ? $formatted : "{$formatted}.0";
     }
 
     /**
@@ -446,7 +465,12 @@ class OdkFarmEntityService
      * exists for the team are skipped (mirrors the FarmImport dedup rule); a
      * team_code repeated within $rows itself is also deduped, keeping the first occurrence.
      *
-     * @param  Collection<int, array{locationId: int, teamCode: string, identifiers: array<string, string>, properties: array<string, string>}>  $rows
+     * Each row: locationId (int), teamCode (string), identifiers (array<string, string>),
+     * properties (array<string, string>), latitude/longitude (?float), altitude (?int),
+     * accuracy (?float). $rows is deliberately left ungenericized in the docblock -
+     * Collection's TValue generic isn't covariant, so parameterizing it here rejects any
+     * Collection built via a ->map()/->filter() chain even when the shapes are identical.
+     *
      * @return Collection<int, FarmEntity>
      */
     public function bulkCreateFarms(Team $team, Collection $rows, ?string $sourceName = null): Collection
@@ -476,6 +500,13 @@ class OdkFarmEntityService
         $locationAttributesByLocationId = $newRows->pluck('locationId')->unique()
             ->mapWithKeys(fn ($locationId) => [$locationId => $this->buildLocationAttributes($locationId)]);
 
+        // GPS varies per row (unlike location, it isn't shared across rows), so it's built
+        // once per row here rather than deduped - buildGeometryValue() is pure string
+        // formatting, cheap enough not to need memoizing.
+        $geometryByRowIndex = $newRows->map(
+            fn ($row) => $this->buildGeometryValue($row['latitude'] ?? null, $row['longitude'] ?? null, $row['altitude'] ?? null, $row['accuracy'] ?? null)
+        );
+
         // Reconcile every identifier/property key used across the whole batch up front,
         // rather than once per row.
         $keyTypes = ['team_code' => 'property'];
@@ -489,12 +520,24 @@ class OdkFarmEntityService
             ];
         }
 
+        if ($geometryByRowIndex->contains(fn ($geometry) => $geometry !== null)) {
+            $keyTypes[self::GEOMETRY_FIELD] = 'property';
+        }
+
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
 
-        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $locationAttributesByLocationId, $sourceName) {
+        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex, $sourceName) {
 
-            $prepared = $newRows->map(function ($row) use ($team, $propertyMap, $locationAttributesByLocationId) {
-                $rawData = [...$row['identifiers'], ...$row['properties'], ...$locationAttributesByLocationId[$row['locationId']], 'team_code' => $row['teamCode']];
+            $prepared = $newRows->map(function ($row, $index) use ($team, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex) {
+                $geometry = $geometryByRowIndex[$index];
+
+                $rawData = [
+                    ...$row['identifiers'],
+                    ...$row['properties'],
+                    ...$locationAttributesByLocationId[$row['locationId']],
+                    ...($geometry !== null ? [self::GEOMETRY_FIELD => $geometry] : []),
+                    'team_code' => $row['teamCode'],
+                ];
 
                 $data = [];
                 foreach ($rawData as $key => $value) {
@@ -787,7 +830,9 @@ class OdkFarmEntityService
 
             $values = collect($row)->filter(fn ($value, $key) => ! Str::startsWith($key, '__') && ! in_array($key, self::RESERVED_ODATA_KEYS, true));
 
-            $liveData[$uuid] = ['label' => $row['label'] ?? null, 'data' => $values->all()];
+            $label = $row['label'] ?? null;
+
+            $liveData[$uuid] = ['label' => $label, 'data' => $values->all()];
 
             $farmEntity = $farmsByUuid->get($uuid);
 
@@ -796,19 +841,31 @@ class OdkFarmEntityService
             }
 
             if (! $farmEntity) {
+                // team_code mirrors label bidirectionally - createFarm()/updateFarm() push
+                // team_code to Central as label, so adopting the other direction reads it
+                // back from label too, not from a same-named property (which may not even
+                // exist for entities registered directly in Enketo).
                 FarmEntity::create([
                     'owner_id' => $team->id,
                     'location_id' => $this->resolveLocationFromAttributes($team, $values->all()),
-                    'team_code' => (string) ($values->get('team_code') ?? $row['label'] ?? $uuid),
+                    'team_code' => (string) ($label ?? $uuid),
                     'odk_uuid' => $uuid,
                 ]);
-            } elseif ($farmEntity->location_id === null) {
-                // Adopted before its location attributes were resolvable (or before this
-                // feature existed) - worth retrying every refresh until it succeeds.
-                $locationId = $this->resolveLocationFromAttributes($team, $values->all());
+            } else {
+                if ($farmEntity->location_id === null) {
+                    // Adopted before its location attributes were resolvable (or before this
+                    // feature existed) - worth retrying every refresh until it succeeds.
+                    $locationId = $this->resolveLocationFromAttributes($team, $values->all());
 
-                if ($locationId !== null) {
-                    $farmEntity->update(['location_id' => $locationId]);
+                    if ($locationId !== null) {
+                        $farmEntity->update(['location_id' => $locationId]);
+                    }
+                }
+
+                if ($label !== null && $farmEntity->team_code !== $label) {
+                    // Keeps team_code in sync if the label was ever changed directly on
+                    // Central (e.g. via Central's own UI) rather than through this app.
+                    $farmEntity->update(['team_code' => $label]);
                 }
             }
 

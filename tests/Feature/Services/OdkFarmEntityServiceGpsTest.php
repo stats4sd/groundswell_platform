@@ -23,7 +23,20 @@ describe('OdkFarmEntityService::buildGeometryValue', function () {
     test('defaults a missing altitude and accuracy to 0', function () {
         $value = odkFarmEntityGpsService()->buildGeometryValue(45.4215, -75.6972, null, null);
 
-        expect($value)->toBe('45.4215 -75.6972 0 0');
+        // altitude defaults to plain "0" (not float-formatted, per Dan's scope - only
+        // latitude/longitude/accuracy needed to always render as floats); accuracy
+        // defaults to 0 too but IS float-formatted, hence "0.0".
+        expect($value)->toBe('45.4215 -75.6972 0 0.0');
+    });
+
+    test('always renders latitude/longitude/accuracy with a decimal point, even for whole numbers', function () {
+        // PHP's (string) cast drops the decimal point for a whole-number float
+        // ((string) 45.0 === '45'), which would otherwise be indistinguishable from an
+        // integer once written into `geometry` - this is the bug Dan reported after
+        // testing the Excel import with whole-number GPS values.
+        $value = odkFarmEntityGpsService()->buildGeometryValue(45.0, -75.0, 70, 4.0);
+
+        expect($value)->toBe('45.0 -75.0 70 4.0');
     });
 
     test('returns null when latitude is missing', function () {
