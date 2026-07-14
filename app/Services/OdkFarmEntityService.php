@@ -39,13 +39,24 @@ class OdkFarmEntityService
 {
     public const LOCAL_DATASET_NAME = 'farm_entities';
 
-    // GPS is synced to Central as fixed properties (like team_code) rather than stored
-    // locally. Detected by property NAME (not the DatasetVariable.description tag used for
-    // the identifier/property split) - matches how team_code is already detected, and
-    // avoids trusting a tag that a pre-existing DatasetVariable might carry from before it
-    // was ever reconciled as GPS (reconcileProperties() reuses an existing name match
-    // without correcting its tag). See docs/plans/farm-entities-simplify-and-gps-sync.md.
+    // Legacy GPS property names - farms created by this app before the `geometry` format
+    // (see GEOMETRY_FIELD below) stored GPS as four separate properties instead of one.
+    // Detected by property NAME (not the DatasetVariable.description tag used for the
+    // identifier/property split) - matches how team_code is already detected, and avoids
+    // trusting a tag that a pre-existing DatasetVariable might carry from before it was
+    // ever reconciled as GPS (reconcileProperties() reuses an existing name match without
+    // correcting its tag). See docs/plans/farm-entities-simplify-and-gps-sync.md. Still
+    // read (getEntityData()) for backward compatibility with farms already written this
+    // way; no longer written (createFarm()/updateFarm() now write GEOMETRY_FIELD instead).
     public const GPS_FIELDS = ['latitude', 'longitude', 'altitude', 'accuracy'];
+
+    // Farms registered directly in Enketo (the Farm Registration XLSForm) store GPS as a
+    // single property in this space-separated "latitude longitude altitude accuracy"
+    // format (ODK's own geopoint string representation, e.g. "45.4215 -75.6972 70.0 4.5"),
+    // not as four separate properties. createFarm()/updateFarm() now write this same format
+    // so both creation paths agree; getEntityData() reads it back into the same four GPS
+    // form fields the app already has (see the GPS section on FarmEntityResource).
+    public const GEOMETRY_FIELD = 'geometry';
 
     // Top-level fields ODK Central's OData entity feed returns alongside the dataset's
     // actual data properties - `label` in particular is not `__`-prefixed, so it isn't
@@ -157,6 +168,46 @@ class OdkFarmEntityService
         }
 
         return $attributes;
+    }
+
+    /**
+     * Builds the `geometry` property value from GPS fields (see GEOMETRY_FIELD doc
+     * comment) - the reverse of parseGeometryValue(). Missing altitude/accuracy default to
+     * 0, matching how a geopoint widget itself behaves when a device doesn't report them.
+     * Returns null (no geometry property at all) if latitude/longitude aren't both given -
+     * a bare altitude/accuracy with no coordinate isn't a meaningful point.
+     */
+    public function buildGeometryValue(?float $latitude, ?float $longitude, ?int $altitude, ?float $accuracy): ?string
+    {
+        if ($latitude === null || $longitude === null) {
+            return null;
+        }
+
+        return implode(' ', [$latitude, $longitude, $altitude ?? 0, $accuracy ?? 0]);
+    }
+
+    /**
+     * Parses a `geometry` property value (see GEOMETRY_FIELD doc comment) back into the
+     * four GPS fields the app's GPS section already uses - the reverse of
+     * buildGeometryValue(). Returns all-null if the value isn't at least "latitude
+     * longitude" (malformed/unexpected data shouldn't blow up the edit form).
+     *
+     * @return array{latitude: ?string, longitude: ?string, altitude: ?string, accuracy: ?string}
+     */
+    public function parseGeometryValue(string $geometry): array
+    {
+        $parts = preg_split('/\s+/', trim($geometry));
+
+        if (! is_array($parts) || count($parts) < 2) {
+            return ['latitude' => null, 'longitude' => null, 'altitude' => null, 'accuracy' => null];
+        }
+
+        return [
+            'latitude' => $parts[0],
+            'longitude' => $parts[1],
+            'altitude' => $parts[2] ?? null,
+            'accuracy' => $parts[3] ?? null,
+        ];
     }
 
     public function ensureOdkDataset(Team $team, Dataset $dataset, string $entityListName): OdkDataset
@@ -340,12 +391,8 @@ class OdkFarmEntityService
         $dataset = $this->ensureDataset();
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
-        $gpsData = array_filter([
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'altitude' => $altitude,
-            'accuracy' => $accuracy,
-        ], fn ($value) => $value !== null);
+        $geometry = $this->buildGeometryValue($latitude, $longitude, $altitude, $accuracy);
+        $gpsData = $geometry !== null ? [self::GEOMETRY_FIELD => $geometry] : [];
 
         $locationAttributes = $this->buildLocationAttributes($locationId);
 
@@ -353,8 +400,8 @@ class OdkFarmEntityService
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
-            // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
-            // tag, so a plain 'property' tag is fine here.
+            // GPS is detected by name elsewhere (see GEOMETRY_FIELD doc comment), not by
+            // this tag, so a plain 'property' tag is fine here.
             ...array_fill_keys(array_keys($gpsData), 'property'),
             ...array_fill_keys(array_keys($locationAttributes), 'property'),
             'team_code' => 'property',
@@ -485,7 +532,10 @@ class OdkFarmEntityService
      * tag - see reconcileProperties(). A name with no known DatasetVariable (e.g.
      * discovered from an entity created outside this app, not yet seen by
      * reconcileProperties/ensurePropertyRegistered) defaults to 'property'. Excludes
-     * team_code, which has its own dedicated form field.
+     * team_code, which has its own dedicated form field. GPS is read from either format: a
+     * single GEOMETRY_FIELD property (farms registered directly in Enketo) or the legacy
+     * four separate GPS_FIELDS properties (farms created by this app before that format) -
+     * both end up in the same four returned GPS keys either way.
      *
      * @return array{identifiers: array<string, string>, properties: array<string, string>, latitude: ?string, longitude: ?string, altitude: ?string, accuracy: ?string}
      */
@@ -511,6 +561,12 @@ class OdkFarmEntityService
 
         foreach ($data as $name => $value) {
             if ($name === 'team_code') {
+                continue;
+            }
+
+            if ($name === self::GEOMETRY_FIELD) {
+                $gps = $this->parseGeometryValue($value);
+
                 continue;
             }
 
@@ -571,12 +627,8 @@ class OdkFarmEntityService
         $currentData = $this->odkLinkService->getOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid)['currentVersion']['data'] ?? [];
         $previouslySetNames = array_keys($currentData);
 
-        $gpsData = array_filter([
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'altitude' => $altitude,
-            'accuracy' => $accuracy,
-        ], fn ($value) => $value !== null);
+        $geometry = $this->buildGeometryValue($latitude, $longitude, $altitude, $accuracy);
+        $gpsData = $geometry !== null ? [self::GEOMETRY_FIELD => $geometry] : [];
 
         $locationAttributes = $this->buildLocationAttributes($locationId);
 
@@ -584,8 +636,8 @@ class OdkFarmEntityService
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
-            // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
-            // tag, so a plain 'property' tag is fine here.
+            // GPS is detected by name elsewhere (see GEOMETRY_FIELD doc comment), not by
+            // this tag, so a plain 'property' tag is fine here.
             ...array_fill_keys(array_keys($gpsData), 'property'),
             ...array_fill_keys(array_keys($locationAttributes), 'property'),
             'team_code' => 'property',
