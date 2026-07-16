@@ -104,7 +104,7 @@ class FarmEntityResource extends Resource
     public static function table(Table $table): Table
     {
         $team = HelperService::getCurrentOwner();
-        $dataset = app(OdkFarmEntityService::class)->ensureDataset();
+        $dataset = app(OdkFarmEntityService::class)->ensureDataset($team);
 
         // Dynamic identifier/property columns are driven by DatasetVariable (schema-level,
         // stays local), not by scanning records' JSON keys like the old FarmResource does.

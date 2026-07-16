@@ -66,13 +66,28 @@ class OdkFarmEntityService
     public function __construct(protected OdkLinkService $odkLinkService) {}
 
     /**
-     * This feature's own Dataset definition, shared across all teams (owner_id null) -
-     * each team's actual Central entity list is tracked separately via OdkDataset.
+     * This feature's own Dataset definition, one per team (owner_id = $team->id). Teams'
+     * Central entity lists are separate schemas, so the local DatasetVariable bookkeeping
+     * that tracks "has this property already been pushed to Central" must be scoped the
+     * same way - a shared Dataset across teams let one team's already-pushed property
+     * silently skip the push for another team that happened to use the same raw key,
+     * leaving that team's Central entity list missing the property (see
+     * docs/change-logs/team-scoped-farm-entities-dataset.md). Each team's actual Central
+     * entity list is tracked separately via OdkDataset.
+     *
+     * The name carries the team id suffix (not just `owner_id`) because this app's
+     * `datasets` table enforces a single-column `unique(name)` - unlike the
+     * filament-odk-link package's own migration, which defines a composite
+     * `unique([name, owner_id])` (see
+     * database/migrations/03_xlsform_management/2024_03_10_03_101232_1_create_datasets_table.php
+     * vs. the package's `000_create_datasets_table.php`). Loosening that constraint would
+     * affect every other (global, owner_id-null) Dataset in the app, so this stays scoped
+     * to just this one feature instead.
      */
-    public function ensureDataset(): Dataset
+    public function ensureDataset(Team $team): Dataset
     {
         return Dataset::firstOrCreate(
-            ['name' => self::LOCAL_DATASET_NAME, 'owner_id' => null],
+            ['name' => self::LOCAL_DATASET_NAME.'_'.$team->id, 'owner_id' => $team->id],
             ['label' => 'team_code'],
         );
     }
@@ -148,7 +163,7 @@ class OdkFarmEntityService
      */
     public function buildLocationAttributes(int $locationId): array
     {
-        ray("buildLocationAttributes()...");
+        ray('buildLocationAttributes()...');
 
         $location = Location::find($locationId);
 
@@ -412,7 +427,7 @@ class OdkFarmEntityService
             throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot determine which ODK Central entity list to write farms to.");
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
         $geometry = $this->buildGeometryValue($latitude, $longitude, $altitude, $accuracy);
@@ -486,7 +501,7 @@ class OdkFarmEntityService
             throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot import farms.");
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
         $existingCodes = FarmEntity::where('owner_id', $team->id)->pluck('team_code')->all();
@@ -597,7 +612,7 @@ class OdkFarmEntityService
 
         $team = $farmEntity->owner;
         $entityListName = $this->resolveEntityListName($team);
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
 
         $data = $this->odkLinkService->getOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid)['currentVersion']['data'] ?? [];
 
@@ -666,7 +681,7 @@ class OdkFarmEntityService
             throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot determine which ODK Central entity list to update.");
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
         // No local mirror of values exists - fetch the entity's current data live to know
@@ -797,7 +812,7 @@ class OdkFarmEntityService
             return [];
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $odkDataset = $this->findOdkDataset($team, $dataset, $entityListName);
 
         if ($odkDataset === null) {
