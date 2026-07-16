@@ -508,8 +508,8 @@ class OdkFarmEntityService
             ...array_fill_keys(array_keys($properties), 'property'),
             // GPS is detected by name elsewhere (see GEOMETRY_FIELD doc comment), not by
             // this tag, so a plain 'property' tag is fine here.
-            ...array_fill_keys(array_keys($gpsData), 'property'),
-            ...array_fill_keys(array_keys($locationAttributes), 'property'),
+            ...array_fill_keys(array_keys($gpsData), 'loc'),
+            ...array_fill_keys(array_keys($locationAttributes), 'loc'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -603,12 +603,12 @@ class OdkFarmEntityService
                 ...$keyTypes,
                 ...array_fill_keys(array_keys($row['identifiers']), 'identifier'),
                 ...array_fill_keys(array_keys($row['properties']), 'property'),
-                ...array_fill_keys(array_keys($locationAttributesByLocationId[$row['locationId']]), 'property'),
+                ...array_fill_keys(array_keys($locationAttributesByLocationId[$row['locationId']]), 'loc'),
             ];
         }
 
         if ($geometryByRowIndex->contains(fn ($geometry) => $geometry !== null)) {
-            $keyTypes[self::GEOMETRY_FIELD] = 'property';
+            $keyTypes[self::GEOMETRY_FIELD] = 'loc';
         }
 
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -767,9 +767,9 @@ class OdkFarmEntityService
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
             // GPS is detected by name elsewhere (see GEOMETRY_FIELD doc comment), not by
-            // this tag, so a plain 'property' tag is fine here.
-            ...array_fill_keys(array_keys($gpsData), 'property'),
-            ...array_fill_keys(array_keys($locationAttributes), 'property'),
+            // this tag, so a plain 'loc' tag is fine here.
+            ...array_fill_keys(array_keys($gpsData), 'loc'),
+            ...array_fill_keys(array_keys($locationAttributes), 'loc'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
