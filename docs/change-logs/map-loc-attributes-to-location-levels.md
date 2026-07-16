@@ -49,6 +49,16 @@ Dan compared a farm registered directly via Enketo against one created through t
 - **Tests**: 3 new cases in `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php` - exact lookup match, case-insensitive match, fallback to `"1"` for an unrecognized name.
 - **Flagged as a known limitation, not fixed**: this lookup is hardcoded per-app, not scoped to a specific team - a coincidental name collision with another team's group would pick up this table's IDs. Fine for the single-deployment need it was built for; would need to become a real per-team table if this app starts serving other teams with the same requirement.
 
+## Reverted: `GROUP_CLUSTER_LOOKUP` removed, `buildLocationAttributes()` made fully generic (2026-07-16)
+
+Teams are not fixed to a two-level Cluster/Group hierarchy - each team configures its own arbitrary-depth `LocationLevel` chain (e.g. District/Sub-district/Village), so the hardcoded 2026-07-15 lookup table and the `loc{n}_type` placeholder string couldn't generalize beyond the one team they were built for. See the plan doc's "Reverted" section for full detail.
+
+- **`OdkFarmEntityService::GROUP_CLUSTER_LOOKUP`/`resolveGroupClusterIds()` removed entirely.**
+- **`buildLocationAttributes()`**: `loc{n}` is now `(string) $current->code` (marked with a `TODO` - undecided whether `loc{n}` should be `locations.code` or `locations.id`); `loc{n}_type` is now the matched `LocationLevel`'s real `name`, not a placeholder.
+- **Accepted consequence**: this team's deployed XLSForm's Enketo cascading selects relied on the removed lookup's internal choice-list IDs for `loc1`/`loc2` on app-created farms - those IDs aren't derivable from this app's data, so app-created farms' `loc1`/`loc2` no longer match the deployed choice list. Updating the ODK form/choice list itself is separate, later work.
+- `resolveLocationFromAttributes()` (read side) unaffected - it only ever matched on `loc{n}_name`.
+- Tests: removed the 3 hardcoded-lookup cases from `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php`; the arbitrary-depth chain-walk test now asserts `loc{n}` against `Location.code` and `loc{n}_type` against the real `LocationLevel` name. Full suite (108 tests, 180 assertions), `phpstan`, `pint` all pass.
+
 ## Deferred
 
 - A feature test for `refreshFromCentral()` itself against a faked OData feed (exercising the full adopt-from-Central path, not just the pure resolution/build methods) remains out of scope for this pass.

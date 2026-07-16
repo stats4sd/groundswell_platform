@@ -160,7 +160,7 @@ describe('OdkFarmEntityService::buildLocationAttributes', function () {
         $this->team = Team::factory()->create();
     });
 
-    test('walks the full parent chain regardless of depth, not hardcoded to any fixed number of levels', function () {
+    test('walks the full parent chain regardless of depth, not hardcoded to any fixed number of levels or level names', function () {
         $region = makeLevel($this->team, 'Region');
         $district = makeLevel($this->team, 'District', $region);
         $village = makeLevel($this->team, 'Village', $district, hasFarms: true);
@@ -174,60 +174,20 @@ describe('OdkFarmEntityService::buildLocationAttributes', function () {
         // toEqual (not toBe): buildLocationAttributes() walks leaf-to-root, so keys land in
         // loc3/loc2/loc1 order - the map's content is what matters, not key order.
         expect($attributes)->toEqual([
-            'loc1' => '1',
+            'loc1' => 'R1',
             'loc1_name' => 'North Region',
-            'loc1_type' => 'Loc1 name',
-            'loc2' => '1',
+            'loc1_type' => 'Region',
+            'loc2' => 'D1',
             'loc2_name' => 'Central District',
-            'loc2_type' => 'Loc2 name',
-            'loc3' => '1',
+            'loc2_type' => 'District',
+            'loc3' => 'V1',
             'loc3_name' => 'Green Village',
-            'loc3_type' => 'Loc3 name',
+            'loc3_type' => 'Village',
         ]);
     });
 
     test('returns an empty array for a non-existent location id', function () {
         expect(odkFarmEntityService()->buildLocationAttributes(999999))->toBe([]);
-    });
-
-    test('uses the hardcoded group/cluster lookup for a group name it recognizes', function () {
-        $cluster = makeLevel($this->team, 'Cluster');
-        $group = makeLevel($this->team, 'Group', $cluster, hasFarms: true);
-
-        // groupId 9 / clusterId 7 per the hardcoded GROUP_CLUSTER_LOOKUP table.
-        $clusterLocation = makeLocation($this->team, $cluster, 'C1', 'Some Cluster');
-        $groupLocation = makeLocation($this->team, $group, 'G1', 'Golmadevi Mahila Krishak Samuha', $clusterLocation);
-
-        $attributes = odkFarmEntityService()->buildLocationAttributes($groupLocation->id);
-
-        expect($attributes['loc1'])->toBe('7')
-            ->and($attributes['loc2'])->toBe('9');
-    });
-
-    test('matches the group/cluster lookup case-insensitively', function () {
-        $cluster = makeLevel($this->team, 'Cluster');
-        $group = makeLevel($this->team, 'Group', $cluster, hasFarms: true);
-
-        $clusterLocation = makeLocation($this->team, $cluster, 'C1', 'Some Cluster');
-        $groupLocation = makeLocation($this->team, $group, 'G1', 'golmadevi mahila krishak samuha', $clusterLocation);
-
-        $attributes = odkFarmEntityService()->buildLocationAttributes($groupLocation->id);
-
-        expect($attributes['loc1'])->toBe('7')
-            ->and($attributes['loc2'])->toBe('9');
-    });
-
-    test('falls back to the "1" placeholder for a group name not in the lookup', function () {
-        $cluster = makeLevel($this->team, 'Cluster');
-        $group = makeLevel($this->team, 'Group', $cluster, hasFarms: true);
-
-        $clusterLocation = makeLocation($this->team, $cluster, 'C1', 'Some Cluster');
-        $groupLocation = makeLocation($this->team, $group, 'G1', 'A Group Not In The Table', $clusterLocation);
-
-        $attributes = odkFarmEntityService()->buildLocationAttributes($groupLocation->id);
-
-        expect($attributes['loc1'])->toBe('1')
-            ->and($attributes['loc2'])->toBe('1');
     });
 
     test('round-trips through resolveLocationFromAttributes back to the same location', function () {
