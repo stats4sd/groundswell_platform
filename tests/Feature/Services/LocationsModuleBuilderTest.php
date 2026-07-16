@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
-function makeLevel(Team $team, string $name, ?LocationLevel $parent = null): LocationLevel
+function makeLocationLevel(Team $team, string $name, ?LocationLevel $parent = null): LocationLevel
 {
     return LocationLevel::create([
         'owner_id' => $team->id,
@@ -17,7 +17,7 @@ function makeLevel(Team $team, string $name, ?LocationLevel $parent = null): Loc
     ]);
 }
 
-function makeLocation(Team $team, LocationLevel $level, string $code, string $name, ?Location $parent = null): Location
+function makeChildLocation(Team $team, LocationLevel $level, string $code, string $name, ?Location $parent = null): Location
 {
     return Location::create([
         'owner_id' => $team->id,
@@ -48,8 +48,8 @@ it('creates a Local Locations module version owned by the team', function () {
 });
 
 it('builds a select_one + calculate row per location level, root-first', function () {
-    $region = makeLevel($this->team, 'Region');
-    makeLevel($this->team, 'District', $region);
+    $region = makeLocationLevel($this->team, 'Region');
+    makeLocationLevel($this->team, 'District', $region);
 
     LocationsModuleBuilder::populate($this->team);
 
@@ -78,8 +78,8 @@ it('builds a select_one + calculate row per location level, root-first', functio
 });
 
 it('builds a per-level choice list from the level\'s locations', function () {
-    $region = makeLevel($this->team, 'Region');
-    $regionLocation = makeLocation($this->team, $region, 'R1', 'North');
+    $region = makeLocationLevel($this->team, 'Region');
+    $regionLocation = makeChildLocation($this->team, $region, 'R1', 'North');
 
     LocationsModuleBuilder::populate($this->team);
 
@@ -94,10 +94,10 @@ it('builds a per-level choice list from the level\'s locations', function () {
 });
 
 it('sets cascade_filter to the parent location id for a non-root level', function () {
-    $region = makeLevel($this->team, 'Region');
-    $district = makeLevel($this->team, 'District', $region);
-    $regionLocation = makeLocation($this->team, $region, 'R1', 'North');
-    $districtLocation = makeLocation($this->team, $district, 'D1', 'Central', $regionLocation);
+    $region = makeLocationLevel($this->team, 'Region');
+    $district = makeLocationLevel($this->team, 'District', $region);
+    $regionLocation = makeChildLocation($this->team, $region, 'R1', 'North');
+    $districtLocation = makeChildLocation($this->team, $district, 'D1', 'Central', $regionLocation);
 
     LocationsModuleBuilder::populate($this->team);
 
@@ -117,8 +117,8 @@ it('leaves an empty group when the team has no location levels yet', function ()
 });
 
 it('removes stale rows and choice lists when a level is removed', function () {
-    $region = makeLevel($this->team, 'Region');
-    $district = makeLevel($this->team, 'District', $region);
+    $region = makeLocationLevel($this->team, 'Region');
+    $district = makeLocationLevel($this->team, 'District', $region);
 
     LocationsModuleBuilder::populate($this->team);
 

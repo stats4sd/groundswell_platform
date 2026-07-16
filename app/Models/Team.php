@@ -5,7 +5,8 @@ namespace App\Models;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
-use App\Services\LocationSectionBuilder;
+use App\Services\XlsformModules\FarmInfoModuleBuilder;
+use App\Services\XlsformModules\LocationsModuleBuilder;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -45,6 +46,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
         'sampling_complete' => 'boolean',
         'languages_complete' => 'boolean',
         'pba_complete' => 'boolean',
+        'has_updated_locations' => 'boolean',
     ];
 
     protected static function booted(): void
@@ -335,7 +337,8 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     public function localiseXlsforms(): void
     {
         if ($this->has_updated_locations) {
-            LocationSectionBuilder::createCustomLocationModuleVersion($this);
+            LocationsModuleBuilder::populate($this);
+            FarmInfoModuleBuilder::populate($this);
         }
 
         $this->has_updated_locations = false;

@@ -29,7 +29,7 @@ class LocationsModuleBuilder
         $byPos = [];
 
         foreach ($team->locationLevels()->get() as $level) {
-            $byPos[$level->pos] = $level;
+            $byPos[$level->getPos()] = $level;
         }
 
         ksort($byPos);
@@ -49,10 +49,10 @@ class LocationsModuleBuilder
 
         foreach ($levels as $pos => $level) {
             $parentPos = $pos - 1;
-            $choiceFilter = $parentPos >= 1 ? 'loc' . $parentPos . '=${loc' . $parentPos . '}' : '';
+            $choiceFilter = $parentPos >= 1 ? 'loc'.$parentPos.'=${loc'.$parentPos.'}' : '';
 
             $moduleVersion->surveyRows()->updateOrCreate(
-                ['name' => 'loc' . $pos, 'type' => 'select_one loc' . $pos],
+                ['name' => 'loc'.$pos, 'type' => 'select_one loc'.$pos],
                 [
                     'required' => true,
                     'choice_filter' => $choiceFilter,
@@ -62,9 +62,9 @@ class LocationsModuleBuilder
             );
 
             $moduleVersion->surveyRows()->updateOrCreate(
-                ['name' => 'loc' . $pos . '_name', 'type' => 'calculate'],
+                ['name' => 'loc'.$pos.'_name', 'type' => 'calculate'],
                 [
-                    'calculation' => 'jr:choice-name(${loc' . $pos . '}, \'${loc' . $pos . '}\')',
+                    'calculation' => 'jr:choice-name(${loc'.$pos.'}, \'${loc'.$pos.'}\')',
                     'row_number' => $rowNumber++,
                 ],
             );
@@ -101,7 +101,7 @@ class LocationsModuleBuilder
         foreach ($levels as $pos => $level) {
             $choiceList = ChoiceList::firstOrCreate([
                 'xlsform_module_version_id' => $moduleVersion->id,
-                'list_name' => 'loc' . $pos,
+                'list_name' => 'loc'.$pos,
             ]);
 
             foreach ($level->locations as $location) {
@@ -144,7 +144,7 @@ class LocationsModuleBuilder
 
         foreach ($team->locales()->with('language')->get() as $locale) {
             $language = $locale->language;
-            $properties['label::' . $language->name . ' (' . $language->iso_alpha2 . ')'] = $label;
+            $properties['label::'.$language->name.' ('.$language->iso_alpha2.')'] = $label;
         }
 
         return $properties;

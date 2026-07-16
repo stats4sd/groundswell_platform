@@ -50,7 +50,7 @@ class FarmInfoModuleBuilder
 
         $rowNumber = 2;
 
-        $choiceFilter = $levelCount >= 1 ? 'loc' . $levelCount . '=${loc' . $levelCount . '}' : '';
+        $choiceFilter = $levelCount >= 1 ? 'loc'.$levelCount.'=${loc'.$levelCount.'}' : '';
 
         $moduleVersion->surveyRows()->updateOrCreate(
             ['name' => 'ID', 'type' => 'select_one_from_file Farm_Summary.csv'],
@@ -66,9 +66,9 @@ class FarmInfoModuleBuilder
 
         foreach ($allVariables as $variable) {
             $moduleVersion->surveyRows()->updateOrCreate(
-                ['name' => 'farm_' . $variable->name, 'type' => 'calculate'],
+                ['name' => 'farm_'.$variable->name, 'type' => 'calculate'],
                 [
-                    'calculation' => 'instance(\'Farm_Summary\')/root/item[name=${ID}]/' . $variable->name,
+                    'calculation' => 'instance(\'Farm_Summary\')/root/item[name=${ID}]/'.$variable->name,
                     'row_number' => $rowNumber++,
                 ],
             );
@@ -93,7 +93,7 @@ class FarmInfoModuleBuilder
     /** @param Collection<int, DatasetVariable> $variables */
     protected static function deleteStaleCalculateRows(XlsformModuleVersion $moduleVersion, Collection $variables): void
     {
-        $currentNames = $variables->map(fn (DatasetVariable $variable) => 'farm_' . $variable->name);
+        $currentNames = $variables->map(fn (DatasetVariable $variable) => 'farm_'.$variable->name);
 
         $moduleVersion->surveyRows()
             ->where('type', 'calculate')
@@ -111,13 +111,13 @@ class FarmInfoModuleBuilder
         $lines = ['You have selected the following farm:', ''];
 
         foreach ($identifiers as $variable) {
-            $lines[] = $variable->label . ': ${farm_' . $variable->name . '},';
+            $lines[] = $variable->label.': ${farm_'.$variable->name.'},';
         }
 
         $lines[] = '';
 
         foreach ($properties as $variable) {
-            $lines[] = $variable->label . ': ${farm_' . $variable->name . '},';
+            $lines[] = $variable->label.': ${farm_'.$variable->name.'},';
         }
 
         $lines[] = '';
@@ -133,7 +133,7 @@ class FarmInfoModuleBuilder
 
         foreach ($team->locales()->with('language')->get() as $locale) {
             $language = $locale->language;
-            $properties['label::' . $language->name . ' (' . $language->iso_alpha2 . ')'] = $label;
+            $properties['label::'.$language->name.' ('.$language->iso_alpha2.')'] = $label;
         }
 
         return $properties;
