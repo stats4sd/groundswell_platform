@@ -1,6 +1,6 @@
 # Location & Farm Info Module Rewrite Implementation Plan
 
-**Status: Not Started**
+**Status: Completed** — change log: [docs/change-logs/location-and-farm-info-module-rewrite.md](../change-logs/location-and-farm-info-module-rewrite.md). All 4 tasks implemented and committed (package commit `61d19a7`, app commits `73067e9`, `9a6ef14`, `c4e8c66`, `17fc5e1`). Minor deviations from the written steps (test label assertions via `defaultLabel`, fresh `locationLevels()` query, renamed test helpers, `has_updated_locations` boolean cast) are documented in the change log.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -34,7 +34,7 @@
 
 This task has no dependency on Tasks 2-4 and can be done first in isolation.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `packages/filament-odk-link/tests/Unit/Models/XlsformSyncWithTemplateTest.php`:
 
@@ -127,12 +127,12 @@ it('attaches only a local version when can_be_replaced is true, not the global d
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `cd packages/filament-odk-link && vendor/bin/pest tests/Unit/Models/XlsformSyncWithTemplateTest.php`
 Expected: the `can_be_extended` and plain-module tests likely PASS already (existing behavior), but `'attaches only a local version when can_be_replaced is true...'` FAILS — it currently attaches the global default too, so `$versions` has count 2, not 1.
 
-- [ ] **Step 3: Implement `can_be_replaced` handling**
+- [x] **Step 3: Implement `can_be_replaced` handling**
 
 Replace lines 251-278 of `packages/filament-odk-link/src/Models/OdkLink/Xlsform.php`:
 
@@ -183,17 +183,17 @@ Replace lines 251-278 of `packages/filament-odk-link/src/Models/OdkLink/Xlsform.
 
 (This also drops the unused `use (&$countModules)` closure capture from the original — it was never declared or read, dead code from an earlier version.)
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `cd packages/filament-odk-link && vendor/bin/pest tests/Unit/Models/XlsformSyncWithTemplateTest.php`
 Expected: all 3 tests PASS.
 
-- [ ] **Step 5: Run the full package suite to check for regressions**
+- [x] **Step 5: Run the full package suite to check for regressions**
 
 Run: `cd packages/filament-odk-link && composer test`
 Expected: PASS (no regressions elsewhere).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add packages/filament-odk-link/src/Models/OdkLink/Xlsform.php packages/filament-odk-link/tests/Unit/Models/XlsformSyncWithTemplateTest.php
@@ -214,7 +214,7 @@ git commit -m "Add can_be_replaced support to Xlsform::syncWithTemplate()"
 
 This task has no dependency on Task 1 or Task 3 and can run in parallel with either.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `tests/Feature/Services/LocationsModuleBuilderTest.php`:
 
@@ -352,12 +352,12 @@ it('removes stale rows and choice lists when a level is removed', function () {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `vendor/bin/pest tests/Feature/Services/LocationsModuleBuilderTest.php`
 Expected: FAIL with "Class App\Services\XlsformModules\LocationsModuleBuilder not found".
 
-- [ ] **Step 3: Implement `LocationsModuleBuilder`**
+- [x] **Step 3: Implement `LocationsModuleBuilder`**
 
 Create `app/Services/XlsformModules/LocationsModuleBuilder.php`:
 
@@ -516,12 +516,12 @@ class LocationsModuleBuilder
 }
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `vendor/bin/pest tests/Feature/Services/LocationsModuleBuilderTest.php`
 Expected: all tests PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add app/Services/XlsformModules/LocationsModuleBuilder.php tests/Feature/Services/LocationsModuleBuilderTest.php
@@ -542,7 +542,7 @@ git commit -m "Add LocationsModuleBuilder for the split locations XLSForm module
 
 This task has no dependency on Task 1 or Task 2 and can run in parallel with either.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `tests/Feature/Services/FarmInfoModuleBuilderTest.php`:
 
@@ -652,12 +652,12 @@ it('removes a stale calculate row when a variable is removed', function () {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `vendor/bin/pest tests/Feature/Services/FarmInfoModuleBuilderTest.php`
 Expected: FAIL with "Class App\Services\XlsformModules\FarmInfoModuleBuilder not found".
 
-- [ ] **Step 3: Implement `FarmInfoModuleBuilder`**
+- [x] **Step 3: Implement `FarmInfoModuleBuilder`**
 
 Create `app/Services/XlsformModules/FarmInfoModuleBuilder.php`:
 
@@ -805,12 +805,12 @@ class FarmInfoModuleBuilder
 }
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `vendor/bin/pest tests/Feature/Services/FarmInfoModuleBuilderTest.php`
 Expected: all tests PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add app/Services/XlsformModules/FarmInfoModuleBuilder.php tests/Feature/Services/FarmInfoModuleBuilderTest.php
@@ -833,7 +833,7 @@ git commit -m "Add FarmInfoModuleBuilder for the split farm-selection XLSForm mo
 
 Depends on Tasks 2 and 3 being complete (both builder classes must exist).
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `tests/Feature/Models/TeamLocaliseXlsformsTest.php`:
 
@@ -868,12 +868,12 @@ it('does nothing when has_updated_locations is false', function () {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `vendor/bin/pest tests/Feature/Models/TeamLocaliseXlsformsTest.php`
 Expected: FAIL — `localiseXlsforms()` still calls the legacy `LocationSectionBuilder`, so no `Local Locations`/`Local Farm Info` rows exist yet.
 
-- [ ] **Step 3: Update `Team::localiseXlsforms()`**
+- [x] **Step 3: Update `Team::localiseXlsforms()`**
 
 In `app/Models/Team.php`, replace the import on line 8:
 
@@ -917,12 +917,12 @@ with:
     }
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `vendor/bin/pest tests/Feature/Models/TeamLocaliseXlsformsTest.php`
 Expected: both tests PASS.
 
-- [ ] **Step 5: Update the scratch dev command and delete the legacy builder**
+- [x] **Step 5: Update the scratch dev command and delete the legacy builder**
 
 In `app/Console/Commands/test.php`, replace:
 
@@ -958,12 +958,12 @@ with:
 
 Delete `app/Services/LocationSectionBuilder.php` (no other callers remain — confirmed via `grep -rl "LocationSectionBuilder" app/`).
 
-- [ ] **Step 6: Run the full app test suite to check for regressions**
+- [x] **Step 6: Run the full app test suite to check for regressions**
 
 Run: `./vendor/bin/pest`
 Expected: PASS (no regressions; no other file references `LocationSectionBuilder`).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add app/Models/Team.php app/Console/Commands/test.php tests/Feature/Models/TeamLocaliseXlsformsTest.php
