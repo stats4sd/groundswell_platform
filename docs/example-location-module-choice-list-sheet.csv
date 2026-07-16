@@ -1,0 +1,13 @@
+﻿list_name,name,label::English (en) ,label::Español (es)
+location_levels,loc1,{{ the english label of location level 1 }},{{ the spanish label of location level 1 }}
+location_levels,loc2,{{ the english label of location level 2 }} ,{{ the spanish label of location level 2 }}
+
+loc1,{{ loc1 - entry 1 ID }},{{ loc1 - entry 1 name en }},{{ loc1 - entry 1 name es }}
+loc1,{{ loc1 - entry 2 ID }},{{ loc1 - entry 2 name en }},{{ loc1 - entry 2 name es }}
+…,…,…,…
+loc1,{{ loc1 - entry n ID }},{{ loc1 - entry n name en }},{{ loc1 - entry n name es }}
+
+loc2,{{ loc2 - entry 1 ID }},{{ loc2 - entry 1 name en }},{{ loc2 - entry 1 name es }}
+loc2,{{ loc2 - entry 2 ID }},{{ loc2 - entry 2 name en }},{{ loc2 - entry 2 name es }}
+…,…,…,…
+loc2,{{ loc2 - entry n ID }},{{ loc2 - entry n name en }},{{ loc2 - entry n name es }}
