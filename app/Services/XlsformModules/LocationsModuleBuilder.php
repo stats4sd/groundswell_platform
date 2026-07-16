@@ -14,7 +14,7 @@ class LocationsModuleBuilder
     {
         $moduleVersion = XlsformModuleVersion::firstOrCreate([
             'owner_id' => $team->id,
-            'name' => 'Local Locations',
+            'name' => 'Local locations',
         ]);
 
         $levels = static::orderedLevels($team);

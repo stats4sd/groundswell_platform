@@ -15,7 +15,7 @@ class FarmInfoModuleBuilder
     {
         $moduleVersion = XlsformModuleVersion::firstOrCreate([
             'owner_id' => $team->id,
-            'name' => 'Local Farm Info',
+            'name' => 'Local farm info',
         ]);
 
         $levelCount = $team->locationLevels()->count();

@@ -336,12 +336,12 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 
     public function localiseXlsforms(): void
     {
-        if ($this->has_updated_locations) {
+        //if ($this->has_updated_locations) {
             LocationsModuleBuilder::populate($this);
             FarmInfoModuleBuilder::populate($this);
-        }
+        //}
 
-        $this->has_updated_locations = false;
+        //$this->has_updated_locations = false;
         $this->saveQuietly();
     }
 
