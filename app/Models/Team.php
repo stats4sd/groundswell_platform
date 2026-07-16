@@ -351,9 +351,15 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 
         $xlsformsToUpdate = $this->xlsforms->filter(fn (Xlsform $xlsform) => $xlsform->draft_needs_update);
 
-        $this->localiseXlsforms();
+        if($xlsformsToUpdate->count() === 0) {
+            return;
+        }
+
+        $this->localiseXlsforms(); // create the local versions of the locations and farm info modules
 
         $xlsformsToUpdate->each(function (Xlsform $xlsform) {
+
+            $xlsform->localiseModules(); // replace the global versions with the local versions in the Xlsforms.
             $xlsform->deployDraft();
         });
     }

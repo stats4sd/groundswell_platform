@@ -49,7 +49,7 @@ class LocationsModuleBuilder
 
         foreach ($levels as $pos => $level) {
             $parentPos = $pos - 1;
-            $choiceFilter = $parentPos >= 1 ? 'loc'.$parentPos.'=${loc'.$parentPos.'}' : '';
+            $choiceFilter = $parentPos >= 1 ? 'filter=${loc'.$parentPos.'}' : '';
 
             $moduleVersion->surveyRows()->updateOrCreate(
                 ['name' => 'loc'.$pos, 'type' => 'select_one loc'.$pos],
@@ -113,7 +113,8 @@ class LocationsModuleBuilder
                     [
                         'owner_id' => $team->id,
                         'cascade_filter' => $location->parent_id,
-                        'properties' => collect(static::labelProperties($team, $location->name)),
+                        'properties' => collect(static::labelProperties($team, $location->name))
+                            ->put('filter', $location->parent_id),
                     ],
                 );
             }

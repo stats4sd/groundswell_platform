@@ -22,7 +22,31 @@ class FarmInfoModuleBuilder
         $identifiers = static::variables('identifier');
         $properties = static::variables('property');
 
-        static::buildSurveyRows($moduleVersion, $team, $levelCount, $identifiers, $properties);
+        // Groundswell specific - check for identifiers + properties required in the main form
+        $requiredList = collect([
+             'participant_sex',
+             'participant_name',
+             'participant_age',
+        ]);
+
+        $merged = $identifiers->merge($properties)->pluck('name');
+
+        // check that the required list is in either identifiers or properties. Save as datasetvariable so next time it is immediately included.
+        $missing = $requiredList->diff($merged)
+        ->map(function(string $item) {
+
+            return DatasetVariable::create([
+                'dataset_id' => Dataset::firstWhere('name', OdkFarmEntityService::LOCAL_DATASET_NAME)->id,
+                'name' => $item,
+                'label' => $item,
+                'description' => 'identifier',
+            ]);
+        });
+
+        // add missing items to identifiers
+        $identifiers = $identifiers->merge($missing);
+
+        static::buildSurveyRows($moduleVersion,$team, $levelCount, $identifiers, $properties);
     }
 
     /** @return Collection<int, DatasetVariable> */
@@ -66,7 +90,7 @@ class FarmInfoModuleBuilder
 
         foreach ($allVariables as $variable) {
             $moduleVersion->surveyRows()->updateOrCreate(
-                ['name' => 'farm_'.$variable->name, 'type' => 'calculate'],
+                ['name' => $variable->name, 'type' => 'calculate'],
                 [
                     'calculation' => 'instance(\'Farm_Summary\')/root/item[name=${ID}]/'.$variable->name,
                     'row_number' => $rowNumber++,
@@ -93,11 +117,10 @@ class FarmInfoModuleBuilder
     /** @param Collection<int, DatasetVariable> $variables */
     protected static function deleteStaleCalculateRows(XlsformModuleVersion $moduleVersion, Collection $variables): void
     {
-        $currentNames = $variables->map(fn (DatasetVariable $variable) => 'farm_'.$variable->name);
+        $currentNames = $variables->map(fn (DatasetVariable $variable) => $variable->name);
 
         $moduleVersion->surveyRows()
             ->where('type', 'calculate')
-            ->where('name', 'like', 'farm_%')
             ->whereNotIn('name', $currentNames)
             ->delete();
     }
@@ -111,13 +134,13 @@ class FarmInfoModuleBuilder
         $lines = ['You have selected the following farm:', ''];
 
         foreach ($identifiers as $variable) {
-            $lines[] = $variable->label.': ${farm_'.$variable->name.'},';
+            $lines[] = $variable->label.': ${'.$variable->name.'},';
         }
 
         $lines[] = '';
 
         foreach ($properties as $variable) {
-            $lines[] = $variable->label.': ${farm_'.$variable->name.'},';
+            $lines[] = $variable->label.': ${'.$variable->name.'},';
         }
 
         $lines[] = '';
