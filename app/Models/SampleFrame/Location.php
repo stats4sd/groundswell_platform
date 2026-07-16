@@ -27,7 +27,6 @@ class Location extends Model
         });
     }
 
-    /** @return BelongsTo<Team, $this> */
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'owner_id');

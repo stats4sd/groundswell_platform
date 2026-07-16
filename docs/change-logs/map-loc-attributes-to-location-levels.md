@@ -38,26 +38,16 @@ Added `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php`, covering bo
 - **`buildLocationAttributes()`**: walks an arbitrary-depth chain (tested with 3 levels) producing `loc1`..`loc3` correctly rather than anything hardcoded to 2; returns `[]` for a non-existent location id; round-trips through `resolveLocationFromAttributes()` back to the same location id.
 - Full suite (`./vendor/bin/pest`) still passes at 99 tests / 171 assertions; `phpstan`/`pint` clean.
 
-## Hardcoded internal group/cluster IDs for loc1/loc2 (2026-07-15, superseded 2026-07-16)
+## Hardcoded internal group/cluster IDs for loc1/loc2 (2026-07-15)
 
 Dan compared a farm registered directly via Enketo against one created through the app and found app-created farms always showed up under the *first* cluster and first group downstream, regardless of their actual cluster/group in the app. The `"1"` placeholder for `loc{n}` wasn't safe for `loc1`/`loc2` specifically for this team's form - those two carry real internal cluster/group IDs defined in the ODK form's own choice list, which this app has no other way to derive.
 
-At the time this was fixed with a hardcoded `GROUP_CLUSTER_LOOKUP` constant (30-entry name→ID table) and `resolveGroupClusterIds()`, special-cased to only the farm's own Location and its immediate parent. **Replaced entirely the next day** - see below.
-
-## Generic per-team resolution via Xlsform choice lists (2026-07-16)
-
-Dan flagged that hardcoding was the wrong long-term shape - teams define their own location levels (2-level, 3-level, whatever), so nothing should be tied to fixed level names or a fixed depth. He asked whether the real IDs could be found in each team's own XLSForm/local tables instead.
-
-They can. When an XLSForm is imported, filament-odk-link's existing pipeline already parses its `choices` sheet into `ChoiceList`/`ChoiceListEntry`/`LanguageString` rows. For this team's real Farm Registration Xlsform, its choice lists are literally named `loc1` (7 entries) and `loc2` (30 entries) - matching `LocationLevel::pos()`'s own numbering - and every entry's `name` (internal ID), `cascade_filter` (parent's internal ID), and label matched Dan's original table exactly, verified against the real database.
-
-- **Removed**: `GROUP_CLUSTER_LOOKUP` constant and `resolveGroupClusterIds()`.
-- **New**: `OdkFarmEntityService::resolveChoiceIdForLocation(Team $team, int $pos, ?string $locationName): ?string` - finds the team's `ChoiceList` named `loc{pos}` across all its Xlsforms' module versions, matches a `ChoiceListEntry` by label (case-insensitive). Returns `null` (falls back to `"1"`) if no match.
-- **`buildLocationAttributes()` simplified** - every level in the chain now resolves the same way, uniformly; no more special-casing for exactly 2 levels.
-- **Model fix**: added the missing `@return BelongsTo<Team, $this>` docblock to `Location::owner()` (present on `FarmEntity::owner()` but not `Location::owner()`) - without it, Larastan resolved `$location->owner` as generic `Model`, not `Team`, breaking type-checking in the new method. A real, narrow fix, not a workaround.
-- **Tests**: replaced the 3 hardcoded-table tests with 5 new ones seeding a real `Xlsform`/`ChoiceList`/`ChoiceListEntry`/`LanguageString` chain at the DB level (no factories exist for these models, so this follows the filament-odk-link package's own DB-insert test convention) - exact match, case-insensitive match, a 3-level (District/Sub-district/Village) generalization test, and two fallback cases.
-- **Verified against real data**: `php artisan tinker` against team 3's actual "Golmadevi Mahila Krishak Samuha" Location now returns `loc1 => '7', loc2 => '9'` - matching Dan's original table with zero hardcoding.
-- Full suite: 113 tests / 189 assertions; `phpstan`/`pint` clean.
-- **Known limitation, carried forward**: depends on each team's XLSForm choices sheet actually naming its lists `loc1`/`loc2`/`loc3`... - confirmed for this one real form; no second team/template available yet to cross-check the convention holds generally.
+- **`OdkFarmEntityService::GROUP_CLUSTER_LOOKUP`** (new protected const) - hardcoded `array<group name, array{groupId, clusterId}>`, transcribed from Dan's reference table (30 entries).
+- **`OdkFarmEntityService::resolveGroupClusterIds(?string $groupName): ?array`** (new protected method) - case-insensitive/trimmed lookup; `null` if no match.
+- **`buildLocationAttributes()`** - for the farm's own Location ("Group") and its immediate parent ("Cluster"), `loc{n}` is now the looked-up `groupId`/`clusterId` (matched by the Group's name) instead of the flat `"1"`. Falls back to `"1"` for both if the name isn't in the table, and for any level beyond these two.
+- **No changes needed anywhere else** - `buildLocationAttributes()` is already the single method wired into every write path (`createFarm()`, `updateFarm()`, `bulkCreateFarms()`) and both import flows already resolve/create the `Location` with the right `name` before calling it, so fixing this one method covered creating/editing a farm, importing a farm list, and importing locations + farm list together, all before the Central API call - Dan's steps 1-4.
+- **Tests**: 3 new cases in `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php` - exact lookup match, case-insensitive match, fallback to `"1"` for an unrecognized name.
+- **Flagged as a known limitation, not fixed**: this lookup is hardcoded per-app, not scoped to a specific team - a coincidental name collision with another team's group would pick up this table's IDs. Fine for the single-deployment need it was built for; would need to become a real per-team table if this app starts serving other teams with the same requirement.
 
 ## Deferred
 

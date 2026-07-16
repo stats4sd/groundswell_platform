@@ -10,12 +10,9 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\OdkDataset;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\LanguageStringType;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 /**
@@ -65,6 +62,55 @@ class OdkFarmEntityService
     // actual data properties - `label` in particular is not `__`-prefixed, so it isn't
     // caught by the generic system-field filter below and must be excluded explicitly.
     protected const RESERVED_ODATA_KEYS = ['label', 'geometry'];
+
+    // Hardcoded internal group ID / internal cluster ID per group name, keyed by the exact
+    // group name (lookup is case-insensitive - see resolveGroupClusterIds()). These specific
+    // IDs are defined in the ODK form's own choice list (used for Enketo's cascading
+    // selects) - they cannot be derived from this app's own Location/LocationLevel records,
+    // so per Dan (2026-07-15) they're hardcoded here instead. A group not in this table
+    // (e.g. a different team's data) simply falls back to the generic '1' placeholder in
+    // buildLocationAttributes() - see docs/plans/map-loc-attributes-to-location-levels.md.
+    //
+    // @var array<string, array{groupId: int, clusterId: int}>
+    protected const GROUP_CLUSTER_LOOKUP = [
+        // Cluster 1
+        'Aapghari Pipalbot Farmer Group' => ['groupId' => 1, 'clusterId' => 1],
+        'Barpipal Mahila Krishak Samuha' => ['groupId' => 3, 'clusterId' => 1],
+        'Bayarbot Women Farmers Group' => ['groupId' => 4, 'clusterId' => 1],
+        'Milan Mahila Samuha' => ['groupId' => 22, 'clusterId' => 1],
+        // Cluster 2
+        'Deurali Bhanjyang Combined Farmer Group' => ['groupId' => 6, 'clusterId' => 2],
+        'Laligurans Misrit Krishak Samuha' => ['groupId' => 17, 'clusterId' => 2],
+        'Makhamali Womens Group' => ['groupId' => 21, 'clusterId' => 2],
+        // Cluster 3
+        'Baganbeli Community Womens Group' => ['groupId' => 2, 'clusterId' => 3],
+        'Chandeshwori Mahila Samuh B' => ['groupId' => 5, 'clusterId' => 3],
+        'Laligurans Mothers Group C' => ['groupId' => 18, 'clusterId' => 3],
+        // Cluster 4
+        'Gomata Women Farmers Group' => ['groupId' => 10, 'clusterId' => 4],
+        'Pragatishil Agriculture Women Group' => ['groupId' => 24, 'clusterId' => 4],
+        'Sallebas Krishak Mahila Group' => ['groupId' => 27, 'clusterId' => 4],
+        // Cluster 5
+        'Godawari Mhaila krishak Samuha' => ['groupId' => 8, 'clusterId' => 5],
+        'Gyatri Mahila Krishak Samuha' => ['groupId' => 11, 'clusterId' => 5],
+        'Janachahana Mahila Samuha' => ['groupId' => 13, 'clusterId' => 5],
+        'Laganshil Mahila Krishak Samuha' => ['groupId' => 16, 'clusterId' => 5],
+        'Laligurans Women Farmers Group' => ['groupId' => 19, 'clusterId' => 5],
+        'Makhamali Mahila Krishak Samuha' => ['groupId' => 20, 'clusterId' => 5],
+        'Ollo Rampur Mahila Samuha' => ['groupId' => 23, 'clusterId' => 5],
+        'Sayaptri Mahila Krishak Samuha' => ['groupId' => 28, 'clusterId' => 5],
+        'Srijanshil Mahila Samuha' => ['groupId' => 29, 'clusterId' => 5],
+        // Cluster 6
+        'Ganeshsthan Women Sustainable Farmer Group' => ['groupId' => 7, 'clusterId' => 6],
+        'Jwaledevi Mahila Group' => ['groupId' => 14, 'clusterId' => 6],
+        'Kalikadevi Mahila Krishak Samuha' => ['groupId' => 15, 'clusterId' => 6],
+        // Cluster 7
+        'Golmadevi Mahila Krishak Samuha' => ['groupId' => 9, 'clusterId' => 7],
+        "Harrebandanda Women's Agri. Group" => ['groupId' => 12, 'clusterId' => 7],
+        'Ranathok Setidevi Women Farmer Group' => ['groupId' => 25, 'clusterId' => 7],
+        'Sagarmatha Farmers Group' => ['groupId' => 26, 'clusterId' => 7],
+        'Tatadhunge Ramtel Tole Group' => ['groupId' => 30, 'clusterId' => 7],
+    ];
 
     public function __construct(protected OdkLinkService $odkLinkService) {}
 
@@ -141,18 +187,21 @@ class OdkFarmEntityService
      * selects (and resolveLocationFromAttributes() on the read side) expect, from a Location
      * the app already resolved - the reverse of resolveLocationFromAttributes(). Walks the
      * Location's parent chain up to the root; `n` is each level's `pos` (1-indexed
-     * root-first, matching the Farm Registration XLSForm's own `loc{n}` convention) - not
-     * hardcoded to any fixed depth or level names, so it works for however many levels a
-     * team has configured, whatever they're called.
+     * root-first, matching the Farm Registration XLSForm's own `loc{n}` convention).
      * `loc{n}_name` is the Location's `name`, `loc{n}_type` a fixed placeholder string - the
      * deployed template's own `loc{n}_type` calculation only ever emits this same
      * placeholder rather than the real level name, so it's reproduced verbatim here rather
      * than being made meaningful.
      *
-     * `loc{n}` itself (per Dan, 2026-07-16): resolved dynamically per level from the team's
-     * own deployed Xlsform's `loc{n}` choice list - see resolveChoiceIdForLocation(). Falls
-     * back to a fixed placeholder `"1"` if the team has no matching choice list/entry yet
-     * (only its presence signals "this level has data" in that case).
+     * `loc{n}` itself (per Dan, 2026-07-15): the given Location (the farm's own attachment
+     * point, i.e. the "Group") and its immediate parent (the "Cluster") get their real
+     * internal group ID / internal cluster ID from GROUP_CLUSTER_LOOKUP, matched by the
+     * Group's name - these specific IDs matter for Central-side cascading selects to place
+     * the farm under the correct cluster/group, unlike every other level's `loc{n}`, which
+     * stays a fixed placeholder value `"1"` (only its presence signals "this level has
+     * data" - see the 2026-07-13 note in git history for why that was fine before this).
+     * A Group name not found in the lookup (e.g. a different team's data) falls back to the
+     * same `"1"` placeholder for both loc{n} positions.
      *
      * @return array<string, string>
      */
@@ -164,7 +213,7 @@ class OdkFarmEntityService
             return [];
         }
 
-        $team = $location->owner;
+        $groupClusterIds = $this->resolveGroupClusterIds($location->name);
 
         $attributes = [];
         $current = $location;
@@ -172,7 +221,11 @@ class OdkFarmEntityService
         while ($current) {
             $pos = $current->locationLevel->pos;
 
-            $attributes["loc{$pos}"] = $this->resolveChoiceIdForLocation($team, $pos, $current->name) ?? '1';
+            $attributes["loc{$pos}"] = match (true) {
+                $groupClusterIds !== null && $current->id === $location->id => (string) $groupClusterIds['groupId'],
+                $groupClusterIds !== null && $current->id === $location->parent_id => (string) $groupClusterIds['clusterId'],
+                default => '1',
+            };
             $attributes["loc{$pos}_name"] = (string) $current->name;
             $attributes["loc{$pos}_type"] = "Loc{$pos} name";
             $current = $current->parent;
@@ -182,53 +235,22 @@ class OdkFarmEntityService
     }
 
     /**
-     * Finds the internal ID a team's own deployed Xlsform assigns to a given location name,
-     * at a given hierarchy position - the reverse of matching entities' `loc{n}_name` back
-     * to a Location, needed because Central-side cascading selects expect these specific
-     * IDs (defined in the form's own choice list), not anything derived from this app's own
-     * Location/LocationLevel primary keys. Not hardcoded per team/level: searches all of the
-     * team's deployed Xlsforms' module versions for a `ChoiceList` named `loc{pos}` (the
-     * same convention the Farm Registration XLSForm's `entities` sheet already uses, and
-     * that `LocationLevel::pos()` already numbers by), then matches by the entry's `label`
-     * language string, case-insensitive. Returns null - not an error, just "no match" - if
-     * the team has no such choice list yet, or the label doesn't match any entry; callers
-     * fall back to a fixed placeholder in that case.
+     * Case-insensitive, trimmed lookup against GROUP_CLUSTER_LOOKUP. Returns null if the
+     * name doesn't match any entry - callers fall back to the generic '1' placeholder.
+     *
+     * @return array{groupId: int, clusterId: int}|null
      */
-    protected function resolveChoiceIdForLocation(Team $team, int $pos, ?string $locationName): ?string
+    protected function resolveGroupClusterIds(?string $groupName): ?array
     {
-        if ($locationName === null) {
+        if ($groupName === null) {
             return null;
         }
 
-        $moduleVersionIds = $team->xlsforms()->get()->flatMap(fn (Xlsform $xlsform) => $xlsform->xlsformModuleVersions->pluck('id'));
+        $normalized = Str::of($groupName)->trim()->lower()->value();
 
-        if ($moduleVersionIds->isEmpty()) {
-            return null;
-        }
-
-        $choiceList = ChoiceList::where('list_name', "loc{$pos}")
-            ->whereIn('xlsform_module_version_id', $moduleVersionIds)
-            ->whereHas('choiceListEntries')
-            ->with('choiceListEntries.languageStrings')
-            ->first();
-
-        if (! $choiceList) {
-            return null;
-        }
-
-        $labelTypeId = LanguageStringType::where('name', 'label')->value('id');
-
-        if ($labelTypeId === null) {
-            return null;
-        }
-
-        $normalized = Str::of($locationName)->trim()->lower()->value();
-
-        foreach ($choiceList->choiceListEntries as $entry) {
-            $label = $entry->languageStrings->firstWhere('language_string_type_id', $labelTypeId)?->text;
-
-            if ($label !== null && Str::of($label)->trim()->lower()->value() === $normalized) {
-                return (string) $entry->name;
+        foreach (self::GROUP_CLUSTER_LOOKUP as $name => $ids) {
+            if (Str::of($name)->trim()->lower()->value() === $normalized) {
+                return $ids;
             }
         }
 
