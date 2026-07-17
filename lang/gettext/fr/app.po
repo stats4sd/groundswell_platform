@@ -7,60 +7,61 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-24T11:45:07+00:00\n"
-"PO-Revision-Date: 2026-06-24 11:45+0000\n"
+"POT-Creation-Date: 2026-07-16T13:45:32+00:00\n"
+"PO-Revision-Date: 2026-07-16 13:45+0000\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:27
-#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:61
+#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:29
+#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:63
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:56
 msgid "Contextualise choice lists"
 msgstr "Mettre en contexte les listes de choix"
 
-#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:59
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:31
+#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:61
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:28
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:32
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels.php:25
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ViewLocationLevel.php:33
 #: app\Filament\App\Pages\DataAnalysis\DataAnalysisIndex.php:39
-#: app\Filament\App\Pages\DataCollection\MonitorDataCollection.php:88
+#: app\Filament\App\Pages\DataCollection\MonitorDataCollection.php:89
 #: app\Filament\App\Pages\DataCollection\SetUpSurvey.php:59
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:66
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:68
 #: app\Filament\App\Pages\Pilot\PilotIndex.php:53
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:96
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:76
-#: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:42
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:97
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:75
+#: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:43
 #: app\Filament\App\Pages\SurveyDashboard.php:31
 #: app\Filament\App\Pages\SurveyDashboard.php:36
 #: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:49
-#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:44
+#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:45
 #: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:42
 #: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:33
-#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:42
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:43
 #: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:44
-#: app\Providers\Filament\AppPanelProvider.php:167
+#: app\Providers\Filament\AppPanelProvider.php:173
 #: resources\views\components\survey-dashboard-header.blade.php:56
 msgid "Survey Dashboard"
 msgstr "Tableau de bord des enquêtes"
 
-#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:60
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:97
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:77
+#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:62
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:98
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:76
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:182
 msgid "Place-based adaptations"
 msgstr "Adaptations liées au territoire"
 
-#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:78
+#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:80
 msgid "Restore to Context"
 msgstr "Remettre dans son contexte"
 
-#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:78
+#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:80
 msgid "Remove from Context"
 msgstr "Supprimer du contexte"
 
-#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:84
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:100
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:102
+#: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries.php:86
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:110
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:106
 msgid "Add new"
 msgstr "Ajouter un nouvel élément"
 
@@ -78,11 +79,11 @@ msgstr "Listes de choix"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:117
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:182
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:50
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:75
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:91
-#: app\Filament\App\Resources\TeamResource.php:42
-#: app\Filament\App\Resources\TeamResource.php:56
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:60
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:83
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:99
+#: app\Filament\App\Resources\TeamResource.php:49
+#: app\Filament\App\Resources\TeamResource.php:63
 #: resources\views\emails\register-interest-email.blade.php:5
 msgid "Name"
 msgstr "Nom"
@@ -93,8 +94,8 @@ msgstr "Ajouter des étiquettes pour les langues suivantes :"
 
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:148
 #: app\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource.php:166
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:111
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:167
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:112
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:168
 msgid "Label"
 msgstr "Étiquette"
 
@@ -106,163 +107,181 @@ msgstr "Nom de la liste"
 msgid "Localised Entry"
 msgstr "Entrée localisée"
 
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:48
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:64
 #: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:43
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:50
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:51
 msgid "Import Locations and Farm List"
 msgstr "Importer les emplacements et la liste des exploitations agricoles"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:114
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:109
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:111
 msgid "Locations and farms are being imported."
 msgstr "Les lieux et les exploitations agricoles sont en cours d'importation."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:115
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:110
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:112
 msgid "The file will be processed in the background and the data will appear below once complete. You may leave this page without interrupting this process."
 msgstr "Le fichier sera traité en arrière-plan et les données s'afficheront ci-dessous une fois le traitement terminé. Vous pouvez quitter cette page sans interrompre ce processus."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:131
-msgid "Upload your farm list Excel file"
-msgstr "Importez votre fichier Excel contenant la liste de vos exploitations agricoles"
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:125
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:128
+msgid "Upload your farm list excel file"
+msgstr ""
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:136
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:128
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:133
 msgid "Location Levels and Farm List Excel Data"
 msgstr "Données Excel relatives aux niveaux de localisation et à la liste des exploitations agricoles"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:137
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:129
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:134
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:66
 msgid "Please make sure your data is in the first worksheet of the Excel file, and that the first row contains the column headers."
 msgstr "Veuillez vous assurer que vos données se trouvent dans la première feuille de calcul du fichier Excel et que la première ligne contient les en-têtes de colonnes."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:157
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:151
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:161
 msgid "Map columns to location levels"
 msgstr "Mettre en correspondance les colonnes avec les niveaux de localisation"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:161
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:67
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:154
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:165
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:72
 msgid "Column Mapping"
 msgstr "Mappage des colonnes"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:177
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:182
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:191
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:196
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:257
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:99
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:81
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:169
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:174
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:183
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:188
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:233
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:181
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:186
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:195
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:200
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:260
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:107
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:86
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:95
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:91
 #: app\Filament\Tables\Actions\ImportLocationsAction.php:100
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:105
 msgid "Which column contains the"
 msgstr "Quelle colonne contient le"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:177
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:191
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:257
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:99
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:81
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:95
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:169
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:183
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:233
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:181
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:195
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:260
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:107
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:86
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:100
 msgid "unique code?"
 msgstr "code unique ?"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:182
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:196
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:86
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:100
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:174
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:188
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:186
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:200
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:91
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:105
 msgid "name?"
 msgstr "nom ?"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:206
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:110
-msgid "Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)"
-msgstr "Souhaitez-vous remplacer tous les lieux par cette importation ? (Cela supprimera tous les lieux existants à tous les niveaux !)"
-
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:208
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:112
-msgid "No"
-msgstr "Non"
-
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:209
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:113
-msgid "Yes"
-msgstr "Oui"
-
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:211
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:115
-msgid "If you select \"No\", all existing locations will be kept. If you select \"Yes\", all existing locations will be deleted and replaced with the data from this import."
-msgstr "Si vous sélectionnez « Non », tous les lieux existants seront conservés. Si vous sélectionnez « Oui », tous les lieux existants seront supprimés et remplacés par les données issues de cette importation."
-
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:233
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:213
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:236
 msgid "Map columns to farm"
 msgstr "Associer les colonnes à la ferme"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:240
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:86
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:220
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:64
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:125
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:243
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:94
 msgid "Location"
 msgstr "Localisation"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:247
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:89
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:223
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:250
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:97
 msgid "Which location level are the farms linked to?"
 msgstr "À quel niveau géographique les exploitations agricoles sont-elles rattachées ?"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:251
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:93
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:227
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:254
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:101
 msgid "Select a location level"
 msgstr "Sélectionnez un niveau de localisation"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:252
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:94
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:228
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:255
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:102
 msgid "For many sampling strategies, this will be obvious (the lowest level). It may be less obvious when there are different hierarchies of locations in different places."
-msgstr ""
+msgstr "Pour de nombreuses stratégies d'échantillonnage, cela va de soi (le niveau le plus bas). Cela peut s'avérer moins évident lorsqu'il existe différentes hiérarchies de sites selon les endroits."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:257
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:99
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:233
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:260
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:107
 msgid "location"
 msgstr "emplacement"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:258
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:266
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:100
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:234
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:242
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:261
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:269
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:108
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:116
 msgid "Select a column"
 msgstr "Sélectionnez une colonne"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:261
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:103
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:237
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:264
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:111
 msgid "Farm Information"
 msgstr "Informations sur l'exploitation agricole"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:265
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:107
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:241
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:268
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:115
 msgid "Which column contains the farm unique code?"
 msgstr "Quelle colonne contient le code unique de la ferme ?"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:267
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:109
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:243
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:270
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:117
 msgid "e.g. farm_id or farm_code"
 msgstr "par exemple : farm_id ou farm_code"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:272
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:114
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:248
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:275
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:122
 msgid "Are there any additional columns that contain identifiers for the farm? Tick all that apply."
 msgstr "Y a-t-il d'autres colonnes contenant des identifiants pour la ferme ? Cochez toutes les cases correspondantes."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:273
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:115
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:249
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:276
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:123
 msgid "For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes."
 msgstr "Par exemple : nom de famille, nom de l'exploitation, numéros de téléphone, etc. Il s'agit de colonnes qui peuvent être utiles aux enquêteurs ou aux membres de l'équipe du projet pour identifier l'exploitation, mais qui ne doivent pas être communiquées en dehors du projet pour des raisons de protection des données."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:284
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:126
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:260
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:287
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:134
 msgid "Are there any additional columns that contain properties of the farm? Tick all that apply."
 msgstr "Y a-t-il d'autres colonnes contenant des propriétés de la ferme ? Cochez toutes les cases correspondantes."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:285
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:127
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ImportLocationsAndFarmEntities.php:261
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:288
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:135
 msgid "These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes."
 msgstr "Il ne s'agit pas d'identifiants, mais de caractéristiques de l'exploitation utiles à des fins d'analyse. Par exemple : la taille de l'exploitation, l'année de la première intervention, etc. Ces colonnes peuvent éventuellement être partagées en dehors du projet à des fins d'analyse."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:25
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:32
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:22
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:29
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:26
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:33
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels.php:19
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ViewLocationLevel.php:22
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ViewLocationLevel.php:34
@@ -270,102 +289,153 @@ msgstr "Il ne s'agit pas d'identifiants, mais de caractéristiques de l'exploita
 msgid "Survey locations"
 msgstr "Lieux d'enquête"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:33
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:31
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:30
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:51
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:34
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:43
 msgid "Farms"
 msgstr "Exploitations agricoles"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:52
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:66
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:53
 msgid "Use this if you have your location and farm data all in one spreadsheet."
 msgstr "Utilisez cette option si toutes vos données relatives à votre emplacement et à votre exploitation sont regroupées dans une seule feuille de calcul."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:61
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:79
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:62
 msgid "Use this if you have already added your locations"
 msgstr "Utilisez cette option si vous avez déjà ajouté vos lieux"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:66
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities.php:83
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms.php:67
 msgid "Import Farm list"
 msgstr "Importer la liste des exploitations agricoles"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:26
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:46
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:38
 msgid "Farm"
 msgstr "Exploitation agricole"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:51
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:64
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:63
 msgid "Select the"
 msgstr "Sélectionnez le"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:51
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:64
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:63
 msgid "for this farm"
 msgstr "pour cette exploitation agricole"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:55
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:133
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:69
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:126
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:67
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:145
 msgid "Unique code"
 msgstr "Code unique"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:56
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:70
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:68
 msgid "Please enter a unique code to identify this farm for your team"
 msgstr "Veuillez saisir un code unique permettant à votre équipe d'identifier cette exploitation agricole."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:63
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:78
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:75
 msgid "Personally Identifiable information"
 msgstr "Données à caractère personnel"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:64
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:79
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:76
 msgid "This section lets you add any information about the farm or farmer that lets your enumerators personally identify the farm / farmer."
 msgstr "Cette section vous permet d'ajouter toute information concernant l'exploitation ou l'agriculteur permettant à vos enquêteurs d'identifier personnellement l'exploitation ou l'agriculteur."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:67
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:82
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:79
 msgid "For example: farm name, name of household head, phone number, physical address."
 msgstr "Par exemple : nom de l'exploitation, nom du chef de famille, numéro de téléphone, adresse postale."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:68
-msgid "Information added here will be available to your team through data downloads, and if required can be included in the ODK survey to help enumerators ensure they reach the correct farms. However, it will never be included in any final data products that are intended for sharing beyond your team, and no-one outside of your team will have access to it."
-msgstr "Les informations ajoutées ici seront mises à la disposition de votre équipe via des téléchargements de données et, si nécessaire, pourront être intégrées à l'enquête ODK afin d'aider les enquêteurs à s'assurer qu'ils se rendent bien dans les bonnes exploitations agricoles. Toutefois, elles ne figureront jamais dans les produits de données finaux destinés à être partagés en dehors de votre équipe, et aucune personne extérieure à celle-ci n'y aura accès."
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:83
+msgid "This data is stored as a property on the farm's ODK Central Entity record."
+msgstr ""
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:71
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:86
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:83
 msgid "Other Farm Information"
 msgstr "Autres informations sur l'exploitation agricole"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:72
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:87
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:84
 msgid "This section lets you add information about the farm that is not personally identifiable."
 msgstr "Cette section vous permet d'ajouter des informations concernant la ferme qui ne permettent pas de vous identifier personnellement."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:75
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:90
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:87
 msgid "For example: gender of household head, active member of (name of your intervention project) - yes / no, farm typology information"
 msgstr "Par exemple : sexe du chef de famille, membre actif de (nom de votre projet d'intervention) - oui / non, informations sur la typologie de l'exploitation agricole"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:76
-msgid "The purpose of information here is to allow you to disaggregate results by these variables. For example, if you are interested in comparing results from farms that took part in a specific training activity with farms that did not take part, you should include that as a variable here. Variables entered here will be available in exported datasets so they can be used in your analysis."
-msgstr "Les informations fournies ici ont pour but de vous permettre de ventiler les résultats en fonction de ces variables. Par exemple, si vous souhaitez comparer les résultats des exploitations agricoles ayant participé à une formation spécifique avec ceux des exploitations n’y ayant pas participé, vous devez inclure cette variable ici. Les variables saisies ici seront disponibles dans les jeux de données exportés afin que vous puissiez les utiliser dans votre analyse."
-
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:79
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:93
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:91
 msgid "GPS"
 msgstr "GPS"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:80
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:94
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:92
 msgid "Optionally, add the GPS co-ordinates for the farm"
 msgstr "Vous pouvez également indiquer les coordonnées GPS de l'exploitation agricole"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:83
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:96
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:95
 msgid "Latitude"
 msgstr "Latitude"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:88
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:97
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:100
 msgid "Longitude"
 msgstr "Longitude"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:93
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:98
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:105
 msgid "Altitude"
 msgstr "Altitude"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:98
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:99
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:110
 msgid "Accuracy"
 msgstr "Précision"
 
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource.php:125
+msgid "Unknown (created outside app)"
+msgstr ""
+
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:210
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:115
+msgid "Do you want to replace all locations with this import? (This will delete all existing locations from all location levels!)"
+msgstr "Souhaitez-vous remplacer tous les lieux par cette importation ? (Cela supprimera tous les lieux existants à tous les niveaux !)"
+
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:212
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:117
+msgid "No"
+msgstr "Non"
+
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:213
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:118
+msgid "Yes"
+msgstr "Oui"
+
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ImportLocationsAndFarms.php:215
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:120
+msgid "If you select \"No\", all existing locations will be kept. If you select \"Yes\", all existing locations will be deleted and replaced with the data from this import."
+msgstr "Si vous sélectionnez « Non », tous les lieux existants seront conservés. Si vous sélectionnez « Oui », tous les lieux existants seront supprimés et remplacés par les données issues de cette importation."
+
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:80
+msgid "Information added here will be available to your team through data downloads, and if required can be included in the ODK survey to help enumerators ensure they reach the correct farms. However, it will never be included in any final data products that are intended for sharing beyond your team, and no-one outside of your team will have access to it."
+msgstr "Les informations ajoutées ici seront mises à la disposition de votre équipe via des téléchargements de données et, si nécessaire, pourront être intégrées à l'enquête ODK afin d'aider les enquêteurs à s'assurer qu'ils se rendent bien dans les bonnes exploitations agricoles. Toutefois, elles ne figureront jamais dans les produits de données finaux destinés à être partagés en dehors de votre équipe, et aucune personne extérieure à celle-ci n'y aura accès."
+
+#: app\Filament\App\Clusters\LocationLevels\Resources\FarmResource.php:88
+msgid "The purpose of information here is to allow you to disaggregate results by these variables. For example, if you are interested in comparing results from farms that took part in a specific training activity with farms that did not take part, you should include that as a variable here. Variables entered here will be available in exported datasets so they can be used in your analysis."
+msgstr "Les informations fournies ici ont pour but de vous permettre de ventiler les résultats en fonction de ces variables. Par exemple, si vous souhaitez comparer les résultats des exploitations agricoles ayant participé à une formation spécifique avec ceux des exploitations n’y ayant pas participé, vous devez inclure cette variable ici. Les variables saisies ici seront disponibles dans les jeux de données exportés afin que vous puissiez les utiliser dans votre analyse."
+
 #: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels.php:26
-#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:31
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:32
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:119
 msgid "Survey Locations"
 msgstr "Lieux d'enquête"
@@ -384,72 +454,72 @@ msgstr "Liste des"
 msgid "Import"
 msgstr "Importation"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:24
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:34
 msgid "List"
 msgstr "Liste"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:60
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:70
 msgid "Code"
 msgstr "Code"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:92
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager.php:102
 msgid "# of Farms"
 msgstr "Nombre d'exploitations agricoles"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:69
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:77
 msgid "Is this location level a sub-level of another level?"
 msgstr "Ce niveau de localisation est-il un sous-niveau d'un autre niveau ?"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:70
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:78
 msgid "E.g. \"Village\" may be a sub-level of \"District\", and \"District\" may be a sub-level of \"Province\"."
 msgstr "Par exemple, « Village » peut être un niveau subordonné à « Arrondissement », et « Arrondissement » peut être un niveau subordonné à « Province »."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:79
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:87
 msgid "Are there farms at this level?"
 msgstr "Y a-t-il des fermes à ce niveau ?"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:80
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:88
 msgid "Only say yes if there are farms directly at this location level, not in a lower location level. E.g. \"Village\" may have farms, but \"District\" may not."
 msgstr "Ne répondez par « oui » que s'il y a des fermes situées directement à ce niveau géographique, pas à un niveau géographique inférieur. Par exemple, un « village » peut comporter des fermes, mais ce n'est pas forcément le cas d'un « district »."
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:94
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:102
 msgid "Parent"
 msgstr "Parent"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:96
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:104
 msgid "Top Level"
 msgstr "Niveau supérieur"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:99
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:107
 msgid "No. of Entries"
 msgstr "Nombre d'inscriptions"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:102
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:110
 msgid "Has farms"
 msgstr "Possède des exploitations agricoles"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:128
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:136
 msgid "Key Details"
 msgstr "Détails clés"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:130
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:138
 msgid "Level"
 msgstr "Niveau"
 
-#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:131
+#: app\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource.php:139
 msgid "Parent Level"
 msgstr "Niveau parent"
 
-#: app\Filament\App\Pages\Auth\EditProfile.php:30
-#: app\Filament\App\Pages\Auth\EditProfile.php:35
+#: app\Filament\App\Pages\Auth\EditProfile.php:31
+#: app\Filament\App\Pages\Auth\EditProfile.php:36
 msgid "My Account"
 msgstr "Mon compte"
 
-#: app\Filament\App\Pages\Auth\EditProfile.php:63
+#: app\Filament\App\Pages\Auth\EditProfile.php:64
 msgid "Profile Information"
 msgstr "Informations de profil"
 
-#: app\Filament\App\Pages\Auth\EditProfile.php:70
+#: app\Filament\App\Pages\Auth\EditProfile.php:71
 msgid "Change Password"
 msgstr "Modifier le mot de passe"
 
@@ -457,31 +527,31 @@ msgstr "Modifier le mot de passe"
 msgid "Password info"
 msgstr "Informations sur le mot de passe"
 
-#: app\Filament\App\Pages\Auth\EditProfile.php:75
+#: app\Filament\App\Pages\Auth\EditProfile.php:76
 msgid "To change your password, please first enter your current password, then the new password. You may leave the password fields blank if you do not wish to change your password."
 msgstr "Pour modifier votre mot de passe, veuillez d'abord saisir votre mot de passe actuel, puis le nouveau mot de passe. Vous pouvez laisser les champs de mot de passe vides si vous ne souhaitez pas modifier votre mot de passe."
 
-#: app\Filament\App\Pages\Auth\EditProfile.php:96
+#: app\Filament\App\Pages\Auth\EditProfile.php:97
 msgid "Current Password"
 msgstr "Mot de passe actuel"
 
-#: app\Filament\App\Pages\Auth\Login.php:66
+#: app\Filament\App\Pages\Auth\Login.php:74
 msgid "Sign in"
 msgstr "Se connecter"
 
-#: app\Filament\App\Pages\Auth\Login.php:72
+#: app\Filament\App\Pages\Auth\Login.php:80
 msgid "Email address"
 msgstr "Adresse électronique"
 
-#: app\Filament\App\Pages\Auth\Login.php:83
+#: app\Filament\App\Pages\Auth\Login.php:91
 msgid "Password"
 msgstr "Mot de passe"
 
-#: app\Filament\App\Pages\Auth\Login.php:84
+#: app\Filament\App\Pages\Auth\Login.php:92
 msgid "Forgot password?"
 msgstr "Mot de passe oublié ?"
 
-#: app\Filament\App\Pages\Auth\Login.php:95
+#: app\Filament\App\Pages\Auth\Login.php:103
 msgid "Remember me"
 msgstr "Souvenez-vous de moi"
 
@@ -494,7 +564,7 @@ msgstr "Analyse des données et résultats"
 msgid "Export Data"
 msgstr "Exporter les données"
 
-#: app\Filament\App\Pages\DataCollection\MonitorDataCollection.php:89
+#: app\Filament\App\Pages\DataCollection\MonitorDataCollection.php:90
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:348
 msgid "Monitor Data Collection"
 msgstr "Collecte des données de surveillance"
@@ -530,36 +600,36 @@ msgstr "Toutes les données collectées pendant la durée du projet pilote seron
 msgid "Yes, return to pilot test"
 msgstr "Oui, revenir à l'essai pilote"
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:37
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:33
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:220
 msgid "Localisation: Optional Modules"
 msgstr "Localisation : modules optionnels"
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:44
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:40
 msgid "Please select the optional modules to be included in your survey."
 msgstr "Veuillez sélectionner les modules optionnels à inclure dans votre enquête."
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:93
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:95
 msgid "Survey Form"
 msgstr "Formulaire d'enquête"
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:100
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:103
 msgid "Select a survey form..."
 msgstr "Sélectionnez un formulaire d'enquête..."
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:186
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:223
 msgid "# Questions"
 msgstr "# Questions"
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:188
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:225
 msgid "In Survey"
 msgstr "Dans l'enquête"
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:194
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:231
 msgid "Add to Survey"
 msgstr "Ajouter à l'enquête"
 
-#: app\Filament\App\Pages\Lisp\OptionalModules.php:200
+#: app\Filament\App\Pages\Lisp\OptionalModules.php:237
 msgid "Remove"
 msgstr "Supprimer"
 
@@ -574,74 +644,74 @@ msgstr "Tests d'enquête - Formation des responsables du projet pilote et des en
 msgid "Localisation: Pilot"
 msgstr "Localisation : projet pilote"
 
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:41
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:42
 msgid "Localisation: HDDS hints"
 msgstr "Localisation : conseils HDDS"
 
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:117
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:170
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:118
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:171
 msgid "Hint"
 msgstr "Conseil"
 
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:129
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:130
 msgid "Type"
 msgstr "Type"
 
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:130
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:131
 msgid "Variable name"
 msgstr "Nom de la variable"
 
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:151
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:152
 msgid "EDIT HINTS"
 msgstr "MODIFIER LES CONSEILS"
 
-#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:152
+#: app\Filament\App\Pages\PlaceAdaptations\HddsHints.php:153
 msgid "Edit hints"
 msgstr "Modifier les conseils"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:45
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:44
 #: app\Filament\App\Resources\SubmissionResource\Pages\ListSubmissions.php:46
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:69
 msgid "Initial Pilot"
 msgstr "Projet pilote initial"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:50
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:49
 msgid "Survey Testing - Initial Pilot"
 msgstr "Tests d'enquête - Projet pilote initial"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:109
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:108
 msgid "Draft Submissions"
 msgstr "Soumissions de projet"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:126
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:125
 #: app\Livewire\InstructionsSidebarLivewire.php:42
 msgid "Close"
 msgstr "Fermer"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:130
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:129
 msgid "Test on ODK Central"
 msgstr "Test sur ODK Central"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:133
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:132
 #: app\Livewire\XlsformsTableView.php:91
 msgid "Manually Get Submissions"
 msgstr "Récupérer manuellement les soumissions"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:148
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:147
 #: app\Livewire\XlsformsTableView.php:84
 #: app\Livewire\XlsformsTableView.php:123
 msgid "Success!"
 msgstr "C'est réussi !"
 
-#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:149
+#: app\Filament\App\Pages\PlaceAdaptations\InitialPilot.php:148
 msgid "submissions have been pulled from the ODK server. (they may take a moment to process)."
 msgstr "soumissions ont été extraites du serveur ODK. (Leur traitement peut prendre quelques instants.)"
 
-#: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:31
+#: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:32
 msgid "Localisation: Place-based adaptations"
 msgstr "Localisation : adaptations en fonction du lieu"
 
-#: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:36
+#: app\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex.php:37
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:183
 msgid "Customise details for questions and answer options to ensure the survey is relevant and suitable for use in the intended location."
 msgstr "Personnalisez les détails des questions et des réponses proposées afin de vous assurer que l'enquête est pertinente et adaptée au contexte dans lequel elle sera menée."
@@ -652,7 +722,7 @@ msgid "Survey Country & Languages"
 msgstr "Pays et langues de l'enquête"
 
 #: app\Filament\App\Pages\SurveyLanguages\SurveyCountry.php:50
-#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:28
+#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:29
 #: app\Filament\App\Pages\SurveyLanguages\SurveyTranslations.php:43
 #: resources\views\filament\app\pages\survey-languages\survey-translations.blade.php:32
 msgid "Survey Languages"
@@ -682,7 +752,7 @@ msgstr "Saisissez le code ISO alpha-3 de ce pays"
 msgid "Languages"
 msgstr "Langues"
 
-#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:33
+#: app\Filament\App\Pages\SurveyLanguages\SurveyLanguagesIndex.php:34
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:56
 msgid "Select the country, language or languages in which you plan to run the survey and either select an existing translation of the tool or create your own using a provided template."
 msgstr "Sélectionnez le pays et la ou les langues dans lesquelles vous prévoyez de mener l'enquête, puis choisissez une traduction existante de l'outil ou créez la vôtre à l'aide d'un modèle fourni."
@@ -702,11 +772,11 @@ msgid "MARK AS INCOMPLETE"
 msgstr "MARQUER COMME INCOMPLET"
 
 #: app\Filament\App\Pages\SurveyLocations\ContextQuestions.php:43
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:15
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:18
 msgid "Context Questions"
 msgstr "Questions de contexte"
 
-#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:36
+#: app\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex.php:37
 #: resources\views\filament\app\pages\survey-dashboard.blade.php:120
 msgid "Add the details of the farms you will visit, to allow the enumerators to carry out data collection."
 msgstr "Veuillez indiquer les coordonnées des exploitations agricoles que vous comptez visiter, afin de permettre aux recenseurs de procéder à la collecte des données."
@@ -719,168 +789,168 @@ msgstr "Soumissions aux tests"
 msgid "Place Adaptations"
 msgstr "Adaptations en fonction du lieu"
 
-#: app\Filament\App\Resources\SubmissionResource\Pages\ViewSubmission.php:54
+#: app\Filament\App\Resources\SubmissionResource\Pages\ViewSubmission.php:56
 msgid "Edit Submission"
 msgstr "Modifier la soumission"
 
-#: app\Filament\App\Resources\TeamResource\Pages\EditTeam.php:17
-#: app\Filament\App\Resources\TeamResource\Pages\ViewTeam.php:26
+#: app\Filament\App\Resources\TeamResource\Pages\EditTeam.php:18
+#: app\Filament\App\Resources\TeamResource\Pages\ViewTeam.php:28
 msgid "WARNING: Please do not delete when there is actual survey data collected, as deletion is irreversible. Are you sure you would like to do this?"
 msgstr "AVERTISSEMENT : veuillez ne pas supprimer ces données tant que des données d'enquête ont été collectées, car la suppression est irréversible. Êtes-vous sûr de vouloir poursuivre ?"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:31
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:38
 #: resources\views\emails\register-interest-email.blade.php:7
 msgid "Email"
 msgstr "E-mail:"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:35
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:42
 msgid "Team"
 msgstr "L'équipe"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:39
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:46
 msgid "Invited By"
 msgstr "À l'invitation de"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:43
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:50
 msgid "Confirmed"
 msgstr "Confirmé"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:47
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:54
 msgid "Invited At"
 msgstr "Invité à"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:50
+#: app\Filament\App\Resources\TeamResource\RelationManagers\InvitesRelationManager.php:57
 msgid "Updated At"
 msgstr "Mis à jour le"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:33
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:48
 msgid "Team Admins have full access to all team settings and can manage all team members. They can edit or delete data. Non-admins can only collect data and view data."
 msgstr "Les administrateurs d'équipe disposent d'un accès complet à tous les paramètres de l'équipe et peuvent gérer tous les membres de l'équipe. Ils peuvent modifier ou supprimer des données. Les utilisateurs non administrateurs peuvent uniquement collecter et consulter des données."
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:65
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:80
 msgid "Add the email address(es) of the user(s) you would like to invite to this team. An invitation will be sent to each address."
 msgstr "Ajoutez la ou les adresses e-mail des utilisateurs que vous souhaitez inviter à rejoindre cette équipe. Une invitation sera envoyée à chacune de ces adresses."
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:68
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:83
 msgid "Email Addresses to Invite"
 msgstr "Adresses e-mail à inviter"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:75
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:90
 msgid "Add Another Email Address"
 msgstr "Ajouter une autre adresse e-mail"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:86
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:101
 msgid "Add Existing User to team"
 msgstr "Ajouter un utilisateur existant à l'équipe"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:94
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:95
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:109
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:110
 msgid "Remove User"
 msgstr "Supprimer un utilisateur"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:96
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:111
 msgid "Remove User from Team"
 msgstr "Supprimer un utilisateur de l'équipe"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:100
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:115
 msgid "Remove selected"
 msgstr "Supprimer la sélection"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:101
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:116
 msgid "Remove Selected Users"
 msgstr "Supprimer les utilisateurs sélectionnés"
 
-#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:102
+#: app\Filament\App\Resources\TeamResource\RelationManagers\UsersRelationManager.php:117
 msgid "Remove Selected Users from Team"
 msgstr "Supprimer les utilisateurs sélectionnés de l'équipe"
 
-#: app\Filament\App\Resources\TeamResource.php:39
+#: app\Filament\App\Resources\TeamResource.php:46
 msgid "Team Details"
 msgstr "Informations sur l'équipe"
 
-#: app\Filament\App\Resources\TeamResource.php:46
+#: app\Filament\App\Resources\TeamResource.php:53
 msgid "Description"
 msgstr "Description"
 
-#: app\Filament\App\Resources\TeamResource.php:60
+#: app\Filament\App\Resources\TeamResource.php:67
 msgid "Program"
 msgstr "Programme"
 
-#: app\Filament\App\Resources\TeamResource.php:66
+#: app\Filament\App\Resources\TeamResource.php:73
 msgid "# Users"
 msgstr "# Utilisateurs"
 
-#: app\Filament\App\Resources\TeamResource.php:70
+#: app\Filament\App\Resources\TeamResource.php:77
 msgid "# Invites"
 msgstr "# Invitations"
 
-#: app\Filament\App\Resources\TeamResource.php:78
+#: app\Filament\App\Resources\TeamResource.php:85
 msgid "Created At"
 msgstr "Créé à"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:68
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:67
 msgid "Question Information"
 msgstr "Informations sur la question"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:106
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:187
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:105
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:186
 msgid "Variable Name"
 msgstr "Nom de la variable"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:107
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:106
 msgid "The variable name should only have alphanumeric characters or underscores. Any spaces will be automatically replaced with underscores when saving this question."
 msgstr "Le nom de la variable ne doit comporter que des caractères alphanumériques ou des traits de soulignement. Les espaces seront automatiquement remplacés par des traits de soulignement lors de l'enregistrement de cette question."
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:130
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:129
 msgid "Choice List"
 msgstr "Liste de choix"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:146
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:145
 msgid "Options list for the select question"
 msgstr "Liste des options pour la question à choix multiples"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:150
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:149
 msgid "Option name"
 msgstr "Nom de l'option"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:151
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:150
 msgid "This is the \"name\" column in ODK, and is the value that appears in the data when the option is selected"
 msgstr "Il s'agit de la colonne « nom » dans ODK ; c'est la valeur qui apparaît dans les données lorsque cette option est sélectionnée."
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:186
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:185
 msgid "Question Type"
 msgstr "Type de question"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:188
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:187
 msgid "Default Label"
 msgstr "Étiquette par défaut"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:195
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:194
 msgid "Disable reordering"
 msgstr "Désactiver le réordonnancement"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:195
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:194
 msgid "Enable reordering"
 msgstr "Activer le réordonnancement"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:205
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:211
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:204
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:210
 msgid "ADD QUESTION"
 msgstr "AJOUTER UNE QUESTION"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:226
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:225
 msgid "EDIT QUESTION"
 msgstr "MODIFIER LA QUESTION"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:241
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:240
 msgid "You cannot directly edit questions created via an Excel Import. Please download the template above and edit the question inside Excel"
 msgstr "Vous ne pouvez pas modifier directement les questions créées via une importation Excel. Veuillez télécharger le modèle ci-dessus et modifier la question dans Excel."
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:258
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:257
 msgid "DELETE QUESTION"
 msgstr "SUPPRIMER LA QUESTION"
 
-#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:261
+#: app\Filament\Shared\WithXlsformModuleVersionQuestionEditing.php:260
 msgid "Delete Question"
 msgstr "Supprimer la question"
 
@@ -893,23 +963,23 @@ msgid "Import Farms from an Excel file. The first worksheet of the Excel file sh
 msgstr "Importer des fermes à partir d'un fichier Excel. La première feuille de calcul du fichier Excel doit contenir les données à importer. La première ligne de la feuille de calcul doit contenir les en-têtes de colonnes. Vous devez avoir déjà créé ou importé les emplacements auxquels les fermes seront associées."
 
 #: app\Filament\Tables\Actions\ImportFarmsAction.php:65
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:52
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:53
 msgid "Excel Data"
 msgstr "Données Excel"
 
-#: app\Filament\Tables\Actions\ImportFarmsAction.php:83
+#: app\Filament\Tables\Actions\ImportFarmsAction.php:91
 msgid "Upload a file to see the column headers"
 msgstr "Téléchargez un fichier pour afficher les en-têtes des colonnes"
 
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:44
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:45
 msgid "Import Locations"
 msgstr "Lieux d'importation"
 
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:45
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:46
 msgid "Import Locations from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings."
 msgstr "Importer des emplacements à partir d'un fichier Excel. La première feuille de calcul du fichier Excel doit contenir les données à importer. La première ligne de la feuille de calcul doit contenir les en-têtes de colonnes."
 
-#: app\Filament\Tables\Actions\ImportLocationsAction.php:119
+#: app\Filament\Tables\Actions\ImportLocationsAction.php:124
 msgid "Upload a file to see the headers"
 msgstr "Téléchargez un fichier pour voir les en-têtes"
 
@@ -917,31 +987,31 @@ msgstr "Téléchargez un fichier pour voir les en-têtes"
 msgid "Register Interest"
 msgstr "Manifester son intérêt"
 
-#: app\Livewire\CoverPage.php:39
+#: app\Livewire\CoverPage.php:40
 msgid "Please fill in your details below - your email address will be used to contact you."
 msgstr "Veuillez remplir le formulaire ci-dessous : votre adresse e-mail nous servira à vous contacter."
 
-#: app\Livewire\CoverPage.php:42
+#: app\Livewire\CoverPage.php:43
 msgid "Enter your email address"
 msgstr "Saisissez votre adresse électronique"
 
-#: app\Livewire\CoverPage.php:44
+#: app\Livewire\CoverPage.php:45
 msgid "Enter your name"
 msgstr "Saisissez votre nom"
 
-#: app\Livewire\CoverPage.php:46
+#: app\Livewire\CoverPage.php:47
 msgid "Enter your organisation name"
 msgstr "Saisissez le nom de votre organisation"
 
-#: app\Livewire\CoverPage.php:49
+#: app\Livewire\CoverPage.php:50
 msgid "Do you intend to implement Groundswell International Surveys? If so, please give some details about your project / work, etc."
 msgstr "Avez-vous l'intention de mettre en œuvre les enquêtes de Groundswell International ? Si oui, veuillez fournir quelques détails sur votre projet, votre travail, etc."
 
-#: app\Livewire\CoverPage.php:57
+#: app\Livewire\CoverPage.php:58
 msgid "Thank you"
 msgstr "Merci"
 
-#: app\Livewire\CoverPage.php:58
+#: app\Livewire\CoverPage.php:59
 msgid "Thank you for your interest in Groundswell International Surveys. You should receive an automated email to confirm your registration of interest."
 msgstr "Nous vous remercions de l'intérêt que vous portez à Groundswell International Surveys. Vous devriez recevoir un e-mail automatique confirmant votre inscription."
 
@@ -961,7 +1031,7 @@ msgstr "Nous vous remercions de l'intérêt que vous portez à Groundswell Inter
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:13
 #: resources\views\filament\app\pages\survey-languages\survey-translations.blade.php:13
 #: resources\views\filament\app\pages\survey-locations\context-questions.blade.php:6
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:27
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:30
 #: resources\views\filament\app\resources\farm-resource\widgets\farm-list-header-widget.blade.php:5
 msgid "Instructions"
 msgstr "Instructions"
@@ -979,73 +1049,73 @@ msgstr "Soumissions d'enquête"
 msgid "These are the submissions that have been submitted during the pilot test. You can review them here, even after the pilot is complete."
 msgstr "Voici les contributions qui ont été soumises au cours de la phase pilote. Vous pouvez les consulter ici, même une fois la phase pilote terminée."
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:63
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:67
 msgid "Available Translations"
 msgstr "Traductions disponibles"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:68
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:72
 msgid "Click to update this translation label"
 msgstr "Cliquez ici pour mettre à jour cette étiquette de traduction"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:75
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:79
 msgid "Update Translation Label for"
 msgstr "Mettre à jour l'étiquette de traduction pour"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:78
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:82
 msgid "Enter a new label for the translation"
 msgstr "Saisissez un nouveau titre pour la traduction"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:79
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:109
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:83
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:113
 msgid "E.g. \"Portuguese (Brazil)\""
 msgstr "Par exemple : « Portugais (Brésil) »"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:88
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:92
 #: app\Livewire\XlsformsTableView.php:63
 msgid "Status"
 msgstr "Etat"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:90
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:94
 msgid "Ready for use"
 msgstr "Prêt à l'emploi"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:91
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:95
 msgid "Not uploaded"
 msgstr "Pas téléchargé"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:92
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:96
 msgid "Translations incomplete"
 msgstr "Traductions incomplètes"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:93
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:97
 msgid "Needs updating"
 msgstr "À mettre à jour"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:98
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:102
 msgid "No translations available."
 msgstr "Aucune traduction disponible."
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:108
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:112
 msgid "Enter a label for the translation"
 msgstr "Saisissez un titre pour la traduction"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:128
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:132
 msgid "Selected"
 msgstr "Sélectionné"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:128
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:132
 msgid "Select"
 msgstr "Sélectionner"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:130
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:134
 msgid "Select this translation for your survey"
 msgstr "Sélectionnez cette traduction pour votre enquête"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:139
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:143
 msgid "View / Edit Translation"
 msgstr "Afficher / Modifier la traduction"
 
-#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:140
+#: app\Livewire\SurveyLanguages\TeamTranslationEntry.php:144
 msgid "View / Edit Translation for"
 msgstr "Afficher / Modifier la traduction de"
 
@@ -1102,19 +1172,19 @@ msgstr "Télécharger les soumissions"
 msgid "The form has been published successfully."
 msgstr "Le formulaire a bien été envoyé."
 
-#: app\Providers\Filament\AppPanelProvider.php:171
+#: app\Providers\Filament\AppPanelProvider.php:177
 msgid "Admin Panel"
 msgstr "Panneau d'administration"
 
-#: app\Providers\Filament\AppPanelProvider.php:176
+#: app\Providers\Filament\AppPanelProvider.php:182
 msgid "Program Admin Panel"
 msgstr "Panneau d'administration du programme"
 
-#: app\Providers\Filament\AppPanelProvider.php:181
+#: app\Providers\Filament\AppPanelProvider.php:187
 msgid "My Team"
 msgstr "Mon équipe"
 
-#: app\Providers\Filament\AppPanelProvider.php:185
+#: app\Providers\Filament\AppPanelProvider.php:191
 msgid "Download User Guide"
 msgstr "Télécharger le guide d'utilisation"
 
@@ -1349,6 +1419,30 @@ msgid ""
 "To add locations manually, click on \"Add new [location name]\", and type in the name and code, then click on \"Create\" or \"Create and create another\". Add locations for all the location levels.\n"
 ""
 msgstr ""
+"Sur la page des niveaux géographiques, vous devez d'abord ajouter les noms des différents niveaux :\n"
+"\n"
+"- Cliquez sur « Nouveau niveau géographique ».\n"
+"- Indiquez si le niveau géographique que vous ajoutez est un sous-niveau d'un autre niveau : dans notre exemple « province &gt; arrondissement &gt; village », l'arrondissement est un sous-niveau de la province et le village est un sous-niveau de l'arrondissement.\n"
+"- Ajoutez le nom du niveau.\n"
+"- Indiquez s'il existe des exploitations agricoles à ce niveau : cela signifie qu'elles se trouvent à ce niveau, mais pas à un niveau inférieur ; par exemple, il y a des exploitations au niveau du village, mais pas au niveau de la province.\n"
+"- Cliquez pour créer le niveau, ou pour créer et ajouter immédiatement un autre niveau.\n"
+"\n"
+"Une fois les niveaux ajoutés, vous pouvez les sélectionner pour afficher la liste des lieux qui y ont été ajoutés et ajouter de nouveaux lieux. Vous avez la possibilité de les importer depuis un fichier Excel ou de les ajouter manuellement.\n"
+"\n"
+"Pour importer des lieux, téléchargez une feuille de calcul Excel contenant les informations requises :\n"
+"\n"
+"- Une colonne avec le nom du lieu\n"
+"- Une colonne contenant les identifiants uniques des lieux. (Vous pouvez les générer comme vous le souhaitez, mais chacun doit être unique)\n"
+"- Si le niveau de lieu auquel vous ajoutez un lieu est un sous-niveau d’un autre niveau de lieu, vous devez également inclure une colonne contenant le nom et l’identifiant unique du lieu situé au niveau supérieur (dans notre exemple « province &gt; district &gt; village », le « Village A » pourrait se situer dans le « District C », et vous devriez alors inclure les informations relatives aux deux.)\n"
+"- La première ligne de la feuille de calcul doit contenir les en-têtes de colonnes, et non votre premier lieu.\n"
+"- Assurez-vous que les données à importer se trouvent dans la première feuille de calcul du tableur.\n"
+"- Vous devez disposer d’une colonne pour le nom de la localité et d’une colonne pour les codes uniques des localités.\n"
+"- L’ordre des colonnes, les en-têtes de colonnes que vous utilisez ou la présence d’autres données dans le tableur n’ont aucune importance.\n"
+"\n"
+"Une fois la liste importée, utilisez les options de mappage des colonnes pour sélectionner la colonne des noms et celle des codes uniques. Vous avez la possibilité de remplacer tous les lieux précédemment ajoutés par les nouveaux lieux issus de la feuille de calcul importée. Lorsque vous êtes prêt, cliquez sur « Soumettre ».\n"
+"\n"
+"Pour ajouter des lieux manuellement, cliquez sur « Ajouter un nouveau [nom du lieu] », saisissez le nom et le code, puis cliquez sur « Créer » ou « Créer et en créer un autre ». Ajoutez des lieux pour tous les niveaux de localisation.\n"
+""
 
 #: resources\text\pilot-index.php:5
 msgid ""
@@ -2193,7 +2287,7 @@ msgstr "Vous personnalisez le questionnaire uniquement pour ce projet."
 
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:35
 msgid "Customisations you make in the following steps will <b> only affect the localised version of the survey used by your team.</b> The global survey selected/uploaded in Step 1 and shared with other teams will remain unchanged. You will be prompted to update the translation of your survey in future steps."
-msgstr ""
+msgstr "Les personnalisations que vous effectuerez au cours des étapes suivantes <b> n'affecteront que la version localisée du questionnaire utilisée par votre équipe.</b> Le questionnaire global sélectionné/téléchargé à l'étape 1 et partagé avec d'autres équipes restera inchangé. Vous serez invité à mettre à jour la traduction de votre questionnaire au cours des étapes suivantes."
 
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:43
 msgid "Adapt HDDS hints"
@@ -2207,7 +2301,7 @@ msgstr "Adaptez le texte d'aide affiché pour les questions relatives à la dive
 #: resources\views\filament\app\pages\place-adaptations\place-adaptations-index.blade.php:58
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:34
 #: resources\views\filament\app\pages\survey-languages\survey-languages-index.blade.php:42
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:18
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:21
 msgid "Update"
 msgstr "Mise à jour"
 
@@ -2336,27 +2430,27 @@ msgstr "Consultez les traductions disponibles pour votre enquête. Vous pouvez a
 msgid "Below are the languages you selected for your survey. For each one, click on \"Select translation\" to see available translations, and either select an appropriate option from the list or add the translation for the language."
 msgstr "Vous trouverez ci-dessous les langues que vous avez sélectionnées pour votre enquête. Pour chacune d'entre elles, cliquez sur « Sélectionner une traduction » pour afficher les traductions disponibles, puis choisissez l'option appropriée dans la liste ou ajoutez la traduction pour cette langue."
 
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:9
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:12
 msgid "Manage location levels"
 msgstr "Gérer les niveaux de localisation"
 
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:10
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:13
 msgid "Manage the location levels (or other strata) in your sampling frame."
 msgstr "Gérez les niveaux géographiques (ou autres strates) de votre base d'échantillonnage."
 
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:12
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:15
 msgid "List of farms"
 msgstr "Liste des exploitations agricoles"
 
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:13
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:16
 msgid "Add or import details of the farms you will visit to give the questionnaire."
 msgstr "Ajoutez ou importez les informations relatives aux exploitations agricoles que vous allez visiter pour y distribuer le questionnaire."
 
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:16
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:19
 msgid "Optionally, add extra questions to the survey to get additional context about the farms."
 msgstr "Si vous le souhaitez, vous pouvez ajouter des questions supplémentaires au questionnaire afin d'obtenir davantage d'informations sur les exploitations agricoles."
 
-#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:19
+#: resources\views\filament\app\pages\survey-locations\survey-locations-index.blade.php:22
 msgid "Manage Questions"
 msgstr "Gérer les questions"
 
@@ -2516,11 +2610,3 @@ msgstr "Le fichier Excel contient la liste de toutes les chaînes de caractères
 #: resources\views\team-translation-review.blade.php:14
 msgid "Re-upload the completed Excel file below. If there is already a file uploaded, you can delete it and upload a replacement."
 msgstr "Téléchargez à nouveau le fichier Excel dûment rempli ci-dessous. Si un fichier a déjà été téléchargé, vous pouvez le supprimer et en télécharger un autre à la place."
-
-#: packages\filament-team-management\src\Filament\App\Pages\RegisterTeam.php:16
-msgid "Register New Team"
-msgstr "Inscrire une nouvelle équipe"
-
-#: packages\filament-team-management\src\Filament\App\Pages\RegisterTeam.php:24
-msgid "Enter a name for the team"
-msgstr "Saisissez un nom pour l'équipe"
