@@ -55,6 +55,7 @@ class LocationLevel extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    /** @return HasMany<Location, $this> */
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class);
