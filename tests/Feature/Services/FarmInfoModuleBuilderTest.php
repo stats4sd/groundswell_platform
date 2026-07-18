@@ -9,17 +9,14 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
-function farmDataset(): Dataset
+function farmDataset(Team $team): Dataset
 {
-    return Dataset::firstOrCreate(
-        ['name' => OdkFarmEntityService::LOCAL_DATASET_NAME, 'owner_id' => null],
-        ['label' => 'team_code'],
-    );
+    return app(OdkFarmEntityService::class)->ensureDataset($team);
 }
 
 function localFarmInfoVersion(Team $team): XlsformModuleVersion
 {
-    return XlsformModuleVersion::where('owner_id', $team->id)->where('name', 'Local Farm Info')->firstOrFail();
+    return XlsformModuleVersion::where('owner_id', $team->id)->where('name', 'Local farm info')->firstOrFail();
 }
 
 beforeEach(function () {
@@ -32,7 +29,7 @@ it('creates a Local Farm Info module version owned by the team', function () {
 
     $this->assertDatabaseHas('xlsform_module_versions', [
         'owner_id' => $this->team->id,
-        'name' => 'Local Farm Info',
+        'name' => 'Local farm info',
     ]);
 });
 
@@ -58,7 +55,7 @@ it('filters the farm picker on the deepest location level', function () {
 });
 
 it('builds a calculate row per identifier and property variable, pulling from the selected entity', function () {
-    $dataset = farmDataset();
+    $dataset = farmDataset($this->team);
     DatasetVariable::create(['dataset_id' => $dataset->id, 'name' => 'certificate_no', 'label' => 'Certificate Number', 'type' => 'string', 'description' => 'identifier']);
     DatasetVariable::create(['dataset_id' => $dataset->id, 'name' => 'field_size', 'label' => 'Field Size (ha)', 'type' => 'string', 'description' => 'property']);
 
@@ -75,7 +72,7 @@ it('builds a calculate row per identifier and property variable, pulling from th
 });
 
 it('builds the farmer_note listing every identifier and property with its label', function () {
-    $dataset = farmDataset();
+    $dataset = farmDataset($this->team);
     DatasetVariable::create(['dataset_id' => $dataset->id, 'name' => 'certificate_no', 'label' => 'Certificate Number', 'type' => 'string', 'description' => 'identifier']);
     DatasetVariable::create(['dataset_id' => $dataset->id, 'name' => 'field_size', 'label' => 'Field Size (ha)', 'type' => 'string', 'description' => 'property']);
 
@@ -94,7 +91,7 @@ it('builds the farmer_note listing every identifier and property with its label'
 });
 
 it('removes a stale calculate row when a variable is removed', function () {
-    $dataset = farmDataset();
+    $dataset = farmDataset($this->team);
     $variable = DatasetVariable::create(['dataset_id' => $dataset->id, 'name' => 'certificate_no', 'label' => 'Certificate Number', 'type' => 'string', 'description' => 'identifier']);
 
     FarmInfoModuleBuilder::populate($this->team);

@@ -18,9 +18,11 @@ class FarmInfoModuleBuilder
             'name' => 'Local farm info',
         ]);
 
+        $dataset = app(OdkFarmEntityService::class)->ensureDataset($team);
+
         $levelCount = $team->locationLevels()->count();
-        $identifiers = static::variables('identifier');
-        $properties = static::variables('property');
+        $identifiers = static::variables($dataset, 'identifier');
+        $properties = static::variables($dataset, 'property');
 
         // Groundswell specific - check for identifiers + properties required in the main form
         $requiredList = collect([
@@ -33,10 +35,10 @@ class FarmInfoModuleBuilder
 
         // check that the required list is in either identifiers or properties. Save as datasetvariable so next time it is immediately included.
         $missing = $requiredList->diff($merged)
-        ->map(function(string $item) {
+        ->map(function(string $item) use ($dataset) {
 
             return DatasetVariable::create([
-                'dataset_id' => Dataset::firstWhere('name', OdkFarmEntityService::LOCAL_DATASET_NAME)->id,
+                'dataset_id' => $dataset->id,
                 'name' => $item,
                 'label' => $item,
                 'description' => 'identifier',
@@ -50,14 +52,8 @@ class FarmInfoModuleBuilder
     }
 
     /** @return Collection<int, DatasetVariable> */
-    protected static function variables(string $description): Collection
+    protected static function variables(Dataset $dataset, string $description): Collection
     {
-        $dataset = Dataset::firstWhere('name', OdkFarmEntityService::LOCAL_DATASET_NAME);
-
-        if ($dataset === null) {
-            return collect();
-        }
-
         return $dataset->variables()->where('description', $description)->orderBy('id')->get();
     }
 
