@@ -177,9 +177,7 @@ class OdkFarmEntityService
         while ($current) {
             $pos = $current->locationLevel->pos;
 
-            // TODO: decide whether loc{n} should be locations.code or locations.id - code
-            // for now.
-            $attributes["loc{$pos}"] = (string) $current->code;
+            $attributes["loc{$pos}"] = (string) $current->id;
             $attributes["loc{$pos}_name"] = (string) $current->name;
             $attributes["loc{$pos}_type"] = (string) $current->locationLevel->name;
             $current = $current->parent;
