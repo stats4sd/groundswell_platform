@@ -56,7 +56,7 @@ class XlsformsRelationManager extends RelationManager
                         /** @var \App\Models\Team $team */
                         $team = $record->owner;
                         $team->localiseXlsforms();
-                        $xlsform->localiseModules();
+                        $record->localiseModules();
 
                         // create draft if there is no draft yet
                         if (! $record->has_draft) {
