@@ -83,6 +83,7 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
 
                 // check if location is already existed for this team
                 $noOfRecords = Location::where('owner_id', $this->data['owner_id'])
+                    ->where('location_level_id', $parentId)
                     ->where('code', $row[$this->data["parent_{$parentId}_code_column"]])
                     ->count();
 
@@ -97,11 +98,17 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
                     ]);
                 }
 
-                $currentParent = Location::where('code', $row[$this->data["parent_{$parentId}_code_column"]])->first();
+                // find the new/existing current parent.
+                $currentParent = Location::query()
+                    ->where('owner_id', $this->data['owner_id'])
+                    ->where('location_level_id', $parentId)
+                    ->where('code', $row[$this->data["parent_{$parentId}_code_column"]])
+                    ->first();
             }
 
             // check if location is already existed for this team
             $noOfLocation = Location::where('owner_id', $this->data['owner_id'])
+                ->where('location_level_id', $locationLevel->id)
                 ->where('code', $row[$this->data['code_column']])
                 ->count();
 
@@ -116,7 +123,11 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
                 ]);
             }
 
-            $currentLocation = Location::where('code', $row[$this->data['code_column']])->first();
+            $currentLocation = Location::query()
+                ->where('owner_id', $this->data['owner_id'])
+                ->where('location_level_id', $locationLevel->id)
+                ->where('code', $row[$this->data['code_column']])
+                ->first();
 
             $importedLocations[] = $currentLocation;
         }

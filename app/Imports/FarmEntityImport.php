@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
@@ -124,8 +125,13 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         $farmCodeColumn = $headers[$this->data['farm_code_column']];
 
         return [
-            $locationCodeColumn => 'required|exists:locations,code',
-            $farmCodeColumn => 'required',
+            $locationCodeColumn => [
+                'required',
+                Rule::exists('locations', 'code')
+                    ->where('owner_id', $this->data['owner_id'])
+                    ->where('location_level_id', $this->data['location_level_id']),
+            ],
+            $farmCodeColumn => ['required'],
         ];
     }
 
@@ -137,7 +143,7 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
 
         return [
             "$locationCodeColumn.required" => "The $locationCodeColumn cannot be empty.",
-            "$locationCodeColumn.exists" => 'The location with this code does not exist in the database.',
+            "$locationCodeColumn.exists" => 'The location with this code does not exist for your team at the selected level.',
             "$farmCodeColumn.required" => 'The farm code cannot be empty.',
         ];
     }
