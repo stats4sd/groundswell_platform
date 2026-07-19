@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Status:** Not Started
+**Status:** Completed — see [change log](../change-logs/2026-07-16-translation-uploader-fixes.md)
 
 **Goal:** Fix all confirmed defects in the ODK translation upload/download system (issue #36 plus the expanded findings in [docs/code-reviews/2026-07-16-translation-uploader-review.md](../code-reviews/2026-07-16-translation-uploader-review.md)), with tests written first so each fix turns a failing test green.
 
