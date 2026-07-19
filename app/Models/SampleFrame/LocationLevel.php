@@ -21,10 +21,15 @@ class LocationLevel extends Model
         });
 
         static::saved(function (self $locationLevel) {
+            $locationLevel->owner->update(['has_updated_locations' => true]);
 
             // mark forms as needing a new deployment
             $locationLevel->owner->xlsforms()
                 ->update(['draft_needs_update' => true]);
+        });
+
+        static::deleted(function (self $locationLevel) {
+            $locationLevel->owner->update(['has_updated_locations' => true]);
         });
 
         if (Filament::hasTenancy() && Filament::getTenant() instanceof Team) {
