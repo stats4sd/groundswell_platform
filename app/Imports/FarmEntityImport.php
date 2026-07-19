@@ -65,14 +65,7 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
         $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
 
-        // No dedicated GPS column-mapping step - if a selected identifier/property column's
-        // header name matches "latitude"/"longitude"/"altitude"/"accuracy" (case-insensitive),
-        // it's pulled out as GPS instead, so it isn't also treated as a generic
-        // identifier/property. Matches how GPS is detected by name elsewhere in this app
-        // (see OdkFarmEntityService::GPS_FIELDS).
-        $gpsColumnsByName = $identifierColumns->merge($propertyColumns)
-            ->filter(fn ($column) => in_array(Str::lower($column), ['latitude', 'longitude', 'altitude', 'accuracy'], true))
-            ->mapWithKeys(fn ($column) => [Str::lower($column) => $column]);
+        $gpsColumnsByName = $this->gpsColumnsByName();
 
         $latitudeColumn = $gpsColumnsByName->get('latitude');
         $longitudeColumn = $gpsColumnsByName->get('longitude');
@@ -124,7 +117,7 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         $locationCodeColumn = $headers[$this->data['location_code_column']];
         $farmCodeColumn = $headers[$this->data['farm_code_column']];
 
-        return [
+        $rules = [
             $locationCodeColumn => [
                 'required',
                 Rule::exists('locations', 'code')
@@ -133,6 +126,53 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
             ],
             $farmCodeColumn => ['required'],
         ];
+
+        // Auto-detected GPS columns get the same numeric/range validation as the manual
+        // farm form (FarmEntityResource), so non-numeric ("unknown") or out-of-range cells
+        // surface as import errors instead of being silently (float)-cast to 0.0 or pushed
+        // to Central as an invalid coordinate.
+        foreach ($this->gpsColumnsByName() as $field => $column) {
+            $rules[$column] = ['nullable', 'numeric', ...$this->gpsRangeRules($field)];
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Maps each GPS field (latitude/longitude/altitude/accuracy) to the mapped spreadsheet
+     * column header, for identifier/property columns whose header matches by name
+     * (case-insensitive). No dedicated GPS column-mapping step exists - a selected
+     * identifier/property column whose header matches a GPS field is pulled out as GPS
+     * instead, so it isn't also treated as a generic identifier/property. Matches how GPS
+     * is detected by name elsewhere in this app (see OdkFarmEntityService::GPS_FIELDS).
+     *
+     * @return Collection<string, string>
+     */
+    private function gpsColumnsByName(): Collection
+    {
+        $headers = $this->data['header_columns'];
+
+        return collect($this->data['farm_identifiers'])
+            ->merge($this->data['farm_properties'])
+            ->map(fn ($column) => $headers[$column])
+            ->filter(fn ($column) => in_array(Str::lower($column), OdkFarmEntityService::GPS_FIELDS, true))
+            ->mapWithKeys(fn ($column) => [Str::lower($column) => $column]);
+    }
+
+    /**
+     * Range rules matching the manual farm form (FarmEntityResource GPS section). Accuracy
+     * carries no range there, so it is validated as numeric only.
+     *
+     * @return array<int, string>
+     */
+    private function gpsRangeRules(string $field): array
+    {
+        return match ($field) {
+            'latitude' => ['between:-90,90'],
+            'longitude' => ['between:-180,180'],
+            'altitude' => ['between:-1240,60000'],
+            default => [],
+        };
     }
 
     public function customValidationMessages(): array

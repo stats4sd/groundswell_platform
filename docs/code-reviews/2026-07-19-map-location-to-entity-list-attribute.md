@@ -45,7 +45,7 @@ The swap looks up `'Local ' . $xlsformModule->name`; the builders hardcode `'Loc
 ## Minor findings
 
 - **M1** `matchLocationById()` digits-only guard (OdkFarmEntityService.php:137-155): a purely numeric legacy location *code* (e.g. `"12"`) passes `ctype_digit`, is treated as a primary key, and can silently match the wrong location; the name fallback never runs because the id match succeeded.
-- **M2** `loc0` crashes resolution (OdkFarmEntityService.php:152-191): the pos filter is `<= $chain->count()` with no lower bound; a Central property named `loc0` gives `max() = 0`, `$chain->values()->get(-1)` → null → fatal inside `refreshFromCentral()`, breaking the farm-list page mount.
+- **M2** `loc0` crashes resolution (OdkFarmEntityService.php:152-191): the pos filter is `<= $chain->count()` with no lower bound; a Central property named `loc0` gives `max() = 0`, `$chain->values()->getOn(-1)` → null → fatal inside `refreshFromCentral()`, breaking the farm-list page mount.
 - **M3** `matchLocationByName()` ignores ancestor names: duplicate leaf names under different parents (two villages "Santa Cruz") resolve to an arbitrary `first()`.
 - **M4** N+1s: `refreshFromCentral()` re-runs `farmLevelChain()` per unresolved entity and fires a Team `UPDATE` per adopted/changed entity via the new `saved` hook (hundreds of queries per farm-list mount); `LocationsModuleBuilder::labelProperties()` queries locales per location (thousands of identical queries per populate) — same code is duplicated verbatim in both builders.
 - **M5** Concurrency: `refreshFromCentral()` unguarded — two simultaneous list mounts race on `FarmEntity::create` for the same `odk_uuid` (unhandled QueryException for the loser); `ensureDataset()`'s `firstOrCreate` has the same window.
