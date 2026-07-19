@@ -98,7 +98,9 @@ test('submitting an exported template filled in by a translator imports the corr
 
     expect($importedTexts)->toHaveCount(4);
 
-    $importedTexts->each(fn (string $text) => expect($text)->toStartWith('AB Test; '));
+    $importedTexts->each(function (string $text) {
+        expect($text)->toStartWith('AB Test; ');
+    });
 
     expect($importedTexts->contains(fn (string $text) => str_contains($text, 'French')))->toBeFalse();
 });

@@ -60,7 +60,9 @@ test('translation text is imported from the target locale column, not column G',
 
     expect($importedTexts)->toHaveCount(4);
 
-    $importedTexts->each(fn (string $text) => expect($text)->toStartWith('AB Test; '));
+    $importedTexts->each(function (string $text) {
+        expect($text)->toStartWith('AB Test; ');
+    });
 });
 
 test('the inspector reports a missing target locale column', function () {
