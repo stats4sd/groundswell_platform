@@ -2,11 +2,9 @@
 
 namespace App\Livewire\SurveyLanguages;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Actions;
-use App\Jobs\NotifyUserThatLanguageImportIsComplete;
+use App\Imports\TranslationUploadInspector;
 use App\Imports\XlsformTemplateLanguageImport;
+use App\Jobs\NotifyUserThatLanguageImportIsComplete;
 use App\Models\Team;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -14,18 +12,18 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Collection;
-use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
-use phpDocumentor\Reflection\Types\Boolean;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Stats4sd\FilamentOdkLink\Exports\XlsformTemplateTranslationsExport;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 
 class TeamTranslationReviewEditForm extends Component implements HasActions, HasForms
@@ -55,37 +53,38 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
             ->model($this->locale)
             ->columns(2)
             ->schema(
-                fn(): array => $this->team->xlsforms->map(fn(Xlsform $xlsform) => $xlsform->xlsformTemplate)
+                fn (): array => $this->team->xlsforms->map(fn (Xlsform $xlsform) => $xlsform->xlsformTemplate)
                     ->map(
-                        fn(XlsformTemplate $xlsformTemplate) => Section::make($xlsformTemplate->title)
+                        fn (XlsformTemplate $xlsformTemplate) => Section::make($xlsformTemplate->title)
                             ->schema([
                                 Actions::make([
 
                                     // download existing translations if they exist
-                                    Action::make('download_' . $xlsformTemplate->id)
-                                        // ->link()
+                                    Action::make("download_existing_{$xlsformTemplate->id}")
                                         ->label(t('Download existing translations'))
                                         ->extraAttributes(['class' => 'buttona w-full'])
-                                        ->action(fn() => Excel::download(new XlsformTemplateTranslationsExport(
-                                            $xlsformTemplate,
-                                            $this->locale,
-                                            withExistingStrings: true
-                                        ), "{$xlsformTemplate->title} translation - {$this->locale->language_label}.xlsx")),
+                                        ->action(fn () => Excel::download(
+                                            new XlsformTemplateTranslationsExport($xlsformTemplate, $this->locale, withExistingStrings: true, owner: $this->team),
+                                            "{$xlsformTemplate->title} translation - {$this->locale->language_label}.xlsx",
+                                        )),
 
                                     // download blank template if needed
-                                    Action::make('download_' . $xlsformTemplate->id)
-                                        ->extraAttributes(['class' => 'buttona w-full'])
-                                        ->visible(fn() => $this->locale->is_editable)
+                                    Action::make("download_empty_{$xlsformTemplate->id}")
                                         ->label(t('Download empty translation template'))
-                                        ->action(fn() => Excel::download(new XlsformTemplateTranslationsExport($xlsformTemplate, $this->locale, withExistingStrings: true), "{$xlsformTemplate->title} translation - {$this->locale->language_label}.xlsx")),
+                                        ->extraAttributes(['class' => 'buttona w-full'])
+                                        ->visible(fn () => $this->locale->is_editable)
+                                        ->action(fn () => Excel::download(
+                                            new XlsformTemplateTranslationsExport($xlsformTemplate, $this->locale, withExistingStrings: false, owner: $this->team),
+                                            "{$xlsformTemplate->title} translation template - {$this->locale->language_label}.xlsx",
+                                        )),
                                 ]),
-                                SpatieMediaLibraryFileUpload::make('upload_for_template_' . $xlsformTemplate->id)
+                                SpatieMediaLibraryFileUpload::make('upload_for_template_'.$xlsformTemplate->id)
                                     ->collection('xlsform_template_translation_files')
-                                    ->filterMediaUsing(fn(Collection $media) => $media->where('custom_properties.xlsform_template_id', $xlsformTemplate->id))
+                                    ->filterMediaUsing(fn (Collection $media) => $media->where('custom_properties.xlsform_template_id', $xlsformTemplate->id))
                                     ->customProperties(['xlsform_template_id' => $xlsformTemplate->id])
-                                    ->visible(fn() => $this->locale->is_editable && $this->canMaintain)
+                                    ->visible(fn () => $this->locale->is_editable && $this->canMaintain)
                                     ->live()
-                                    ->label(fn($state) => count($state) === 0
+                                    ->label(fn ($state) => blank($state)
                                         ? "Upload completed {$xlsformTemplate->title} translation file"
                                         : "To replace the translations, delete the existing file with the 'x' icon below and upload the new completed translations file."
                                     )
@@ -105,7 +104,7 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
     public function submit(): void
     {
-        if (!auth()->user()->can('maintain survey translations')) {
+        if (! auth()->user()->can('maintain survey translations')) {
             abort(403);
         }
 
@@ -114,50 +113,61 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
         $this->locale->refresh();
 
-        foreach (XlsformTemplate::all() as $xlsformTemplate) {
+        $xlsformTemplates = $this->team->xlsforms
+            ->map(fn (Xlsform $xlsform) => $xlsform->xlsformTemplate)
+            ->unique('id');
 
+        foreach ($xlsformTemplates as $xlsformTemplate) {
             $file = $this->locale->getMedia('xlsform_template_translation_files', function (Media $media) use ($xlsformTemplate) {
                 return isset($media->custom_properties['xlsform_template_id']) && $media->custom_properties['xlsform_template_id'] === $xlsformTemplate->id;
             })->first();
 
-            // if the file doesn't exist, don't process it.
-            if (!$file) {
+            if (! $file) {
                 continue;
             }
 
-            $path = $file->getPath();
+            $inspector = new TranslationUploadInspector($file->getPath());
+            $errors = $inspector->validate($this->locale, $xlsformTemplate);
 
+            if ($errors !== []) {
+                $file->delete();
 
-            // Update locale's count of number of active import processes;
+                Notification::make()
+                    ->danger()
+                    ->title(t('The translation file could not be processed'))
+                    ->body(implode('<br/>', $errors))
+                    ->persistent()
+                    ->send();
+
+                continue;
+            }
+
             $this->locale->processing_count++;
             $this->locale->save();
-
-
 
             Excel::queueImport(new XlsformTemplateLanguageImport(
                 $this->locale,
                 $xlsformTemplate,
-                auth()->user()
-            ), $path)
+                auth()->user(),
+                $inspector->textColumnIndex($this->locale),
+            ), $file->getPath())
                 ->chain([
                     new NotifyUserThatLanguageImportIsComplete($this->locale, $xlsformTemplate, request()->user()),
                 ]);
-
         }
 
-        // submit modal close event
         $this->dispatch('closeModal');
     }
 
     public function duplicate(): void
     {
-        if (!auth()->user()->can('maintain survey translations')) {
+        if (! auth()->user()->can('maintain survey translations')) {
             abort(403);
         }
 
         // copy this locale as a new locale model
         $newRecord = $this->locale->replicate();
-        $newRecord->description = $this->locale->languageLabel . ' - duplicated';
+        $newRecord->description = $this->locale->languageLabel.' - duplicated';
         $newRecord->is_default = false;
         $newRecord->creator()->associate($this->team);
         $newRecord->save();
