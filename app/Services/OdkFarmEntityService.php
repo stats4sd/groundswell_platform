@@ -104,14 +104,17 @@ class OdkFarmEntityService
     }
 
     /**
-     * Resolves the `location_id` for an entity adopted from Central, from its `loc{n}_name`
-     * attributes (e.g. `loc1_name`, `loc2_name`, ... - the Farm Registration XLSForm's
-     * `entities` sheet convention, one triplet per location level, `loc1` topmost). Matches
-     * only against Locations the team already has - never creates one. The name match is
-     * case-insensitive, since ODK data entry and the app's own Location names may differ
-     * only in case. Returns null if the data has no usable `loc{n}_name`, or the deepest
-     * one present doesn't match an existing Location for this team at that hierarchy
-     * position.
+     * Resolves the `location_id` for an entity adopted from Central, from its `loc{n}`
+     * attributes (the Farm Registration XLSForm's `entities` sheet convention, one
+     * `loc{n}`/`loc{n}_name`/`loc{n}_type` triplet per location level, `loc1` topmost).
+     * `loc{n}` carries the authoritative `locations.id` - the entity list synced to
+     * Central uses ids as choice values, and buildLocationAttributes() writes the same -
+     * so the deepest `loc{n}` present is matched by primary key first. Entities written
+     * before the id switch hold codes or placeholder values in `loc{n}`, so the deepest
+     * `loc{n}_name` remains as a fallback, matched case-insensitively since ODK data
+     * entry and the app's own Location names may differ only in case. Both paths match
+     * only against Locations the team already has, at the level the position implies -
+     * never creating one - and return null when nothing matches.
      *
      * @param  array<string, mixed>  $data
      */
@@ -123,26 +126,73 @@ class OdkFarmEntityService
             return null;
         }
 
-        $names = [];
+        $idsByPos = [];
+        $namesByPos = [];
 
         foreach ($data as $key => $value) {
-            if (preg_match('/^loc(\d+)_name$/', $key, $matches) && $value !== null && $value !== '') {
-                $names[(int) $matches[1]] = $value;
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            if (preg_match('/^loc(\d+)$/', $key, $matches)) {
+                // Digits-only guard: legacy code values like "1V" must not reach the id
+                // query - MySQL's string-to-int cast would silently match them to id 1.
+                if (ctype_digit((string) $value)) {
+                    $idsByPos[(int) $matches[1]] = (int) $value;
+                }
+
+                continue;
+            }
+
+            if (preg_match('/^loc(\d+)_name$/', $key, $matches)) {
+                $namesByPos[(int) $matches[1]] = $value;
             }
         }
 
-        $names = array_filter($names, fn ($name, $pos) => $pos <= $chain->count(), ARRAY_FILTER_USE_BOTH);
+        $idsByPos = array_filter($idsByPos, fn ($id, $pos) => $pos <= $chain->count(), ARRAY_FILTER_USE_BOTH);
+        $namesByPos = array_filter($namesByPos, fn ($name, $pos) => $pos <= $chain->count(), ARRAY_FILTER_USE_BOTH);
 
-        if (empty($names)) {
+        return $this->matchLocationById($team, $chain, $idsByPos)
+            ?? $this->matchLocationByName($team, $chain, $namesByPos);
+    }
+
+    /**
+     * @param  Collection<int, LocationLevel>  $chain
+     * @param  array<int, int>  $idsByPos
+     */
+    protected function matchLocationById(Team $team, Collection $chain, array $idsByPos): ?int
+    {
+        if ($idsByPos === []) {
             return null;
         }
 
-        $highestPos = max(array_keys($names));
-        $level = $chain->values()->get($highestPos - 1);
+        $deepestPos = max(array_keys($idsByPos));
+        $level = $chain->values()->get($deepestPos - 1);
 
         $location = Location::where('owner_id', $team->id)
             ->where('location_level_id', $level->id)
-            ->whereRaw('LOWER(name) = ?', [Str::lower($names[$highestPos])])
+            ->whereKey($idsByPos[$deepestPos])
+            ->first();
+
+        return $location?->id;
+    }
+
+    /**
+     * @param  Collection<int, LocationLevel>  $chain
+     * @param  array<int, string>  $namesByPos
+     */
+    protected function matchLocationByName(Team $team, Collection $chain, array $namesByPos): ?int
+    {
+        if ($namesByPos === []) {
+            return null;
+        }
+
+        $deepestPos = max(array_keys($namesByPos));
+        $level = $chain->values()->get($deepestPos - 1);
+
+        $location = Location::where('owner_id', $team->id)
+            ->where('location_level_id', $level->id)
+            ->whereRaw('LOWER(name) = ?', [Str::lower($namesByPos[$deepestPos])])
             ->first();
 
         return $location?->id;

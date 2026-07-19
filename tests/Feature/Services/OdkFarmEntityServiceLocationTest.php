@@ -174,13 +174,13 @@ describe('OdkFarmEntityService::buildLocationAttributes', function () {
         // toEqual (not toBe): buildLocationAttributes() walks leaf-to-root, so keys land in
         // loc3/loc2/loc1 order - the map's content is what matters, not key order.
         expect($attributes)->toEqual([
-            'loc1' => 'R1',
+            'loc1' => '1', // locations.id
             'loc1_name' => 'North Region',
             'loc1_type' => 'Region',
-            'loc2' => 'D1',
+            'loc2' => '2',
             'loc2_name' => 'Central District',
             'loc2_type' => 'District',
-            'loc3' => 'V1',
+            'loc3' => '3',
             'loc3_name' => 'Green Village',
             'loc3_type' => 'Village',
         ]);
