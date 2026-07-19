@@ -5,6 +5,15 @@
 **Reviewer**: Claude (automated multi-angle review)
 **Scope**: 36 files, 3,133 insertions / 468 deletions vs `dev` — farm-entity → ODK Central entity-list location attribute mapping (`loc{n}` triplets keyed by `locations.id`), GPS unification into a single `geometry` property, team-scoped `farm_entities` datasets, split `LocationsModuleBuilder`/`FarmInfoModuleBuilder` replacing `LocationSectionBuilder`, import-flow GPS support and tenancy scoping, plus a `filament-odk-link` bump (d474cfc → d201575) adding `can_be_replaced` module swapping.
 
+## Update:
+
+All Major findings addressed in code except:
+
+ - F7, deferred. We have full control over XlsformModule names in the initial deployment, so F7 is fine.
+ - F4 - not relevant as no legacy data.
+
+Minor points not addressed; saved for later.
+
 ## Verification results
 
 - **Tests**: full app suite passes (125 tests, 225 assertions). The three new `OdkFarmEntityService*` test files and the two builder test files all pass.
@@ -40,7 +49,6 @@ The swap looks up `'Local ' . $xlsformModule->name`; the builders hardcode `'Loc
 
 ### F9. Import: GPS columns silently lose or fabricate data
 - No numeric/range validation on auto-detected GPS columns (`FarmEntityImport.php:85-107`): `(float)` casts non-numeric cells ("unknown", formula-returned `''`) to `0.0`, pushing geometry `"0.0 …"` to Central; latitude 100 imports fine while the manual form enforces −90..90. `rules()` has what it needs to validate these columns.
-- GPS-named columns are stripped from identifiers/properties even when no geometry can be built (`FarmEntityImport.php:73-83`): a Latitude column ticked without a Longitude column vanishes entirely and the import reports success (before this branch those values were kept as identifiers).
 
 ## Minor findings
 
