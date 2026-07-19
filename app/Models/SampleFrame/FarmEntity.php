@@ -23,10 +23,12 @@ class FarmEntity extends Model
     {
         static::saved(function (self $farmEntity) {
             $farmEntity->owner->update(['has_updated_locations' => true]);
+            $farmEntity->owner->xlsforms()->update(['draft_needs_update' => true]);
         });
 
         static::deleted(function (self $farmEntity) {
             $farmEntity->owner->update(['has_updated_locations' => true]);
+            $farmEntity->owner->xlsforms()->update(['draft_needs_update' => true]);
         });
     }
 

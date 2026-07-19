@@ -364,13 +364,42 @@ class OdkFarmEntityService
      * isn't already known - needed because entity_values.dataset_variable_name has a real
      * FK to dataset_variables.name, and entities created outside this app (e.g. by a
      * registration form's `entities` sheet) can carry properties we've never seen.
+     *
+     * The location/GPS attributes carried by farms registered directly in Enketo are tagged
+     * `'loc'` here, matching how createFarm()/reconcileProperties() tag the same names for
+     * app-created farms. Without this they'd default to `'property'` and FarmInfoModuleBuilder
+     * would emit `calculate` rows named `loc1`/`loc1_name` etc. that duplicate the Locations
+     * module's own fields in the same survey sheet - a duplicate pyxform rejects on deploy.
      */
     protected function ensurePropertyRegistered(Dataset $dataset, string $name): void
     {
         DatasetVariable::firstOrCreate(
             ['dataset_id' => $dataset->id, 'name' => $name],
-            ['label' => $name, 'type' => 'string', 'description' => 'property'],
+            ['label' => $name, 'type' => 'string', 'description' => $this->propertyDescription($name)],
         );
+    }
+
+    /**
+     * The `description` tag a discovered Central property should carry - `'loc'` for the
+     * location cascade attributes (`loc{n}`/`loc{n}_name`/`loc{n}_type`) and the GPS
+     * properties (the single `geometry` field and the legacy separate GPS_FIELDS), matching
+     * how createFarm() tags them, otherwise `'property'`.
+     */
+    public function propertyDescription(string $name): string
+    {
+        if (preg_match('/^loc\d+(_name|_type)?$/', $name) === 1) {
+            return 'loc';
+        }
+
+        if ($name === self::GEOMETRY_FIELD) {
+            return 'loc';
+        }
+
+        if (in_array($name, self::GPS_FIELDS, true)) {
+            return 'loc';
+        }
+
+        return 'property';
     }
 
     /**
@@ -680,6 +709,14 @@ class OdkFarmEntityService
             if (in_array($name, self::GPS_FIELDS, true)) {
                 $gps[$name] = $value;
 
+                continue;
+            }
+
+            // Location cascade attributes (loc{n}/loc{n}_name/loc{n}_type) are derived from
+            // the farm's resolved Location, not user-editable data - the dedicated Location
+            // field owns them. Excluding them here keeps them out of the editable properties
+            // UI (and the farm-list columns) and stops them being resubmitted as 'property'.
+            if ($this->propertyDescription($name) === 'loc') {
                 continue;
             }
 

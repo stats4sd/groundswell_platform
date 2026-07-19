@@ -7,6 +7,7 @@ use App\Services\XlsformModules\FarmInfoModuleBuilder;
 use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
 function farmDataset(Team $team): Dataset
@@ -22,6 +23,7 @@ function localFarmInfoVersion(Team $team): XlsformModuleVersion
 beforeEach(function () {
     Http::fake();
     $this->team = Team::factory()->create();
+    createLocationModules();
 });
 
 it('creates a Local Farm Info module version owned by the team', function () {
@@ -31,6 +33,23 @@ it('creates a Local Farm Info module version owned by the team', function () {
         'owner_id' => $this->team->id,
         'name' => 'Local farm info',
     ]);
+});
+
+it('creates one Local Farm Info module version per location XlsformModule', function () {
+    // beforeEach already created one; add two more for three location modules in total.
+    createLocationModules(2);
+
+    expect(XlsformModule::where('name', 'location')->count())->toBe(3);
+
+    FarmInfoModuleBuilder::populate($this->team);
+
+    $versions = XlsformModuleVersion::where('owner_id', $this->team->id)
+        ->where('name', 'Local farm info')
+        ->get();
+
+    expect($versions)->toHaveCount(3);
+    expect($versions->pluck('xlsform_module_id')->sort()->values()->all())
+        ->toBe(XlsformModule::where('name', 'location')->pluck('id')->sort()->values()->all());
 });
 
 it('builds the farm picker row with no choice_filter when the team has no location levels', function () {

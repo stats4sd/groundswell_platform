@@ -29,6 +29,7 @@ class Location extends Model
 
         static::deleted(function (self $location) {
             $location->owner->update(['has_updated_locations' => true]);
+            $location->owner->xlsforms()->update(['draft_needs_update' => true]);
         });
     }
 

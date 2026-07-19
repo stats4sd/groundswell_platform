@@ -4,23 +4,36 @@ namespace App\Services\XlsformModules;
 
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
+use Illuminate\Support\Collection;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
 class LocationsModuleBuilder
 {
     public static function populate(Team $team): void
     {
-        $moduleVersion = XlsformModuleVersion::firstOrCreate([
-            'owner_id' => $team->id,
-            'name' => 'Local locations',
-        ]);
 
-        $levels = static::orderedLevels($team);
+        // NOTE: right now, we have identical modules for different XlsformTemplates as separate XlsformModule entries (i.e. with 3 forms, there are 3 separate 'location' XlsformModule entries)
 
-        static::buildSurveyRows($moduleVersion, $team, $levels);
-        static::buildChoiceLists($moduleVersion, $team, $levels);
+        // SO, to map ModuleVersion to module (so that $xlsform syncWithTemplate() can tell the localised version is fine in the form), we need 3 differente module versions here. (or 'n', 3 is just the example)
+
+        $xlsformModules = XlsformModule::where('name', 'location')->get();
+
+        foreach ($xlsformModules as $xlsformModule) {
+
+            $moduleVersion = XlsformModuleVersion::firstOrCreate([
+                'owner_id' => $team->id,
+                'name' => 'Local locations',
+                'xlsform_module_id' => $xlsformModule->id,
+            ]);
+
+            $levels = static::orderedLevels($team);
+
+            static::buildSurveyRows($moduleVersion, $team, $levels);
+            static::buildChoiceLists($moduleVersion, $team, $levels);
+        }
     }
 
     /** @return array<int, LocationLevel> keyed by 1-indexed position, root first */
@@ -118,9 +131,19 @@ class LocationsModuleBuilder
                     ],
                 );
             }
+
+            static::deleteStaleChoiceListEntries($choiceList, $level->locations->pluck('id'));
         }
 
         static::deleteStaleChoiceLists($moduleVersion, count($levels));
+    }
+
+    /** @param Collection<int, int> $currentLocationIds */
+    protected static function deleteStaleChoiceListEntries(ChoiceList $choiceList, Collection $currentLocationIds): void
+    {
+        $choiceList->choiceListEntries()
+            ->whereNotIn('name', $currentLocationIds)
+            ->delete();
     }
 
     protected static function deleteStaleChoiceLists(XlsformModuleVersion $moduleVersion, int $maxPos): void

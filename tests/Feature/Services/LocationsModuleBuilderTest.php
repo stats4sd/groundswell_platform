@@ -6,6 +6,7 @@ use App\Models\Team;
 use App\Services\XlsformModules\LocationsModuleBuilder;
 use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
 function makeLocationLevel(Team $team, string $name, ?LocationLevel $parent = null): LocationLevel
@@ -36,6 +37,7 @@ function localVersion(Team $team): XlsformModuleVersion
 beforeEach(function () {
     Http::fake();
     $this->team = Team::factory()->create();
+    createLocationModules();
 });
 
 it('creates a Local Locations module version owned by the team', function () {
@@ -45,6 +47,25 @@ it('creates a Local Locations module version owned by the team', function () {
         'owner_id' => $this->team->id,
         'name' => 'Local locations',
     ]);
+});
+
+it('creates one Local Locations module version per location XlsformModule', function () {
+    // beforeEach already created one; add two more for three location modules in total.
+    $modules = createLocationModules(2)
+        ->merge(XlsformModule::where('name', 'location')->get())
+        ->unique('id');
+
+    expect($modules)->toHaveCount(3);
+
+    LocationsModuleBuilder::populate($this->team);
+
+    $versions = XlsformModuleVersion::where('owner_id', $this->team->id)
+        ->where('name', 'Local locations')
+        ->get();
+
+    expect($versions)->toHaveCount(3);
+    expect($versions->pluck('xlsform_module_id')->sort()->values()->all())
+        ->toBe(XlsformModule::where('name', 'location')->pluck('id')->sort()->values()->all());
 });
 
 it('builds a select_one + calculate row per location level, root-first', function () {
@@ -105,6 +126,25 @@ it('sets cascade_filter to the parent location id for a non-root level', functio
     $entry = ChoiceListEntry::where('choice_list_id', $choiceList->id)->where('name', $districtLocation->id)->first();
 
     expect($entry->cascade_filter)->toBe((string) $regionLocation->id);
+});
+
+it('removes stale choice list entries when a location is deleted from an existing level', function () {
+    $region = makeLocationLevel($this->team, 'Region');
+    $north = makeChildLocation($this->team, $region, 'R1', 'North');
+    $south = makeChildLocation($this->team, $region, 'R2', 'South');
+
+    LocationsModuleBuilder::populate($this->team);
+
+    $choiceList = localVersion($this->team)->choiceLists->firstWhere('list_name', 'loc1');
+    expect(ChoiceListEntry::where('choice_list_id', $choiceList->id)->pluck('name')->sort()->values()->all())
+        ->toBe([(string) $north->id, (string) $south->id]);
+
+    $south->delete();
+
+    LocationsModuleBuilder::populate($this->team);
+
+    expect(ChoiceListEntry::where('choice_list_id', $choiceList->id)->pluck('name')->all())
+        ->toBe([(string) $north->id]);
 });
 
 it('leaves an empty group when the team has no location levels yet', function () {

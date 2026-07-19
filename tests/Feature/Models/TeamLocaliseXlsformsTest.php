@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 beforeEach(function () {
     Http::fake();
     $this->team = Team::factory()->create();
+    createLocationModules();
 });
 
 it('populates both Local Locations and Local Farm Info when has_updated_locations is true, then resets the flag', function () {

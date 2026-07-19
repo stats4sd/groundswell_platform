@@ -7,48 +7,56 @@ use App\Services\OdkFarmEntityService;
 use Illuminate\Support\Collection;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
 class FarmInfoModuleBuilder
 {
     public static function populate(Team $team): void
     {
-        $moduleVersion = XlsformModuleVersion::firstOrCreate([
-            'owner_id' => $team->id,
-            'name' => 'Local farm info',
-        ]);
 
-        $dataset = app(OdkFarmEntityService::class)->ensureDataset($team);
+        $xlsformModules = XlsformModule::where('name', 'location')->get();
 
-        $levelCount = $team->locationLevels()->count();
-        $identifiers = static::variables($dataset, 'identifier');
-        $properties = static::variables($dataset, 'property');
+        foreach ($xlsformModules as $xlsformModule) {
 
-        // Groundswell specific - check for identifiers + properties required in the main form
-        $requiredList = collect([
-             'participant_sex',
-             'participant_name',
-             'participant_age',
-        ]);
-
-        $merged = $identifiers->merge($properties)->pluck('name');
-
-        // check that the required list is in either identifiers or properties. Save as datasetvariable so next time it is immediately included.
-        $missing = $requiredList->diff($merged)
-        ->map(function(string $item) use ($dataset) {
-
-            return DatasetVariable::create([
-                'dataset_id' => $dataset->id,
-                'name' => $item,
-                'label' => $item,
-                'description' => 'identifier',
+            $moduleVersion = XlsformModuleVersion::firstOrCreate([
+                'owner_id' => $team->id,
+                'name' => 'Local farm info',
+                'xlsform_module_id' => $xlsformModule->id,
             ]);
-        });
 
-        // add missing items to identifiers
-        $identifiers = $identifiers->merge($missing);
+            $dataset = app(OdkFarmEntityService::class)->ensureDataset($team);
 
-        static::buildSurveyRows($moduleVersion,$team, $levelCount, $identifiers, $properties);
+            $levelCount = $team->locationLevels()->count();
+            $identifiers = static::variables($dataset, 'identifier');
+            $properties = static::variables($dataset, 'property');
+
+            // Groundswell specific - check for identifiers + properties required in the main form
+            $requiredList = collect([
+                'participant_sex',
+                'participant_name',
+                'participant_age',
+            ]);
+
+            $merged = $identifiers->merge($properties)->pluck('name');
+
+            // check that the required list is in either identifiers or properties. Save as datasetvariable so next time it is immediately included.
+            $missing = $requiredList->diff($merged)
+            ->map(function(string $item) use ($dataset) {
+
+                return DatasetVariable::create([
+                    'dataset_id' => $dataset->id,
+                    'name' => $item,
+                    'label' => $item,
+                    'description' => 'identifier',
+                ]);
+            });
+
+            // add missing items to identifiers
+            $identifiers = $identifiers->merge($missing);
+
+            static::buildSurveyRows($moduleVersion,$team, $levelCount, $identifiers, $properties);
+        }
     }
 
     /** @return Collection<int, DatasetVariable> */

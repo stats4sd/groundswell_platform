@@ -30,6 +30,7 @@ class LocationLevel extends Model
 
         static::deleted(function (self $locationLevel) {
             $locationLevel->owner->update(['has_updated_locations' => true]);
+            $locationLevel->owner->xlsforms()->update(['draft_needs_update' => true]);
         });
 
         if (Filament::hasTenancy() && Filament::getTenant() instanceof Team) {

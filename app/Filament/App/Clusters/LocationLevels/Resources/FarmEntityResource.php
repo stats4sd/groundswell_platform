@@ -104,18 +104,21 @@ class FarmEntityResource extends Resource
     public static function table(Table $table): Table
     {
         $team = HelperService::getCurrentOwner();
-        $dataset = app(OdkFarmEntityService::class)->ensureDataset($team);
+        $service = app(OdkFarmEntityService::class);
+        $dataset = $service->ensureDataset($team);
 
         // Dynamic identifier/property columns are driven by DatasetVariable (schema-level,
         // stays local), not by scanning records' JSON keys like the old FarmResource does.
         // Values themselves are never persisted locally - $livewire->liveFarmData is the
         // live feed ListFarmEntities::mount() fetched for this page load (see
-        // OdkFarmEntityService::refreshFromCentral()). GPS is excluded here - it has itsTHis
-        // own dedicated form fields, not shown as list columns, matching the old FarmResource.
+        // OdkFarmEntityService::refreshFromCentral()). The location cascade attributes
+        // (loc{n}/loc{n}_name/loc{n}_type) and GPS are excluded here via the 'loc'
+        // classification - GPS has its own dedicated form fields and the cascade attributes
+        // are owned by the dedicated Location column, matching the old FarmResource.
         $propertyColumns = $dataset->variables()
             ->where('name', '!=', 'team_code')
-            ->whereNotIn('name', [...OdkFarmEntityService::GPS_FIELDS, OdkFarmEntityService::GEOMETRY_FIELD])
             ->get()
+            ->reject(fn ($variable) => $service->propertyDescription($variable->name) === 'loc')
             ->map(fn ($variable) => TextColumn::make("property_{$variable->name}")
                 ->label($variable->label)
                 ->getStateUsing(fn (FarmEntity $record, $livewire) => $livewire->liveFarmData[$record->odk_uuid]['data'][$variable->name] ?? null));
