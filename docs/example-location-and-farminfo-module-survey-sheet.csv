@@ -1,0 +1,35 @@
+﻿module,type,name,label::English (en),label::Español (es),calculate,relevant
+locations,begin_group,location,Location,Ubicación,,
+locations,select_one loc_level,location_level,,,,FALSE
+locations,calculate,loc1_type,,,"jr:choice-name(${location_level}, 'loc1')",
+locations,calculate,loc2_type,,,"jr:choice-name(${location_level}, 'loc2')",
+locations,select_one loc1,loc1,${loc1_type},${loc1_type},,
+locations,calculate,loc1_name,,,"jr:choice-name(${loc1}, '${loc1}')",
+locations,select_one loc2,loc2,${loc2_type},${loc2_type},,
+locations,calculate,loc2_name,,,"jr:choice-name(${loc2}, '${loc2}')",
+locations,end_group,location,Location,Ubicación,,
+
+farm_info,begin_group,farms
+farm_info,select_one_from_file Farm_Summary.csv,ID,Please select the farm you are visiting,Por favor seleccione la finca que está visitando,,
+farm_info,calculate,farm_{{ident_1}},,,,
+farm_info,calculate,farm_{{ident_2}},,,,
+farm_info,…,…,,,,
+farm_info,calculate,farm {{ident_n}},,,,
+farm_info,calculate,farm_{{prop_1}},,,,
+farm_info,calculate,farm_{{prop_2}},,,,
+farm_info,…,…,,,,
+farm_info,calculate,farm {{prop_n}},,,,
+farm_info,note,farmer_note,"You have selected the following farm:
+
+{{ident_1}}: {{farm->ident_1}},
+{{ident_2}}: {{farm->ident_2}},
+...
+{{ident_n}}: {{farm->ident_n}}},
+
+{{prop_1}}: {{farm->prop_1}},
+{{prop_2}}: {{farm->prop_2}},
+...
+{{prop_n}}: {{farm->prop_n}}},
+
+If this is not the correct farm, please go back and reselect. ",,,
+farm_info,end_group,farms

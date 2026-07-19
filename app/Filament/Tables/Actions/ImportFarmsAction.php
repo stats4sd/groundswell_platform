@@ -100,12 +100,15 @@ class ImportFarmsAction extends ExcelImportAction
                         )
                         ->placeholder(t('Select a location level'))
                         ->helperText(t('For many sampling strategies, this will be obvious (the lowest level). It may be less obvious when there are different hierarchies of locations in different places.'))
+                        ->required()
                         ->live(),
 
                     Select::make('location_code_column')
                         ->options(fn (Get $get) => $get('header_columns'))
-                        ->label(fn (Get $get) => t('Which column contains the').' '.(LocationLevel::find($get('location_level_id'))?->name ?? t('location')).' '.t('unique code?'))
-                        ->placeholder(t('Select a column')),
+                        ->label(fn (Get $get) => t('Which column contains the').' '.(LocationLevel::find($get('location_level_id'))->name ?? t('location')).' '.t('unique code?'))
+                        ->placeholder(t('Select a column'))
+                        ->notIn(['na'])
+                        ->required(),
                 ]),
 
             Section::make(t('Farm Information'))
@@ -116,11 +119,13 @@ class ImportFarmsAction extends ExcelImportAction
                         ->placeholder(t('Select a column'))
                         ->helperText(t('e.g. farm_id or farm_code'))
                         ->live()
-                        ->options(fn (Get $get) => $get('header_columns')),
+                        ->options(fn (Get $get) => $get('header_columns'))
+                        ->notIn(['na'])
+                        ->required(),
 
                     CheckboxList::make('farm_identifiers')
                         ->label(t('Are there any additional columns that contain identifiers for the farm? Tick all that apply.'))
-                        ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.'))
+                        ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes. A column literally named Latitude, Longitude, Altitude, or Accuracy is automatically used as the farm\'s GPS instead, if ticked here.'))
                         ->options(fn (Get $get): array => $get('header_columns'))
                         ->disableOptionWhen(
                             fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||

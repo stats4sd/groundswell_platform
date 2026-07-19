@@ -23,6 +23,12 @@ class Location extends Model
     protected static function booted()
     {
         static::saved(function (self $location) {
+            $location->owner->update(['has_updated_locations' => true]);
+            $location->owner->xlsforms()->update(['draft_needs_update' => true]);
+        });
+
+        static::deleted(function (self $location) {
+            $location->owner->update(['has_updated_locations' => true]);
             $location->owner->xlsforms()->update(['draft_needs_update' => true]);
         });
     }

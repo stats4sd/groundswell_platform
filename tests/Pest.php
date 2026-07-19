@@ -1,6 +1,18 @@
 <?php
 
+use App\Models\Team;
+use App\Models\TeamMembership;
+use App\Models\User;
+use Filament\Facades\Filament;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
+use Stats4sd\FilamentTeamManagement\Models\Program;
+use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +25,8 @@ use Illuminate\Support\Facades\Http;
 |
 */
 
-pest()->extend(Tests\TestCase::class)
-    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+pest()->extend(TestCase::class)
+    ->use(RefreshDatabase::class)
     ->in('Feature');
 
 /*
@@ -48,26 +60,56 @@ function something()
     // ..
 }
 
+/**
+ * Create $count `location` XlsformModules, each on its own XlsformTemplate.
+ *
+ * The module builders (LocationsModuleBuilder / FarmInfoModuleBuilder) loop over
+ * every `location` XlsformModule and build one module version per module, so the
+ * modules must exist before populate()/localiseXlsforms() is called.
+ *
+ * @return Collection<int, XlsformModule>
+ */
+function createLocationModules(int $count = 1): Collection
+{
+    return collect(range(1, $count))->map(function (int $i) {
+        $template = XlsformTemplate::withoutEvents(
+            fn () => XlsformTemplate::create([
+                'title' => "Test Template {$i}",
+                'available' => true,
+            ])
+        );
+
+        // Creating the module fires its 'created' hook, which makes a default
+        // "Global location" XlsformModuleVersion linked to this module.
+        return XlsformModule::create([
+            'xlsform_template_id' => $template->id,
+            'label' => 'Location',
+            'name' => 'location',
+        ]);
+    });
+}
+
 pest()->beforeEach(function () {
-    app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
 })->in('Feature');
 
-function createSuperAdmin(): \App\Models\User
+function createSuperAdmin(): User
 {
     Http::fake();
-    $user = \App\Models\User::factory()->create();
-    $user->roles()->attach(\Spatie\Permission\Models\Role::where('name', 'Super Admin')->first());
+    $user = User::factory()->create();
+    $user->roles()->attach(Role::where('name', 'Super Admin')->first());
     $user->load('roles', 'permissions');
+
     return $user;
 }
 
-function createAppUser(\App\Models\Team $team): \App\Models\User
+function createAppUser(Team $team): User
 {
     Http::fake();
-    $user = \App\Models\User::factory()->create();
-    \App\Models\TeamMembership::withoutEvents(fn () => $user->teams()->attach($team->id));
+    $user = User::factory()->create();
+    TeamMembership::withoutEvents(fn () => $user->teams()->attach($team->id));
     $user->latest_team_id = $team->id;
-    $user->roles()->attach(\Spatie\Permission\Models\Role::where('name', 'Team Admin')->first());
+    $user->roles()->attach(Role::where('name', 'Team Admin')->first());
     $user->save();
 
     return $user;
@@ -75,29 +117,30 @@ function createAppUser(\App\Models\Team $team): \App\Models\User
 
 function withAdminPanel(): void
 {
-    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('admin'));
+    Filament::setCurrentPanel(Filament::getPanel('admin'));
 }
 
-function withAppTenant(\App\Models\Team $team): void
+function withAppTenant(Team $team): void
 {
-    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('app'));
-    \Filament\Facades\Filament::setTenant($team);
+    Filament::setCurrentPanel(Filament::getPanel('app'));
+    Filament::setTenant($team);
 }
 
-function withProgramTenant(\Stats4sd\FilamentTeamManagement\Models\Program $program): void
+function withProgramTenant(Program $program): void
 {
-    \Filament\Facades\Filament::setCurrentPanel(\Filament\Facades\Filament::getPanel('program'));
-    \Filament\Facades\Filament::setTenant($program);
+    Filament::setCurrentPanel(Filament::getPanel('program'));
+    Filament::setTenant($program);
 }
 
-function createProgramAdmin(\Stats4sd\FilamentTeamManagement\Models\Program $program): \App\Models\User
+function createProgramAdmin(Program $program): User
 {
     Http::fake();
-    $user = \App\Models\User::factory()->create();
-    $user->roles()->attach(\Spatie\Permission\Models\Role::where('name', 'Program Admin')->first());
+    $user = User::factory()->create();
+    $user->roles()->attach(Role::where('name', 'Program Admin')->first());
     $user->load('roles', 'permissions');
     $user->programs()->attach($program->id);
     $user->latest_program_id = $program->id;
     $user->save();
+
     return $user;
 }

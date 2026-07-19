@@ -19,6 +19,19 @@ class FarmEntity extends Model
 {
     use SoftDeletes;
 
+    protected static function booted(): void
+    {
+        static::saved(function (self $farmEntity) {
+            $farmEntity->owner->update(['has_updated_locations' => true]);
+            $farmEntity->owner->xlsforms()->update(['draft_needs_update' => true]);
+        });
+
+        static::deleted(function (self $farmEntity) {
+            $farmEntity->owner->update(['has_updated_locations' => true]);
+            $farmEntity->owner->xlsforms()->update(['draft_needs_update' => true]);
+        });
+    }
+
     /** @return BelongsTo<Team, $this> */
     public function owner(): BelongsTo
     {

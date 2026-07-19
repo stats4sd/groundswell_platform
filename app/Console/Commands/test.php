@@ -2,13 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Events\LanguageImportIsComplete;
 use App\Models\Team;
-use App\Models\User;
-use App\Services\LocationSectionBuilder;
+use App\Services\XlsformModules\FarmInfoModuleBuilder;
+use App\Services\XlsformModules\LocationsModuleBuilder;
 use Illuminate\Console\Command;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 
 class test extends Command
 {
@@ -31,6 +28,7 @@ class test extends Command
      */
     public function handle()
     {
-       LocationSectionBuilder::createCustomLocationModuleVersion(Team::find(3));
+        LocationsModuleBuilder::populate(Team::find(3));
+        FarmInfoModuleBuilder::populate(Team::find(3));
     }
 }

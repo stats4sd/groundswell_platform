@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\SampleFrame\FarmEntity;
+use App\Models\SampleFrame\Location;
+use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
@@ -37,13 +39,24 @@ class OdkFarmEntityService
 {
     public const LOCAL_DATASET_NAME = 'farm_entities';
 
-    // GPS is synced to Central as fixed properties (like team_code) rather than stored
-    // locally. Detected by property NAME (not the DatasetVariable.description tag used for
-    // the identifier/property split) - matches how team_code is already detected, and
-    // avoids trusting a tag that a pre-existing DatasetVariable might carry from before it
-    // was ever reconciled as GPS (reconcileProperties() reuses an existing name match
-    // without correcting its tag). See docs/plans/farm-entities-simplify-and-gps-sync.md.
+    // Legacy GPS property names - farms created by this app before the `geometry` format
+    // (see GEOMETRY_FIELD below) stored GPS as four separate properties instead of one.
+    // Detected by property NAME (not the DatasetVariable.description tag used for the
+    // identifier/property split) - matches how team_code is already detected, and avoids
+    // trusting a tag that a pre-existing DatasetVariable might carry from before it was
+    // ever reconciled as GPS (reconcileProperties() reuses an existing name match without
+    // correcting its tag). See docs/plans/farm-entities-simplify-and-gps-sync.md. Still
+    // read (getEntityData()) for backward compatibility with farms already written this
+    // way; no longer written (createFarm()/updateFarm() now write GEOMETRY_FIELD instead).
     public const GPS_FIELDS = ['latitude', 'longitude', 'altitude', 'accuracy'];
+
+    // Farms registered directly in Enketo (the Farm Registration XLSForm) store GPS as a
+    // single property in this space-separated "latitude longitude altitude accuracy"
+    // format (ODK's own geopoint string representation, e.g. "45.4215 -75.6972 70.0 4.5"),
+    // not as four separate properties. createFarm()/updateFarm() now write this same format
+    // so both creation paths agree; getEntityData() reads it back into the same four GPS
+    // form fields the app already has (see the GPS section on FarmEntityResource).
+    public const GEOMETRY_FIELD = 'geometry';
 
     // Top-level fields ODK Central's OData entity feed returns alongside the dataset's
     // actual data properties - `label` in particular is not `__`-prefixed, so it isn't
@@ -53,13 +66,28 @@ class OdkFarmEntityService
     public function __construct(protected OdkLinkService $odkLinkService) {}
 
     /**
-     * This feature's own Dataset definition, shared across all teams (owner_id null) -
-     * each team's actual Central entity list is tracked separately via OdkDataset.
+     * This feature's own Dataset definition, one per team (owner_id = $team->id). Teams'
+     * Central entity lists are separate schemas, so the local DatasetVariable bookkeeping
+     * that tracks "has this property already been pushed to Central" must be scoped the
+     * same way - a shared Dataset across teams let one team's already-pushed property
+     * silently skip the push for another team that happened to use the same raw key,
+     * leaving that team's Central entity list missing the property (see
+     * docs/change-logs/team-scoped-farm-entities-dataset.md). Each team's actual Central
+     * entity list is tracked separately via OdkDataset.
+     *
+     * The name carries the team id suffix (not just `owner_id`) because this app's
+     * `datasets` table enforces a single-column `unique(name)` - unlike the
+     * filament-odk-link package's own migration, which defines a composite
+     * `unique([name, owner_id])` (see
+     * database/migrations/03_xlsform_management/2024_03_10_03_101232_1_create_datasets_table.php
+     * vs. the package's `000_create_datasets_table.php`). Loosening that constraint would
+     * affect every other (global, owner_id-null) Dataset in the app, so this stays scoped
+     * to just this one feature instead.
      */
-    public function ensureDataset(): Dataset
+    public function ensureDataset(Team $team): Dataset
     {
         return Dataset::firstOrCreate(
-            ['name' => self::LOCAL_DATASET_NAME, 'owner_id' => null],
+            ['name' => self::LOCAL_DATASET_NAME.'_'.$team->id, 'owner_id' => $team->id],
             ['label' => 'team_code'],
         );
     }
@@ -73,6 +101,196 @@ class OdkFarmEntityService
     public function resolveEntityListName(Team $team): ?string
     {
         return 'Farm_Summary';
+    }
+
+    /**
+     * Resolves the `location_id` for an entity adopted from Central, from its `loc{n}`
+     * attributes (the Farm Registration XLSForm's `entities` sheet convention, one
+     * `loc{n}`/`loc{n}_name`/`loc{n}_type` triplet per location level, `loc1` topmost).
+     * `loc{n}` carries the authoritative `locations.id` - the entity list synced to
+     * Central uses ids as choice values, and buildLocationAttributes() writes the same -
+     * so the deepest `loc{n}` present is matched by primary key first. Entities written
+     * before the id switch hold codes or placeholder values in `loc{n}`, so the deepest
+     * `loc{n}_name` remains as a fallback, matched case-insensitively since ODK data
+     * entry and the app's own Location names may differ only in case. Both paths match
+     * only against Locations the team already has, at the level the position implies -
+     * never creating one - and return null when nothing matches.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function resolveLocationFromAttributes(Team $team, array $data): ?int
+    {
+        $chain = LocationLevel::farmLevelChain($team);
+
+        if ($chain->isEmpty()) {
+            return null;
+        }
+
+        $idsByPos = [];
+        $namesByPos = [];
+
+        foreach ($data as $key => $value) {
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            if (preg_match('/^loc(\d+)$/', $key, $matches)) {
+                // Digits-only guard: legacy code values like "1V" must not reach the id
+                // query - MySQL's string-to-int cast would silently match them to id 1.
+                if (ctype_digit((string) $value)) {
+                    $idsByPos[(int) $matches[1]] = (int) $value;
+                }
+
+                continue;
+            }
+
+            if (preg_match('/^loc(\d+)_name$/', $key, $matches)) {
+                $namesByPos[(int) $matches[1]] = $value;
+            }
+        }
+
+        $idsByPos = array_filter($idsByPos, fn ($id, $pos) => $pos <= $chain->count(), ARRAY_FILTER_USE_BOTH);
+        $namesByPos = array_filter($namesByPos, fn ($name, $pos) => $pos <= $chain->count(), ARRAY_FILTER_USE_BOTH);
+
+        return $this->matchLocationById($team, $chain, $idsByPos)
+            ?? $this->matchLocationByName($team, $chain, $namesByPos);
+    }
+
+    /**
+     * @param  Collection<int, LocationLevel>  $chain
+     * @param  array<int, int>  $idsByPos
+     */
+    protected function matchLocationById(Team $team, Collection $chain, array $idsByPos): ?int
+    {
+        if ($idsByPos === []) {
+            return null;
+        }
+
+        $deepestPos = max(array_keys($idsByPos));
+        $level = $chain->values()->get($deepestPos - 1);
+
+        $location = Location::where('owner_id', $team->id)
+            ->where('location_level_id', $level->id)
+            ->whereKey($idsByPos[$deepestPos])
+            ->first();
+
+        return $location?->id;
+    }
+
+    /**
+     * @param  Collection<int, LocationLevel>  $chain
+     * @param  array<int, string>  $namesByPos
+     */
+    protected function matchLocationByName(Team $team, Collection $chain, array $namesByPos): ?int
+    {
+        if ($namesByPos === []) {
+            return null;
+        }
+
+        $deepestPos = max(array_keys($namesByPos));
+        $level = $chain->values()->get($deepestPos - 1);
+
+        $location = Location::where('owner_id', $team->id)
+            ->where('location_level_id', $level->id)
+            ->whereRaw('LOWER(name) = ?', [Str::lower($namesByPos[$deepestPos])])
+            ->first();
+
+        return $location?->id;
+    }
+
+    /**
+     * Derives the `loc{n}`/`loc{n}_name`/`loc{n}_type` properties Central-side cascading
+     * selects (and resolveLocationFromAttributes() on the read side) expect, from a Location
+     * the app already resolved - the reverse of resolveLocationFromAttributes(). Walks the
+     * Location's parent chain up to the root; `n` is each level's `pos` (1-indexed
+     * root-first, matching the Farm Registration XLSForm's own `loc{n}` convention) - not
+     * hardcoded to any fixed depth or set of level names, so it works for whatever
+     * root-to-leaf chain of LocationLevels a team has configured. `loc{n}_name` is the
+     * Location's `name`; `loc{n}_type` is the matched LocationLevel's own `name` (e.g.
+     * "Cluster", "District"), not a placeholder.
+     *
+     * @return array<string, string>
+     */
+    public function buildLocationAttributes(int $locationId): array
+    {
+        $location = Location::find($locationId);
+
+        if (! $location) {
+            return [];
+        }
+
+        $attributes = [];
+        $current = $location;
+
+        while ($current) {
+            $pos = $current->locationLevel->pos;
+
+            $attributes["loc{$pos}"] = (string) $current->id;
+            $attributes["loc{$pos}_name"] = (string) $current->name;
+            $attributes["loc{$pos}_type"] = (string) $current->locationLevel->name;
+            $current = $current->parent;
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Builds the `geometry` property value from GPS fields (see GEOMETRY_FIELD doc
+     * comment) - the reverse of parseGeometryValue(). Missing altitude/accuracy default to
+     * 0, matching how a geopoint widget itself behaves when a device doesn't report them.
+     * Returns null (no geometry property at all) if latitude/longitude aren't both given -
+     * a bare altitude/accuracy with no coordinate isn't a meaningful point.
+     */
+    public function buildGeometryValue(?float $latitude, ?float $longitude, ?int $altitude, ?float $accuracy): ?string
+    {
+        if ($latitude === null || $longitude === null) {
+            return null;
+        }
+
+        return implode(' ', [
+            $this->formatGpsFloat($latitude),
+            $this->formatGpsFloat($longitude),
+            $altitude ?? 0,
+            $this->formatGpsFloat($accuracy ?? 0),
+        ]);
+    }
+
+    /**
+     * PHP's plain (string) cast drops the decimal point for a whole-number float (e.g.
+     * (string) 45.0 === '45'), which reads as an integer once written into `geometry` -
+     * this forces latitude/longitude/accuracy to always render with one, matching the
+     * Farm Registration form's own geopoint output (e.g. "45.4215 -75.6972 70.0 4.5" -
+     * every component shown with a decimal, including whole-number ones).
+     */
+    protected function formatGpsFloat(float $value): string
+    {
+        $formatted = (string) $value;
+
+        return str_contains($formatted, '.') ? $formatted : "{$formatted}.0";
+    }
+
+    /**
+     * Parses a `geometry` property value (see GEOMETRY_FIELD doc comment) back into the
+     * four GPS fields the app's GPS section already uses - the reverse of
+     * buildGeometryValue(). Returns all-null if the value isn't at least "latitude
+     * longitude" (malformed/unexpected data shouldn't blow up the edit form).
+     *
+     * @return array{latitude: ?string, longitude: ?string, altitude: ?string, accuracy: ?string}
+     */
+    public function parseGeometryValue(string $geometry): array
+    {
+        $parts = preg_split('/\s+/', trim($geometry));
+
+        if (! is_array($parts) || count($parts) < 2) {
+            return ['latitude' => null, 'longitude' => null, 'altitude' => null, 'accuracy' => null];
+        }
+
+        return [
+            'latitude' => $parts[0],
+            'longitude' => $parts[1],
+            'altitude' => $parts[2] ?? null,
+            'accuracy' => $parts[3] ?? null,
+        ];
     }
 
     public function ensureOdkDataset(Team $team, Dataset $dataset, string $entityListName): OdkDataset
@@ -146,13 +364,42 @@ class OdkFarmEntityService
      * isn't already known - needed because entity_values.dataset_variable_name has a real
      * FK to dataset_variables.name, and entities created outside this app (e.g. by a
      * registration form's `entities` sheet) can carry properties we've never seen.
+     *
+     * The location/GPS attributes carried by farms registered directly in Enketo are tagged
+     * `'loc'` here, matching how createFarm()/reconcileProperties() tag the same names for
+     * app-created farms. Without this they'd default to `'property'` and FarmInfoModuleBuilder
+     * would emit `calculate` rows named `loc1`/`loc1_name` etc. that duplicate the Locations
+     * module's own fields in the same survey sheet - a duplicate pyxform rejects on deploy.
      */
     protected function ensurePropertyRegistered(Dataset $dataset, string $name): void
     {
         DatasetVariable::firstOrCreate(
             ['dataset_id' => $dataset->id, 'name' => $name],
-            ['label' => $name, 'type' => 'string', 'description' => 'property'],
+            ['label' => $name, 'type' => 'string', 'description' => $this->propertyDescription($name)],
         );
+    }
+
+    /**
+     * The `description` tag a discovered Central property should carry - `'loc'` for the
+     * location cascade attributes (`loc{n}`/`loc{n}_name`/`loc{n}_type`) and the GPS
+     * properties (the single `geometry` field and the legacy separate GPS_FIELDS), matching
+     * how createFarm() tags them, otherwise `'property'`.
+     */
+    public function propertyDescription(string $name): string
+    {
+        if (preg_match('/^loc\d+(_name|_type)?$/', $name) === 1) {
+            return 'loc';
+        }
+
+        if ($name === self::GEOMETRY_FIELD) {
+            return 'loc';
+        }
+
+        if (in_array($name, self::GPS_FIELDS, true)) {
+            return 'loc';
+        }
+
+        return 'property';
     }
 
     /**
@@ -253,23 +500,22 @@ class OdkFarmEntityService
             throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot determine which ODK Central entity list to write farms to.");
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
-        $gpsData = array_filter([
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'altitude' => $altitude,
-            'accuracy' => $accuracy,
-        ], fn ($value) => $value !== null);
+        $geometry = $this->buildGeometryValue($latitude, $longitude, $altitude, $accuracy);
+        $gpsData = $geometry !== null ? [self::GEOMETRY_FIELD => $geometry] : [];
 
-        $rawData = [...$identifiers, ...$properties, ...$gpsData, 'team_code' => $teamCode];
+        $locationAttributes = $this->buildLocationAttributes($locationId);
+
+        $rawData = [...$identifiers, ...$properties, ...$gpsData, ...$locationAttributes, 'team_code' => $teamCode];
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
-            // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
-            // tag, so a plain 'property' tag is fine here.
-            ...array_fill_keys(array_keys($gpsData), 'property'),
+            // GPS is detected by name elsewhere (see GEOMETRY_FIELD doc comment), not by
+            // this tag, so a plain 'property' tag is fine here.
+            ...array_fill_keys(array_keys($gpsData), 'loc'),
+            ...array_fill_keys(array_keys($locationAttributes), 'loc'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -312,7 +558,12 @@ class OdkFarmEntityService
      * exists for the team are skipped (mirrors the FarmImport dedup rule); a
      * team_code repeated within $rows itself is also deduped, keeping the first occurrence.
      *
-     * @param  Collection<int, array{locationId: int, teamCode: string, identifiers: array<string, string>, properties: array<string, string>}>  $rows
+     * Each row: locationId (int), teamCode (string), identifiers (array<string, string>),
+     * properties (array<string, string>), latitude/longitude (?float), altitude (?int),
+     * accuracy (?float). $rows is deliberately left ungenericized in the docblock -
+     * Collection's TValue generic isn't covariant, so parameterizing it here rejects any
+     * Collection built via a ->map()/->filter() chain even when the shapes are identical.
+     *
      * @return Collection<int, FarmEntity>
      */
     public function bulkCreateFarms(Team $team, Collection $rows, ?string $sourceName = null): Collection
@@ -323,7 +574,7 @@ class OdkFarmEntityService
             throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot import farms.");
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
         $existingCodes = FarmEntity::where('owner_id', $team->id)->pluck('team_code')->all();
@@ -337,6 +588,18 @@ class OdkFarmEntityService
             return collect();
         }
 
+        // Computed once per distinct location - most rows in a batch share a handful of
+        // locations, and this saves re-walking the same parent chain per row.
+        $locationAttributesByLocationId = $newRows->pluck('locationId')->unique()
+            ->mapWithKeys(fn ($locationId) => [$locationId => $this->buildLocationAttributes($locationId)]);
+
+        // GPS varies per row (unlike location, it isn't shared across rows), so it's built
+        // once per row here rather than deduped - buildGeometryValue() is pure string
+        // formatting, cheap enough not to need memoizing.
+        $geometryByRowIndex = $newRows->map(
+            fn ($row) => $this->buildGeometryValue($row['latitude'] ?? null, $row['longitude'] ?? null, $row['altitude'] ?? null, $row['accuracy'] ?? null)
+        );
+
         // Reconcile every identifier/property key used across the whole batch up front,
         // rather than once per row.
         $keyTypes = ['team_code' => 'property'];
@@ -346,15 +609,28 @@ class OdkFarmEntityService
                 ...$keyTypes,
                 ...array_fill_keys(array_keys($row['identifiers']), 'identifier'),
                 ...array_fill_keys(array_keys($row['properties']), 'property'),
+                ...array_fill_keys(array_keys($locationAttributesByLocationId[$row['locationId']]), 'loc'),
             ];
+        }
+
+        if ($geometryByRowIndex->contains(fn ($geometry) => $geometry !== null)) {
+            $keyTypes[self::GEOMETRY_FIELD] = 'loc';
         }
 
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
 
-        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $sourceName) {
+        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex, $sourceName) {
 
-            $prepared = $newRows->map(function ($row) use ($team, $propertyMap) {
-                $rawData = [...$row['identifiers'], ...$row['properties'], 'team_code' => $row['teamCode']];
+            $prepared = $newRows->map(function ($row, $index) use ($team, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex) {
+                $geometry = $geometryByRowIndex[$index];
+
+                $rawData = [
+                    ...$row['identifiers'],
+                    ...$row['properties'],
+                    ...$locationAttributesByLocationId[$row['locationId']],
+                    ...($geometry !== null ? [self::GEOMETRY_FIELD => $geometry] : []),
+                    'team_code' => $row['teamCode'],
+                ];
 
                 $data = [];
                 foreach ($rawData as $key => $value) {
@@ -392,7 +668,10 @@ class OdkFarmEntityService
      * tag - see reconcileProperties(). A name with no known DatasetVariable (e.g.
      * discovered from an entity created outside this app, not yet seen by
      * reconcileProperties/ensurePropertyRegistered) defaults to 'property'. Excludes
-     * team_code, which has its own dedicated form field.
+     * team_code, which has its own dedicated form field. GPS is read from either format: a
+     * single GEOMETRY_FIELD property (farms registered directly in Enketo) or the legacy
+     * four separate GPS_FIELDS properties (farms created by this app before that format) -
+     * both end up in the same four returned GPS keys either way.
      *
      * @return array{identifiers: array<string, string>, properties: array<string, string>, latitude: ?string, longitude: ?string, altitude: ?string, accuracy: ?string}
      */
@@ -406,7 +685,7 @@ class OdkFarmEntityService
 
         $team = $farmEntity->owner;
         $entityListName = $this->resolveEntityListName($team);
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
 
         $data = $this->odkLinkService->getOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid)['currentVersion']['data'] ?? [];
 
@@ -421,9 +700,23 @@ class OdkFarmEntityService
                 continue;
             }
 
+            if ($name === self::GEOMETRY_FIELD) {
+                $gps = $this->parseGeometryValue($value);
+
+                continue;
+            }
+
             if (in_array($name, self::GPS_FIELDS, true)) {
                 $gps[$name] = $value;
 
+                continue;
+            }
+
+            // Location cascade attributes (loc{n}/loc{n}_name/loc{n}_type) are derived from
+            // the farm's resolved Location, not user-editable data - the dedicated Location
+            // field owns them. Excluding them here keeps them out of the editable properties
+            // UI (and the farm-list columns) and stops them being resubmitted as 'property'.
+            if ($this->propertyDescription($name) === 'loc') {
                 continue;
             }
 
@@ -469,7 +762,7 @@ class OdkFarmEntityService
             throw new \RuntimeException("Team {$team->id} has no active Xlsform with an entities sheet - cannot determine which ODK Central entity list to update.");
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $this->ensureOdkDataset($team, $dataset, $entityListName);
 
         // No local mirror of values exists - fetch the entity's current data live to know
@@ -478,20 +771,19 @@ class OdkFarmEntityService
         $currentData = $this->odkLinkService->getOdkEntity($team->odkProject, $entityListName, $farmEntity->odk_uuid)['currentVersion']['data'] ?? [];
         $previouslySetNames = array_keys($currentData);
 
-        $gpsData = array_filter([
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'altitude' => $altitude,
-            'accuracy' => $accuracy,
-        ], fn ($value) => $value !== null);
+        $geometry = $this->buildGeometryValue($latitude, $longitude, $altitude, $accuracy);
+        $gpsData = $geometry !== null ? [self::GEOMETRY_FIELD => $geometry] : [];
 
-        $rawData = [...$identifiers, ...$properties, ...$gpsData, 'team_code' => $teamCode];
+        $locationAttributes = $this->buildLocationAttributes($locationId);
+
+        $rawData = [...$identifiers, ...$properties, ...$gpsData, ...$locationAttributes, 'team_code' => $teamCode];
         $keyTypes = [
             ...array_fill_keys(array_keys($identifiers), 'identifier'),
             ...array_fill_keys(array_keys($properties), 'property'),
-            // GPS is detected by name elsewhere (see GPS_FIELDS doc comment), not by this
-            // tag, so a plain 'property' tag is fine here.
-            ...array_fill_keys(array_keys($gpsData), 'property'),
+            // GPS is detected by name elsewhere (see GEOMETRY_FIELD doc comment), not by
+            // this tag, so a plain 'loc' tag is fine here.
+            ...array_fill_keys(array_keys($gpsData), 'loc'),
+            ...array_fill_keys(array_keys($locationAttributes), 'loc'),
             'team_code' => 'property',
         ];
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
@@ -601,7 +893,7 @@ class OdkFarmEntityService
             return [];
         }
 
-        $dataset = $this->ensureDataset();
+        $dataset = $this->ensureDataset($team);
         $odkDataset = $this->findOdkDataset($team, $dataset, $entityListName);
 
         if ($odkDataset === null) {
@@ -639,7 +931,9 @@ class OdkFarmEntityService
 
             $values = collect($row)->filter(fn ($value, $key) => ! Str::startsWith($key, '__') && ! in_array($key, self::RESERVED_ODATA_KEYS, true));
 
-            $liveData[$uuid] = ['label' => $row['label'] ?? null, 'data' => $values->all()];
+            $label = $row['label'] ?? null;
+
+            $liveData[$uuid] = ['label' => $label, 'data' => $values->all()];
 
             $farmEntity = $farmsByUuid->get($uuid);
 
@@ -648,12 +942,32 @@ class OdkFarmEntityService
             }
 
             if (! $farmEntity) {
+                // team_code mirrors label bidirectionally - createFarm()/updateFarm() push
+                // team_code to Central as label, so adopting the other direction reads it
+                // back from label too, not from a same-named property (which may not even
+                // exist for entities registered directly in Enketo).
                 FarmEntity::create([
                     'owner_id' => $team->id,
-                    'location_id' => null,
-                    'team_code' => (string) ($values->get('team_code') ?? $row['label'] ?? $uuid),
+                    'location_id' => $this->resolveLocationFromAttributes($team, $values->all()),
+                    'team_code' => (string) ($label ?? $uuid),
                     'odk_uuid' => $uuid,
                 ]);
+            } else {
+                if ($farmEntity->location_id === null) {
+                    // Adopted before its location attributes were resolvable (or before this
+                    // feature existed) - worth retrying every refresh until it succeeds.
+                    $locationId = $this->resolveLocationFromAttributes($team, $values->all());
+
+                    if ($locationId !== null) {
+                        $farmEntity->update(['location_id' => $locationId]);
+                    }
+                }
+
+                if ($label !== null && $farmEntity->team_code !== $label) {
+                    // Keeps team_code in sync if the label was ever changed directly on
+                    // Central (e.g. via Central's own UI) rather than through this app.
+                    $farmEntity->update(['team_code' => $label]);
+                }
             }
 
             foreach ($values as $name => $value) {
