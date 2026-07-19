@@ -63,11 +63,11 @@ it('builds a calculate row per identifier and property variable, pulling from th
 
     $rows = localFarmInfoVersion($this->team)->surveyRows;
 
-    $identifierRow = $rows->firstWhere('name', 'farm_certificate_no');
+    $identifierRow = $rows->firstWhere('name', 'certificate_no');
     expect($identifierRow->type)->toBe('calculate');
     expect($identifierRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${ID}]/certificate_no');
 
-    $propertyRow = $rows->firstWhere('name', 'farm_field_size');
+    $propertyRow = $rows->firstWhere('name', 'field_size');
     expect($propertyRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${ID}]/field_size');
 });
 
@@ -85,8 +85,8 @@ it('builds the farmer_note listing every identifier and property with its label'
     // package's HasLanguageStrings saved() hook, so the label is asserted via defaultLabel.
     $text = $note->defaultLabel->text;
 
-    expect($text)->toContain('Certificate Number: ${farm_certificate_no},');
-    expect($text)->toContain('Field Size (ha): ${farm_field_size},');
+    expect($text)->toContain('Certificate Number: ${certificate_no},');
+    expect($text)->toContain('Field Size (ha): ${field_size},');
     expect($text)->toContain('If this is not the correct farm, please go back and reselect.');
 });
 

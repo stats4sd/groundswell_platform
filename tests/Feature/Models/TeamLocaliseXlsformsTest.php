@@ -13,8 +13,8 @@ it('populates both Local Locations and Local Farm Info when has_updated_location
 
     $this->team->localiseXlsforms();
 
-    $this->assertDatabaseHas('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local Locations']);
-    $this->assertDatabaseHas('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local Farm Info']);
+    $this->assertDatabaseHas('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local locations']);
+    $this->assertDatabaseHas('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local farm info']);
     expect($this->team->fresh()->has_updated_locations)->toBeFalse();
 });
 
@@ -23,6 +23,6 @@ it('does nothing when has_updated_locations is false', function () {
 
     $this->team->localiseXlsforms();
 
-    $this->assertDatabaseMissing('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local Locations']);
-    $this->assertDatabaseMissing('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local Farm Info']);
+    $this->assertDatabaseMissing('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local locations']);
+    $this->assertDatabaseMissing('xlsform_module_versions', ['owner_id' => $this->team->id, 'name' => 'Local farm info']);
 });

@@ -163,8 +163,6 @@ class OdkFarmEntityService
      */
     public function buildLocationAttributes(int $locationId): array
     {
-        ray('buildLocationAttributes()...');
-
         $location = Location::find($locationId);
 
         if (! $location) {
@@ -182,8 +180,6 @@ class OdkFarmEntityService
             $attributes["loc{$pos}_type"] = (string) $current->locationLevel->name;
             $current = $current->parent;
         }
-
-        ray($attributes);
 
         return $attributes;
     }
