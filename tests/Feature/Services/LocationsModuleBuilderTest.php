@@ -30,7 +30,7 @@ function makeChildLocation(Team $team, LocationLevel $level, string $code, strin
 
 function localVersion(Team $team): XlsformModuleVersion
 {
-    return XlsformModuleVersion::where('owner_id', $team->id)->where('name', 'Local Locations')->firstOrFail();
+    return XlsformModuleVersion::where('owner_id', $team->id)->where('name', 'Local locations')->firstOrFail();
 }
 
 beforeEach(function () {
@@ -43,7 +43,7 @@ it('creates a Local Locations module version owned by the team', function () {
 
     $this->assertDatabaseHas('xlsform_module_versions', [
         'owner_id' => $this->team->id,
-        'name' => 'Local Locations',
+        'name' => 'Local locations',
     ]);
 });
 
@@ -69,7 +69,7 @@ it('builds a select_one + calculate row per location level, root-first', functio
 
     $loc2 = $rows->firstWhere('name', 'loc2');
     expect($loc2->type)->toBe('select_one loc2');
-    expect($loc2->choice_filter)->toBe('loc1=${loc1}');
+    expect($loc2->choice_filter)->toBe('filter=${loc1}');
     expect($loc2->defaultLabel->text)->toBe('District');
 
     $loc2Name = $rows->firstWhere('name', 'loc2_name');
