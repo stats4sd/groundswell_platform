@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "606d2c4042741a5b7387a4b06e85df90",
+    "content-hash": "165aec1c7ab9e8cb5c5e336ff65f1d3f",
     "packages": [
         {
             "name": "althinect/filament-spatie-roles-permissions",
@@ -3297,16 +3297,16 @@
         },
         {
             "name": "laravel/horizon",
-            "version": "v5.47.2",
+            "version": "v5.48.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "a6ac142293ad02db4d7cccb961dd32f56ef1462d"
+                "reference": "7953b21becabb83974ab93111ffa4d9439dcac07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/a6ac142293ad02db4d7cccb961dd32f56ef1462d",
-                "reference": "a6ac142293ad02db4d7cccb961dd32f56ef1462d",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/7953b21becabb83974ab93111ffa4d9439dcac07",
+                "reference": "7953b21becabb83974ab93111ffa4d9439dcac07",
                 "shasum": ""
             },
             "require": {
@@ -3371,9 +3371,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/horizon/issues",
-                "source": "https://github.com/laravel/horizon/tree/v5.47.2"
+                "source": "https://github.com/laravel/horizon/tree/v5.48.1"
             },
-            "time": "2026-06-03T15:11:37+00:00"
+            "time": "2026-07-20T15:53:58+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -8803,7 +8803,7 @@
         },
         {
             "name": "stats4sd/filament-odk-link",
-            "version": "dev-dev",
+            "version": "dev-location-minor-fix-submodule",
             "dist": {
                 "type": "path",
                 "url": "packages/filament-odk-link",
@@ -8904,7 +8904,7 @@
         },
         {
             "name": "stats4sd/filament-team-management",
-            "version": "dev-dev",
+            "version": "dev-fix-send-invite-issue",
             "dist": {
                 "type": "path",
                 "url": "packages/filament-team-management",
@@ -8998,7 +8998,7 @@
         },
         {
             "name": "stats4sd/laravel-shiny-loader",
-            "version": "dev-main",
+            "version": "dev-b6c8841e679e6eb1393636082a42f79445b17c0f",
             "dist": {
                 "type": "path",
                 "url": "packages/laravel-shiny-loader",
