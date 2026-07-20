@@ -19,7 +19,7 @@ class LocationsModuleBuilder
 
         // SO, to map ModuleVersion to module (so that $xlsform syncWithTemplate() can tell the localised version is fine in the form), we need 3 differente module versions here. (or 'n', 3 is just the example)
 
-        $xlsformModules = XlsformModule::where('name', 'location')->get();
+        $xlsformModules = XlsformModule::where('name', 'locations')->get();
 
         foreach ($xlsformModules as $xlsformModule) {
 

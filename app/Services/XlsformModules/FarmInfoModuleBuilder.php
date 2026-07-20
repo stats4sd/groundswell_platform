@@ -15,7 +15,7 @@ class FarmInfoModuleBuilder
     public static function populate(Team $team): void
     {
 
-        $xlsformModules = XlsformModule::where('name', 'location')->get();
+        $xlsformModules = XlsformModule::where('name', 'farm info')->get();
 
         foreach ($xlsformModules as $xlsformModule) {
 
