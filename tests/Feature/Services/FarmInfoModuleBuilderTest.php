@@ -55,7 +55,7 @@ it('creates one Local Farm Info module version per location XlsformModule', func
 it('builds the farm picker row with no choice_filter when the team has no location levels', function () {
     FarmInfoModuleBuilder::populate($this->team);
 
-    $idRow = localFarmInfoVersion($this->team)->surveyRows->firstWhere('name', 'ID');
+    $idRow = localFarmInfoVersion($this->team)->surveyRows->firstWhere('name', 'id');
 
     expect($idRow->type)->toBe('select_one_from_file Farm_Summary.csv');
     expect($idRow->required)->toBeTrue();
@@ -68,7 +68,7 @@ it('filters the farm picker on the deepest location level', function () {
 
     FarmInfoModuleBuilder::populate($this->team);
 
-    $idRow = localFarmInfoVersion($this->team)->surveyRows->firstWhere('name', 'ID');
+    $idRow = localFarmInfoVersion($this->team)->surveyRows->firstWhere('name', 'id');
 
     expect($idRow->choice_filter)->toBe('loc2=${loc2}');
 });
@@ -84,10 +84,10 @@ it('builds a calculate row per identifier and property variable, pulling from th
 
     $identifierRow = $rows->firstWhere('name', 'certificate_no');
     expect($identifierRow->type)->toBe('calculate');
-    expect($identifierRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${ID}]/certificate_no');
+    expect($identifierRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${id}]/certificate_no');
 
     $propertyRow = $rows->firstWhere('name', 'field_size');
-    expect($propertyRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${ID}]/field_size');
+    expect($propertyRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${id}]/field_size');
 });
 
 it('builds the farmer_note listing every identifier and property with its label', function () {
