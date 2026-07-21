@@ -26,16 +26,18 @@ Target documents:
 
 ## 1. Roles and legal responsibility
 
-*Settles the two "Unsure" rows — and most other answers hang off this.*
+_Settles the two "Unsure" rows — and most other answers hang off this._
 
 - For each dataset, who is the data controller — the individual project/organisation collecting the data, Groundswell as coordinator, or is it joint? Stats4SD is presumably a processor, but does Stats4SD ever use the data for its own purposes (methodology research, demos), which would make it a controller too?
 - Which law governs? GDPR/UK GDPR via Stats4SD, plus local data protection laws in each country where farmers are surveyed?
 - Is there (or will there be) a Data Processing Agreement (DPA) between each controller and Stats4SD? A DPA is arguably the missing document in the table — the Privacy Policy and confidentiality agreements flow from it.
 - Who signs the confidentiality agreements — and with whom? Enumerators with their employing organisation, or with Stats4SD?
 
+Echowest Confidentiality agreement 15 west africa countries. 
+
 ## 2. What data, from whom
 
-*Needed for the Privacy Policy, Information Form, and Processing Record.*
+_Needed for the Privacy Policy, Information Form, and Processing Record._
 
 - What personal data do surveys actually capture? Names, phone numbers, GPS coordinates of farms/households? Are farm GPS points treated as personal data (they usually identify a household)?
 - Any special-category data (health, ethnicity, income of vulnerable groups)?
@@ -50,7 +52,7 @@ Target documents:
 ## 4. Retention, deletion, anonymisation
 
 - Who decides retention periods — each program, or a platform-wide default?
-- When data is "deleted", where does it need to be deleted *from*? The platform DB, ODK Central, backups, Excel exports users have downloaded, media attachments?
+- When data is "deleted", where does it need to be deleted _from_? The platform DB, ODK Central, backups, Excel exports users have downloaded, media attachments?
 - What does "anonymised" mean for this data — can GPS + crop data ever be truly anonymous?
 - What happens to a program's data when the program ends or an organisation leaves the platform?
 

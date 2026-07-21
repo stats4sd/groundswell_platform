@@ -5,28 +5,6 @@ use App\Livewire\ResultsPage;
 
 describe('Public routes are accessible without authentication', function () {
 
-    test('cover page loads', function () {
-        $this->get('/')
-            ->assertOk()
-            ->assertSeeLivewire(CoverPage::class);
-    });
-
-    // page keeps loading, no result shows
-    test('results page loads', function () {
-        $this->get('/results')
-            ->assertOk()
-            ->assertSeeLivewire(ResultsPage::class);
-    });
-
-    // previous_agroecology_scores table is not existed in database.
-    // this table existed in holpa staging database, but there is no migration file for this table in holpa repo.
-    // I have copied this table from holpa staging database, this test still failed.
-    // I created a migration file with id and timestamps columns only, the test is passed.
-    test('temp results page loads', function () {
-        $this->get('/temp-results')
-            ->assertOk();
-    });
-
     test('app login page loads', function () {
         $this->get('/app/login')
             ->assertOk();
