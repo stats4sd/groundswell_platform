@@ -35,11 +35,11 @@ it('creates a Local Farm Info module version owned by the team', function () {
     ]);
 });
 
-it('creates one Local Farm Info module version per location XlsformModule', function () {
+it('creates one Local Farm Info module version per farm info XlsformModule', function () {
     // beforeEach already created one; add two more for three location modules in total.
     createLocationModules(2);
 
-    expect(XlsformModule::where('name', 'location')->count())->toBe(3);
+    expect(XlsformModule::where('name', 'farm info')->count())->toBe(3);
 
     FarmInfoModuleBuilder::populate($this->team);
 
@@ -49,7 +49,7 @@ it('creates one Local Farm Info module version per location XlsformModule', func
 
     expect($versions)->toHaveCount(3);
     expect($versions->pluck('xlsform_module_id')->sort()->values()->all())
-        ->toBe(XlsformModule::where('name', 'location')->pluck('id')->sort()->values()->all());
+        ->toBe(XlsformModule::where('name', 'farm info')->pluck('id')->sort()->values()->all());
 });
 
 it('builds the farm picker row with no choice_filter when the team has no location levels', function () {

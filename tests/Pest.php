@@ -5,7 +5,6 @@ use App\Models\TeamMembership;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -61,17 +60,15 @@ function something()
 }
 
 /**
- * Create $count `location` XlsformModules, each on its own XlsformTemplate.
+ * Create $count `location` and `farm info` XlsformModules, each pair on its own XlsformTemplate.
  *
  * The module builders (LocationsModuleBuilder / FarmInfoModuleBuilder) loop over
- * every `location` XlsformModule and build one module version per module, so the
+ * every `location` / `farm info` XlsformModule and build one module version per module, so the
  * modules must exist before populate()/localiseXlsforms() is called.
- *
- * @return Collection<int, XlsformModule>
  */
-function createLocationModules(int $count = 1): Collection
+function createLocationModules(int $count = 1): void
 {
-    return collect(range(1, $count))->map(function (int $i) {
+    collect(range(1, $count))->each(function (int $i) {
         $template = XlsformTemplate::withoutEvents(
             fn () => XlsformTemplate::create([
                 'title' => "Test Template {$i}",
@@ -81,13 +78,20 @@ function createLocationModules(int $count = 1): Collection
 
         // Creating the module fires its 'created' hook, which makes a default
         // "Global location" XlsformModuleVersion linked to this module.
-        return XlsformModule::create([
+        XlsformModule::create([
             'xlsform_template_id' => $template->id,
-            'label' => 'Location',
-            'name' => 'location',
+            'label' => 'Locations',
+            'name' => 'locations',
+        ]);
+
+        XlsformModule::create([
+            'xlsform_template_id' => $template->id,
+            'label' => 'Farm Info',
+            'name' => 'farm info',
         ]);
     });
 }
+
 
 pest()->beforeEach(function () {
     app(PermissionRegistrar::class)->forgetCachedPermissions();

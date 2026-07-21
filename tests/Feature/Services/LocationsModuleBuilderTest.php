@@ -51,9 +51,9 @@ it('creates a Local Locations module version owned by the team', function () {
 
 it('creates one Local Locations module version per location XlsformModule', function () {
     // beforeEach already created one; add two more for three location modules in total.
-    $modules = createLocationModules(2)
-        ->merge(XlsformModule::where('name', 'location')->get())
-        ->unique('id');
+    createLocationModules(2);
+
+    $modules = XlsformModule::where('name', 'locations')->get();
 
     expect($modules)->toHaveCount(3);
 
@@ -65,7 +65,7 @@ it('creates one Local Locations module version per location XlsformModule', func
 
     expect($versions)->toHaveCount(3);
     expect($versions->pluck('xlsform_module_id')->sort()->values()->all())
-        ->toBe(XlsformModule::where('name', 'location')->pluck('id')->sort()->values()->all());
+        ->toBe(XlsformModule::where('name', 'locations')->pluck('id')->sort()->values()->all());
 });
 
 it('builds a select_one + calculate row per location level, root-first', function () {

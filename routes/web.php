@@ -11,9 +11,9 @@ Route::group([
 ], function () {
 
     // redirect user from root path to app panel login page
-    Route::get('/', CoverPage::class)->name('cover-page');
-    Route::get('/results', ResultsPage::class)->name('results');
-
+    Route::get('/', function() {
+        return redirect('app');
+    });
 
     // when user logout from program admin panel, redirect user to app panel login pager
     Route::get('/program/login', function () {
@@ -35,9 +35,6 @@ Route::group([
 
     })->middleware('auth')
         ->name('filament.app.auth.profile');
-
-
-    Route::get('/temp-results', [TempResultsController::class, 'index']);
 
     Route::shiny();
 
