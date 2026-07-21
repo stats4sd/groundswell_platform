@@ -81,7 +81,7 @@ class FarmInfoModuleBuilder
         $choiceFilter = $levelCount >= 1 ? 'loc'.$levelCount.'=${loc'.$levelCount.'}' : '';
 
         $moduleVersion->surveyRows()->updateOrCreate(
-            ['name' => 'ID', 'type' => 'select_one_from_file Farm_Summary.csv'],
+            ['name' => 'id', 'type' => 'select_one_from_file Farm_Summary.csv'],
             [
                 'required' => true,
                 'choice_filter' => $choiceFilter,
@@ -96,7 +96,7 @@ class FarmInfoModuleBuilder
             $moduleVersion->surveyRows()->updateOrCreate(
                 ['name' => $variable->name, 'type' => 'calculate'],
                 [
-                    'calculation' => 'instance(\'Farm_Summary\')/root/item[name=${ID}]/'.$variable->name,
+                    'calculation' => 'instance(\'Farm_Summary\')/root/item[name=${id}]/'.$variable->name,
                     'row_number' => $rowNumber++,
                 ],
             );
