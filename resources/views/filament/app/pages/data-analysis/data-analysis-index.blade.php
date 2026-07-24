@@ -17,7 +17,7 @@ $instructions = tfile('data-analysis');
     </x-instructions-sidebar>
     <div class="mx-0 xl:px-4" style="margin-top:-50px">
         <div class="surveyblocks">
-            <x-shiny-loader::shiny-iframe shiny-app-url="{{ config('shiny-loader.analysis-app-url') }}" :post-data="['foo' => 'bar']" />
+            <x-shiny-loader::shiny-iframe app="groundswell_analysis" :post-data="['foo' => 'bar']" />
         </div>
     </div>
 

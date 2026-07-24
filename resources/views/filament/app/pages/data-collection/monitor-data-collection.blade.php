@@ -10,7 +10,7 @@
     <div class="mx-0 xl:px-4" style="margin-top:-50px">
         <div class="surveyblocks">
 
-            <x-shiny-loader::shiny-iframe shiny-app-url="{{ config('shiny-loader.monitoring-app-url') }}"
+            <x-shiny-loader::shiny-iframe app="groundswell_monitor"
                 :post-data="$shinyData->toArray()" />
         </div>
 

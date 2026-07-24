@@ -80,10 +80,10 @@ class XlsformsTableView extends Component implements HasActions, HasForms, HasTa
 
                         $record->publishForm();
 
-                        Notification::make('update_success')
-                            ->title(t('Success!'))
+                        Notification::make('update_info')
+                            ->title(t('Publishing Started'))
                             ->body(t("The form :title is being compiled and will be deployed shortly.", ['title' => $record->title]))
-                            ->color('success')
+                            ->color('info')
                             ->send();
                     }),
 
