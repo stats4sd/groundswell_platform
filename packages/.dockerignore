@@ -1,0 +1,9 @@
+# Keep the local-testing build context small. The Dockerfile only needs each
+# app's renv scaffolding (renv.lock, renv/activate.R, renv/settings.json,
+# .Rprofile) - not the large macOS-built renv libraries or git history.
+**/renv/library/
+**/renv/staging/
+**/.git/
+**/node_modules/
+**/vendor/
+.sessions/

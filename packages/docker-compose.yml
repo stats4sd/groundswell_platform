@@ -1,0 +1,45 @@
+# =============================================================================
+# LOCAL TESTING ONLY - DO NOT USE IN PRODUCTION
+# =============================================================================
+# This compose file exists purely to run a single shiny server locally that
+# mimics the production single-server layout, so the shiny-loader auth
+# handshake can be verified end-to-end.
+#
+# It is NOT hardened, NOT a deployment artifact, and makes assumptions that
+# only hold on a developer machine:
+#   - a custom image (Dockerfile) with both apps' renv deps cached at build time
+#   - the host source dirs mounted straight into the container; the container's
+#     startup restore writes each app's renv/library into the mounted host folder,
+#     so it persists on the host across stop/start/rebuild
+#   - a fixed host port and no auth/tls in front of the server
+#
+# Paths below are relative to THIS file (the packages/ directory).
+# With this running, set in the Laravel .env:
+#   SHINY_ROOT_URL=http://localhost:3838
+#   SHINY_ROOT_PATH=/Users/dave/Sites/groundswell_platform/packages
+# and each R app's .env: URL=http://localhost:3838/{app-folder-name}
+# =============================================================================
+
+services:
+  shiny:
+    # Custom image (see Dockerfile) that installs both apps' renv dependencies
+    # on top of rocker/shiny. Rebuild after changing an app's renv.lock:
+    #   docker compose build
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Equivalent of `docker run --platform`. rocker images are amd64-only, so
+    # on Apple Silicon (arm64) this forces emulation instead of failing to pull.
+    # NOTE: the package install below then builds/runs under emulation, so the
+    # first `docker compose build` is slow (tens of minutes).
+    platform: linux/amd64
+    ports:
+      # host:container - the shiny server listens on 3838 inside the container.
+      - "3838:3838"
+    volumes:
+      # Each app folder is served at {root_url}/{folder-name}/.
+      - ./groundswell_monitor:/srv/shiny-server/groundswell_monitor
+      - ./groundswell_analysis:/srv/shiny-server/groundswell_analysis
+      # Shared session dir used by the auth handshake. Mounted back to the
+      # host so the Laravel app (SHINY_ROOT_PATH) can read the session files.
+      - ./.sessions:/srv/shiny-server/.sessions
