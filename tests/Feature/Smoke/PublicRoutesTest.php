@@ -1,9 +1,11 @@
 <?php
 
-use App\Livewire\CoverPage;
-use App\Livewire\ResultsPage;
-
 describe('Public routes are accessible without authentication', function () {
+
+    test('root path redirects to app login', function () {
+        $this->get('/')
+            ->assertRedirect('app');
+    });
 
     test('app login page loads', function () {
         $this->get('/app/login')

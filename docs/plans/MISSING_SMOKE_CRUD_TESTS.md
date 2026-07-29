@@ -1,6 +1,6 @@
 # Missing Smoke & CRUD Tests
 
-**Status:** Not Started
+**Status:** Completed — see [docs/change-logs/missing-smoke-crud-tests.md](../change-logs/missing-smoke-crud-tests.md). All planned tests implemented (85 smoke/CRUD tests passing). The optional `HddsHints` smoke test was skipped: the page 404s without an HDDS module version linked to a deployed xlsform. The Program record-URL test uses `assertSeeHtml()` instead of `getRecordUrl()` for phpstan compatibility.
 
 Follow-up to [SMOKE_TESTS.md](SMOKE_TESTS.md) and [CRUD_TESTS.md](CRUD_TESTS.md). Audit date 2026-07-29: all 77 existing tests in `tests/Feature/Smoke/` and `tests/Feature/Crud/` pass. This plan adds the tests from the two original plans that are still missing **and still feasible against the current codebase**, and fixes two vacuous tests found during the audit.
 
