@@ -2,7 +2,7 @@
 
 **Status: Completed**
 
-See [change log](../change-logs/gps-geometry-format-unification.md).
+See [change log](../../change-logs/gps-geometry-format-unification.md).
 
 ## Context
 

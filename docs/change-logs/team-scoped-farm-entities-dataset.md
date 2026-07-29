@@ -1,6 +1,6 @@
 # Change log: Team-scoped `farm_entities` Dataset bookkeeping
 
-Implements [the plan](../plans/team-scoped-farm-entities-dataset.md).
+Implements [the plan](../archive/plans/team-scoped-farm-entities-dataset.md).
 
 ## Problem
 

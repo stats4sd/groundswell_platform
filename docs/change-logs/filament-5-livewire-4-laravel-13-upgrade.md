@@ -1,6 +1,6 @@
 # Filament 3→5 / Livewire 3→4 / Laravel 11→13 upgrade — change log
 
-Records the work done on the `filament-4` branch to execute [the upgrade plan](../plans/filament-5-livewire-4-laravel-13-upgrade.md). The plan's "single combined update" landed: the root app is on Filament 5, Livewire 4 and Laravel 13, the codemods have run, and the app boots. Remaining work (validation to green, Tailwind v4) and the blockers found are tracked in [docs/issues/filament-5-upgrade-remaining.md](../issues/filament-5-upgrade-remaining.md).
+Records the work done on the `filament-4` branch to execute [the upgrade plan](../archive/plans/filament-5-livewire-4-laravel-13-upgrade.md). The plan's "single combined update" landed: the root app is on Filament 5, Livewire 4 and Laravel 13, the codemods have run, and the app boots. Remaining work (validation to green, Tailwind v4) and the blockers found are tracked in [docs/issues/filament-5-upgrade-remaining.md](../issues/filament-5-upgrade-remaining.md).
 
 ## Installed framework versions (after `composer update -W`)
 

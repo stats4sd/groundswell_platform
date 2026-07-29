@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Status:** Completed — see [change log](../change-logs/2026-07-16-translation-uploader-fixes.md)
+**Status:** Completed — see [change log](../../change-logs/2026-07-16-translation-uploader-fixes.md)
 
-**Goal:** Fix all confirmed defects in the ODK translation upload/download system (issue #36 plus the expanded findings in [docs/code-reviews/2026-07-16-translation-uploader-review.md](../code-reviews/2026-07-16-translation-uploader-review.md)), with tests written first so each fix turns a failing test green.
+**Goal:** Fix all confirmed defects in the ODK translation upload/download system (issue #36 plus the expanded findings in [docs/code-reviews/2026-07-16-translation-uploader-review.md](../../code-reviews/2026-07-16-translation-uploader-review.md)), with tests written first so each fix turns a failing test green.
 
 **Architecture:** The importer stops hard-coding column G and instead receives the target column index, resolved from the file's header row by a new `TranslationUploadInspector` class that also validates uploads before they are queued. The export gains an optional `owner` filter so reference columns match the team's selected languages, and locks the identifier columns via sheet protection. The Livewire components get correct action wiring, team-scoped locale visibility, and the dead component is removed.
 
@@ -1230,7 +1230,7 @@ pivot attribute was always null."
 ```markdown
 # Structured cross-team sharing of translation locales
 
-**Status**: Deferred — out of scope for the issue #36 fixes (see docs/plans/2026-07-16-translation-uploader-fixes.md).
+**Status**: Deferred — out of scope for the issue #36 fixes (see docs/archive/plans/2026-07-16-translation-uploader-fixes.md).
 
 The original platform intended locales/translations to be shareable across teams, but the implementation that shipped exposed every team-created locale to every team with the language selected — an unstructured leftover of an unfinished attempt. As part of the issue #36 fixes, visibility was restricted to default locales plus the team's own locales.
 
@@ -1262,11 +1262,11 @@ Expected: pest PASS; phpstan no NEW errors versus the base branch (compare again
 
 - [ ] **Step 3: Write the change log**
 
-`docs/change-logs/2026-07-16-translation-uploader-fixes.md` — summarise what shipped, referencing the plan (`docs/plans/2026-07-16-translation-uploader-fixes.md`) and the review (`docs/code-reviews/2026-07-16-translation-uploader-review.md`). Cover: header-resolved import column + inspector validation, per-chunk full-row validation, owner-filtered export columns, real empty template + renamed actions, sheet protection, team-scoped submit, locale visibility scoping, dead component removal, pivot typo, and the two deferred issues (with links). List the new test files.
+`docs/change-logs/2026-07-16-translation-uploader-fixes.md` — summarise what shipped, referencing the plan (`docs/archive/plans/2026-07-16-translation-uploader-fixes.md`) and the review (`docs/code-reviews/2026-07-16-translation-uploader-review.md`). Cover: header-resolved import column + inspector validation, per-chunk full-row validation, owner-filtered export columns, real empty template + renamed actions, sheet protection, team-scoped submit, locale visibility scoping, dead component removal, pivot typo, and the two deferred issues (with links). List the new test files.
 
 - [ ] **Step 4: Update this plan's status**
 
-Change the `**Status:**` line at the top of this file to `Completed — see [change log](../change-logs/2026-07-16-translation-uploader-fixes.md)`.
+Change the `**Status:**` line at the top of this file to `Completed — see [change log](../../change-logs/2026-07-16-translation-uploader-fixes.md)`.
 
 - [ ] **Step 5: Final commit**
 

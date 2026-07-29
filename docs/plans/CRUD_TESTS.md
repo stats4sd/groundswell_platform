@@ -1,5 +1,7 @@
 # CRUD Test Plan
 
+**Status:** In Progress — first draft implemented 2026-05-12 (commit `b827ead`): 37 of ~69 planned tests exist in `tests/Feature/Crud/` (Admin 20/~49, App 12/~14, Program 4/~6), with the `withAppTenant()`/`withProgramTenant()` helpers in place. 5 Admin-panel tests were known-failing against current package behaviour — see [docs/change-logs/fix-admin-crud-test-imports.md](../change-logs/fix-admin-crud-test-imports.md). Remaining: ~29 Admin-panel resource cases.
+
 ## Overview
 
 Tests that each Filament resource can list, create, edit, delete, and view records correctly. Tests live in `tests/Feature/Crud/`.

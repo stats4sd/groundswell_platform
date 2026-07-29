@@ -1,6 +1,6 @@
 # Change Log — Survey Dashboard Header Tailwind v4 / Filament 5 Fixes
 
-Implements [docs/plans/survey-dashboard-header-tailwind-v4-fixes.md](../plans/survey-dashboard-header-tailwind-v4-fixes.md).
+Implements [docs/archive/plans/survey-dashboard-header-tailwind-v4-fixes.md](../archive/plans/survey-dashboard-header-tailwind-v4-fixes.md).
 
 ## Summary
 

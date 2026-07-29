@@ -1,5 +1,7 @@
 # Smoke Test Plan
 
+**Status:** In Progress — implemented 2026-05-11 (commit `9b15333`): 40 of the 43 planned tests exist across all 5 files in `tests/Feature/Smoke/`, and the `tests/Pest.php` helpers (`createSuperAdmin()`, `createAppUser()`, panel/tenant helpers, permission-cache `beforeEach`) are all in place. Remaining gap: ~3 App-panel resource smoke tests from the File 4 "Resources" block.
+
 ## Overview
 
 43 tests across 5 files that assert every page returns HTTP 200 for the correct actor, and HTTP 302 (redirect) for unauthenticated guests. Tests live in `tests/Feature/Smoke/`.

@@ -2,7 +2,7 @@
 
 **Status: Completed**
 
-See [change log](../change-logs/team-scoped-farm-entities-dataset.md).
+See [change log](../../change-logs/team-scoped-farm-entities-dataset.md).
 
 ## Context
 

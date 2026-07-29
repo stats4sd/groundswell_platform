@@ -10,7 +10,7 @@ auto-create), matched by name **and** hierarchy position (`location_level_id`), 
 `tests/Feature/Services/OdkFarmEntityServiceLocationTest.php`. A live-feed feature test for
 `refreshFromCentral()` itself (faking the OData response) remains out of scope - see
 "Deferred" in the change log. See
-[change log](../change-logs/map-loc-attributes-to-location-levels.md).
+[change log](../../change-logs/map-loc-attributes-to-location-levels.md).
 
 ## Revised decisions (2026-07-13, supersede the corresponding items below)
 

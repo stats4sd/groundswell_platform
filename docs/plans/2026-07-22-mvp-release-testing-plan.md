@@ -1,6 +1,6 @@
 # MVP Release Testing Plan — Team Localisation Workflow & Shiny Apps
 
-**Status:** Not Started
+**Status:** In Progress — Part 0 pre-flight fixes largely complete as of 2026-07-29: numeric-zero drop (B3), `publishForm` phantom-publish (B14), `UpdateXlsformDrafts` TEMP hack (B6), `ChoiceListEntry` scope leak (B4) all fixed; shiny config moved to `SHINY_AUTH_KEY`/`SHINY_ROOT_URL` (item 6); `odk:trs` command unregistered though `TestRemoveSub.php` still exists (item 1). Remaining: the Part 1 & Part 2 manual test checklists have not been run (0/45 boxes ticked).
 **Date:** 2026-07-22
 **Context:** The platform must be published next week so teams can start survey preparation (localisation, piloting). Live data collection starts ~October. Deep architectural work on filament-odk-link (see the package-vs-app appraisal of 2026-07-06) is deferred; this plan covers getting a minimum viable, hard-to-break release out.
 

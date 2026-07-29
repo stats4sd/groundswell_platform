@@ -1,6 +1,6 @@
 # Change log: Resolve FarmEntity.location_id from `loc{n}_name` entity attributes
 
-Implements [the plan](../plans/map-loc-attributes-to-location-levels.md), narrowed per decisions made 2026-07-13: match-only against existing Locations (no auto-create), matched by name **and** hierarchy position, no `loc{n}_type` check.
+Implements [the plan](../archive/plans/map-loc-attributes-to-location-levels.md), narrowed per decisions made 2026-07-13: match-only against existing Locations (no auto-create), matched by name **and** hierarchy position, no `loc{n}_type` check.
 
 ## Changes
 

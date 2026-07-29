@@ -1,6 +1,6 @@
 # Survey Dashboard Header — Tailwind v4 / Filament 5 Regression Fixes
 
-**Status:** Completed — see [change log](../change-logs/survey-dashboard-header-tailwind-v4-fixes.md).
+**Status:** Completed — see [change log](../../change-logs/survey-dashboard-header-tailwind-v4-fixes.md).
 
 ## Context
 

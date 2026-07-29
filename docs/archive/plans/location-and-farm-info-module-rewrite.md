@@ -1,6 +1,6 @@
 # Location & Farm Info Module Rewrite — Design
 
-**Status: Not Started**
+**Status: Completed** (design doc) — implemented via [location-and-farm-info-module-rewrite-implementation.md](location-and-farm-info-module-rewrite-implementation.md); see the [change log](../../change-logs/location-and-farm-info-module-rewrite.md). This file is the design/rationale record (dropped legacy behaviour, known limitations); the implementation plan and change log record what shipped. Two subsequent divergences from this design: module builders now create one local module version **per `XlsformModule` entry** rather than one per team (commit `29aa895`, 2026-07-19), and the global-`DatasetVariable` limitation was later addressed by `docs/change-logs/team-scoped-farm-entities-dataset.md`. Still open: `has_updated_locations` is never set to `true` in the codebase, so the builders don't yet run automatically.
 
 ## Context
 
@@ -9,7 +9,7 @@
 Two things have changed since it was written:
 
 1. Farm registration now happens in its own dedicated ODK form ("Farm Registration"). That form only needs the **locations** cascading-select section — it must not also show farm selection. Every other form needs **both** locations and farm selection.
-2. Farms are no longer the legacy `App\Models\SampleFrame\Farm` model. They are `FarmEntity` — a thin structural link (`owner_id`, `location_id`, `team_code`, `odk_uuid`, `odk_version`) whose actual data lives on ODK Central as entities in an `OdkDataset`. Local `Entity`/`EntityValue` mirroring was deliberately removed (see `docs/plans/farm-entities-simplify-and-gps-sync.md`); every read of a farm's actual identifiers/properties goes live to Central via `OdkFarmEntityService`.
+2. Farms are no longer the legacy `App\Models\SampleFrame\Farm` model. They are `FarmEntity` — a thin structural link (`owner_id`, `location_id`, `team_code`, `odk_uuid`, `odk_version`) whose actual data lives on ODK Central as entities in an `OdkDataset`. Local `Entity`/`EntityValue` mirroring was deliberately removed (see `docs/archive/plans/farm-entities-simplify-and-gps-sync.md`); every read of a farm's actual identifiers/properties goes live to Central via `OdkFarmEntityService`.
 
 Two example CSVs define the target shape:
 - `docs/example-location-and-farminfo-module-survey-sheet.csv` — the `survey` sheet for both modules.

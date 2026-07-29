@@ -1,6 +1,6 @@
 # Change log: Read farm_entities.team_code from Central's `label`, not a `team_code` property
 
-Implements [the plan](../plans/farm-entity-team-code-label-sync.md). `createFarm()`/`updateFarm()` already push `team_code` to Central as the Entity's `label`; `refreshFromCentral()`'s adopt logic read the other direction inconsistently, preferring a `team_code` property (which entities registered directly in Enketo never have) over `label`.
+Implements [the plan](../archive/plans/farm-entity-team-code-label-sync.md). `createFarm()`/`updateFarm()` already push `team_code` to Central as the Entity's `label`; `refreshFromCentral()`'s adopt logic read the other direction inconsistently, preferring a `team_code` property (which entities registered directly in Enketo never have) over `label`.
 
 ## Changes
 

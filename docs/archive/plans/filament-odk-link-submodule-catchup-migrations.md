@@ -1,6 +1,6 @@
 # Plan: Catch-up migrations for updated `filament-odk-link` submodule
 
-**Status: Completed** — implemented on the `filament-5` branch. See the [change log](../change-logs/filament-odk-link-submodule-catchup-migrations.md).
+**Status: Completed** — implemented on the `filament-5` branch. See the [change log](../../change-logs/filament-odk-link-submodule-catchup-migrations.md).
 
 > **Follow-up:** the "column-by-column diff" below was **incomplete** — a later re-diff found five more deltas it missed (`xlsform_modules.row_names`, `dataset_variables.type`/`value_type`, `required_media.links_to_dataset`, `datasets.custom_key`, `datasets.owner_id`). Those are addressed in [the second catch-up plan](filament-odk-link-catchup-missing-columns.md).
 

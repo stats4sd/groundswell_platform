@@ -1,6 +1,6 @@
 # Structured cross-team sharing of translation locales
 
-**Status**: Deferred — out of scope for the issue #36 fixes (see docs/plans/2026-07-16-translation-uploader-fixes.md).
+**Status**: Deferred — out of scope for the issue #36 fixes (see docs/archive/plans/2026-07-16-translation-uploader-fixes.md).
 
 The original platform intended locales/translations to be shareable across teams, but the implementation that shipped exposed every team-created locale to every team with the language selected — an unstructured leftover of an unfinished attempt. As part of the issue #36 fixes, visibility was restricted to default locales plus the team's own locales.
 

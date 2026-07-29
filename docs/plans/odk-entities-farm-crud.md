@@ -1,6 +1,6 @@
 # Plan: Farm CRUD on ODK Central Entities (generic entity framework, take 1)
 
-**Status: In Progress** — Phase 0 through Phase 4 (List, Create, Update, Delete, Import farms only) are implemented and **confirmed working against a real ODK Central server**, feature-parity confirmed against the old page for both import flows. Phase 5 (combined locations+farms import wizard) is implemented, passing `phpstan`/`pint`/the test suite, not yet tested.
+**Status: In Progress** — Phases 0–5 (List, Create, Update, Delete, Import farms only, and the combined locations+farms import wizard) are all implemented and **confirmed working against a real ODK Central server** — both import flows verified by Dan, see the [farm-entities-simplify-and-gps-sync change log](../change-logs/farm-entities-simplify-and-gps-sync.md). Follow-up work has since refined the wizard (`loc{n}` attribute mapping, GPS column matching — see `docs/change-logs/map-loc-attributes-to-location-levels.md` and `docs/change-logs/gps-geometry-format-unification.md`). Remaining: **Phase 6 (cutover)** — the legacy `FarmResource`/`Farm` model are still in place. Known open items: ordinary location-deletion behaviour after the `nullOnDelete` FK change was verified at the schema level but never manually retested; and finding M13 from `docs/code-reviews/2026-07-19-map-location-to-entity-list-attribute.md` (concurrent `LocationImport`/`FarmEntityImport` queueing is only safe with a single FIFO worker) is unaddressed.
 
 ### Bug found during Phase 5 testing: deleting a location hard-deletes linked farm_entities
 

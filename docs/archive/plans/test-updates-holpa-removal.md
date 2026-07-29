@@ -1,6 +1,6 @@
 # Test updates for HOLPA content removal (PRs #14, #22)
 
-**Status:** Completed — see [change log](../change-logs/test-updates-holpa-removal.md)
+**Status:** Completed — see [change log](../../change-logs/test-updates-holpa-removal.md)
 
 ## Background
 

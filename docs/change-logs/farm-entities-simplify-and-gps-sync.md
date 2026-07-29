@@ -1,6 +1,6 @@
 # Change log: Simplify entity-list resolution, drop entity/entity_values persistence, close the GPS gap
 
-Implements [the plan](../plans/farm-entities-simplify-and-gps-sync.md), a follow-up to [odk-entities-farm-crud.md](../plans/odk-entities-farm-crud.md) (the main Farm-on-ODK-Central-Entities feature). Three simplifications identified after that feature shipped, all confirmed working end-to-end against a real ODK Central server.
+Implements [the plan](../archive/plans/farm-entities-simplify-and-gps-sync.md), a follow-up to [odk-entities-farm-crud.md](../plans/odk-entities-farm-crud.md) (the main Farm-on-ODK-Central-Entities feature). Three simplifications identified after that feature shipped, all confirmed working end-to-end against a real ODK Central server.
 
 ## Part A — hardcoded `resolveEntityListName()`
 

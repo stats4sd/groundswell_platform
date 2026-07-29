@@ -1,6 +1,6 @@
 # Filament 5 upgrade — Tailwind v4 theme migration + config
 
-Implements **steps 5 (Tailwind v4 theme migration) and 6 (config)** of [the Filament 3→5 / Livewire 3→4 / Laravel 11→13 upgrade plan](../plans/filament-5-livewire-4-laravel-13-upgrade.md). Steps 1–4 (package removals, constraint bumps, `composer update`, the v4+v5 codemods, manual breaking changes) had already landed; this completes the frontend theme port and config merge so `npm run build` is green and the v5 config keys are present.
+Implements **steps 5 (Tailwind v4 theme migration) and 6 (config)** of [the Filament 3→5 / Livewire 3→4 / Laravel 11→13 upgrade plan](../archive/plans/filament-5-livewire-4-laravel-13-upgrade.md). Steps 1–4 (package removals, constraint bumps, `composer update`, the v4+v5 codemods, manual breaking changes) had already landed; this completes the frontend theme port and config merge so `npm run build` is green and the v5 config keys are present.
 
 ## Step 5 — Tailwind v3 → v4
 

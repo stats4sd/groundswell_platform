@@ -1,6 +1,6 @@
 # `filament-odk-link` submodule catch-up migrations — change log
 
-Records the work executing [the plan](../plans/filament-odk-link-submodule-catchup-migrations.md) on the `filament-5` branch: adding host-app migrations to match schema introduced by the updated `filament-odk-link` submodule.
+Records the work executing [the plan](../archive/plans/filament-odk-link-submodule-catchup-migrations.md) on the `filament-5` branch: adding host-app migrations to match schema introduced by the updated `filament-odk-link` submodule.
 
 ## Why
 
@@ -8,7 +8,7 @@ The `packages/filament-odk-link` submodule was updated during the Filament 5 / L
 
 A column-by-column diff of every package migration against its app copy found four genuine deltas (others — `xlsform_modules.default_order`, `language_strings.text` nullable, `dataset_variables.order`, `xlsform_module_versions.country_id` — were already covered by existing standalone app migrations).
 
-> **Correction:** that diff was incomplete. A later exhaustive re-diff found five more missing columns/constraints (`xlsform_modules.row_names`, `dataset_variables.type`/`value_type`, `required_media.links_to_dataset`, `datasets.custom_key`, `datasets.owner_id`), tracked in [the second catch-up plan](../plans/filament-odk-link-catchup-missing-columns.md).
+> **Correction:** that diff was incomplete. A later exhaustive re-diff found five more missing columns/constraints (`xlsform_modules.row_names`, `dataset_variables.type`/`value_type`, `required_media.links_to_dataset`, `datasets.custom_key`, `datasets.owner_id`), tracked in [the second catch-up plan](../archive/plans/filament-odk-link-catchup-missing-columns.md).
 
 ## Migrations added
 

@@ -2,7 +2,7 @@
 
 **Status: Completed**
 
-See [change log](../change-logs/farm-entity-team-code-label-sync.md).
+See [change log](../../change-logs/farm-entity-team-code-label-sync.md).
 
 ## Context
 

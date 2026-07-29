@@ -1,6 +1,6 @@
 # Plan: Second round of catch-up columns for the `filament-odk-link` submodule
 
-**Status: Completed** — see [change log](../change-logs/filament-odk-link-catchup-missing-columns.md). Follow-up to [the first catch-up plan](filament-odk-link-submodule-catchup-migrations.md), which was completed but whose "column-by-column diff" turned out to be incomplete. A full re-diff of every package migration against the app schema (create-copies + standalone alters + the four migrations added by the first plan) found five further deltas the first pass missed. This plan adds the migrations to close them.
+**Status: Completed** — see [change log](../../change-logs/filament-odk-link-catchup-missing-columns.md). Follow-up to [the first catch-up plan](filament-odk-link-submodule-catchup-migrations.md), which was completed but whose "column-by-column diff" turned out to be incomplete. A full re-diff of every package migration against the app schema (create-copies + standalone alters + the four migrations added by the first plan) found five further deltas the first pass missed. This plan adds the migrations to close them.
 
 ## Context
 

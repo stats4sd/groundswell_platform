@@ -1,6 +1,6 @@
 # Change log: Test updates for HOLPA content removal
 
-Implements [docs/plans/test-updates-holpa-removal.md](../plans/test-updates-holpa-removal.md).
+Implements [docs/archive/plans/test-updates-holpa-removal.md](../archive/plans/test-updates-holpa-removal.md).
 
 ## Changes
 

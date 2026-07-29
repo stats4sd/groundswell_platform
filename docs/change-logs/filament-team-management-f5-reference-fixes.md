@@ -34,7 +34,7 @@ The package replaced the Program-panel `ProgramResource` with a `ManageProgram` 
 
 All changed files pass `php -l`; no references to old package paths remain; every new target class/middleware/model/event exists in the package source.
 
-`pest`/`phpstan` could **not** be run: installed Filament is still **v3.3.52** (root `composer.json` pins `^3.3.3`), while the package now requires Filament 5. The repo is the intermediate state described in [the upgrade plan](../plans/filament-5-livewire-4-laravel-13-upgrade.md) — these reference/structure fixes only fully validate after the staged `composer update` to Filament 5 lands.
+`pest`/`phpstan` could **not** be run: installed Filament is still **v3.3.52** (root `composer.json` pins `^3.3.3`), while the package now requires Filament 5. The repo is the intermediate state described in [the upgrade plan](../archive/plans/filament-5-livewire-4-laravel-13-upgrade.md) — these reference/structure fixes only fully validate after the staged `composer update` to Filament 5 lands.
 
 Two things to re-check at that point:
 

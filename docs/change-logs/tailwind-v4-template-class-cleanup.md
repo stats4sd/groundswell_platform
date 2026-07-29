@@ -1,6 +1,6 @@
 # Tailwind v4 — leftover v3 utility classes in templates + theme.css
 
-Implements [the Tailwind v3→v4 blade/theme cleanup plan](../plans/tailwind-v4-template-class-cleanup.md). The earlier [Filament 5 / Tailwind v4 theme + config migration](./filament-5-tailwind-v4-theme-and-config.md) ported the build toolchain and the two CSS entrypoints, but did not sweep the *content* of the blade templates. Several v3 utility classes survived in the markup and a few `@apply` rules in `theme.css`. These compiled without error under v4 but rendered incorrectly (dropped opacity, wrong border colour, heavier shadow, lost flex behaviour). This change fixes them so rendered output matches the pre-upgrade intent.
+Implements [the Tailwind v3→v4 blade/theme cleanup plan](../archive/plans/tailwind-v4-template-class-cleanup.md). The earlier [Filament 5 / Tailwind v4 theme + config migration](./filament-5-tailwind-v4-theme-and-config.md) ported the build toolchain and the two CSS entrypoints, but did not sweep the *content* of the blade templates. Several v3 utility classes survived in the markup and a few `@apply` rules in `theme.css`. These compiled without error under v4 but rendered incorrectly (dropped opacity, wrong border colour, heavier shadow, lost flex behaviour). This change fixes them so rendered output matches the pre-upgrade intent.
 
 ## Changes
 

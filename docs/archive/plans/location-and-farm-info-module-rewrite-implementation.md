@@ -1,6 +1,6 @@
 # Location & Farm Info Module Rewrite Implementation Plan
 
-**Status: Completed** — change log: [docs/change-logs/location-and-farm-info-module-rewrite.md](../change-logs/location-and-farm-info-module-rewrite.md). All 4 tasks implemented and committed (package commit `61d19a7`, app commits `73067e9`, `9a6ef14`, `c4e8c66`, `17fc5e1`). Minor deviations from the written steps (test label assertions via `defaultLabel`, fresh `locationLevels()` query, renamed test helpers, `has_updated_locations` boolean cast) are documented in the change log.
+**Status: Completed** — change log: [docs/change-logs/location-and-farm-info-module-rewrite.md](../../change-logs/location-and-farm-info-module-rewrite.md). All 4 tasks implemented and committed (package commit `61d19a7`, app commits `73067e9`, `9a6ef14`, `c4e8c66`, `17fc5e1`). Minor deviations from the written steps (test label assertions via `defaultLabel`, fresh `locationLevels()` query, renamed test helpers, `has_updated_locations` boolean cast) are documented in the change log.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -10,7 +10,7 @@
 
 **Tech Stack:** Laravel 11, Pest 3, Eloquent, the `stats4sd/filament-odk-link` path-repo package.
 
-**Design doc:** `docs/plans/location-and-farm-info-module-rewrite.md` (read this first for the full rationale — known limitations, dropped legacy behavior, and why each decision was made).
+**Design doc:** `docs/archive/plans/location-and-farm-info-module-rewrite.md` (read this first for the full rationale — known limitations, dropped legacy behavior, and why each decision was made).
 
 ## Global Constraints
 

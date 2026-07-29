@@ -1,6 +1,6 @@
 # Change Log: Location & Farm Info Module Rewrite
 
-Implements [docs/plans/location-and-farm-info-module-rewrite-implementation.md](../plans/location-and-farm-info-module-rewrite-implementation.md) (design: [docs/plans/location-and-farm-info-module-rewrite.md](../plans/location-and-farm-info-module-rewrite.md)).
+Implements [docs/archive/plans/location-and-farm-info-module-rewrite-implementation.md](../archive/plans/location-and-farm-info-module-rewrite-implementation.md) (design: [docs/archive/plans/location-and-farm-info-module-rewrite.md](../archive/plans/location-and-farm-info-module-rewrite.md)).
 
 **Branch:** `location-odk-module-builder` (app) + `add-new-farm-crud-for-odk-central-submodule` (filament-odk-link package)
 

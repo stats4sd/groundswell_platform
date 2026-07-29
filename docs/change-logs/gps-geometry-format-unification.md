@@ -1,6 +1,6 @@
 # Change log: Unify GPS storage on Central to the `geometry` property format
 
-Implements [the plan](../plans/gps-geometry-format-unification.md). Farms registered directly in Enketo store GPS as a single `geometry` Entity property (ODK's geopoint string format, `"lat lon alt acc"`, e.g. `"45.4215 -75.6972 70.0 4.5"`); farms created through the app instead wrote four separate properties (`latitude`/`longitude`/`altitude`/`accuracy`). Dan found this mismatch when comparing farms from both sources on Central.
+Implements [the plan](../archive/plans/gps-geometry-format-unification.md). Farms registered directly in Enketo store GPS as a single `geometry` Entity property (ODK's geopoint string format, `"lat lon alt acc"`, e.g. `"45.4215 -75.6972 70.0 4.5"`); farms created through the app instead wrote four separate properties (`latitude`/`longitude`/`altitude`/`accuracy`). Dan found this mismatch when comparing farms from both sources on Central.
 
 ## Changes
 

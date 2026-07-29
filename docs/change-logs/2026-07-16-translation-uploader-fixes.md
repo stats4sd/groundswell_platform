@@ -1,6 +1,6 @@
 # Translation Uploader Fixes (issue #36) — Change Log
 
-Implements [docs/plans/2026-07-16-translation-uploader-fixes.md](../plans/2026-07-16-translation-uploader-fixes.md), which addresses GitHub issue #36 and the expanded findings in [docs/code-reviews/2026-07-16-translation-uploader-review.md](../code-reviews/2026-07-16-translation-uploader-review.md). All work landed on branch `fix/translation-uploader-issue-36` (the `filament-odk-link` submodule carries a matching `fix/translation-uploader-issue-36` branch). Every behavioural change was written test-first (RED → GREEN).
+Implements [docs/archive/plans/2026-07-16-translation-uploader-fixes.md](../archive/plans/2026-07-16-translation-uploader-fixes.md), which addresses GitHub issue #36 and the expanded findings in [docs/code-reviews/2026-07-16-translation-uploader-review.md](../code-reviews/2026-07-16-translation-uploader-review.md). All work landed on branch `fix/translation-uploader-issue-36` (the `filament-odk-link` submodule carries a matching `fix/translation-uploader-issue-36` branch). Every behavioural change was written test-first (RED → GREEN).
 
 ## What shipped
 
