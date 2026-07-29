@@ -1,17 +1,28 @@
 <?php
 
-use function Pest\Livewire\livewire;
-
-use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\CreateLocationLevel;
+use App\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries;
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels;
 use App\Filament\App\Resources\TeamResource\Pages\CreateTeam;
 use App\Filament\App\Resources\TeamResource\Pages\EditTeam;
 use App\Filament\App\Resources\TeamResource\Pages\ListTeams;
+use App\Models\SampleFrame\Farm;
+use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Illuminate\Support\Facades\Http;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\LanguageStringType;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
+
+use function Pest\Livewire\livewire;
 
 describe('App panel CRUD — Team', function () {
 
@@ -66,7 +77,7 @@ describe('App panel CRUD — LocationLevel', function () {
 
         livewire(ListLocationLevels::class)
             ->callTableAction(CreateAction::class, data: [
-                'name'     => 'Region',
+                'name' => 'Region',
                 'owner_id' => $this->team->id,
             ])
             ->assertHasNoFormErrors();
@@ -76,7 +87,7 @@ describe('App panel CRUD — LocationLevel', function () {
 
     test('location level view page loads', function () {
         withAppTenant($this->team);
-        $level = new LocationLevel();
+        $level = new LocationLevel;
         $level->name = 'Test Level';
         $level->owner_id = $this->team->id;
         $level->save();
@@ -86,7 +97,7 @@ describe('App panel CRUD — LocationLevel', function () {
 
     test('can bulk delete location level', function () {
         withAppTenant($this->team);
-        $level = new LocationLevel();
+        $level = new LocationLevel;
         $level->name = 'Delete Level';
         $level->owner_id = $this->team->id;
         $level->save();
@@ -114,6 +125,33 @@ describe('App panel CRUD — Farm', function () {
         $this->get("/app/{$this->team->id}/location-levels/farms")->assertOk();
     });
 
+    test('can bulk delete farm', function () {
+        withAppTenant($this->team);
+
+        $level = new LocationLevel;
+        $level->name = 'Village';
+        $level->owner_id = $this->team->id;
+        $level->save();
+
+        $location = Location::create([
+            'owner_id' => $this->team->id,
+            'location_level_id' => $level->id,
+            'name' => 'Test Village',
+            'code' => 'tv1',
+        ]);
+
+        $farm = Farm::create([
+            'owner_id' => $this->team->id,
+            'location_id' => $location->id,
+            'team_code' => 'farm-001',
+        ]);
+
+        livewire(ListFarms::class)
+            ->callTableBulkAction(DeleteBulkAction::class, [$farm]);
+
+        $this->assertDatabaseMissing('farms', ['id' => $farm->id]);
+    });
+
 });
 
 // ---------------------------------------------------------------------------
@@ -125,24 +163,24 @@ describe('App panel CRUD — ChoiceListEntry', function () {
         $this->team = Team::factory()->create();
 
         // ChoiceList requires the full parent chain: Template → Module → ModuleVersion
-        $xlsformTemplate = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::withoutEvents(
-            fn () => \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::forceCreate(['title' => 'Test Template'])
+        $xlsformTemplate = XlsformTemplate::withoutEvents(
+            fn () => XlsformTemplate::forceCreate(['title' => 'Test Template'])
         );
-        $xlsformModule = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule::forceCreate([
+        $xlsformModule = XlsformModule::forceCreate([
             'xlsform_template_id' => $xlsformTemplate->id,
             'label' => 'Test Module',
-            'name'  => 'test_module',
+            'name' => 'test_module',
         ]);
-        $xlsformModuleVersion = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion::forceCreate([
+        $xlsformModuleVersion = XlsformModuleVersion::forceCreate([
             'xlsform_module_id' => $xlsformModule->id,
-            'name'              => 'v1',
-            'is_default'        => true,
+            'name' => 'v1',
+            'is_default' => true,
         ]);
-        \Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList::forceCreate([
+        $this->choiceList = ChoiceList::forceCreate([
             'xlsform_module_version_id' => $xlsformModuleVersion->id,
-            'list_name'                 => 'smoke_test_list',
-            'is_localisable'            => true,
-            'has_custom_handling'       => false,
+            'list_name' => 'smoke_test_list',
+            'is_localisable' => true,
+            'has_custom_handling' => false,
         ]);
 
         $this->user = createAppUser($this->team);
@@ -153,10 +191,68 @@ describe('App panel CRUD — ChoiceListEntry', function () {
         $this->get("/app/{$this->team->id}/localisations/choice-list-entries")->assertOk();
     });
 
+    test('can create choice list entry via table header action', function () {
+        withAppTenant($this->team);
+
+        livewire(ListChoiceListEntries::class)
+            ->callTableAction(CreateAction::class, data: [
+                'name' => 'new_entry',
+                'languageStrings' => [
+                    [
+                        'locale_id' => $this->team->locales()->value('locales.id'),
+                        'language_string_type_id' => LanguageStringType::where('name', 'label')->firstOrFail()->id,
+                        'text' => 'New Entry',
+                    ],
+                ],
+            ])
+            ->assertHasNoTableActionErrors();
+
+        $this->assertDatabaseHas('choice_list_entries', [
+            'choice_list_id' => $this->choiceList->id,
+            'owner_id' => $this->team->id,
+            'name' => 'new_entry',
+        ]);
+    });
+
+    test('can edit choice list entry via table action', function () {
+        withAppTenant($this->team);
+
+        $entry = ChoiceListEntry::create([
+            'choice_list_id' => $this->choiceList->id,
+            'owner_id' => $this->team->id,
+            'name' => 'editable_entry',
+        ]);
+        $entry->languageStrings()->create([
+            'locale_id' => $this->team->locales()->value('locales.id'),
+            'language_string_type_id' => LanguageStringType::where('name', 'label')->firstOrFail()->id,
+            'text' => 'Editable Entry',
+        ]);
+
+        livewire(ListChoiceListEntries::class)
+            ->callTableAction(EditAction::class, $entry, data: ['name' => 'updated_entry'])
+            ->assertHasNoTableActionErrors();
+
+        $this->assertDatabaseHas('choice_list_entries', ['id' => $entry->id, 'name' => 'updated_entry']);
+    });
+
+    test('can delete choice list entry via table action', function () {
+        withAppTenant($this->team);
+
+        $entry = ChoiceListEntry::create([
+            'choice_list_id' => $this->choiceList->id,
+            'owner_id' => $this->team->id,
+            'name' => 'deletable_entry',
+        ]);
+
+        livewire(ListChoiceListEntries::class)
+            ->callTableAction(DeleteAction::class, $entry);
+
+        $this->assertDatabaseMissing('choice_list_entries', ['id' => $entry->id]);
+    });
+
 });
 
-
-describe('App Panel CRUD - Create New Team', function() {
+describe('App Panel CRUD - Create New Team', function () {
 
     beforeEach(function () {
         Http::fake();
@@ -164,7 +260,6 @@ describe('App Panel CRUD - Create New Team', function() {
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
     });
-
 
     test('team create page loads', function () {
         $this->get("/app/{$this->team->id}/teams/create")->assertOk();

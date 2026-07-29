@@ -1,21 +1,24 @@
 <?php
 
+use App\Filament\Admin\Resources\ProgramResource\Pages\ListPrograms;
 use App\Filament\Admin\Resources\TeamResource\Pages\CreateTeam;
 use App\Filament\Admin\Resources\TeamResource\Pages\ListTeams;
+use App\Filament\Admin\Resources\UserResource\Pages\ListUsers;
 use App\Models\Team;
 use App\Models\User;
 use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\Datasets\Pages\CreateDataset;
+use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\Datasets\Pages\EditDataset;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModules\Pages\ManageXlsformModule;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModuleVersions\Pages\ManageXlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
-use App\Filament\Admin\Resources\UserResource\Pages\ListUsers;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
+use Stats4sd\FilamentTeamManagement\Models\Program;
 
 use function Pest\Livewire\livewire;
 
@@ -29,6 +32,13 @@ describe('Admin panel CRUD — Program (list only in admin panel)', function () 
 
     test('program list page loads', function () {
         $this->get('/admin/programs')->assertOk();
+    });
+
+    test('program list links to program panel', function () {
+        $program = Program::create(['name' => 'Linked Program']);
+
+        livewire(ListPrograms::class)
+            ->assertSeeHtml(url('program/'.$program->id));
     });
 
 });
@@ -125,9 +135,27 @@ describe('Admin panel CRUD — Dataset', function () {
         $this->assertDatabaseHas('datasets', ['name' => 'Test Dataset']);
     });
 
+    test('create dataset requires name', function () {
+        livewire(CreateDataset::class)
+            ->fillForm(['name' => '', 'description' => 'Test description'])
+            ->call('create')
+            ->assertHasFormErrors(['name' => 'required']);
+    });
+
     test('dataset edit page loads', function () {
         $dataset = Dataset::forceCreate(['name' => 'Editable Dataset', 'primary_key' => 'id']);
         $this->get("/admin/datasets/{$dataset->id}/edit")->assertOk();
+    });
+
+    test('can edit dataset', function () {
+        $dataset = Dataset::forceCreate(['name' => 'Editable Dataset', 'primary_key' => 'id']);
+
+        livewire(EditDataset::class, ['record' => $dataset->id])
+            ->fillForm(['name' => 'Updated Dataset', 'description' => 'Updated description'])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $this->assertDatabaseHas('datasets', ['id' => $dataset->id, 'name' => 'Updated Dataset']);
     });
 
 });
@@ -160,8 +188,8 @@ describe('Admin panel CRUD — XlsformModule', function () {
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
         withAdminPanel();
-        $this->xlsformTemplate = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::withoutEvents(
-            fn () => \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::forceCreate(['title' => 'Test Template'])
+        $this->xlsformTemplate = XlsformTemplate::withoutEvents(
+            fn () => XlsformTemplate::forceCreate(['title' => 'Test Template'])
         );
     });
 
@@ -169,6 +197,18 @@ describe('Admin panel CRUD — XlsformModule', function () {
         $this->get('/admin/xlsform-modules')->assertOk();
     });
 
+    test('can delete xlsform module', function () {
+        $module = XlsformModule::forceCreate([
+            'xlsform_template_id' => $this->xlsformTemplate->id,
+            'label' => 'Delete Module',
+            'name' => 'delete_module',
+        ]);
+
+        livewire(ManageXlsformModule::class)
+            ->callTableBulkAction(DeleteBulkAction::class, [$module]);
+
+        $this->assertDatabaseMissing('xlsform_modules', ['id' => $module->id]);
+    });
 
 });
 
@@ -180,8 +220,8 @@ describe('Admin panel CRUD — XlsformModuleVersion', function () {
         $this->superAdmin = createSuperAdmin();
         $this->actingAs($this->superAdmin);
         withAdminPanel();
-        $this->xlsformTemplate = \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::withoutEvents(
-            fn () => \Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate::forceCreate(['title' => 'Test Template'])
+        $this->xlsformTemplate = XlsformTemplate::withoutEvents(
+            fn () => XlsformTemplate::forceCreate(['title' => 'Test Template'])
         );
         $this->xlsformModule = XlsformModule::forceCreate([
             'xlsform_template_id' => $this->xlsformTemplate->id,
@@ -209,7 +249,7 @@ describe('Admin panel CRUD — XlsformModuleVersion', function () {
         ]);
     });
 
-     test('create xlsform module requires name', function () {
+    test('create xlsform module requires name', function () {
         livewire(ManageXlsformModuleVersion::class)
             ->callAction(CreateAction::class, data: [
                 'xlsform_template_id' => $this->xlsformTemplate->id,
@@ -219,30 +259,16 @@ describe('Admin panel CRUD — XlsformModuleVersion', function () {
             ->assertHasActionErrors(['name' => 'required']);
     });
 
-
-
-    test('can create xlsform module version', function () {
-        livewire(ManageXlsformModuleVersion::class)
-            ->callAction(CreateAction::class, data: [
-                'xlsform_template_id' => $this->xlsformTemplate->id,
-                'label' => 'Test Module',
-                'name' => 'test_module',
-            ])
-            ->assertHasNoActionErrors();
-
-        $this->assertDatabaseHas('xlsform_modules', ['name' => 'test_module']);
-    });
-
-     test('can delete xlsform module', function () {
-
-        $module = XlsformModuleVersion::withoutEvents(fn () => XlsformModuleVersion::forceCreate([
+    test('can delete xlsform module version', function () {
+        $version = XlsformModuleVersion::withoutEvents(fn () => XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->xlsformModule->id,
             'name' => 'delete_me',
         ]));
 
         livewire(ManageXlsformModuleVersion::class)
-            ->callTableAction(DeleteAction::class, $module);
+            ->callTableAction(DeleteAction::class, $version);
 
-        $this->assertDatabaseMissing('xlsform_modules', ['id' => $module->id]);
+        $this->assertDatabaseMissing('xlsform_module_versions', ['id' => $version->id]);
     });
 
 });

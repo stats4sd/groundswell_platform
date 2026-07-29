@@ -78,7 +78,7 @@ describe('App panel routes load for authenticated team member', function () {
             ->get("/app/{$this->team->id}/pilot-index")
             ->assertOk();
     });
-    
+
     test('place adaptations index loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/place-adaptations-index")
@@ -122,5 +122,8 @@ describe('App panel routes load for authenticated team member', function () {
             ->get("/app/{$this->team->id}/localisations/choice-list-entries")
             ->assertOk();
     });
+
+    // HddsHints (/app/{team}/hdds-hints) has no smoke test: its mount() aborts 404
+    // unless the team has an HDDS module version linked to a deployed xlsform.
 
 });
