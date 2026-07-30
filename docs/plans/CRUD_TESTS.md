@@ -1,6 +1,6 @@
 # CRUD Test Plan
 
-**Status:** In Progress — first draft implemented 2026-05-12 (commit `b827ead`): 37 of ~69 planned tests exist in `tests/Feature/Crud/` (Admin 20/~49, App 12/~14, Program 4/~6), with the `withAppTenant()`/`withProgramTenant()` helpers in place. 5 Admin-panel tests were known-failing against current package behaviour — see [docs/change-logs/fix-admin-crud-test-imports.md](../change-logs/fix-admin-crud-test-imports.md). Remaining: ~29 Admin-panel resource cases.
+**Status:** Completed — see [docs/change-logs/missing-smoke-crud-tests.md](../change-logs/missing-smoke-crud-tests.md). The still-feasible remaining cases were added via the follow-up plan [MISSING_SMOKE_CRUD_TESTS.md](MISSING_SMOKE_CRUD_TESTS.md). Items that became obsolete before completion: Domain/Theme/GlobalIndicator CRUD (resources removed), User create/edit (Admin UserResource is now list-only with an "invite users" action), XlsformModule create (the package's create action is disabled), and Program-panel ProgramResource CRUD (redesigned around the `ManageProgram` tenant-profile page — adapted tests exist in `ProgramPanelCrudTest.php`).
 
 ## Overview
 

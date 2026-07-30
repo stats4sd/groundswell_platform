@@ -1,6 +1,6 @@
 # Smoke Test Plan
 
-**Status:** In Progress — implemented 2026-05-11 (commit `9b15333`): 40 of the 43 planned tests exist across all 5 files in `tests/Feature/Smoke/`, and the `tests/Pest.php` helpers (`createSuperAdmin()`, `createAppUser()`, panel/tenant helpers, permission-cache `beforeEach`) are all in place. Remaining gap: ~3 App-panel resource smoke tests from the File 4 "Resources" block.
+**Status:** Completed — see [docs/change-logs/missing-smoke-crud-tests.md](../change-logs/missing-smoke-crud-tests.md). The remaining gaps were closed via the follow-up plan [MISSING_SMOKE_CRUD_TESTS.md](MISSING_SMOKE_CRUD_TESTS.md); the only adaptation is that the "cover page loads" item became "root path redirects to app login" (the `/` route is now a redirect). Items that became obsolete before completion: cover/results/temp-results pages (routes removed), `data-collection-index`/`lisp-index`/`lisp-indicators`/`lisp-workshop` pages (page classes deleted), and `domains`/`themes`/`global-indicators` admin lists (resources removed).
 
 ## Overview
 
