@@ -67,8 +67,7 @@ Models in this app often extend base classes from these packages (e.g., `User`, 
 ### Model Domain Structure
 
 Models are namespaced by domain under `app/Models/`:
-- `Models/SampleFrame/` — Farm, Location, LocationLevel (the survey sample population)
-- `Models/SurveyData/` — FarmSurveyData, Crop, Product and other ODK submission data
+- `Models/SampleFrame/` — FarmEntity, Location, LocationLevel (the survey sample population)
 - `Models/Holpa/` — LocalIndicator, Theme, Domain (custom indicator framework)
 - `Models/Reference/` — Reference/lookup data
 

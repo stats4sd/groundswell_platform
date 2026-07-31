@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Widgets;
+namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Widgets;
 
-use Filament\Widgets\Widget;
 use App\Services\HelperService;
+use Filament\Widgets\Widget;
 
 class FarmListHeaderWidget extends Widget
 {
-    protected string $view = 'filament.app.resources.farm-resource.widgets.farm-list-header-widget';
+    protected string $view = 'filament.app.resources.farm-entity-resource.widgets.farm-list-header-widget';
 
     protected int|string|array $columnSpan = 'full';
 

@@ -111,9 +111,11 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
+    // The team has no OdkProject, so ListFarmEntities::mount()'s refreshFromCentral()
+    // short-circuits to an empty live feed without reaching ODK Central at all.
     test('farms list loads', function () {
         $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/location-levels/farms")
+            ->get("/app/{$this->team->id}/location-levels/farm-entities")
             ->assertOk();
     });
 

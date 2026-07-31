@@ -3,7 +3,7 @@
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages;
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
-use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Widgets\FarmListHeaderWidget;
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Widgets\FarmListHeaderWidget;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
 use App\Filament\Tables\Actions\ImportFarmsAction;
@@ -34,8 +34,6 @@ class ListFarmEntities extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            // Reused as-is from FarmResource - it's a generic instructions panel with no
-            // Farm-model-specific logic.
             FarmListHeaderWidget::class,
         ];
     }
@@ -58,8 +56,6 @@ class ListFarmEntities extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            // Divert to the combined wizard - identical to ListFarms' equivalent button,
-            // just pointed at this resource's own import route.
             Action::make('import')
                 ->label(fn () => t('Import Locations and Farm List'))
                 ->extraAttributes(['class' => 'buttonb'])
@@ -70,9 +66,7 @@ class ListFarmEntities extends ListRecords
 
             // Reuses the existing column-mapping modal as-is (it's about parsing a
             // spreadsheet, independent of storage backend) - only the underlying import
-            // class differs. NOTE: the Import audit record this creates is tagged
-            // model_type => Farm::class regardless (hardcoded in ImportFarmsAction), which
-            // is cosmetically inaccurate for entity imports but doesn't affect behaviour.
+            // class differs.
             ImportFarmsAction::make()
                 ->color('primary')
                 ->extraAttributes(['class' => 'buttonb'])

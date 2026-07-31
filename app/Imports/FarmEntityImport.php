@@ -28,9 +28,8 @@ use Maatwebsite\Excel\Events\ImportFailed;
 use Maatwebsite\Excel\Validators\ValidationException;
 
 /**
- * ODK-Entities-backed counterpart to FarmImport: same column-mapping/validation rules, but
- * rows are pushed to ODK Central (via OdkFarmEntityService::bulkCreateFarms()) instead of
- * being inserted into a local farms table.
+ * Imports a farm list spreadsheet by pushing rows to ODK Central as entities (via
+ * OdkFarmEntityService::bulkCreateFarms()); only the FarmEntity stub rows are stored locally.
  *
  * WithMultipleSheets + sheets() => [0 => $this] restricts the import to the first worksheet
  * only while keeping all row-handling logic on this single class, delegating the sheet back

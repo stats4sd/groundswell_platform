@@ -59,9 +59,6 @@ class LocationLevelResource extends Resource
                     });
             });
 
-        // Points at the new ODK-Entities-backed Farms page - the original FarmResource is
-        // kept around (unlinked) for comparison during the migration. See
-        // docs/plans/odk-entities-farm-crud.md.
         $farmNavItem = NavigationItem::make('Farms')
             ->url(FarmEntityResource::getUrl())
             ->isActiveWhen(fn () => request()->routeIs(FarmEntityResource::getRouteBaseName().'.index'));

@@ -5,8 +5,6 @@ namespace App\Policies;
 use App\Models\SampleFrame\FarmEntity;
 use App\Models\User;
 
-// Mirrors FarmPolicy's gate names so the same permissions govern both the legacy
-// database-backed Farms page and this new ODK-Entities-backed one during coexistence.
 class FarmEntityPolicy
 {
     public function viewAny(User $user): bool

@@ -53,11 +53,6 @@ class Location extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    public function farms(): HasMany
-    {
-        return $this->hasMany(Farm::class);
-    }
-
     public function farmEntities(): HasMany
     {
         return $this->hasMany(FarmEntity::class);
@@ -83,48 +78,6 @@ class Location extends Model
                     return $this->children->reduce(function ($carry, $location) {
                         return $carry + $location->farms_all_count;
                     }, $this->farmEntities->count());
-                });
-            }
-        );
-    }
-
-    public function farmsHouseholdCompleteCount(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                return Cache::remember($this->cacheKey().':farmsHouseholdCompleteCount', now()->addMinutes(5), function () {
-                    return $this->children->reduce(function ($carry, $location) {
-                        return $carry + $location->farms_household_complete_count;
-                    }, $this->farms()->where('household_form_completed', true)->count());
-                });
-            }
-        );
-    }
-
-    public function farmsFieldworkCompleteCount(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                return Cache::remember($this->cacheKey().':farmsFieldworkCompleteCount', now()->addMinutes(5), function () {
-                    return $this->children->reduce(function ($carry, $location) {
-                        return $carry + $location->farms_fieldwork_complete_count;
-                    }, $this->farms()->where('fieldwork_form_completed', true)->count());
-                });
-            }
-        );
-    }
-
-    public function farmsAllCompleteCount(): Attribute
-    {
-        return new Attribute(
-            get: function () {
-                return Cache::remember($this->cacheKey().':farmsAllCompleteCount', now()->addMinutes(5), function () {
-                    return $this->children->reduce(function ($carry, $location) {
-                        return $carry + $location->farms_all_complete_count;
-                    }, $this->farms()
-                        ->where('household_form_completed', true)
-                        ->where('fieldwork_form_completed', true)
-                        ->count());
                 });
             }
         );

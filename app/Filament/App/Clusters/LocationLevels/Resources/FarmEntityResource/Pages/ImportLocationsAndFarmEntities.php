@@ -30,18 +30,15 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
 
-// ODK-Entities-backed counterpart to FarmResource\Pages\ImportLocationsAndFarms - the
-// column-mapping wizard is identical (it's about parsing a spreadsheet + location
-// hierarchy, independent of storage backend). Only the farm half of save() differs:
-// FarmEntityImport instead of FarmImport. Locations stay fully local either way. Reuses
-// the same Blade view as the original page - it's generic form+actions boilerplate.
+// Combined wizard: one spreadsheet holding both the location hierarchy and the farm list.
+// Locations are imported into local tables; farms are pushed to ODK Central as entities.
 class ImportLocationsAndFarmEntities extends Page implements HasForms
 {
     use InteractsWithForms;
 
     protected static string $resource = FarmEntityResource::class;
 
-    protected string $view = 'filament.app.clusters.location-levels.resources.farm-resource.pages.import-locations-and-farms';
+    protected string $view = 'filament.app.clusters.location-levels.resources.farm-entity-resource.pages.import-locations-and-farm-entities';
 
     public function getTitle(): string
     {
@@ -79,7 +76,7 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         // copy it as a duplicate, which will be stored with the import model for farms
         Storage::copy($data['upload'], $data['upload'].'_duplicate');
 
-        // No "replace all locations" option here (unlike the old FarmResource wizard) -
+        // No "replace all locations" option here -
         // farm_entities.location_id used to cascadeOnDelete, which combined with mass
         // location deletion here into a real bug (see docs/plans/odk-entities-farm-crud.md).
         // The FK is now nullOnDelete instead, but a bulk "delete every location" action is

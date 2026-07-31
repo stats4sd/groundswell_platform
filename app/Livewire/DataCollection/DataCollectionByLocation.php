@@ -13,17 +13,16 @@ use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Reactive;
 use Livewire\Attributes\Url;
 use Livewire\Component;
-use Filament\Tables\Table;
 
-class DataCollectionByLocation extends Component implements HasTable, HasForms, HasActions
+class DataCollectionByLocation extends Component implements HasActions, HasForms, HasTable
 {
     use InteractsWithActions;
     use InteractsWithForms;
@@ -37,13 +36,11 @@ class DataCollectionByLocation extends Component implements HasTable, HasForms, 
     #[Url]
     public ?array $tableFilters = null;
 
-
     #[Computed]
     public function locationLevel()
     {
         return LocationLevel::find($this->locationLevelId);
     }
-
 
     public function table(Table $table): Table
     {
@@ -51,33 +48,27 @@ class DataCollectionByLocation extends Component implements HasTable, HasForms, 
         $filters = [];
 
         if ($parentLocationLevel) {
-            $filters[] = SelectFilter::make('parent_' . $parentLocationLevel->id)
-                ->relationship('parent', 'name', fn(Builder $query) => $query->where('location_level_id', $parentLocationLevel->id));
+            $filters[] = SelectFilter::make('parent_'.$parentLocationLevel->id)
+                ->relationship('parent', 'name', fn (Builder $query) => $query->where('location_level_id', $parentLocationLevel->id));
         }
 
         return $table
-            ->relationship(fn() => $this->locationLevel->locations())
-            ->heading(fn() => Str::of($this->locationLevel->name)->title()->plural())
+            ->relationship(fn () => $this->locationLevel->locations())
+            ->heading(fn () => Str::of($this->locationLevel->name)->title()->plural())
             ->filters($filters)
             ->columns([
                 ColumnGroup::make('Location', [
                     TextColumn::make('name')->label('')
-                        ->url(fn(Location $record) => MonitorDataCollection::getUrl() . '?' . http_build_query([
-                'locationLevelId' => $record->locationLevel->children->first()?->id,
-                'tableFilters' => [
-                    'parent_' . $record->locationLevel->id => ['value' => $record->id],
-                ],
-            ])),
+                        ->url(fn (Location $record) => MonitorDataCollection::getUrl().'?'.http_build_query([
+                            'locationLevelId' => $record->locationLevel->children->first()?->id,
+                            'tableFilters' => [
+                                'parent_'.$record->locationLevel->id => ['value' => $record->id],
+                            ],
+                        ])),
                 ]),
-                ColumnGroup::make('Farm Counts', [
-                    TextColumn::make('farms_all_count')->label('Total'),
-                    TextColumn::make('farms_household_complete_count')->label('Household Complete'),
-                    TextColumn::make('farms_fieldwork_complete_count')->label('Fieldwork Complete'),
-                    TextColumn::make('farms_all_complete_count')->label('All Complete'),
-                ]),
+                TextColumn::make('farms_all_count')->label('Farms'),
             ]);
     }
-
 
     public function render()
     {
