@@ -26,14 +26,13 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rules\Unique;
 
-// New, ODK-Central-Entities-backed Farm CRUD page, built alongside the existing
-// FarmResource (not replacing it yet). See docs/plans/odk-entities-farm-crud.md.
-// Nav-hidden, same as FarmResource - reachable by direct link during development/testing.
+// ODK-Central-Entities-backed Farm CRUD page. See docs/plans/odk-entities-farm-crud.md.
+// Nav-hidden - reached via the Survey Locations index and the location-levels cluster nav.
 class FarmEntityResource extends Resource
 {
     protected static ?string $model = FarmEntity::class;
 
-    protected static ?string $slug = 'farm-entities';
+    protected static ?string $slug = 'farms';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -108,13 +107,12 @@ class FarmEntityResource extends Resource
         $dataset = $service->ensureDataset($team);
 
         // Dynamic identifier/property columns are driven by DatasetVariable (schema-level,
-        // stays local), not by scanning records' JSON keys like the old FarmResource does.
-        // Values themselves are never persisted locally - $livewire->liveFarmData is the
+        // stays local). Values themselves are never persisted locally - $livewire->liveFarmData is the
         // live feed ListFarmEntities::mount() fetched for this page load (see
         // OdkFarmEntityService::refreshFromCentral()). The location cascade attributes
         // (loc{n}/loc{n}_name/loc{n}_type) and GPS are excluded here via the 'loc'
         // classification - GPS has its own dedicated form fields and the cascade attributes
-        // are owned by the dedicated Location column, matching the old FarmResource.
+        // are owned by the dedicated Location column.
         $propertyColumns = $dataset->variables()
             ->where('name', '!=', 'team_code')
             ->get()

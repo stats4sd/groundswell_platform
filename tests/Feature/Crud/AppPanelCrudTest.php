@@ -1,12 +1,12 @@
 <?php
 
 use App\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries;
-use App\Filament\App\Clusters\LocationLevels\Resources\FarmResource\Pages\ListFarms;
+use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities;
 use App\Filament\App\Clusters\LocationLevels\Resources\LocationLevelResource\Pages\ListLocationLevels;
 use App\Filament\App\Resources\TeamResource\Pages\CreateTeam;
 use App\Filament\App\Resources\TeamResource\Pages\EditTeam;
 use App\Filament\App\Resources\TeamResource\Pages\ListTeams;
-use App\Models\SampleFrame\Farm;
+use App\Models\SampleFrame\FarmEntity;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
@@ -17,6 +17,7 @@ use Filament\Actions\EditAction;
 use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\OdkProject;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\LanguageStringType;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
@@ -112,11 +113,20 @@ describe('App panel CRUD — LocationLevel', function () {
 
 // ---------------------------------------------------------------------------
 
-describe('App panel CRUD — Farm', function () {
+describe('App panel CRUD — FarmEntity', function () {
 
     beforeEach(function () {
-        Http::fake();
+        Http::fake([
+            '*/sessions' => Http::response(['token' => 'fake-token'], 200),
+            // ListFarmEntities::mount() self-heals the local OdkDataset row from Central;
+            // a 404 short-circuits it to an empty live feed without needing an OData fake.
+            '*/datasets/Farm_Summary' => Http::response([], 404),
+            '*/entities/*' => Http::response([], 200),
+        ]);
+
         $this->team = Team::factory()->create();
+        OdkProject::create(['id' => 1, 'owner_type' => Team::class, 'owner_id' => $this->team->id, 'name' => 'Project 1']);
+
         $this->user = createAppUser($this->team);
         $this->actingAs($this->user);
     });
@@ -125,12 +135,13 @@ describe('App panel CRUD — Farm', function () {
         $this->get("/app/{$this->team->id}/location-levels/farms")->assertOk();
     });
 
-    test('can bulk delete farm', function () {
+    test('can delete farm entity via table action', function () {
         withAppTenant($this->team);
 
         $level = new LocationLevel;
         $level->name = 'Village';
         $level->owner_id = $this->team->id;
+        $level->has_farms = true;
         $level->save();
 
         $location = Location::create([
@@ -140,16 +151,21 @@ describe('App panel CRUD — Farm', function () {
             'code' => 'tv1',
         ]);
 
-        $farm = Farm::create([
+        $farmEntity = FarmEntity::create([
             'owner_id' => $this->team->id,
             'location_id' => $location->id,
             'team_code' => 'farm-001',
+            'odk_uuid' => 'uuid-farm-001',
+            'odk_version' => 1,
         ]);
 
-        livewire(ListFarms::class)
-            ->callTableBulkAction(DeleteBulkAction::class, [$farm]);
+        livewire(ListFarmEntities::class)
+            ->callTableAction(DeleteAction::class, $farmEntity);
 
-        $this->assertDatabaseMissing('farms', ['id' => $farm->id]);
+        $this->assertSoftDeleted('farm_entities', ['id' => $farmEntity->id]);
+
+        Http::assertSent(fn ($request) => $request->method() === 'DELETE'
+            && str_contains($request->url(), 'datasets/Farm_Summary/entities/uuid-farm-001'));
     });
 
 });

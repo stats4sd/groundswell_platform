@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Services\XlsformModules\FarmInfoModuleBuilder;
@@ -146,12 +145,6 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
         return $this->hasMany(Location::class, 'owner_id');
     }
 
-    /** @return HasMany<Farm, $this> */
-    public function farms(): HasMany
-    {
-        return $this->hasMany(Farm::class, 'owner_id');
-    }
-
     /** @return HasMany<Import, $this> */
     public function imports(): HasMany
     {
@@ -274,8 +267,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
                     return 'complete';
                 }
 
-                // $farm->household_form_completed + fieldwork_form_completed are only marked for 'live' submissions, so here we can just count if any submissions have come in.
-                if ($this->farms->some(fn (Farm $farm) => $farm->submissions()->count() > 0)) {
+                if ($this->xlsforms()->whereHas('xlsformVersions.submissions')->exists()) {
                     return 'in_progress';
                 }
 
@@ -307,7 +299,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
                     return 'complete';
                 }
 
-                if ($this->farms->some(fn (Farm $farm) => $farm->household_form_completed || $farm->fieldwork_form_completed)) {
+                if ($this->xlsforms()->whereHas('xlsformVersions.submissions', fn ($query) => $query->where('test_data', false))->exists()) {
                     return 'in_progress';
                 }
 
@@ -330,7 +322,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
     public function readyForLive(): Attribute
     {
         return new Attribute(
-            get: fn(): bool => $this->languages_complete && $this->sampling_complete && $this->pba_complete && $this->optional_modules_complete,
+            get: fn (): bool => $this->languages_complete && $this->sampling_complete && $this->pba_complete && $this->optional_modules_complete,
         );
     }
 
@@ -351,7 +343,7 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
 
         $xlsformsToUpdate = $this->xlsforms->filter(fn (Xlsform $xlsform) => $xlsform->draft_needs_update);
 
-        if($xlsformsToUpdate->count() === 0) {
+        if ($xlsformsToUpdate->count() === 0) {
             return;
         }
 

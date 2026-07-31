@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Widgets;
 
-use App\Models\SampleFrame\Farm;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\HtmlString;
@@ -16,14 +15,8 @@ class DataCollectedWidget extends StatsOverviewWidget
     {
         $result = [];
 
-        // find number of farms that completed both household form and fieldwork form
-        $farmsSurveyed = Farm::where('household_form_completed', true)->where('fieldwork_form_completed', true)->count();
-        // $farmsSurveyed = Role::count();
-
-        array_push($result, Stat::make(new HtmlString('Farms surveyed'), $farmsSurveyed));
-
         // find total number of submissions for each xlsform template
-        $xlsformTemplates = XlsFormTemplate::all();
+        $xlsformTemplates = XlsformTemplate::all();
 
         foreach ($xlsformTemplates as $xlsformTemplate) {
             $total = 0;

@@ -1,6 +1,6 @@
 # Plan: Finish the ODK-Entities farm CRUD cutover (remove legacy Farm + HOLPA survey-data models) + chain the combined import
 
-**Status: Not Started**
+**Status: Completed** — see [docs/change-logs/farm-crud-cutover-and-import-chaining.md](../change-logs/farm-crud-cutover-and-import-chaining.md). All steps A1–A8 and B1–B4 landed in three commits on `remove-extra-holpa-items`. Two deviations from the plan as written, both recorded in the change log: A1 also moved the `FarmListHeaderWidget` Blade view (a third shared asset the plan didn't list), and B2 uses `Excel::queueImport()` rather than `Excel::import()` behind an `instanceof PendingDispatch` guard — same call, correctly typed, so the guard was unnecessary. The manual verification steps (5 and 6, which need a real ODK Central project and two queue workers) have not been performed.
 
 Wraps up [odk-entities-farm-crud.md](odk-entities-farm-crud.md) — its Phase 6 (cutover) and the one known open finding from [2026-07-19-map-location-to-entity-list-attribute.md](../code-reviews/2026-07-19-map-location-to-entity-list-attribute.md) (M13). Two independent parts; either can land first, but Part A deletes `FarmResource\Pages\ImportLocationsAndFarms`, so doing Part A first avoids fixing the concurrency bug in a file that is about to be deleted.
 

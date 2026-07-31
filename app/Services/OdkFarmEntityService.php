@@ -555,7 +555,7 @@ class OdkFarmEntityService
      * Bulk-creates many farms in a single Central API call - used by the Excel import
      * flow instead of calling createFarm() per row, which would mean one Central round
      * trip per row on top of the reconciliation calls. Rows whose team_code already
-     * exists for the team are skipped (mirrors the FarmImport dedup rule); a
+     * exists for the team are skipped; a
      * team_code repeated within $rows itself is also deduped, keeping the first occurrence.
      *
      * Each row: locationId (int), teamCode (string), identifiers (array<string, string>),
@@ -828,8 +828,8 @@ class OdkFarmEntityService
 
     /**
      * Soft-deletes a farm's entity on ODK Central, then soft-deletes the local FarmEntity
-     * row (not hard-deleted - keeps it around for any future FK references, e.g. from
-     * FarmSurveyData once this is wired up at cutover).
+     * row (not hard-deleted - keeps it around for any future FK references from submission
+     * data, once submissions are linked to the farm they describe).
      */
     public function deleteFarm(FarmEntity $farmEntity): void
     {

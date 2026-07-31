@@ -3,7 +3,7 @@
 namespace App\Filament\Tables\Actions;
 
 use App\Models\Import;
-use App\Models\SampleFrame\Farm;
+use App\Models\SampleFrame\FarmEntity;
 use App\Models\SampleFrame\LocationLevel;
 use App\Services\HelperService;
 use Closure;
@@ -175,7 +175,7 @@ class ImportFarmsAction extends ExcelImportAction
             // create import record - for review and error tracking by users
             $import = Import::create([
                 'team_id' => HelperService::getCurrentOwner()->id,
-                'model_type' => Farm::class,
+                'model_type' => FarmEntity::class,
             ]);
 
             $import->addMedia(Storage::path($data['upload']))->toMediaCollection();
