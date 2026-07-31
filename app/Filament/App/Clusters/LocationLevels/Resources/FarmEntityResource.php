@@ -32,7 +32,7 @@ class FarmEntityResource extends Resource
 {
     protected static ?string $model = FarmEntity::class;
 
-    protected static ?string $slug = 'farm-entities';
+    protected static ?string $slug = 'farms';
 
     protected static bool $shouldRegisterNavigation = false;
 

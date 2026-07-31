@@ -115,7 +115,7 @@ describe('App panel routes load for authenticated team member', function () {
     // short-circuits to an empty live feed without reaching ODK Central at all.
     test('farms list loads', function () {
         $this->actingAs($this->user)
-            ->get("/app/{$this->team->id}/location-levels/farm-entities")
+            ->get("/app/{$this->team->id}/location-levels/farms")
             ->assertOk();
     });
 

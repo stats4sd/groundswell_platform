@@ -132,7 +132,7 @@ describe('App panel CRUD — FarmEntity', function () {
     });
 
     test('farm list page loads', function () {
-        $this->get("/app/{$this->team->id}/location-levels/farm-entities")->assertOk();
+        $this->get("/app/{$this->team->id}/location-levels/farms")->assertOk();
     });
 
     test('can delete farm entity via table action', function () {
