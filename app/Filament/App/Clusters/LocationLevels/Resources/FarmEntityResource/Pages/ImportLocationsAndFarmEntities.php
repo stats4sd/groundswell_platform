@@ -3,8 +3,8 @@
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages;
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
-use App\Imports\FarmEntityImport;
 use App\Imports\LocationImport;
+use App\Jobs\QueueFarmEntityImport;
 use App\Models\Import;
 use App\Models\SampleFrame\FarmEntity;
 use App\Models\SampleFrame\Location;
@@ -87,9 +87,6 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         ]);
 
         $locationImport->addMedia(Storage::path($data['upload']))->toMediaCollection();
-        $data['import_id'] = $locationImport->id;
-
-        Excel::import(new LocationImport($data), $locationImport->getFirstMediaPath());
 
         // import farms as ODK Central entities
         $farmImport = Import::create([
@@ -98,9 +95,27 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         ]);
 
         $farmImport->addMedia(Storage::path($data['upload']).'_duplicate')->toMediaCollection();
-        $data['import_id'] = $farmImport->id;
 
-        Excel::import(new FarmEntityImport($data), $farmImport->getFirstMediaPath());
+        // $data['level'] holds a whole LocationLevel model, and SerializesModels does not
+        // reduce models nested inside an array property - FarmEntityImport never reads it.
+        $farmData = $data;
+        unset($farmData['level']);
+        $farmData['import_id'] = $farmImport->id;
+
+        $data['import_id'] = $locationImport->id;
+        $data['dependent_import_id'] = $farmImport->id;
+
+        // Farm rows validate against locations this import is still creating
+        // (FarmEntityImport::rules() -> Rule::exists('locations', 'code')), so the farm import
+        // must not run concurrently. Appending to the location import's own chain - rather
+        // than dispatching a second chain - is what actually orders them: a sibling
+        // Bus::chain link would fire as soon as the location chunks had been *queued*, not
+        // once they had run. queueImport() is Excel::import() narrowed to the ShouldQueue
+        // case, so it always hands back the PendingDispatch wrapping that chain, and
+        // appendToChain() must happen before it falls out of scope and dispatches.
+        Excel::queueImport(new LocationImport($data), $locationImport->getFirstMediaPath())
+            // @phpstan-ignore-next-line PendingDispatch::__call() forwards to Queueable::appendToChain() on the underlying QueueImport job
+            ->appendToChain(new QueueFarmEntityImport($farmData, $farmImport->id));
 
         Notification::make()
             ->title(t('Locations and farms are being imported.'))

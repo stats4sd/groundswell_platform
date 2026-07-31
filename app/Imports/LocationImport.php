@@ -140,6 +140,36 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
         return 1000;
     }
 
+    /**
+     * When this import is the first half of the combined locations+farms wizard, the farm
+     * import is appended to this import's own job chain (see
+     * ImportLocationsAndFarmEntities::save()), so a failure here aborts the chain and the
+     * farm import never runs. Without this its Import record would sit empty, reading as
+     * "nothing happened" rather than "skipped". The key is absent when LocationImport is
+     * used standalone from LocationLevelResource\Pages\ViewLocationLevel.
+     */
+    protected function failDependentImport(ImportFailed $event): void
+    {
+        $dependentImportId = $this->data['dependent_import_id'] ?? null;
+
+        if ($dependentImportId === null) {
+            return;
+        }
+
+        Import::find($dependentImportId)?->update([
+            'errors' => [
+                [
+                    'row' => null,
+                    'attribute' => null,
+                    'errors' => [
+                        'The farm import was skipped because the location import it depends on failed: '
+                            .$event->getException()->getMessage(),
+                    ],
+                ],
+            ],
+        ]);
+    }
+
     public function registerEvents(): array
     {
         return [
@@ -148,6 +178,8 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
                     ->update([
                         'errors' => $event->getException()->getMessage(),
                     ]);
+
+                $this->failDependentImport($event);
             },
             AfterImport::class => function (AfterImport $event) {
                 Notification::make()
