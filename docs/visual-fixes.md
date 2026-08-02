@@ -18,3 +18,11 @@ remove user menu in top-right and replace with straight-up logout button in nav 
 
 - random 500 error on signup; likely to do with ODK Central sync.
 -
+
+## Farms and Locations Cluster
+
+- The view of recent imports should have the error truncated and not wrapped; currently a long error message results in that section being extremely tall in the window.
+
+## initial pilot page
+
+The 2nd line
