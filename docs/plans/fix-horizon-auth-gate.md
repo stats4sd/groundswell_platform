@@ -1,6 +1,6 @@
 # Plan: Fix Horizon's auth gate
 
-**Status:** Not Started
+**Status:** Completed — see [fix-horizon-auth-gate.md](../change-logs/fix-horizon-auth-gate.md)
 
 ## Problem
 
