@@ -1,6 +1,6 @@
 # Plan: Reset `processing` flags on job failure, and remove dead error columns
 
-**Status:** Not Started
+**Status:** Completed — see [change log](../change-logs/job-failure-notifications-and-processing-flag-reset.md). Note: the app migration copies were not byte-identical to the package copies as this plan claimed (pre-existing drift: HOLPA columns, `odk_project_id`, config-key differences); only the dead columns were removed from both. The A3 manual SQL reset still needs running in each deployed environment after deploy.
 
 Two related cleanups ahead of the September ODK Link rewrite. Part A makes every failure point in the template-import and draft-deployment/publishing chains reset the `processing` flag, so a single failed job can no longer permanently brick a template or form. Part B removes the five error/status columns that were designed for ODK error persistence and have never been written or read.
 

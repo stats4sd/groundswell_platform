@@ -7,13 +7,16 @@ use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Stats4sd\FilamentOdkLink\Concerns\NotifiesOnJobFailure;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
+use Throwable;
 
 class NotifyUserThatLanguageImportIsComplete implements ShouldQueue
 {
+    use NotifiesOnJobFailure;
     use Queueable;
 
     /**
@@ -35,17 +38,19 @@ class NotifyUserThatLanguageImportIsComplete implements ShouldQueue
         $this->locale->save();
 
         // mark xlsform_module_versions as no longer needing a locale update
-        $this->xlsformTemplate->xlsform_default_module_versions->each(function(XlsformModuleVersion $xlsformModuleVersion) {
-          $xlsformModuleVersion->locales()
-              ->sync([$this->locale->id => ['needs_update' => 0]], detaching: false);
+        $this->xlsformTemplate->xlsform_default_module_versions->each(function (XlsformModuleVersion $xlsformModuleVersion) {
+            $xlsformModuleVersion->locales()
+                ->sync([$this->locale->id => ['needs_update' => 0]], detaching: false);
 
         });
 
         // mark xlsform as needing draft update
-        $xlsform = $this->locale->creator->xlsforms->filter(fn(Xlsform $xlsform) => $xlsform->xlsform_template_id === $this->xlsformTemplate->id)->first();
+        $xlsform = $this->locale->creator->xlsforms->filter(fn (Xlsform $xlsform) => $xlsform->xlsform_template_id === $this->xlsformTemplate->id)->first();
 
-        $xlsform->draft_needs_update = true;
-        $xlsform->save();
+        if ($xlsform) {
+            $xlsform->draft_needs_update = true;
+            $xlsform->save();
+        }
 
         Notification::make()
             ->title('Translation Import Complete')
@@ -55,5 +60,14 @@ class NotifyUserThatLanguageImportIsComplete implements ShouldQueue
             ->send();
 
         LanguageImportIsComplete::dispatch($this->locale->id, $this->xlsformTemplate->id);
+    }
+
+    public function failed(?Throwable $exception = null): void
+    {
+        $this->notifyJobFailure(
+            "Translation import could not be finalised: {$this->xlsformTemplate->title} {$this->locale->description}",
+            $exception,
+            $this->user,
+        );
     }
 }

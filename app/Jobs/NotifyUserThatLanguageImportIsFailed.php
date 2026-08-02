@@ -8,12 +8,14 @@ use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\HtmlString;
-use Maatwebsite\Excel\Events\ImportFailed;
+use Stats4sd\FilamentOdkLink\Concerns\NotifiesOnJobFailure;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
+use Throwable;
 
 class NotifyUserThatLanguageImportIsFailed implements ShouldQueue
 {
+    use NotifiesOnJobFailure;
     use Queueable;
 
     public int $tries = 1;
@@ -21,8 +23,7 @@ class NotifyUserThatLanguageImportIsFailed implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Locale $locale, public XlsformTemplate
-    $xlsformTemplate, public User $user, public string $message)
+    public function __construct(public Locale $locale, public XlsformTemplate $xlsformTemplate, public User $user, public string $message)
     {
         //
     }
@@ -36,7 +37,6 @@ class NotifyUserThatLanguageImportIsFailed implements ShouldQueue
         $this->locale->processing_count--;
         $this->locale->save();
 
-
         Notification::make()
             ->title('Translation Import Failed')
             ->body(new HtmlString(
@@ -46,10 +46,19 @@ class NotifyUserThatLanguageImportIsFailed implements ShouldQueue
 ")
             )
             ->danger()
-            ->broadcast($this->user)
             ->persistent()
-            ->send();
+            ->sendToDatabase($this->user, isEventDispatched: true)
+            ->broadcast($this->user);
 
         LanguageImportIsComplete::dispatch($this->locale->id, $this->xlsformTemplate->id, $this->user->id);
+    }
+
+    public function failed(?Throwable $exception = null): void
+    {
+        $this->notifyJobFailure(
+            "Translation import failed: {$this->xlsformTemplate->title} {$this->locale->description}",
+            $exception,
+            $this->user,
+        );
     }
 }
