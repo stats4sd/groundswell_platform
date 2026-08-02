@@ -1,6 +1,6 @@
 # Plan: Database notifications + `failed()` on every queueable job
 
-**Status:** Not Started
+**Status:** Completed — see [change log](../change-logs/job-failure-notifications-and-processing-flag-reset.md). One deviation: `RegisterNewUserToOdkCentral` stays synchronous (queueing it would serialise the plaintext password in the event payload into the queue store); the swallow was replaced with log + durable Super Admin notification instead.
 
 ## Goal
 

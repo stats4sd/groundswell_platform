@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         /**
@@ -20,21 +21,14 @@ return new class extends Migration {
             $table->string('submitted_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->longtext('content'); // This is explicitly not json so the ordering of variables is preserved (at the expense of not being able to query the content in SQL);
-            $table->json('errors')->nullable();
-            $table->boolean('processed')->default(0);
-
-            // what data model entries were created when processing this submission? e.g., if the application has custom data maps that populate tables from processed submissions.
-            $table->json('entries')->nullable();
 
             $table->boolean('draft_data')->default(0);
             $table->boolean('test_data')->default(0);
-
 
             // HOLPA CUSTOM
             $table->timestamp('survey_started_at')->nullable();
             $table->timestamp('survey_ended_at')->nullable();
             $table->float('survey_duration')->nullable()->comment('The time difference between survey start time and survey end time in minutes');
-
 
             $table->timestamps();
             $table->softDeletes();

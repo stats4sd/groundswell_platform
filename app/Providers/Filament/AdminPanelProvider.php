@@ -68,6 +68,8 @@ class AdminPanelProvider extends PanelProvider
                     ->url(url('/app'))
                     ->sort(1),
             ])->darkMode(false)
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->plugins([
                 OdkLinkAdmin::make(),
             ]);
