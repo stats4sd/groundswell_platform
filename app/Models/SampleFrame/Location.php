@@ -20,39 +20,75 @@ class Location extends Model
         'parent',
     ];
 
+    protected static bool $flagOwnerOnWrite = true;
+
     protected static function booted()
     {
         static::saved(function (self $location) {
-            $location->owner->update(['has_updated_locations' => true]);
-            $location->owner->xlsforms()->update(['draft_needs_update' => true]);
+            if (! static::$flagOwnerOnWrite) {
+                return;
+            }
+
+            static::flagOwner($location->owner);
         });
 
         static::deleted(function (self $location) {
-            $location->owner->update(['has_updated_locations' => true]);
-            $location->owner->xlsforms()->update(['draft_needs_update' => true]);
+            if (! static::$flagOwnerOnWrite) {
+                return;
+            }
+
+            static::flagOwner($location->owner);
         });
     }
 
+    /**
+     * Marking the owner costs three queries (load the team, update it, update its xlsforms) and
+     * `$touches = ['parent']` re-fires `saved` once per ancestor, so a bulk writer creating
+     * hundreds of locations pays it hundreds of times for a flag that is idempotent. Suppress it
+     * for the batch and call flagOwner() once at the end — see LocationImport::collection().
+     */
+    public static function withoutFlaggingOwner(callable $callback): mixed
+    {
+        static::$flagOwnerOnWrite = false;
+
+        try {
+            return $callback();
+        } finally {
+            static::$flagOwnerOnWrite = true;
+        }
+    }
+
+    public static function flagOwner(Team $owner): void
+    {
+        $owner->update(['has_updated_locations' => true]);
+        $owner->xlsforms()->update(['draft_needs_update' => true]);
+    }
+
+    /** @return BelongsTo<Team, $this> */
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'owner_id');
     }
 
+    /** @return BelongsTo<LocationLevel, $this> */
     public function locationLevel(): BelongsTo
     {
         return $this->belongsTo(LocationLevel::class);
     }
 
+    /** @return BelongsTo<self, $this> */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
 
+    /** @return HasMany<self, $this> */
     public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    /** @return HasMany<FarmEntity, $this> */
     public function farmEntities(): HasMany
     {
         return $this->hasMany(FarmEntity::class);

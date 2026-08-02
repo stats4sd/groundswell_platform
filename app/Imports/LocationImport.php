@@ -4,10 +4,13 @@ namespace App\Imports;
 
 use App\Models\Import;
 use App\Models\SampleFrame\Location;
+use App\Models\SampleFrame\LocationLevel;
+use App\Models\Team;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\HtmlString;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
@@ -16,8 +19,12 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\ImportFailed;
+use Maatwebsite\Excel\Validators\Failure;
+use Maatwebsite\Excel\Validators\ValidationException;
+use Throwable;
 
 /**
  * Imports a location hierarchy from the FIRST worksheet of an uploaded spreadsheet.
@@ -30,12 +37,24 @@ use Maatwebsite\Excel\Events\ImportFailed;
  * This single-class shape is also what makes CSV files work. The PhpSpreadsheet Csv reader
  * does not expose listWorksheetNames(), so maatwebsite/excel bypasses sheets() for CSV and
  * applies THIS object as the row handler directly (see the "Csv doesn't have worksheets"
- * branch of vendor/maatwebsite/excel/src/Reader.php::getWorksheets). Because collection()
- * lives here, CSV and Excel are handled by the same code.
+ * branch of vendor/maatwebsite/excel/src/Reader.php::getWorksheets). Because collection() and
+ * the validation rules live here, CSV and Excel are handled by the same code.
  */
-class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithEvents, WithHeadingRow, WithMultipleSheets, WithStrictNullComparison
+class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithEvents, WithHeadingRow, WithMultipleSheets, WithStrictNullComparison, WithValidation
 {
     protected Collection $parentIds;
+
+    /**
+     * Every location already owned by this team, keyed by locationKey(), so a chunk resolves
+     * parents and existing rows in memory instead of two queries per level per row.
+     *
+     * Populated lazily from collection() and never from the constructor: each chunk is a separate
+     * queued ReadChunk job with this object serialized into its payload (Maatwebsite\Excel\ChunkReader::read),
+     * so building it up front would write the whole hierarchy into every chunk's payload.
+     *
+     * @var ?array<string, Location>
+     */
+    private ?array $existingLocations = null;
 
     public function __construct(public array $data)
     {
@@ -63,76 +82,202 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
         ];
     }
 
-    public function collection(Collection $rows): array
+    /**
+     * Maatwebsite discards whatever this returns (Maatwebsite\Excel\Sheet::import calls
+     * `$import->collection($rows)` and drops the result), so nothing is collected here.
+     *
+     * A location is matched on owner + level + code only, never on its parent: two locations under
+     * different parents may legitimately share a code, and the unique index on locations.code was
+     * dropped in 2025_11_24_112030_drop_unique_from_locations_table. Existing rows are never
+     * updated, only reused.
+     */
+    public function collection(Collection $rows): void
     {
         $locationLevel = $this->data['level'];
 
-        $importedLocations = [];
+        $createdAnyLocation = false;
+        $ancestorIdsToTouch = [];
 
-        foreach ($rows as $row) {
+        Location::withoutFlaggingOwner(function () use ($rows, $locationLevel, &$createdAnyLocation, &$ancestorIdsToTouch): void {
+            foreach ($rows as $row) {
+                $currentParent = null;
+                $ancestorIds = [];
 
-            $currentParent = null;
+                // highest parent level down to the lowest, so each level's parent already exists
+                foreach ($this->parentIds as $parentId) {
+                    ['location' => $parent, 'created' => $created] = $this->findOrCreateLocation(
+                        (int) $parentId,
+                        $row[$this->data["parent_{$parentId}_code_column"]],
+                        $row[$this->data["parent_{$parentId}_name_column"]],
+                        $currentParent,
+                    );
 
-            // go through parents in order from highest to lowest. Ensure all parents exist in the database (and create them if they do not)
-            foreach ($this->parentIds as $parentId) {
+                    if ($created) {
+                        $createdAnyLocation = true;
+                        $ancestorIdsToTouch = [...$ancestorIdsToTouch, ...$ancestorIds];
+                    }
 
-                // upsert() requires columns specified in "uniqueBy" with "primary" or "unique" index in database level.
-                // we removed the unique constraint of column locations.code. This column does not have unique index now.
-                // modify program to check record existence, create new record if it is not existed.
-                // do not update anything if location is existed. As it is possible to have two different locations with same location code accidentally.
-
-                // check if location is already existed for this team
-                $noOfRecords = Location::where('owner_id', $this->data['owner_id'])
-                    ->where('location_level_id', $parentId)
-                    ->where('code', $row[$this->data["parent_{$parentId}_code_column"]])
-                    ->count();
-
-                // create new location record if it is not existed for this team
-                if ($noOfRecords == 0) {
-                    Location::create([
-                        'owner_id' => $this->data['owner_id'],
-                        'code' => $row[$this->data["parent_{$parentId}_code_column"]],
-                        'name' => $row[$this->data["parent_{$parentId}_name_column"]],
-                        'location_level_id' => $parentId,
-                        'parent_id' => $currentParent?->id,
-                    ]);
+                    $ancestorIds[] = $parent->id;
+                    $currentParent = $parent;
                 }
 
-                // find the new/existing current parent.
-                $currentParent = Location::query()
-                    ->where('owner_id', $this->data['owner_id'])
-                    ->where('location_level_id', $parentId)
-                    ->where('code', $row[$this->data["parent_{$parentId}_code_column"]])
-                    ->first();
+                ['created' => $created] = $this->findOrCreateLocation(
+                    $locationLevel->id,
+                    $row[$this->data['code_column']],
+                    $row[$this->data['name_column']],
+                    $currentParent,
+                );
+
+                if ($created) {
+                    $createdAnyLocation = true;
+                    $ancestorIdsToTouch = [...$ancestorIdsToTouch, ...$ancestorIds];
+                }
             }
+        });
 
-            // check if location is already existed for this team
-            $noOfLocation = Location::where('owner_id', $this->data['owner_id'])
-                ->where('location_level_id', $locationLevel->id)
-                ->where('code', $row[$this->data['code_column']])
-                ->count();
-
-            // create new location record if it is not existed for this team
-            if ($noOfLocation == 0) {
-                Location::create([
-                    'owner_id' => $this->data['owner_id'],
-                    'location_level_id' => $locationLevel->id,
-                    'parent_id' => $currentParent?->id,
-                    'code' => $row[$this->data['code_column']],
-                    'name' => $row[$this->data['name_column']],
-                ]);
-            }
-
-            $currentLocation = Location::query()
-                ->where('owner_id', $this->data['owner_id'])
-                ->where('location_level_id', $locationLevel->id)
-                ->where('code', $row[$this->data['code_column']])
-                ->first();
-
-            $importedLocations[] = $currentLocation;
+        if (! $createdAnyLocation) {
+            return;
         }
 
-        return $importedLocations;
+        $this->touchAncestors($ancestorIdsToTouch);
+
+        Location::flagOwner(Team::findOrFail($this->data['owner_id']));
+    }
+
+    /**
+     * @return array{
+     *     location: Location,
+     *     created: bool
+     * }
+     */
+    private function findOrCreateLocation(int $levelId, mixed $code, mixed $name, ?Location $parent): array
+    {
+        $key = $this->locationKey($levelId, $code);
+
+        $existing = $this->existingLocations()[$key] ?? null;
+
+        if ($existing !== null) {
+            return ['location' => $existing, 'created' => false];
+        }
+
+        $location = new Location([
+            'owner_id' => $this->data['owner_id'],
+            'location_level_id' => $levelId,
+            'parent_id' => $parent?->id,
+            'code' => $code,
+            'name' => $name,
+        ]);
+
+        // `touch => false` skips Model::touchOwners(), which would lazily load the parent, update
+        // it, re-fire `saved` on it and then recurse to the grandparent — the whole ancestor chain
+        // per created row. touchAncestors() does the same job in one query per chunk.
+        $location->save(['touch' => false]);
+
+        $this->existingLocations[$key] = $location;
+
+        return ['location' => $location, 'created' => true];
+    }
+
+    /** @return array<string, Location> */
+    private function existingLocations(): array
+    {
+        if ($this->existingLocations !== null) {
+            return $this->existingLocations;
+        }
+
+        $this->existingLocations = [];
+
+        Location::query()
+            ->where('owner_id', $this->data['owner_id'])
+            ->orderBy('id')
+            ->get(['id', 'owner_id', 'code', 'location_level_id', 'parent_id'])
+            ->each(function (Location $location): void {
+                // oldest wins, matching the unordered first() this index replaced
+                $this->existingLocations[$this->locationKey($location->location_level_id, $location->code)] ??= $location;
+            });
+
+        return $this->existingLocations;
+    }
+
+    /**
+     * MySQL's collation on locations.code matches case-insensitively and ignores trailing
+     * whitespace, and comparing a numeric spreadsheet cell against the varchar column is a loose
+     * comparison. An array lookup does none of that, so both sides are normalised the same way —
+     * otherwise a row that used to reuse an existing location would silently insert a duplicate,
+     * and there is no longer a unique index to stop it.
+     *
+     * Note that SQLite, which the test suite runs on, is case-sensitive here and so agrees with
+     * the raw array lookup rather than with production.
+     */
+    private function locationKey(int $levelId, mixed $code): string
+    {
+        return $levelId.'|'.mb_strtolower(trim((string) $code));
+    }
+
+    /**
+     * @param  array<int, int>  $ancestorIds
+     */
+    private function touchAncestors(array $ancestorIds): void
+    {
+        $uniqueAncestorIds = array_unique($ancestorIds);
+
+        if ($uniqueAncestorIds === []) {
+            return;
+        }
+
+        Location::whereIn('id', $uniqueAncestorIds)->update(['updated_at' => now()]);
+    }
+
+    /**
+     * locations.code and locations.name are both NOT NULL, and a whole chunk is imported inside
+     * one transaction, so a single blank cell in a mapped column used to abort the entire import
+     * with a bare "Column 'code' cannot be null" and no indication of which row was at fault.
+     * Validating up front turns that into a failure naming the row and the column.
+     *
+     * @return array<string, array<int, string>>
+     */
+    public function rules(): array
+    {
+        return collect($this->requiredColumns())
+            ->map(fn () => ['required'])
+            ->all();
+    }
+
+    /** @return array<string, string> */
+    public function customValidationMessages(): array
+    {
+        return collect($this->requiredColumns())
+            ->mapWithKeys(fn (string $description, string $column) => [
+                "{$column}.required" => "The '{$column}' column is empty. You mapped this column to the {$description}, and every row must have a value in it.",
+            ])
+            ->all();
+    }
+
+    /**
+     * Spreadsheet column name => the mapping the user chose for it in the import form, ordered
+     * from the highest parent level down to the level being imported.
+     *
+     * @return array<string, string>
+     */
+    private function requiredColumns(): array
+    {
+        $parentNames = LocationLevel::whereIn('id', $this->parentIds)->pluck('name', 'id');
+
+        $columns = [];
+
+        foreach ($this->parentIds as $parentId) {
+            $parentName = $parentNames->get((int) $parentId, "location level {$parentId}");
+
+            $columns[$this->data["parent_{$parentId}_code_column"]] = "{$parentName} unique code";
+            $columns[$this->data["parent_{$parentId}_name_column"]] = "{$parentName} name";
+        }
+
+        $levelName = $this->data['level']->name;
+
+        $columns[$this->data['code_column']] = "{$levelName} unique code";
+        $columns[$this->data['name_column']] = "{$levelName} name";
+
+        return $columns;
     }
 
     public function chunkSize(): int
@@ -163,23 +308,102 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
                     'attribute' => null,
                     'errors' => [
                         'The farm import was skipped because the location import it depends on failed: '
-                            .$event->getException()->getMessage(),
+                            .$this->describeFailure($event->getException()),
                     ],
                 ],
             ],
         ]);
     }
 
+    /**
+     * The same [{row, attribute, errors}] shape FarmEntityImport and QueueFarmEntityImport write,
+     * so every writer of imports.errors agrees on one payload shape.
+     *
+     * @return array<int, array{row: ?int, attribute: ?string, errors: array<int, string>}>
+     */
+    protected function formatFailures(Throwable $exception): array
+    {
+        if (! $exception instanceof ValidationException) {
+            return [
+                [
+                    'row' => null,
+                    'attribute' => null,
+                    'errors' => [$exception->getMessage()],
+                ],
+            ];
+        }
+
+        return collect($exception->failures())
+            ->map(fn (Failure $failure) => [
+                'row' => $failure->row(),
+                'attribute' => $failure->attribute(),
+                'errors' => $failure->errors(),
+            ])
+            ->all();
+    }
+
+    /**
+     * A plain-text summary for the failure notification and for the dependent import's record.
+     * Validation failures are capped because one badly prepared file can fail every row.
+     */
+    protected function describeFailure(Throwable $exception): string
+    {
+        if (! $exception instanceof ValidationException) {
+            return $exception->getMessage();
+        }
+
+        $failures = collect($exception->failures());
+
+        $summary = $failures->take(10)
+            ->map(fn (Failure $failure) => "Row {$failure->row()}: ".implode(' ', $failure->errors()))
+            ->implode("\n");
+
+        if ($failures->count() <= 10) {
+            return $summary;
+        }
+
+        return $summary."\n(and ".($failures->count() - 10).' more rows with problems)';
+    }
+
+    /**
+     * Without this a failed location import was completely silent: the wizard reported that the
+     * file was being processed, the errors were written to imports.errors, and nothing surfaced
+     * them. Chaining the farm import behind this one made that worse, because FarmEntityImport's
+     * own failure notification no longer fires when this half fails.
+     */
+    protected function notifyFailure(Throwable $exception): void
+    {
+        $recipient = User::find($this->data['user_id']);
+
+        if ($recipient === null) {
+            return;
+        }
+
+        Notification::make()
+            ->title('Import of Location Data Failed')
+            ->body(fn (): HtmlString => new HtmlString(
+                'The import of location data failed with the following errors:<br/><br/>'
+                    .nl2br(e($this->describeFailure($exception)))
+            ))
+            ->danger()
+            ->sendToDatabase($recipient, isEventDispatched: true)
+            ->broadcast($recipient);
+    }
+
     public function registerEvents(): array
     {
         return [
             ImportFailed::class => function (ImportFailed $event) {
+                $exception = $event->getException();
+
                 Import::find($this->data['import_id'])
-                    ->update([
-                        'errors' => $event->getException()->getMessage(),
+                    ?->update([
+                        'errors' => $this->formatFailures($exception),
                     ]);
 
                 $this->failDependentImport($event);
+
+                $this->notifyFailure($exception);
             },
             AfterImport::class => function (AfterImport $event) {
                 Notification::make()
