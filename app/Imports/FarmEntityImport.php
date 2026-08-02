@@ -2,16 +2,18 @@
 
 namespace App\Imports;
 
+use App\Filament\App\Clusters\LocationLevels\Resources\ImportResource;
+use App\Imports\Concerns\FormatsImportFailures;
 use App\Models\Import;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\OdkFarmEntityService;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
@@ -25,7 +27,6 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\ImportFailed;
-use Maatwebsite\Excel\Validators\ValidationException;
 
 /**
  * Imports a farm list spreadsheet by pushing rows to ODK Central as entities (via
@@ -43,6 +44,8 @@ use Maatwebsite\Excel\Validators\ValidationException;
  */
 class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithEvents, WithHeadingRow, WithMultipleSheets, WithStrictNullComparison, WithValidation
 {
+    use FormatsImportFailures;
+
     // The $data array is the data that is passed from the import form
     public function __construct(public array $data) {}
 
@@ -192,57 +195,68 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         return 1000;
     }
 
+    /**
+     * The notification body is deliberately a summary - the full per-row list lives on the
+     * import's own page, which is what this links to.
+     *
+     * @return array<int, Action>
+     */
+    private function viewImportActions(): array
+    {
+        $team = Team::find($this->data['owner_id']);
+
+        if ($team === null) {
+            return [];
+        }
+
+        return [
+            Action::make('view_errors')
+                ->label('See what went wrong')
+                // no Filament tenant is set inside a queued job, so getUrl() cannot infer it
+                ->url(ImportResource::getUrl('view', ['record' => $this->data['import_id']], tenant: $team))
+                ->markAsRead(),
+        ];
+    }
+
     public function registerEvents(): array
     {
         return [
             ImportFailed::class => function (ImportFailed $event) {
+                $exception = $event->getException();
 
-                // check if exception is a validation exception, and get the failures from it
-                if ($event->getException() instanceof ValidationException) {
-                    $failures = collect($event->getException()->failures());
+                $import = Import::find($this->data['import_id']);
 
-                    Import::find($this->data['import_id'])
-                        ->update([
-                            'errors' => $failures->map(function ($failure) {
-                                return [
-                                    'location' => [
-                                        'row' => $failure->row(),
-                                        'column' => $failure->attribute(),
-                                    ],
-                                    'errors' => $failure->errors(),
-                                ];
-                            })->toArray(),
-                        ]);
-                } else {
-                    Import::find($this->data['import_id'])
-                        ->update([
-                            'errors' => [
-                                [
-                                    'row' => null,
-                                    'attribute' => null,
-                                    'errors' => [$event->getException()->getMessage()],
-                                ],
-                            ],
-                        ]);
+                if ($import !== null) {
+                    $import->appendErrorLines($this->formatFailures($exception));
+                    $import->update(['finished_at' => now()]);
                 }
 
                 $recipient = User::find($this->data['user_id']);
 
+                if ($recipient === null) {
+                    return;
+                }
+
                 Notification::make()
                     ->title('Import of Farm Data Failed')
-                    ->body(fn (): HtmlString => new HtmlString(
-                        'The import of farm data failed with the following errors:<br/><br/>'
-                            .$event->getException()->getMessage()
-                    ))
+                    ->body(Str::limit($this->describeFailure($exception), 200))
                     ->danger()
+                    ->actions($this->viewImportActions())
                     ->sendToDatabase($recipient, isEventDispatched: true)
                     ->broadcast($recipient);
             },
             AfterImport::class => function (AfterImport $event) {
+                Import::find($this->data['import_id'])?->update([
+                    'success' => true,
+                    'finished_at' => now(),
+                ]);
 
                 $recipient = User::find($this->data['user_id']);
 
-                // send notification
+                if ($recipient === null) {
+                    return;
+                }
+
                 Notification::make()
                     ->title('Import of Farm Data Complete')
                     ->success()

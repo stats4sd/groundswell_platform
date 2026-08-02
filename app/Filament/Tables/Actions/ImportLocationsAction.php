@@ -2,14 +2,17 @@
 
 namespace App\Filament\Tables\Actions;
 
+use App\Filament\App\Clusters\LocationLevels\Resources\ImportResource;
 use App\Models\Import;
 use App\Models\SampleFrame\Location;
 use App\Services\HelperService;
 use Closure;
 use EightyNine\ExcelImport\ExcelImportAction;
+use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -153,6 +156,7 @@ class ImportLocationsAction extends ExcelImportAction
 
             $import = Import::create([
                 'team_id' => HelperService::getCurrentOwner()->id,
+                'user_id' => auth()->id(),
                 'model_type' => Location::class,
             ]);
 
@@ -163,6 +167,17 @@ class ImportLocationsAction extends ExcelImportAction
             $importObject = new $this->importClass($data);
 
             Excel::import($importObject, $import->getFirstMediaPath());
+
+            Notification::make()
+                ->title(t('Your locations are being imported.'))
+                ->body(t('The file is being processed in the background. If anything goes wrong, "Past imports" will say which rows were at fault.'))
+                ->success()
+                ->actions([
+                    Action::make('view_imports')
+                        ->label(t('Past imports'))
+                        ->url(ImportResource::getUrl('index')),
+                ])
+                ->send();
 
             return true;
         };

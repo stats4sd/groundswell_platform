@@ -3,6 +3,7 @@
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages;
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
+use App\Filament\App\Clusters\LocationLevels\Resources\ImportResource;
 use App\Imports\LocationImport;
 use App\Jobs\QueueFarmEntityImport;
 use App\Models\Import;
@@ -83,6 +84,7 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         // still a blunt, dangerous operation this architecture doesn't need to offer.
         $locationImport = Import::create([
             'team_id' => HelperService::getCurrentOwner()->id,
+            'user_id' => auth()->id(),
             'model_type' => Location::class,
         ]);
 
@@ -91,6 +93,7 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         // import farms as ODK Central entities
         $farmImport = Import::create([
             'team_id' => HelperService::getCurrentOwner()->id,
+            'user_id' => auth()->id(),
             'model_type' => FarmEntity::class,
         ]);
 
@@ -119,8 +122,13 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
 
         Notification::make()
             ->title(t('Locations and farms are being imported.'))
-            ->body(t('The file will be processed in the background and the data will appear below once complete. You may leave this page without interrupting this process.'))
+            ->body(t('The file is being processed in the background and the data will appear below once complete. You may leave this page without interrupting this process. If anything goes wrong, "Past imports" will say which rows were at fault.'))
             ->success()
+            ->actions([
+                Action::make('view_imports')
+                    ->label(t('Past imports'))
+                    ->url(ImportResource::getUrl('index')),
+            ])
             ->send();
 
         redirect(FarmEntityResource::getUrl('index'));

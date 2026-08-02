@@ -119,6 +119,12 @@ describe('App panel routes load for authenticated team member', function () {
             ->assertOk();
     });
 
+    test('past imports list loads', function () {
+        $this->actingAs($this->user)
+            ->get("/app/{$this->team->id}/location-levels/imports")
+            ->assertOk();
+    });
+
     test('choice list entries list loads', function () {
         $this->actingAs($this->user)
             ->get("/app/{$this->team->id}/localisations/choice-list-entries")

@@ -2,15 +2,18 @@
 
 namespace App\Imports;
 
+use App\Filament\App\Clusters\LocationLevels\Resources\ImportResource;
+use App\Imports\Concerns\FormatsImportFailures;
 use App\Models\Import;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
@@ -22,8 +25,6 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\ImportFailed;
-use Maatwebsite\Excel\Validators\Failure;
-use Maatwebsite\Excel\Validators\ValidationException;
 use Throwable;
 
 /**
@@ -42,6 +43,8 @@ use Throwable;
  */
 class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithEvents, WithHeadingRow, WithMultipleSheets, WithStrictNullComparison, WithValidation
 {
+    use FormatsImportFailures;
+
     protected Collection $parentIds;
 
     /**
@@ -301,68 +304,24 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
             return;
         }
 
-        Import::find($dependentImportId)?->update([
-            'errors' => [
-                [
-                    'row' => null,
-                    'attribute' => null,
-                    'errors' => [
-                        'The farm import was skipped because the location import it depends on failed: '
-                            .$this->describeFailure($event->getException()),
-                    ],
+        $dependentImport = Import::find($dependentImportId);
+
+        if ($dependentImport === null) {
+            return;
+        }
+
+        $dependentImport->appendErrorLines([
+            [
+                'row' => null,
+                'attribute' => null,
+                'errors' => [
+                    'The farm import was skipped because the location import it depends on failed: '
+                        .$this->describeFailure($event->getException()),
                 ],
             ],
         ]);
-    }
 
-    /**
-     * The same [{row, attribute, errors}] shape FarmEntityImport and QueueFarmEntityImport write,
-     * so every writer of imports.errors agrees on one payload shape.
-     *
-     * @return array<int, array{row: ?int, attribute: ?string, errors: array<int, string>}>
-     */
-    protected function formatFailures(Throwable $exception): array
-    {
-        if (! $exception instanceof ValidationException) {
-            return [
-                [
-                    'row' => null,
-                    'attribute' => null,
-                    'errors' => [$exception->getMessage()],
-                ],
-            ];
-        }
-
-        return collect($exception->failures())
-            ->map(fn (Failure $failure) => [
-                'row' => $failure->row(),
-                'attribute' => $failure->attribute(),
-                'errors' => $failure->errors(),
-            ])
-            ->all();
-    }
-
-    /**
-     * A plain-text summary for the failure notification and for the dependent import's record.
-     * Validation failures are capped because one badly prepared file can fail every row.
-     */
-    protected function describeFailure(Throwable $exception): string
-    {
-        if (! $exception instanceof ValidationException) {
-            return $exception->getMessage();
-        }
-
-        $failures = collect($exception->failures());
-
-        $summary = $failures->take(10)
-            ->map(fn (Failure $failure) => "Row {$failure->row()}: ".implode(' ', $failure->errors()))
-            ->implode("\n");
-
-        if ($failures->count() <= 10) {
-            return $summary;
-        }
-
-        return $summary."\n(and ".($failures->count() - 10).' more rows with problems)';
+        $dependentImport->update(['finished_at' => now()]);
     }
 
     /**
@@ -381,13 +340,31 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
 
         Notification::make()
             ->title('Import of Location Data Failed')
-            ->body(fn (): HtmlString => new HtmlString(
-                'The import of location data failed with the following errors:<br/><br/>'
-                    .nl2br(e($this->describeFailure($exception)))
-            ))
+            // plain text, never an HtmlString: this is built from spreadsheet cell contents,
+            // and the full per-row list belongs on the page this links to, not in a toast
+            ->body(Str::limit($this->describeFailure($exception), 200))
             ->danger()
+            ->actions($this->viewImportActions())
             ->sendToDatabase($recipient, isEventDispatched: true)
             ->broadcast($recipient);
+    }
+
+    /** @return array<int, Action> */
+    protected function viewImportActions(): array
+    {
+        $team = Team::find($this->data['owner_id']);
+
+        if ($team === null) {
+            return [];
+        }
+
+        return [
+            Action::make('view_errors')
+                ->label('See what went wrong')
+                // no Filament tenant is set inside a queued job, so getUrl() cannot infer it
+                ->url(ImportResource::getUrl('view', ['record' => $this->data['import_id']], tenant: $team))
+                ->markAsRead(),
+        ];
     }
 
     public function registerEvents(): array
@@ -396,20 +373,34 @@ class LocationImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithC
             ImportFailed::class => function (ImportFailed $event) {
                 $exception = $event->getException();
 
-                Import::find($this->data['import_id'])
-                    ?->update([
-                        'errors' => $this->formatFailures($exception),
-                    ]);
+                $import = Import::find($this->data['import_id']);
+
+                if ($import !== null) {
+                    $import->appendErrorLines($this->formatFailures($exception));
+                    $import->update(['finished_at' => now()]);
+                }
 
                 $this->failDependentImport($event);
 
                 $this->notifyFailure($exception);
             },
             AfterImport::class => function (AfterImport $event) {
+                Import::find($this->data['import_id'])?->update([
+                    'success' => true,
+                    'finished_at' => now(),
+                ]);
+
+                $recipient = User::find($this->data['user_id']);
+
+                if ($recipient === null) {
+                    return;
+                }
+
                 Notification::make()
                     ->title('Import Complete')
                     ->success()
-                    ->broadcast(User::find($this->data['user_id']));
+                    ->sendToDatabase($recipient, isEventDispatched: true)
+                    ->broadcast($recipient);
             },
         ];
     }

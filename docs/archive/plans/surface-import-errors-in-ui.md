@@ -1,6 +1,6 @@
 # Plan: Surface location + farm import errors in the UI
 
-**Status:** Not Started
+**Status:** Completed — see [docs/change-logs/surface-import-errors-in-ui.md](../change-logs/surface-import-errors-in-ui.md)
 
 ## Scope decision
 
