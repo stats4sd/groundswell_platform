@@ -55,7 +55,6 @@ class ImportsTable
                 TextColumn::make('error_preview')
                     ->label(fn () => t('First problem'))
                     ->state(fn (Import $record): ?string => $record->error_lines->first()['messages'][0] ?? null)
-                    ->wrap()
                     ->limit(120)
                     ->placeholder('—'),
 

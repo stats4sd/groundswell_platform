@@ -102,7 +102,7 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
             ->headerActions([
                 Action::make('Add New')
                     ->label(fn () => t('Add new'))
-                    ->extraAttributes(['class' => 'buttonb my-4 shadow-none !py-21'])
+                    ->extraAttributes(['class' => 'buttonb my-4 shadow-none'])
                     ->icon('heroicon-o-plus-circle')
                     ->visible(fn () => auth()->user()->can('maintain survey translations'))
                     ->schema([

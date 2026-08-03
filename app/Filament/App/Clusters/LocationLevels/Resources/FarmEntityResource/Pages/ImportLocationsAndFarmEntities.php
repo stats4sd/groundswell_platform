@@ -18,6 +18,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Components\Section;
@@ -134,6 +135,24 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         redirect(FarmEntityResource::getUrl('index'));
     }
 
+    // Step 2 asks for a code column for the farm level (`code_column`) and for each of its
+    // ancestors (`parent_{id}_code_column`), so the column for whichever level the farms are
+    // linked to is already in the form state - step 3 just needs to pick the right key.
+    protected function getLocationCodeColumn(Get $get): int|string|null
+    {
+        $levelId = $get('location_level_id');
+
+        if (! $levelId) {
+            return null;
+        }
+
+        $farmLevelId = LocationLevel::where('has_farms', true)->value('id');
+
+        return (int) $levelId === (int) $farmLevelId
+            ? $get('code_column')
+            : $get("parent_{$levelId}_code_column");
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema
@@ -244,12 +263,23 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
                                         ->required()
                                         ->live(),
 
-                                    Select::make('location_code_column')
-                                        ->options(fn (Get $get) => $get('header_columns'))
+                                    // Step 2 already mapped a code column for every level in the chain,
+                                    // so show the answer for the chosen level instead of asking twice.
+                                    TextEntry::make('location_code_column_preview')
                                         ->label(fn (Get $get) => t('Which column contains the').' '.(LocationLevel::find($get('location_level_id'))->name ?? t('location')).' '.t('unique code?'))
-                                        ->placeholder(t('Select a column'))
-                                        ->notIn(['na'])
-                                        ->required(),
+                                        ->state(function (Get $get) {
+                                            $column = $this->getLocationCodeColumn($get);
+
+                                            if ($column === null) {
+                                                return t('Select a location level above.');
+                                            }
+
+                                            return $get('header_columns')[$column]
+                                                ?? t('No column was mapped for this level in the previous step.');
+                                        }),
+
+                                    Hidden::make('location_code_column')
+                                        ->dehydrateStateUsing(fn (Get $get) => $this->getLocationCodeColumn($get)),
                                 ]),
 
                             Section::make(t('Farm Information'))
