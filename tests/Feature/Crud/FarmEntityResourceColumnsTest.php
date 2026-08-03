@@ -1,6 +1,9 @@
 <?php
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages\ListFarmEntities;
+use App\Filament\App\Clusters\LocationLevels\Resources\ImportResource\Widgets\RecentImportsWidget;
+use App\Models\Import;
+use App\Models\SampleFrame\Location;
 use App\Models\Team;
 use App\Services\OdkFarmEntityService;
 use Illuminate\Support\Facades\Http;
@@ -49,4 +52,29 @@ test('farm list shows identifier/property columns but not the location cascade o
         ->assertTableColumnDoesNotExist('property_loc1_name')
         ->assertTableColumnDoesNotExist('property_loc1_type')
         ->assertTableColumnDoesNotExist('property_geometry');
+});
+
+// This is the page both import flows redirect to, so a failed import has to be visible from it.
+describe('the recent imports widget', function () {
+
+    test('it appears once the team has a failed import', function () {
+        Import::create([
+            'team_id' => $this->team->id,
+            'model_type' => Location::class,
+            'errors' => [['row' => 14, 'attribute' => 'village_code', 'errors' => ['The value is required.']]],
+        ]);
+
+        withAppTenant($this->team);
+
+        livewire(ListFarmEntities::class)
+            ->assertSeeLivewire(RecentImportsWidget::class);
+    });
+
+    test('it stays out of the way of a team that has never imported anything', function () {
+        withAppTenant($this->team);
+
+        livewire(ListFarmEntities::class)
+            ->assertDontSeeLivewire(RecentImportsWidget::class);
+    });
+
 });

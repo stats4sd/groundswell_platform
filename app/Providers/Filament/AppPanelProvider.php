@@ -26,6 +26,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stats4sd\FilamentTeamManagement\Filament\App\Pages\RegisterTeam;
+use Stats4sd\FilamentTeamManagement\Filament\Auth\Register;
 use Stats4sd\FilamentTeamManagement\Http\Middleware\SetLatestTeamMiddleware;
 use Tio\Laravel\Middleware\SetLocaleMiddleware;
 
@@ -48,7 +49,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->profile(EditProfile::class, isSimple: false)
             ->login(Login::class)
-            ->registration(\Stats4sd\FilamentTeamManagement\Filament\Auth\Register::class)
+            ->registration(Register::class)
             ->passwordReset()
             ->brandLogo(asset('images/groundswell_international_logo.png'))
             ->brandLogoHeight('3rem')
@@ -195,6 +196,8 @@ class AppPanelProvider extends PanelProvider
             ])
             ->tenantMenu(fn () => auth()->check() && auth()->user()->can('view team selection box'))
             ->darkMode(false)
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->topNavigation()
             ->renderHook(PanelsRenderHook::SCRIPTS_BEFORE, fn () => view('filament.app.scripts'))
             ->plugins([

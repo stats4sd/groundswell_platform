@@ -4,6 +4,7 @@ namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Widgets\FarmListHeaderWidget;
+use App\Filament\App\Clusters\LocationLevels\Resources\ImportResource\Widgets\RecentImportsWidget;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\App\Pages\SurveyLocations\SurveyLocationsIndex;
 use App\Filament\Tables\Actions\ImportFarmsAction;
@@ -35,6 +36,9 @@ class ListFarmEntities extends ListRecords
     {
         return [
             FarmListHeaderWidget::class,
+            // this is the page both import flows redirect to, so it is where a failure has to
+            // become visible
+            RecentImportsWidget::class,
         ];
     }
 

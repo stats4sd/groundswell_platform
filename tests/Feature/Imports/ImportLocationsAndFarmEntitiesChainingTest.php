@@ -6,6 +6,7 @@ use App\Imports\LocationImport;
 use App\Jobs\QueueFarmEntityImport;
 use App\Models\Import;
 use App\Models\SampleFrame\FarmEntity;
+use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use App\Models\User;
@@ -17,6 +18,7 @@ use Maatwebsite\Excel\Events\ImportFailed;
 use Maatwebsite\Excel\Excel as ExcelWriter;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Jobs\QueueImport;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 use function Pest\Livewire\livewire;
 
@@ -160,6 +162,8 @@ describe('LocationImport failure propagation', function () {
 
     beforeEach(function () {
         Http::fake();
+        config()->set('broadcasting.default', 'null');
+
         $this->team = Team::factory()->create();
         $this->user = User::factory()->create();
 
@@ -177,7 +181,12 @@ describe('LocationImport failure propagation', function () {
         $handler = $import->registerEvents()[ImportFailed::class];
         $handler(new ImportFailed(new RuntimeException('bad location file')));
 
-        expect($this->locationImportRecord->fresh()->errors->first())->toBe('bad location file');
+        expect($this->locationImportRecord->fresh()->errors->first())->toBe([
+            'row' => null,
+            'attribute' => null,
+            'errors' => ['bad location file'],
+        ]);
+
         expect($farmImportRecord->fresh()->errors->first()['errors'][0])
             ->toContain('skipped because the location import it depends on failed')
             ->toContain('bad location file');
@@ -191,10 +200,128 @@ describe('LocationImport failure propagation', function () {
         $handler = $import->registerEvents()[ImportFailed::class];
         $handler(new ImportFailed(new RuntimeException('bad location file')));
 
-        expect($this->locationImportRecord->fresh()->errors->first())->toBe('bad location file');
+        expect($this->locationImportRecord->fresh()->errors->first()['errors'])->toBe(['bad location file']);
+    });
+
+    test('the user is notified, so a failed location import is not silent', function () {
+        $import = new LocationImport(locationImportData($this->team, $this->user, [
+            'import_id' => $this->locationImportRecord->id,
+        ]));
+
+        $handler = $import->registerEvents()[ImportFailed::class];
+        $handler(new ImportFailed(new RuntimeException('bad location file')));
+
+        expect($this->user->notifications()->count())->toBe(1);
+        expect($this->user->notifications()->first()->data['title'])->toBe('Import of Location Data Failed');
+        expect($this->user->notifications()->first()->data['body'])->toContain('bad location file');
     });
 
 });
+
+describe('LocationImport row validation', function () {
+
+    beforeEach(function () {
+        Http::fake();
+        Storage::fake(config('filesystems.default'));
+        config()->set('broadcasting.default', 'null');
+
+        $this->team = Team::factory()->create();
+        $this->user = User::factory()->create();
+
+        $this->level = LocationLevel::create([
+            'owner_id' => $this->team->id,
+            'name' => 'Village',
+            'has_farms' => true,
+        ]);
+
+        $this->locationImportRecord = Import::create(['team_id' => $this->team->id, 'model_type' => Location::class]);
+    });
+
+    // locations.code and locations.name are NOT NULL, so before these rules existed a single
+    // blank cell aborted the whole chunk transaction with a raw "Column 'code' cannot be null"
+    // that named neither the row nor the column.
+    test('a blank code cell is reported against its row and column, and no locations are created', function () {
+        $failure = importSpreadsheetWithBlankVillageCode($this);
+
+        expect(Location::count())->toBe(0);
+        expect($failure['row'])->toBe(3);
+        expect($failure['attribute'])->toBe('village_code');
+        expect($failure['errors'][0])
+            ->toContain("The 'village_code' column is empty")
+            ->toContain('Village unique code');
+    });
+
+    test('the dependent farm import is told which row broke the location import', function () {
+        $farmImportRecord = Import::create(['team_id' => $this->team->id, 'model_type' => FarmEntity::class]);
+
+        importSpreadsheetWithBlankVillageCode($this, ['dependent_import_id' => $farmImportRecord->id]);
+
+        expect($farmImportRecord->fresh()->errors->first()['errors'][0])
+            ->toContain('skipped because the location import it depends on failed')
+            ->toContain('Row 3');
+    });
+
+    test('rules() requires every column the user mapped, at the level and at every parent level', function () {
+        $parent = LocationLevel::create(['owner_id' => $this->team->id, 'name' => 'District']);
+        $this->level->update(['parent_id' => $parent->id]);
+
+        $import = new LocationImport([
+            'header_columns' => [
+                'district_code' => 'district_code',
+                'district_name' => 'district_name',
+                'village_code' => 'village_code',
+                'village_name' => 'village_name',
+            ],
+            'code_column' => 'village_code',
+            'name_column' => 'village_name',
+            "parent_{$parent->id}_code_column" => 'district_code',
+            "parent_{$parent->id}_name_column" => 'district_name',
+            'level' => $this->level,
+            'owner_id' => $this->team->id,
+            'user_id' => $this->user->id,
+        ]);
+
+        expect($import->rules())->toBe([
+            'district_code' => ['required'],
+            'district_name' => ['required'],
+            'village_code' => ['required'],
+            'village_name' => ['required'],
+        ]);
+
+        expect($import->customValidationMessages()['district_code.required'])
+            ->toContain('District unique code');
+    });
+
+});
+
+function importSpreadsheetWithBlankVillageCode($test, array $overrides = []): array
+{
+    $export = new class implements FromArray
+    {
+        public function array(): array
+        {
+            return [
+                ['village_code', 'village_name'],
+                ['V1', 'Alpha'],
+                ['', 'Beta'],
+            ];
+        }
+    };
+
+    Excel::store($export, 'blank-code.xlsx', null, ExcelWriter::XLSX);
+
+    $test->locationImportRecord->addMedia(Storage::path('blank-code.xlsx'))->toMediaCollection();
+
+    $data = locationImportData($test->team, $test->user, array_merge([
+        'import_id' => $test->locationImportRecord->id,
+        'level' => $test->level,
+    ], $overrides));
+
+    expect(fn () => Excel::import(new LocationImport($data), $test->locationImportRecord->getFirstMediaPath()))
+        ->toThrow(ValidationException::class);
+
+    return $test->locationImportRecord->fresh()->errors->first();
+}
 
 function locationImportData(Team $team, User $user, array $overrides = []): array
 {

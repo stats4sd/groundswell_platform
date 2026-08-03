@@ -45,7 +45,7 @@ php artisan horizon       # Start Horizon queue manager
 
 ## Architecture Overview
 
-This is a multi-tenant Laravel 11 + Filament 3 platform for managing agricultural survey data collection via ODK Central.
+This is a multi-tenant Laravel 13 + Filament 5 platform for managing agricultural survey data collection via ODK Central.
 
 ### Multi-Panel Filament Architecture
 

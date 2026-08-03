@@ -82,12 +82,24 @@ it('builds a calculate row per identifier and property variable, pulling from th
 
     $rows = localFarmInfoVersion($this->team)->surveyRows;
 
-    $identifierRow = $rows->firstWhere('name', 'certificate_no');
+    $identifierRow = $rows->firstWhere('name', 'farm_var_certificate_no');
     expect($identifierRow->type)->toBe('calculate');
     expect($identifierRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${id}]/certificate_no');
 
-    $propertyRow = $rows->firstWhere('name', 'field_size');
+    $propertyRow = $rows->firstWhere('name', 'farm_var_field_size');
     expect($propertyRow->calculation)->toBe('instance(\'Farm_Summary\')/root/item[name=${id}]/field_size');
+});
+
+it('prefixes calculate rows so they cannot collide with a question of the same name elsewhere in the form', function () {
+    $dataset = farmDataset($this->team);
+    DatasetVariable::create(['dataset_id' => $dataset->id, 'name' => 'interviewer_name', 'label' => 'Interviewer', 'type' => 'string', 'description' => 'property']);
+
+    FarmInfoModuleBuilder::populate($this->team);
+
+    $rows = localFarmInfoVersion($this->team)->surveyRows;
+
+    expect($rows->firstWhere('name', 'interviewer_name'))->toBeNull();
+    expect($rows->firstWhere('name', 'farm_var_interviewer_name'))->not->toBeNull();
 });
 
 it('builds the farmer_note listing every identifier and property with its label', function () {
@@ -104,8 +116,8 @@ it('builds the farmer_note listing every identifier and property with its label'
     // package's HasLanguageStrings saved() hook, so the label is asserted via defaultLabel.
     $text = $note->defaultLabel->text;
 
-    expect($text)->toContain('Certificate Number: ${certificate_no},');
-    expect($text)->toContain('Field Size (ha): ${field_size},');
+    expect($text)->toContain('Certificate Number: ${farm_var_certificate_no},');
+    expect($text)->toContain('Field Size (ha): ${farm_var_field_size},');
     expect($text)->toContain('If this is not the correct farm, please go back and reselect.');
 });
 
@@ -117,5 +129,5 @@ it('removes a stale calculate row when a variable is removed', function () {
     $variable->delete();
     FarmInfoModuleBuilder::populate($this->team);
 
-    expect(localFarmInfoVersion($this->team)->surveyRows->firstWhere('name', 'farm_certificate_no'))->toBeNull();
+    expect(localFarmInfoVersion($this->team)->surveyRows->firstWhere('name', 'farm_var_certificate_no'))->toBeNull();
 });

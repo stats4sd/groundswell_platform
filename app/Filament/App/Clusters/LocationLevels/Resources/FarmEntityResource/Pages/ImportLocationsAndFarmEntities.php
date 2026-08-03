@@ -3,6 +3,7 @@
 namespace App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource\Pages;
 
 use App\Filament\App\Clusters\LocationLevels\Resources\FarmEntityResource;
+use App\Filament\App\Clusters\LocationLevels\Resources\ImportResource;
 use App\Imports\LocationImport;
 use App\Jobs\QueueFarmEntityImport;
 use App\Models\Import;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Components\Section;
@@ -83,6 +85,7 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         // still a blunt, dangerous operation this architecture doesn't need to offer.
         $locationImport = Import::create([
             'team_id' => HelperService::getCurrentOwner()->id,
+            'user_id' => auth()->id(),
             'model_type' => Location::class,
         ]);
 
@@ -91,6 +94,7 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
         // import farms as ODK Central entities
         $farmImport = Import::create([
             'team_id' => HelperService::getCurrentOwner()->id,
+            'user_id' => auth()->id(),
             'model_type' => FarmEntity::class,
         ]);
 
@@ -119,11 +123,34 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
 
         Notification::make()
             ->title(t('Locations and farms are being imported.'))
-            ->body(t('The file will be processed in the background and the data will appear below once complete. You may leave this page without interrupting this process.'))
+            ->body(t('The file is being processed in the background and the data will appear below once complete. You may leave this page without interrupting this process. If anything goes wrong, "Past imports" will say which rows were at fault.'))
             ->success()
+            ->actions([
+                Action::make('view_imports')
+                    ->label(t('Past imports'))
+                    ->url(ImportResource::getUrl('index')),
+            ])
             ->send();
 
         redirect(FarmEntityResource::getUrl('index'));
+    }
+
+    // Step 2 asks for a code column for the farm level (`code_column`) and for each of its
+    // ancestors (`parent_{id}_code_column`), so the column for whichever level the farms are
+    // linked to is already in the form state - step 3 just needs to pick the right key.
+    protected function getLocationCodeColumn(Get $get): int|string|null
+    {
+        $levelId = $get('location_level_id');
+
+        if (! $levelId) {
+            return null;
+        }
+
+        $farmLevelId = LocationLevel::where('has_farms', true)->value('id');
+
+        return (int) $levelId === (int) $farmLevelId
+            ? $get('code_column')
+            : $get("parent_{$levelId}_code_column");
     }
 
     public function form(Schema $schema): Schema
@@ -236,12 +263,23 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
                                         ->required()
                                         ->live(),
 
-                                    Select::make('location_code_column')
-                                        ->options(fn (Get $get) => $get('header_columns'))
+                                    // Step 2 already mapped a code column for every level in the chain,
+                                    // so show the answer for the chosen level instead of asking twice.
+                                    TextEntry::make('location_code_column_preview')
                                         ->label(fn (Get $get) => t('Which column contains the').' '.(LocationLevel::find($get('location_level_id'))->name ?? t('location')).' '.t('unique code?'))
-                                        ->placeholder(t('Select a column'))
-                                        ->notIn(['na'])
-                                        ->required(),
+                                        ->state(function (Get $get) {
+                                            $column = $this->getLocationCodeColumn($get);
+
+                                            if ($column === null) {
+                                                return t('Select a location level above.');
+                                            }
+
+                                            return $get('header_columns')[$column]
+                                                ?? t('No column was mapped for this level in the previous step.');
+                                        }),
+
+                                    Hidden::make('location_code_column')
+                                        ->dehydrateStateUsing(fn (Get $get) => $this->getLocationCodeColumn($get)),
                                 ]),
 
                             Section::make(t('Farm Information'))

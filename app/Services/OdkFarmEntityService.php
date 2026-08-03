@@ -8,6 +8,7 @@ use App\Models\SampleFrame\LocationLevel;
 use App\Models\Team;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
@@ -909,17 +910,43 @@ class OdkFarmEntityService
         }
 
         $feed = $this->odkLinkService->getOdkDatasetEntitiesFeed($odkProject, $entityListName);
+        $liveData = $this->extractLiveData($feed);
 
-        // withTrashed(): the feed only returns Central's currently-active entities, but a
-        // uuid in it may belong to a farm we soft-deleted locally that was since restored
-        // on Central - that needs restoring, not re-inserting (which would collide on the
-        // unique odk_uuid constraint).
-        $farmsByUuid = FarmEntity::withTrashed()
-            ->where('owner_id', $team->id)
-            ->whereNotNull('odk_uuid')
-            ->get()
-            ->keyBy('odk_uuid');
+        // Only one refresh may write for a team at a time. Adopting a few hundred farms
+        // that already exist on Central takes ~15s, which is long enough for a second page
+        // load (a reload, another tab) to overlap the first - and both walk the same feed,
+        // so the second tried to adopt uuids the first had inserted after the second read
+        // its local state, dying on the unique odk_uuid constraint mid-way through.
+        // Non-blocking on purpose: the run that loses returns the live Central read it has
+        // already paid for and leaves the writes to the run holding the lock (whose rows
+        // show up on the next load), rather than tying up a worker waiting on it.
+        $lock = Cache::lock("farm-entities-refresh:{$team->id}", 120);
 
+        if (! $lock->get()) {
+            return $liveData;
+        }
+
+        // One transaction for the whole sync: a failure part-way through previously left
+        // the team's farm list half-adopted, with no way to tell which rows had made it.
+        try {
+            DB::transaction(fn () => $this->syncLocalFarms($team, $dataset, $liveData));
+        } finally {
+            $lock->release();
+        }
+
+        return $liveData;
+    }
+
+    /**
+     * Reduces Central's OData feed to the live data map, dropping rows with no uuid and the
+     * OData system/reserved keys. Keying on uuid also collapses a uuid repeated within the
+     * feed itself, so the sync can never see the same farm twice in one pass.
+     *
+     * @param  array<int, array<string, mixed>>  $feed
+     * @return array<string, array{label: ?string, data: array<string, string>}>
+     */
+    protected function extractLiveData(array $feed): array
+    {
         $liveData = [];
 
         foreach ($feed as $row) {
@@ -931,50 +958,87 @@ class OdkFarmEntityService
 
             $values = collect($row)->filter(fn ($value, $key) => ! Str::startsWith($key, '__') && ! in_array($key, self::RESERVED_ODATA_KEYS, true));
 
-            $label = $row['label'] ?? null;
-
-            $liveData[$uuid] = ['label' => $label, 'data' => $values->all()];
-
-            $farmEntity = $farmsByUuid->get($uuid);
-
-            if ($farmEntity?->trashed()) {
-                $farmEntity->restore();
-            }
-
-            if (! $farmEntity) {
-                // team_code mirrors label bidirectionally - createFarm()/updateFarm() push
-                // team_code to Central as label, so adopting the other direction reads it
-                // back from label too, not from a same-named property (which may not even
-                // exist for entities registered directly in Enketo).
-                FarmEntity::create([
-                    'owner_id' => $team->id,
-                    'location_id' => $this->resolveLocationFromAttributes($team, $values->all()),
-                    'team_code' => (string) ($label ?? $uuid),
-                    'odk_uuid' => $uuid,
-                ]);
-            } else {
-                if ($farmEntity->location_id === null) {
-                    // Adopted before its location attributes were resolvable (or before this
-                    // feature existed) - worth retrying every refresh until it succeeds.
-                    $locationId = $this->resolveLocationFromAttributes($team, $values->all());
-
-                    if ($locationId !== null) {
-                        $farmEntity->update(['location_id' => $locationId]);
-                    }
-                }
-
-                if ($label !== null && $farmEntity->team_code !== $label) {
-                    // Keeps team_code in sync if the label was ever changed directly on
-                    // Central (e.g. via Central's own UI) rather than through this app.
-                    $farmEntity->update(['team_code' => $label]);
-                }
-            }
-
-            foreach ($values as $name => $value) {
-                $this->ensurePropertyRegistered($dataset, $name);
-            }
+            $liveData[$uuid] = ['label' => $row['label'] ?? null, 'data' => $values->all()];
         }
 
         return $liveData;
+    }
+
+    /**
+     * @param  array<string, array{label: ?string, data: array<string, string>}>  $liveData
+     */
+    protected function syncLocalFarms(Team $team, Dataset $dataset, array $liveData): void
+    {
+        $propertyNames = [];
+
+        foreach ($liveData as $uuid => $entry) {
+            $this->syncLocalFarm($team, $uuid, $entry['label'], $entry['data']);
+
+            $propertyNames = [...$propertyNames, ...array_keys($entry['data'])];
+        }
+
+        // Registered once per distinct property name rather than once per farm - every farm
+        // in a feed carries the same handful of property names, so doing this inside the
+        // loop above meant a firstOrCreate per property per row.
+        foreach (array_unique($propertyNames) as $name) {
+            $this->ensurePropertyRegistered($dataset, $name);
+        }
+    }
+
+    /**
+     * @param  array<string, string>  $values
+     */
+    protected function syncLocalFarm(Team $team, string $uuid, ?string $label, array $values): void
+    {
+        // Keyed on odk_uuid alone - withTrashed() because the feed only returns Central's
+        // currently-active entities, so a uuid in it that we soft-deleted locally was
+        // restored on Central and needs restoring here rather than re-inserting; and
+        // deliberately not scoped to this team because odk_uuid is globally unique, so a
+        // lookup narrowed by owner_id would miss a row held by another team and then
+        // collide on insert. Matching on the unique column is also what makes this
+        // idempotent - a uuid another run inserted since this run read the feed is found
+        // here instead of re-created.
+        $farmEntity = FarmEntity::withTrashed()->firstOrNew(['odk_uuid' => $uuid]);
+
+        if (! $farmEntity->exists) {
+            // team_code mirrors label bidirectionally - createFarm()/updateFarm() push
+            // team_code to Central as label, so adopting the other direction reads it
+            // back from label too, not from a same-named property (which may not even
+            // exist for entities registered directly in Enketo).
+            $farmEntity->fill([
+                'owner_id' => $team->id,
+                'location_id' => $this->resolveLocationFromAttributes($team, $values),
+                'team_code' => (string) ($label ?? $uuid),
+            ])->save();
+
+            return;
+        }
+
+        if ($farmEntity->owner_id !== $team->id) {
+            // Another team already holds this uuid, which shouldn't happen - Central entity
+            // uuids are unique across projects. Whatever that row is, its team_code and
+            // location belong to that team's feed, not this one's.
+            return;
+        }
+
+        if ($farmEntity->trashed()) {
+            $farmEntity->restore();
+        }
+
+        if ($farmEntity->location_id === null) {
+            // Adopted before its location attributes were resolvable (or before this
+            // feature existed) - worth retrying every refresh until it succeeds.
+            $locationId = $this->resolveLocationFromAttributes($team, $values);
+
+            if ($locationId !== null) {
+                $farmEntity->update(['location_id' => $locationId]);
+            }
+        }
+
+        if ($label !== null && $farmEntity->team_code !== $label) {
+            // Keeps team_code in sync if the label was ever changed directly on Central
+            // (e.g. via Central's own UI) rather than through this app.
+            $farmEntity->update(['team_code' => $label]);
+        }
     }
 }

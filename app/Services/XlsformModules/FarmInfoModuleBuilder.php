@@ -12,6 +12,8 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 
 class FarmInfoModuleBuilder
 {
+    private static string $variablePrefix = 'farm_var_';
+
     public static function populate(Team $team): void
     {
 
@@ -42,20 +44,20 @@ class FarmInfoModuleBuilder
 
             // check that the required list is in either identifiers or properties. Save as datasetvariable so next time it is immediately included.
             $missing = $requiredList->diff($merged)
-            ->map(function(string $item) use ($dataset) {
+                ->map(function (string $item) use ($dataset) {
 
-                return DatasetVariable::create([
-                    'dataset_id' => $dataset->id,
-                    'name' => $item,
-                    'label' => $item,
-                    'description' => 'identifier',
-                ]);
-            });
+                    return DatasetVariable::create([
+                        'dataset_id' => $dataset->id,
+                        'name' => $item,
+                        'label' => $item,
+                        'description' => 'identifier',
+                    ]);
+                });
 
             // add missing items to identifiers
             $identifiers = $identifiers->merge($missing);
 
-            static::buildSurveyRows($moduleVersion,$team, $levelCount, $identifiers, $properties);
+            static::buildSurveyRows($moduleVersion, $team, $levelCount, $identifiers, $properties);
         }
     }
 
@@ -94,7 +96,7 @@ class FarmInfoModuleBuilder
 
         foreach ($allVariables as $variable) {
             $moduleVersion->surveyRows()->updateOrCreate(
-                ['name' => $variable->name, 'type' => 'calculate'],
+                ['name' => static::prefixed($variable->name), 'type' => 'calculate'],
                 [
                     'calculation' => 'instance(\'Farm_Summary\')/root/item[name=${id}]/'.$variable->name,
                     'row_number' => $rowNumber++,
@@ -118,10 +120,19 @@ class FarmInfoModuleBuilder
         static::deleteStaleCalculateRows($moduleVersion, $allVariables);
     }
 
+    /**
+     * The Farm_Summary CSV column keeps the raw variable name; only the survey question is
+     * prefixed, so its name cannot collide with a question of the same name elsewhere in the form.
+     */
+    protected static function prefixed(string $variableName): string
+    {
+        return self::$variablePrefix.$variableName;
+    }
+
     /** @param Collection<int, DatasetVariable> $variables */
     protected static function deleteStaleCalculateRows(XlsformModuleVersion $moduleVersion, Collection $variables): void
     {
-        $currentNames = $variables->map(fn (DatasetVariable $variable) => $variable->name);
+        $currentNames = $variables->map(fn (DatasetVariable $variable) => static::prefixed($variable->name));
 
         $moduleVersion->surveyRows()
             ->where('type', 'calculate')
@@ -138,13 +149,13 @@ class FarmInfoModuleBuilder
         $lines = ['You have selected the following farm:', ''];
 
         foreach ($identifiers as $variable) {
-            $lines[] = $variable->label.': ${'.$variable->name.'},';
+            $lines[] = $variable->label.': ${'.static::prefixed($variable->name).'},';
         }
 
         $lines[] = '';
 
         foreach ($properties as $variable) {
-            $lines[] = $variable->label.': ${'.$variable->name.'},';
+            $lines[] = $variable->label.': ${'.static::prefixed($variable->name).'},';
         }
 
         $lines[] = '';
