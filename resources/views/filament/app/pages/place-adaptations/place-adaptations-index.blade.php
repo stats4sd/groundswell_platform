@@ -49,6 +49,19 @@ $surveyDashboardUrl = SurveyDashboard::getUrl();
                     :url="\App\Filament\App\Pages\PlaceAdaptations\HddsHints::getUrl()"/>
             @endif
 
+            @if($currentTeam && $currentTeam->informedConsentXlsforms()->isNotEmpty())
+                @php
+                    $consentHeading = t('Adapt informed consent');
+                    $consentDescription = t('Edit the informed consent statement read to participants at the start of each survey form, for each language.');
+                    $consentUpdateLabel = t('Update');
+                @endphp
+                <x-rounded-section
+                    :heading="$consentHeading"
+                    :description="$consentDescription"
+                    :buttonLabel="$consentUpdateLabel"
+                    :url="\App\Filament\App\Pages\PlaceAdaptations\InformedConsent::getUrl()"/>
+            @endif
+
             @if(ChoiceList::where('is_localisable', true)->where('has_custom_handling', false)->count() > 0)
                 @php
                     $choiceListHeading = t('Contextualise choice lists');

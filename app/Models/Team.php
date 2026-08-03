@@ -8,6 +8,7 @@ use App\Services\XlsformModules\FarmInfoModuleBuilder;
 use App\Services\XlsformModules\LocationsModuleBuilder;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -182,6 +183,22 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
             ->whereHas('xlsformModule', fn ($q) => $q->where('name', 'HDDS'))
             ->whereHas('xlsforms', fn ($q) => $q->where('owner_id', $this->id))
             ->first();
+    }
+
+    /**
+     * Xlsforms for this team whose selected module versions contain an
+     * `enum_intro` survey row (the informed consent note). Queried by row
+     * name so forms gain a consent editor automatically once the row is
+     * added to their template.
+     *
+     * @return Collection<int, Xlsform>
+     */
+    public function informedConsentXlsforms(): Collection
+    {
+        return $this->xlsforms()
+            ->whereHas('xlsformModuleVersions.surveyRows', fn ($query) => $query->where('name', 'enum_intro'))
+            ->orderBy('title')
+            ->get();
     }
 
     /** @return Attribute<string, never> */
