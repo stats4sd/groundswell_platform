@@ -501,6 +501,14 @@ fieldset {
     border-radius: 9999px;
 }
 
+/* The brand logo is a flex item in the topbar/sidebar header with only its
+   height set, so it gets squashed when the row runs short of space (and
+   preflight's max-width: 100% squashes it further). Pin the width to the
+   intrinsic aspect ratio and never let it distort. */
+img.fi-logo {
+    @apply w-auto max-w-none shrink-0 object-contain;
+}
+
 /* Filament 5 wraps the top-nav groups to multiple rows (lg:flex-wrap);
    keep them on a single row to match the pre-upgrade layout. */
 .fi-topbar-nav-groups {
