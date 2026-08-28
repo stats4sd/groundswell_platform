@@ -44,5 +44,6 @@ return [
 
     'R' => [
         'rscript_path' => env('RSCRIPT_PATH', '/usr/bin/Rscript'),
+        'indicator_calculation_script_path' => env('INDICATOR_CALCULATION_SCRIPT_PATH'),
     ],
 ];
