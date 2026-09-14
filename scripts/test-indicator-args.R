@@ -6,7 +6,7 @@
 
 args <- commandArgs(trailingOnly = TRUE)
 
-expected <- c("project", "xlsform_1", "xlsform_2", "xlsform_3")
+expected <- c("odk_projects.id", "xlsform_1", "xlsform_2", "xlsform_3")
 
 if (length(args) != length(expected)) {
   stop(sprintf(

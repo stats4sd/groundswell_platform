@@ -11,7 +11,7 @@ Artisan::command('inspire', function () {
 // TODO: replace the placeholder project/xlsform arguments below with the real odk_projects.id
 // and the three xlsforms.odk_id values before enabling this in production.
 Schedule::command('app:calculate-indicators', [
-    'project' => 1,
+    'odk_projects.id' => 1,
     'xlsform_1' => 'xlsform_1',
     'xlsform_2' => 'xlsform_2',
     'xlsform_3' => 'xlsform_3',

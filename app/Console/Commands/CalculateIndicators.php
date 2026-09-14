@@ -15,7 +15,7 @@ class CalculateIndicators extends Command
      * @var string
      */
     protected $signature = 'app:calculate-indicators
-        {project : The odk_projects.id to calculate indicators for}
+        {odk_projects.id : The odk_projects.id to calculate indicators for}
         {xlsform_1 : The odk_id of the first xlsform required for the calculation}
         {xlsform_2 : The odk_id of the second xlsform required for the calculation}
         {xlsform_3 : The odk_id of the third xlsform required for the calculation}';
@@ -32,10 +32,10 @@ class CalculateIndicators extends Command
      */
     public function handle(): int
     {
-        $project = OdkProject::find($this->argument('project'));
+        $project = OdkProject::find($this->argument('odk_projects.id'));
 
         if (! $project) {
-            $this->error("No odk_projects record found with id {$this->argument('project')}.");
+            $this->error("No odk_projects record found with id {$this->argument('odk_projects.id')}.");
 
             return self::FAILURE;
         }
