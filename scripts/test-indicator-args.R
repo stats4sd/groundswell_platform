@@ -6,19 +6,18 @@
 
 args <- commandArgs(trailingOnly = TRUE)
 
-expected <- c("odk_projects.id", "xlsform_1", "xlsform_2", "xlsform_3")
-
-if (length(args) != length(expected)) {
+if (length(args) < 2) {
   stop(sprintf(
-    "Expected %d arguments (%s), got %d: %s",
-    length(expected), paste(expected, collapse = ", "),
+    "Expected at least 2 arguments (odk_projects.id and at least one xlsform odk_id), got %d: %s",
     length(args), paste(args, collapse = ", ")
   ))
 }
 
-names(args) <- expected
+project_id <- args[1]
+xlsform_ids <- args[-1]
 
 cat("Received arguments:\n")
-for (name in expected) {
-  cat(sprintf("  %s = %s\n", name, args[[name]]))
+cat(sprintf("  odk_projects.id = %s\n", project_id))
+for (i in seq_along(xlsform_ids)) {
+  cat(sprintf("  xlsform_%d = %s\n", i, xlsform_ids[i]))
 }

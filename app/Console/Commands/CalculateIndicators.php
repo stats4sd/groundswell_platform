@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Process;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\OdkProject;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 
 class CalculateIndicators extends Command
 {
@@ -15,17 +14,14 @@ class CalculateIndicators extends Command
      * @var string
      */
     protected $signature = 'app:calculate-indicators
-        {odk_projects.id : The odk_projects.id to calculate indicators for}
-        {xlsform_1 : The odk_id of the first xlsform required for the calculation}
-        {xlsform_2 : The odk_id of the second xlsform required for the calculation}
-        {xlsform_3 : The odk_id of the third xlsform required for the calculation}';
+        {odk_projects.id : The odk_projects.id to calculate indicators for}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Run the external R script that calculates indicators for a project, from data collected via three xlsforms';
+    protected $description = 'Run the external R script that calculates indicators for a project, from data collected via its xlsforms';
 
     /**
      * Execute the console command.
@@ -40,16 +36,16 @@ class CalculateIndicators extends Command
             return self::FAILURE;
         }
 
-        $xlsformOdkId1 = $this->argument('xlsform_1');
-        $xlsformOdkId2 = $this->argument('xlsform_2');
-        $xlsformOdkId3 = $this->argument('xlsform_3');
+        $xlsformOdkIds = $project->owner->xlsforms()
+            ->orderBy('id')
+            ->pluck('odk_id')
+            ->filter()
+            ->values();
 
-        foreach (['xlsform_1' => $xlsformOdkId1, 'xlsform_2' => $xlsformOdkId2, 'xlsform_3' => $xlsformOdkId3] as $label => $odkId) {
-            if (! Xlsform::where('odk_id', $odkId)->exists()) {
-                $this->error("No xlsforms record found with odk_id \"{$odkId}\" (argument: {$label}).");
+        if ($xlsformOdkIds->isEmpty()) {
+            $this->error("No published xlsforms found for odk_projects record {$project->id}.");
 
-                return self::FAILURE;
-            }
+            return self::FAILURE;
         }
 
         $rscriptPath = config('services.R.rscript_path');
@@ -67,9 +63,7 @@ class CalculateIndicators extends Command
             $rscriptPath,
             $scriptPath,
             (string) $project->id,
-            (string) $xlsformOdkId1,
-            (string) $xlsformOdkId2,
-            (string) $xlsformOdkId3,
+            ...$xlsformOdkIds->map(fn ($id) => (string) $id)->all(),
         ], function (string $type, string $output): void {
             $this->output->write($output);
         });
