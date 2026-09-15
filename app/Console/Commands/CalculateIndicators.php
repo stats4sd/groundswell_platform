@@ -65,6 +65,7 @@ class CalculateIndicators extends Command
         $result = Process::timeout(0)->run([
             $rscriptPath,
             $scriptPath,
+            (string) $team->id,
             (string) $odkProject->id,
             (string) $this->argument('odk_central_project_id'),
             ...$xlsformOdkIds->map(fn ($id) => (string) $id)->all(),
