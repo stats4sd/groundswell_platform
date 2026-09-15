@@ -66,7 +66,6 @@ class CalculateIndicators extends Command
             $rscriptPath,
             $scriptPath,
             (string) $team->id,
-            (string) $odkProject->id,
             (string) $this->argument('odk_central_project_id'),
             ...$xlsformOdkIds->map(fn ($id) => (string) $id)->all(),
         ], function (string $type, string $output): void {
