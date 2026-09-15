@@ -14,7 +14,8 @@ class CalculateIndicators extends Command
      * @var string
      */
     protected $signature = 'app:calculate-indicators
-        {odk_projects.id : The odk_projects.id to calculate indicators for}';
+        {odk_projects.id : The odk_projects.id to calculate indicators for}
+        {odk_central_project_id : ODK central project ID}';
 
     /**
      * The console command description.
@@ -63,6 +64,7 @@ class CalculateIndicators extends Command
             $rscriptPath,
             $scriptPath,
             (string) $project->id,
+            (string) $this->argument('odk_central_project_id'),
             ...$xlsformOdkIds->map(fn ($id) => (string) $id)->all(),
         ], function (string $type, string $output): void {
             $this->output->write($output);
