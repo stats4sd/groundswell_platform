@@ -11,10 +11,12 @@ use App\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Wi
 use App\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource;
 use App\Filament\App\Pages\PlaceAdaptations\PlaceAdaptationsIndex;
 use App\Filament\App\Pages\SurveyDashboard;
+use App\Services\ChoiceListSiblingService;
 use App\Services\HelperService;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
@@ -42,6 +44,7 @@ class ListChoiceListEntries extends ListRecords
             // choiceListName is not available, find the first choice list
             $firstChoiceList = ChoiceList::where('is_localisable', true)
                 ->where('has_custom_handling', false)
+                ->orderBy('id')
                 ->first();
 
             // if first choice list is existed
@@ -51,7 +54,9 @@ class ListChoiceListEntries extends ListRecords
             }
         } else {
             // choiceListName is available, use choice list name to find choice list
-            $this->choiceList = ChoiceList::where('list_name', $this->choiceListName)->first();
+            $this->choiceList = ChoiceList::findOrFail(
+                app(ChoiceListSiblingService::class)->canonicalListId($this->choiceListName)
+            );
         }
     }
 
@@ -66,26 +71,39 @@ class ListChoiceListEntries extends ListRecords
 
     public function table(Table $table): Table
     {
+        $siblingService = app(ChoiceListSiblingService::class);
+
+        /** @var Collection<int, ChoiceListEntry> $siblingsBeforeEdit */
+        $siblingsBeforeEdit = new Collection;
+
         return parent::table($table)
             ->modifyQueryUsing(fn(Builder $query) => $query
-                ->whereHas('choiceList', fn(Builder $query) => $query
-                    ->where('choice_lists.list_name', $this->choiceListName)
-                )
+                ->where('choice_list_id', $siblingService->canonicalListId($this->choiceListName))
             )
             ->recordActions([
                 EditAction::make()->visible(fn(ChoiceListEntry $record) => !$record->is_global_entry)
-                    ->schema(fn(Schema $schema) => $schema->components(fn() => $this->getResource()::getFormSchema($this->choiceList))),
-                DeleteAction::make()->visible(fn(ChoiceListEntry $record) => !$record->is_global_entry),
+                    ->schema(fn(Schema $schema) => $schema->components(fn() => $this->getResource()::getFormSchema($this->choiceList)))
+                    ->before(function (ChoiceListEntry $record) use ($siblingService, &$siblingsBeforeEdit) {
+                        $siblingsBeforeEdit = $siblingService->siblingsOf($record);
+                    })
+                    ->after(function (ChoiceListEntry $record) use ($siblingService, &$siblingsBeforeEdit) {
+                        $siblingService->syncSiblingsFrom($record, $siblingsBeforeEdit);
+                    }),
+                DeleteAction::make()->visible(fn(ChoiceListEntry $record) => !$record->is_global_entry)
+                    ->before(function (ChoiceListEntry $record) use ($siblingService) {
+                        $siblingService->deleteSiblings($siblingService->siblingsOf($record));
+                    }),
                 Action::make('Toggle Removed')
                     ->label(fn(ChoiceListEntry $record) => $record->isRemoved(HelperService::getCurrentOwner()) ? t('Restore to Context') : t('Remove from Context'))
                     ->visible(fn(ChoiceListEntry $record) => $record->is_global_entry)
-                    ->action(fn(ChoiceListEntry $record) => $record->toggleRemoved(HelperService::getCurrentOwner())),
+                    ->action(fn(ChoiceListEntry $record) => $siblingService->toggleRemoved($record, HelperService::getCurrentOwner())),
             ])
             ->headerActions([
                 CreateAction::make()
                     ->label(fn () => t('Add new') . ' ' . Str::singular($this->choiceListName))
                     ->schema(fn(Schema $schema) => $schema
-                        ->components(fn() => $this->getResource()::getFormSchema($this->choiceList))),
+                        ->components(fn() => $this->getResource()::getFormSchema($this->choiceList)))
+                    ->after(fn (ChoiceListEntry $record) => $siblingService->replicateToSiblingLists($record)),
                 ]);
     }
 
