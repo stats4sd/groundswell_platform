@@ -6,6 +6,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use App\Filament\App\Clusters\Localisations;
 use App\Filament\App\Clusters\Localisations\Resources\ChoiceListEntryResource\Pages\ListChoiceListEntries;
 use App\Models\Team;
+use App\Services\ChoiceListSiblingService;
 use App\Services\HelperService;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
@@ -67,12 +68,26 @@ class ChoiceListEntryResource extends Resource
 
     }
 
+    /** @return array<int, int> */
+    protected static function sameNamedListIds(?int $choiceListId): array
+    {
+        $listName = ChoiceList::find($choiceListId)?->list_name;
+
+        if (! $listName) {
+            return [$choiceListId];
+        }
+
+        return app(ChoiceListSiblingService::class)->listIdsFor($listName)->all();
+    }
+
     public static function getNavigationItems(): array
     {
         /** @var Collection<ChoiceList> $lists */
         $lists = ChoiceList::where('is_localisable', true)
             ->where('has_custom_handling', false)
-            ->get();
+            ->orderBy('id')
+            ->get()
+            ->unique('list_name');
 
         if (! $lists) {
             return [
@@ -113,11 +128,11 @@ class ChoiceListEntryResource extends Resource
             Hidden::make('owner_id')
                 ->default(fn () => HelperService::getCurrentOwner()?->id),
             Hidden::make('choice_list_id')
-                ->formatStateUsing(fn (?ChoiceListEntry $record, ListChoiceListEntries $livewire) => $record ? $record->choiceList->id : ChoiceList::where('list_name', $livewire->choiceListName)->first()->id),
+                ->formatStateUsing(fn (?ChoiceListEntry $record, ListChoiceListEntries $livewire) => $record ? $record->choiceList->id : $livewire->choiceList->id),
             TextInput::make('name')->label(t('Name'))->required()
                 ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule, Get $get) {
                     return $rule
-                        ->where('choice_list_id', $get('choice_list_id'))
+                        ->whereIn('choice_list_id', static::sameNamedListIds($get('choice_list_id')))
                         ->where('owner_id', $get('owner_id'));
                 }),
             Repeater::make('languageStrings')
