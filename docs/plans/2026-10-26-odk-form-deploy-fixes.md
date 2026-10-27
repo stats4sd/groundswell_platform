@@ -1,6 +1,6 @@
 # Plan: Fix crop_list labels, module localisation, choice order (staging issues reported 2026-10-26)
 
-**Status: In Progress** — Phase 1 (items 1-5) is implemented and tested in the `packages/filament-odk-link` working tree on branch `fix-issue-20261026`, not yet committed or deployed; see the [Phase 1 change log](../change-logs/2026-10-26-odk-form-deploy-fixes-phase-1.md). Still to do: commit/deploy Phase 1, the data repair and SQL steps under "Rollout order", and Phase 2 (item 6, explicit choice `row_number`).
+**Status: In Progress** — Phase 1 (items 1-5) is implemented, committed and verified end to end on a clean local DB (see the [Phase 1 change log](../change-logs/2026-10-26-odk-form-deploy-fixes-phase-1.md)); a follow-up to item 5 (team entries ordered after global ones) is implemented in the working tree but not yet committed. Still to do: commit/deploy, the data repair and SQL steps under "Rollout order", and Phase 2 (item 6, explicit choice `row_number`).
 
 All code changes are in the `packages/filament-odk-link` submodule (currently at `e048b4b`). Implementing them means a commit in the submodule plus a submodule pointer bump in this repo; staging needs both deployed, then `php artisan queue:restart` (the staging worker is a long-running `queue:work database --daemon` and keeps running old code until restarted).
 
@@ -85,7 +85,8 @@ After the label import, [AddMissingChoiceListStrings](../../packages/filament-od
 
 #### 5. `XlsformChoicesExport`: export in template order (option A)
 
-- Replace `orderBy('choice_list_entries.name')` with an order by the group's lowest id (`orderByRaw('min(choice_list_entries.id)')`); keep `orderBy('choice_lists.list_name')` first. Entries are inserted in template order on import and team-added entries get later ids, so they follow the template entries.
+- Replace `orderBy('choice_list_entries.name')` with an order by the group's lowest id (`orderByRaw('min(choice_list_entries.id)')`); keep `orderBy('choice_lists.list_name')` first. Entries are inserted in template order on import.
+- **Follow-up found in the local end-to-end test:** the original assumption "team-added entries get later ids" does not hold once the template is re-uploaded, because the import recreates the global entries with new, higher ids. In the local test the three team crops (41-43), added before the re-upload, were exported **before** the 35 global crops. The order is therefore `list_name`, then global before team-owned (`min(case when owner_id is null then 0 else 1 end)`), then lowest id. An entry that overrides a global one with the same name and properties sorts with the global group.
 - Known limit of option A: if the template author later moves an existing choice, the DB id order does not change. Phase 2 fixes that.
 
 ### Phase 2
@@ -189,6 +190,11 @@ Candidate fixes for a later plan (not decided): import only files uploaded in th
 ## Open items
 
 - **Team-cloned module versions are emptied by template re-upload.** `XlsformTemplateWorkbookImport::afterImport()` deletes every unflagged survey row under the template, including rows of team-owned clones. This empties `introduction`, `HDDS`, `Local locations` and `Local farm info` clones for teams 1 and 2 and leaves stray `end group` rows (`end group_567`, `womens_section`) in their forms. Team 3's clones will be emptied by the next re-upload.
+
+## Follow-ups noted (not in this plan)
+
+- **Admin Panel > Xlsform Templates > Replace XLSForm (list row action) crashes** with `Filament\Actions\Action::getModalContent(): Return value must be of type View|Htmlable|null, array returned`. `XlsformTemplateTable` uses `->modalContent(fn () => XlsformTemplateForm::getCreateFields())`, which returns an array; it should use `->schema(XlsformTemplateForm::getCreateFields())` as the template View page's action already does. Workaround: use Replace XLSForm on the template's View page.
+- **Farm choices are listed newest first** in the form (F003, F002, F001): the order comes from the `Farm_Summary` entity data returned by ODK Central.
 
 ## Out of scope
 
