@@ -20,7 +20,14 @@ php artisan odk:repair-form-deploy-issues --only=modules   # R2 only (add --appl
 
 `tests/Feature/Console/RepairFormDeployIssuesTest.php` (6 tests): the dry run reports and changes nothing for both repairs; `--apply` copies the label for R1; `--apply` swaps the foreign version for the form's own default, keeps the other versions and marks the form for a draft update for R2; a form with only its own versions is left alone; an invalid `--only` fails.
 
-Pint and phpstan pass on the command. A dry run on the local (clean) database reports nothing to repair. It has not been run against the staging data.
+Pint and phpstan pass on the command. A dry run on the local (clean) database reports nothing to repair. 
+
+It was also run against a clone of the staging database (dump of 2026-10-27 14:17), `--apply` included:
+
+- R1 reported 0 lists for all three templates. `crop_list` #28 (and #53) already had all 35 global entries labelled in the clone, so R1 is expected to be a no-op on staging.
+- R2 found forms 2, 3, 5 and 6 (teams 1 and 2) selecting Local versions of other templates (versions 38, 41, 48, 51). `--apply` detached them and a second dry run reported nothing. Forms 7, 8 and 9 (team 3) had no foreign versions and were not touched.
+- The name-based `can_be_replaced` UPDATE affected 5 rows (modules 3, 6, 7, 23, 24); `new farm info` was unchanged.
+- The choices export for forms 9 and 3 had no rows without a label.
 
 ## Running it on staging
 
