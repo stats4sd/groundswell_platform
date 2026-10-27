@@ -108,10 +108,10 @@ After the label import, [AddMissingChoiceListStrings](../../packages/filament-od
 
 ## Data repair (one-off, run separately from the code deploy)
 
-Run first against the local staging clone, review the output, then Dan runs it on staging. These are tinker snippets recorded in the change log, not new commands or migrations.
+Implemented as one artisan command, `php artisan odk:repair-form-deploy-issues` (`app/Console/Commands/RepairFormDeployIssues.php`), instead of tinker snippets. It is a **dry run by default** and only writes with `--apply`; `--only=labels` or `--only=modules` runs one repair. Run it against a restored staging clone first, review the output, then Dan runs it on staging. See the [change log](../change-logs/2026-10-27-repair-form-deploy-issues-command.md).
 
-- **R1: refill labels.** After item 1 is deployed, run `AddMissingChoiceListStrings::dispatchSync(XlsformTemplate::find(2))` (and templates 1 and 3 for completeness). Expected: `crop_list` #28 global entries 0/35 -> 35/35 labelled; no other list changes.
-- **R2: remove cross-template module versions.** For each xlsform, detach selected module versions whose `xlsform_module.xlsform_template_id` differs from the form's template (affects forms 2, 3, 5, 6 on staging: v#38, v#41, v#48, v#51), then call `syncWithTemplate()` so any module left without a version gets its default. Print a dry-run list of (form, version to detach) before changing anything.
+- **R1: refill labels** (`--only=labels`). Lists the global choice entries that have no label (per template and list), then with `--apply` runs `AddMissingChoiceListStrings` for each template. Expected on staging: `crop_list` #28 global entries 0/35 -> 35/35 labelled; no other list changes. Needs the code deploy of item 1 first.
+- **R2: remove cross-template module versions** (`--only=modules`). For each form it lists the selected module versions whose module belongs to a different template than the form, and which modules would get their default version back; with `--apply` it detaches them, calls `syncWithTemplate()` and marks the form for a draft update. It only warns about a form that selects two versions of the same module of its own template (not changed). Affects forms 2, 3, 5, 6 on staging (v#38, v#41, v#48, v#51 were the foreign ones at the time of the investigation; the exact list comes from the dry run).
 
 R2 does not touch the empty team-cloned versions (v#34-52); see "Open items". Teams 1 and 2 have empty Local versions, so do **not** turn on the swap for them until those are rebuilt (setting `has_updated_locations = 1` makes `Team::localiseXlsforms()` rebuild them on the next draft deploy); team 3 is safe to switch first.
 
