@@ -198,6 +198,15 @@ Both were found during the local end-to-end test and fixed afterwards; see [the 
 - **Admin Panel > Xlsform Templates > Replace XLSForm (list row action) crashed** with `Filament\Actions\Action::getModalContent(): Return value must be of type View|Htmlable|null, array returned`. Fixed by using `->schema(...)` instead of `->modalContent(...)`.
 - **Farm choices were listed newest first** in the form (F003, F002, F001), because Central serves the entity list newest first. Fixed for imports by sending the batch to Central in reverse.
 
+## Submodule branching (decision 2026-10-27)
+
+`stats4sd/filament-odk-link` `dev` was restructured into a monorepo (`packages/odk-link-core`, `apps/reference`) while this work was in progress. The restructure is still being worked on by a colleague, so these fixes are **not** merged into `dev`.
+
+- The staging code is the submodule commit `80b95d2` (tip of `fix-issue-20261026`), on top of `e048b4b`, in the old layout (`src/` at the repository root). The main repo pins that commit. Branch `staging-hotfix-20261026` points at the same commit.
+- Submodule PR #155 is closed without merging; keep the branches on the remote so `80b95d2` stays fetchable.
+- A trial merge of `origin/dev` into the branch had two simple conflicts (`XlsformChoicesExport`, `XlsformTemplateTable`) and the core suite passed (196 tests). It was discarded, not pushed.
+- Porting later, once the restructure settles: branch from `origin/dev`, `git cherry-pick 9d124c2 e32757c 3177aac 80b95d2`, resolve as in the trial merge, and change the main repo `composer.json` path repository to `packages/filament-odk-link/packages/odk-link-core`.
+
 ## Out of scope
 
 - Import/clone data-loss fix and the stray `end group` pre-flight check.
