@@ -650,10 +650,12 @@ class OdkFarmEntityService
                 return ['farmEntity' => $farmEntity, 'uuid' => $farmEntity->odk_uuid, 'label' => $row['teamCode'], 'data' => $data];
             });
 
+            // Central serves the entity list to forms (select_one_from_file) newest first, so the
+            // batch is sent in reverse to make the form list the farms in the uploaded order.
             $this->odkLinkService->bulkCreateOdkEntities(
                 $team->odkProject,
                 $entityListName,
-                $prepared->map(fn ($p) => ['uuid' => $p['uuid'], 'label' => $p['label'], 'data' => $p['data']])->values()->all(),
+                $prepared->map(fn ($p) => ['uuid' => $p['uuid'], 'label' => $p['label'], 'data' => $p['data']])->reverse()->values()->all(),
                 $sourceName,
             );
 

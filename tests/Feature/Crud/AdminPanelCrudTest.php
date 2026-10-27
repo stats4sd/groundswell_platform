@@ -14,6 +14,7 @@ use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\Datasets\Pages\CreateDa
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\Datasets\Pages\EditDataset;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModules\Pages\ManageXlsformModule;
 use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformModuleVersions\Pages\ManageXlsformModuleVersion;
+use Stats4sd\FilamentOdkLink\Filament\OdkAdmin\Resources\XlsformTemplates\Pages\ListXlsformTemplates;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
@@ -176,6 +177,16 @@ describe('Admin panel CRUD — XlsformTemplate', function () {
 
     test('xlsform template create page loads', function () {
         $this->get('/admin/xlsform-templates/create')->assertOk();
+    });
+
+    test('replace xlsform action opens its modal from the list page', function () {
+        $template = XlsformTemplate::withoutEvents(
+            fn () => XlsformTemplate::forceCreate(['title' => 'Test Template'])
+        );
+
+        livewire(ListXlsformTemplates::class)
+            ->mountTableAction('update_xlsform_template', $template)
+            ->assertSuccessful();
     });
 
 });

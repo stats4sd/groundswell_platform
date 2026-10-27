@@ -191,10 +191,12 @@ Candidate fixes for a later plan (not decided): import only files uploaded in th
 
 - **Team-cloned module versions are emptied by template re-upload.** `XlsformTemplateWorkbookImport::afterImport()` deletes every unflagged survey row under the template, including rows of team-owned clones. This empties `introduction`, `HDDS`, `Local locations` and `Local farm info` clones for teams 1 and 2 and leaves stray `end group` rows (`end group_567`, `womens_section`) in their forms. Team 3's clones will be emptied by the next re-upload.
 
-## Follow-ups noted (not in this plan)
+## Follow-ups
 
-- **Admin Panel > Xlsform Templates > Replace XLSForm (list row action) crashes** with `Filament\Actions\Action::getModalContent(): Return value must be of type View|Htmlable|null, array returned`. `XlsformTemplateTable` uses `->modalContent(fn () => XlsformTemplateForm::getCreateFields())`, which returns an array; it should use `->schema(XlsformTemplateForm::getCreateFields())` as the template View page's action already does. Workaround: use Replace XLSForm on the template's View page.
-- **Farm choices are listed newest first** in the form (F003, F002, F001): the order comes from the `Farm_Summary` entity data returned by ODK Central.
+Both were found during the local end-to-end test and fixed afterwards; see [the change log](../change-logs/2026-10-27-replace-xlsform-button-and-farm-choice-order.md).
+
+- **Admin Panel > Xlsform Templates > Replace XLSForm (list row action) crashed** with `Filament\Actions\Action::getModalContent(): Return value must be of type View|Htmlable|null, array returned`. Fixed by using `->schema(...)` instead of `->modalContent(...)`.
+- **Farm choices were listed newest first** in the form (F003, F002, F001), because Central serves the entity list newest first. Fixed for imports by sending the batch to Central in reverse.
 
 ## Out of scope
 
