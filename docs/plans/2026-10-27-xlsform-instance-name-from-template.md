@@ -1,8 +1,8 @@
 # Plan: Keep `instance_name` and `default_language` from the template's `settings` sheet
 
-**Status: Not Started**
+**Status: In Progress**
 
-Plan only; nothing has been implemented. Decisions are recorded at the end; implementation starts 2026-10-28.
+Done (2026-10-28): migration `035` (package and host), `syncSettingsFromFile()` on upload, `XlsformInstanceNameResolver` and the settings export, the `odk:backfill-template-settings` command, and their tests. Tested on a local DB against a separate ODK Central: the template expression reaches the ODK Central XForm (`instanceName` bind) and submissions get the expected name (Farm Registration: `REGISTRATION:<interviewer> - <participant> - <date>`); a form missing a referenced question falls back to `"instance"` with a warning. Left to do: deploy to staging (backup, migrate, `queue:restart`, backfill dry run then `--apply`, redeploy one team first), then write the change log and set this plan to Completed. A stale queue worker still running old code also produces `"instance"`; restart it after every deploy.
 
 All package changes are in the `packages/filament-odk-link` submodule, on a new branch cut from `staging-hotfix-20261026` (old layout, `src/` at the repository root; staging runs `80b95d2`). Do **not** branch from `dev` (colleague's monorepo restructure in progress, see "Submodule branching" in [2026-10-26-odk-form-deploy-fixes.md](2026-10-26-odk-form-deploy-fixes.md)). Branch: `instance-name-hotfix-20261027`. Delivery is a submodule commit plus a pointer bump here, as in the previous hotfix.
 
@@ -115,8 +115,13 @@ Host app:
 - **Re-upload wipes team-cloned module versions** (known, separate work): this plan does not make it worse and deliberately avoids depending on re-upload.
 - **Old-layout branch**: the change has to be ported when the monorepo restructure lands (same cherry-pick approach as in the previous plan).
 
+## Porting to the monorepo `dev` later
+
+The submodule commits are on branch `instance-name-hotfix-20261027` (old layout), no PR to the submodule `dev`. When the restructure settles, cherry-pick `f7f5fe5 6ad9f3c f9fc720` on top of the commits listed in "Submodule branching" of [2026-10-26-odk-form-deploy-fixes.md](2026-10-26-odk-form-deploy-fixes.md). Keep the branch on the remote so the pinned commit stays fetchable.
+
 ## Out of scope
 
+- Empty `Local farm info` module versions breaking Global Indicators/Women's deploys: [issue](../issues/2026-10-28-empty-local-farm-info-module-version.md).
 - Fixing the re-upload data loss; a UI to edit `instance_name`; other `settings` columns (`version`, `form_id`, `form_title` stay generated); bulk redeploy of existing forms; notifying teams about the fallback.
 
 ## Decisions (agreed with Dan, 2026-10-27)
