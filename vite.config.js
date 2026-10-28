@@ -7,6 +7,13 @@ export default defineConfig({
     css: {
         devSourcemap: true,
     },
+    server: {
+        // vendor/stats4sd/* are symlinks into packages/ (composer path repositories);
+        // watching them makes the dev server run out of memory after a few minutes.
+        watch: {
+            ignored: ['**/vendor/**'],
+        },
+    },
     plugins: [
         tailwindcss(),
         laravel({

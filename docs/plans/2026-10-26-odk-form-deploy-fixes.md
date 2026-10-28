@@ -1,6 +1,6 @@
 # Plan: Fix crop_list labels, module localisation, choice order (staging issues reported 2026-10-26)
 
-**Status: In Progress** — Phase 1 (items 1-5) is implemented, committed and verified end to end on a clean local DB (see the [Phase 1 change log](../change-logs/2026-10-26-odk-form-deploy-fixes-phase-1.md)); a follow-up to item 5 (team entries ordered after global ones) is implemented in the working tree but not yet committed. Still to do: commit/deploy, the data repair and SQL steps under "Rollout order", and Phase 2 (item 6, explicit choice `row_number`).
+**Status: Completed** (Phase 1, the two minor fixes and the data repair, deployed to staging on 2026-10-27). Change logs: [Phase 1](../change-logs/2026-10-26-odk-form-deploy-fixes-phase-1.md), [Replace XLSForm button and farm order](../change-logs/2026-10-27-replace-xlsform-button-and-farm-choice-order.md), [repair command](../change-logs/2026-10-27-repair-form-deploy-issues-command.md). Not done and carried forward as separate work: Phase 2 (explicit choice `row_number`), the template re-upload wiping team-cloned module versions (see Open items), and the findings listed under "Findings without a fix in this plan".
 
 All code changes are in the `packages/filament-odk-link` submodule (currently at `e048b4b`). Implementing them means a commit in the submodule plus a submodule pointer bump in this repo; staging needs both deployed, then `php artisan queue:restart` (the staging worker is a long-running `queue:work database --daemon` and keeps running old code until restarted).
 
