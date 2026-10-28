@@ -30,7 +30,7 @@ Master templates carry expressions such as (to be confirmed against the stored x
 
 | Package (`database/migrations/`) | Host (`database/migrations/`) | Change |
 |---|---|---|
-| `035_add_settings_columns_to_xlsform_templates_table.php` | `2026_10_27_000001_035_add_settings_columns_to_xlsform_templates_table.php` | `text('instance_name')->nullable()` and `string('default_language')->nullable()` on `xlsform_templates` |
+| `035_add_settings_columns_to_xlsform_templates_table.php` | `2026_10_28_000001_035_add_settings_columns_to_xlsform_templates_table.php` | `text('instance_name')->nullable()` and `string('default_language')->nullable()` on `xlsform_templates` |
 
 - One migration for the one table (changed 2026-10-28 from two separate migrations; `035` was only committed locally, never pushed or run, so it was rewritten in place and renamed).
 - Both nullable, so existing rows and the old default keep working before the backfill runs.
@@ -40,8 +40,11 @@ Master templates carry expressions such as (to be confirmed against the stored x
 
 ### 2. Read the settings sheet on upload
 
-- Add `XlsformTemplate::syncSettingsFromFile()`, modelled on `syncEntityListsFromFile()`: read the stored `xlsform_file` media with `XlsImport`, take `settings`, first row only, and write `instance_name` / `default_language` with `updateQuietly()` (blank cell -> `null`).
-- Call it from `afterXlsformFileUpdated()` next to `syncEntityListsFromFile()`. This is a small non-destructive read of one sheet; it does not go through the survey/choices import that causes the wipe.
+- New `XlsformTemplateSettingsImport` reads only the `settings` sheet (`SkipsUnknownSheets`). The generic `XlsImport` is not used: it throws `SheetNotFoundException` when `entities` (or any of its four sheets) is missing, and it loads the whole survey sheet just to read one row.
+- `XlsformTemplate::readSettingsFromFile(?string $filePath = null)` returns `['instance_name' => ?string, 'default_language' => ?string]`, or `null` when there is no file or no `settings` sheet. Blank cells and missing columns give `null`; columns are matched by heading, not position.
+- `XlsformTemplate::syncSettingsFromFile(?string $filePath = null)` writes both columns with `updateQuietly()`. A file with a `settings` sheet is the source of truth (columns it lacks are cleared); a file without a `settings` sheet leaves the stored values alone.
+- Called from `HandleXlsformTemplateAdded::handle()` next to `syncEntityListsFromFile()`, i.e. when the media file is added or replaced. Not from `afterXlsformFileUpdated()` (changed 2026-10-28): that also runs on draft updates when the file has not changed.
+- The backfill command reuses `readSettingsFromFile()`.
 - Do not add `instance_name` to the template Filament form: it comes from the file only.
 
 ### 3. Use the values in the export
@@ -54,17 +57,22 @@ Master templates carry expressions such as (to be confirmed against the stored x
   2. Extract references with `/\$\{([^}]+)\}/`.
   3. Compare against the distinct `name` values of `$xlsform->surveyRows` (final rows, after `localiseModules()`), excluding rows of type `end_group` / `end_repeat` / `begin_*` with generated names if that causes false matches.
   4. If any referenced name is missing: `Log::warning` with xlsform id, template id, missing names; return the default.
-  5. Also reject references to rows that sit inside a `begin_repeat` (not valid at form root; verify with pyxform/ODK Central in step 0 before deciding how strict to be).
+  5. Not implemented (decided 2026-10-28): rejecting references to rows inside a `begin_repeat`. Step 0 showed that none of the three master expressions refers to a row in a repeat (all are in `begin_group`s), and how ODK Central treats such a reference is unverified. Revisit if a template needs it.
+- `default_language` is checked in the export against the form's `locale_list` (`"<language name> (<iso_alpha2>)"`, the same format as the `label::` headers). No match: warning logged and the column left out.
+- Settings are computed once per export instance (`settings()`), so `collection()` and `headings()` always agree and the warnings are logged once.
 - The export row order and the `allow_choice_duplicates` column stay as they are.
 
 ### 4. Backfill command (host app)
 
-`app/Console/Commands/BackfillTemplateSettings.php`, signature `odk:backfill-template-settings {--apply}`, same style as `RepairFormDeployIssues` (dry run by default, comment line saying which mode, `$this->table()` of changes).
+`app/Console/Commands/BackfillTemplateSettings.php`, signature `odk:backfill-template-settings {--apply}`, same style as `RepairFormDeployIssues` (dry run by default, a comment line saying which mode).
 
-- For each `XlsformTemplate`: call the same reading code as `syncSettingsFromFile()` (shared method returning the two values, so the command and the upload path cannot drift) **without** writing; print `template id | title | current | from file` for both columns.
-- With `--apply`: write the values. Idempotent: running twice changes nothing.
+- For each `XlsformTemplate` (by id): print `Template <id> (<title>)`, call `readSettingsFromFile()` (the same code the upload path uses, read-only) and print a table `column | current | from file | change/unchanged` for both columns.
+- With `--apply`: `updateQuietly()` the two columns of the templates that differ. Idempotent: a second run reports everything as unchanged.
 - Never touches module versions, survey rows or choices.
-- Report templates with no stored xlsx or no `settings` sheet as "skipped", not an error.
+- A template with no stored xlsx or no `settings` sheet is reported as "skipped" and keeps its stored values.
+- A file that cannot be read is reported and counted as failed; the run continues with the other templates and exits with a failure code at the end.
+- Final line: `N template(s): X changed|would be changed, Y unchanged, Z skipped, W failed.`
+- The host copy of migration `035` is created in the same commit as the command (the host test database is built from `database/migrations/`), so the migration copy is no longer part of the last commit.
 - Dry run on a staging-DB clone first, as for the previous repair command (record the result in a change log).
 
 ## Rollout (staging)
@@ -114,7 +122,7 @@ Host app:
 ## Decisions (agreed with Dan, 2026-10-27)
 
 - Branch `instance-name-hotfix-20261027` already exists in the main repo and in the submodule (cut from `staging-hotfix-20261026`).
-- Separate commits, each passing tests on its own: (1) migration 035 (both columns), (2) `syncSettingsFromFile()` + read on upload, (3) resolver + settings export, (4) backfill command, (5) host migration copies, submodule pointer bump, change log.
+- Separate commits, each passing tests on its own: (1) migration 035 (both columns), (2) `syncSettingsFromFile()` + read on upload, (3) resolver + settings export, (4) backfill command + host migration copy, (5) submodule pointer bump and change log.
 - Already-deployed forms: redeploy **one team first, Guatemala - ARGIDIVI (team 3)**, check the result in ODK Central/Collect, then the second team. Reason: a rejected expression then only affects one team, and this team can exercise the `farm_var_*` check.
 - Backfill is by the command only (option A). `generateXlsfile()` does **not** self-heal null `instance_name`/`default_language`; the rollout order (migrate, backfill, then redeploy) avoids a gap.
 
