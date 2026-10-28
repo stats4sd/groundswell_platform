@@ -47,3 +47,17 @@ Clean local DB pointed at its own ODK Central; the three master xlsx uploaded; `
 
 - The list-row **Replace XLSForm** action crashes (`modalContent()` returns an array); use the action on the template View page until it is fixed.
 - Farm choices appear newest first (F003, F002, F001), as returned by ODK Central.
+
+## Staging deployment and verification (2026-10-27)
+
+Deployed with the submodule pinned at `80b95d2` (old layout; not merged into the submodule `dev`, which was restructured into a monorepo in the meantime, see the plan's "Submodule branching"). Steps run on staging: `queue:restart`, `odk:repair-form-deploy-issues` (dry run, then `--apply`: R1 had nothing to do, R2 repaired forms 2, 3, 5 and 6), the name-based `can_be_replaced` UPDATE (5 modules), `draft_needs_update = 1` for team 3's forms, then Initial Pilot reloaded for team 3.
+
+Checked in Enketo for team 3 (Global Indicators and Women's forms):
+
+- Both forms open without begin/end group errors; locations and farms appear, with farms filtered by community.
+- `crop_list`, `practices`, `rapport` and `reliability` labels are all present and in template order.
+- Team-added entries come after the global ones (crop_list: Farm bean to Lemon; practices: milpa and coffee systems).
+- `draft_needs_update` returned to 0 for all three forms.
+
+Known and not fixed: entries a team removed from its context (e.g. Capsicum, Mushroom, Other 1-3 in `crop_list`) still appear in the form, because `XlsformChoicesExport` never filtered on `choice_list_entries_removed_owner`. Existing farms on Central still list newest first.
+
