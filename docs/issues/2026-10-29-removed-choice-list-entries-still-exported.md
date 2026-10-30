@@ -1,6 +1,6 @@
 # Choice list entries a team "Removed from context" are still exported to the generated ODK form
 
-**Status**: Open — found on 2026-10-29 by reading the export code; not yet reproduced against a real form.
+**Status**: Fixed in code on 2026-10-30 ([plan](../plans/2026-10-29-exclude-removed-choice-entries-from-form.md), [change log](../change-logs/2026-10-30-exclude-removed-choice-entries-from-form.md)); pending manual verification and deployment. Found on 2026-10-29 by reading the export code.
 
 ## What happens
 

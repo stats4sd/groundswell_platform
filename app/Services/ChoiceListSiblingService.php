@@ -56,6 +56,9 @@ class ChoiceListSiblingService
             } else {
                 $team->choiceListEntriesRemovedFromContext()->syncWithoutDetaching($entries->modelKeys());
             }
+
+            // the generated forms now differ from the published ones; flag them so the team is prompted to publish
+            $team->xlsforms()->update(['draft_needs_update' => true]);
         });
 
         $team->unsetRelation('choiceListEntriesRemovedFromContext');

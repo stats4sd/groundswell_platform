@@ -1,6 +1,6 @@
 # Plan: Exclude "Removed from context" choice list entries from the generated ODK form
 
-**Status: Not Started**
+**Status: Completed** — implemented 2026-10-30; see the [change log](../change-logs/2026-10-30-exclude-removed-choice-entries-from-form.md). Manual verification on local/staging is still to be done by Dan.
 
 Fixes [the issue](../issues/2026-10-29-removed-choice-list-entries-still-exported.md). Changes span the `packages/filament-odk-link` submodule (the exports) and this repo (the toggle action). Implementing them means a commit in the submodule plus a submodule pointer bump here. Follow-up to [the duplicate choice list work](2026-10-19-choice-list-duplicate-names.md), which made removal apply to every same-named copy but did not touch the exports.
 
@@ -68,6 +68,10 @@ $team->xlsforms()->update(['draft_needs_update' => true]);
 ```
 
 This follows the pattern in `FarmEntity::booted()` and the Informed Consent / HDDS hints pages. Consider limiting it to xlsforms that use the affected list (via `xlsform_module_versions` -> `choice_lists`) rather than all of the team's forms; the simple version is fine unless it causes noticeable extra republishing.
+
+### Follow-up (2026-10-30)
+
+Manual testing showed the UI only checked the canonical copy, so a removal row on a non-canonical copy hid the entry from the form but still showed it as available. `ChoiceListEntry::isRemoved()` now uses the same sibling rule as the export.
 
 ## Implementation steps
 
