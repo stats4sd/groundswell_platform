@@ -9,6 +9,7 @@ use Filament\Actions\EditAction;
 use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\LanguageStringType;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
@@ -103,6 +104,43 @@ test('toggle removed removes and restores every copy', function () {
         ->callTableAction('Toggle Removed', $entry);
 
     expect($this->team->fresh()->choiceListEntriesRemovedFromContext()->count())->toBe(0);
+});
+
+test('an entry removed in only one copy shows as removed for every copy, and restore clears it', function () {
+    $firstOne = ChoiceListEntry::where('choice_list_id', $this->firstList->id)->where('name', '1')->first();
+    $secondOne = ChoiceListEntry::where('choice_list_id', $this->secondList->id)->where('name', '1')->first();
+
+    // only the non-canonical copy has a removal row
+    $this->team->choiceListEntriesRemovedFromContext()->attach($secondOne);
+
+    expect($firstOne->isRemoved($this->team->fresh()))->toBeTrue();
+
+    livewire(ListChoiceListEntries::class, ['choiceListName' => 'crop_list'])
+        ->callTableAction('Toggle Removed', $firstOne);
+
+    expect($this->team->fresh()->choiceListEntriesRemovedFromContext()->count())->toBe(0);
+});
+
+test('toggle removed flags the team xlsforms as needing a draft update, both ways', function () {
+    $xlsform = Xlsform::withoutEvents(fn () => Xlsform::forceCreate([
+        'xlsform_template_id' => $this->firstList->xlsformModuleVersion->xlsformModule->xlsform_template_id,
+        'owner_id' => $this->team->id,
+        'draft_needs_update' => false,
+    ]));
+
+    $entry = ChoiceListEntry::where('choice_list_id', $this->firstList->id)->where('name', '1')->first();
+
+    livewire(ListChoiceListEntries::class, ['choiceListName' => 'crop_list'])
+        ->callTableAction('Toggle Removed', $entry);
+
+    expect($xlsform->fresh()->draft_needs_update)->toBeTruthy();
+
+    $xlsform->updateQuietly(['draft_needs_update' => false]);
+
+    livewire(ListChoiceListEntries::class, ['choiceListName' => 'crop_list'])
+        ->callTableAction('Toggle Removed', $entry);
+
+    expect($xlsform->fresh()->draft_needs_update)->toBeTruthy();
 });
 
 test('create adds the entry and its labels to every copy', function () {
