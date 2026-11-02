@@ -294,12 +294,21 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
                                         ->notIn(['na'])
                                         ->required(),
 
+                                    Select::make('farm_name_column')
+                                        ->label(t('Which column contains the farmer name? (optional)'))
+                                        ->placeholder(t('No name column'))
+                                        ->helperText(t('If you pick one, ODK Collect and ODK Central show each farm as "ID: <farm code> / Name: <name>" instead of just the farm code. The name is stored as an identifier. Farms that were already imported keep their current label.'))
+                                        ->live()
+                                        ->options(fn (Get $get) => $get('header_columns'))
+                                        ->notIn(['na']),
+
                                     CheckboxList::make('farm_identifiers')
                                         ->label(t('Are there any additional columns that contain identifiers for the farm? Tick all that apply.'))
                                         ->helperText(t('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes. A column literally named Latitude, Longitude, Altitude, or Accuracy is automatically used as the farm\'s GPS instead, if ticked here.'))
                                         ->options(fn (Get $get): array => $get('header_columns'))
                                         ->disableOptionWhen(
                                             fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||
+                                                $value === (string) $get('farm_name_column') ||
                                                 collect($get('farm_properties'))->contains($value) ||
                                                 $value === 'na'
                                         )
@@ -312,6 +321,7 @@ class ImportLocationsAndFarmEntities extends Page implements HasForms
                                         ->options(fn (Get $get) => $get('header_columns'))
                                         ->disableOptionWhen(
                                             fn (string $value, Get $get): bool => $value === (string) $get('farm_code_column') ||
+                                                $value === (string) $get('farm_name_column') ||
                                                 collect($get('farm_identifiers'))->contains($value) ||
                                                 $value === 'na'
                                         )
