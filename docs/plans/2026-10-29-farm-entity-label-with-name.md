@@ -1,23 +1,28 @@
 # Plan: Optional farmer name in the ODK farm entity label
 
-**Status: Not Started**
+**Status: In Progress**
+
+Implemented 2026-11-02 (all steps below, 367 tests passing); see [the change log](../change-logs/2026-11-02-farm-entity-label-with-name.md). Left to do: on staging, run `php artisan odk:backfill-farm-labels --team=<id> --name-property=<property>` as a dry run first and confirm Central's OData feed carries `__system.version` (otherwise the command falls back to one `getOdkEntity()` call per farm), then re-run with `--apply`. Mark Completed after that.
+
+Revised 2026-11-02 after a line-by-line check of the plan against the code (see "Verification notes" at the end).
 
 ## Background
 
-Farms are stored as entities in an ODK Central Entity List. The entity `label` is what ODK Collect and ODK Central show in their lists. Today the label is always the farm code (`team_code`), so enumerators see a bare code such as `154`.
+Farms are stored as entities in an ODK Central Entity List (`Farm_Summary`). The entity `label` is what ODK Collect and ODK Central show. It is also what the enumerator sees in the farm picker of every survey form: `FarmInfoModuleBuilder` builds the question as `select_one_from_file Farm_Summary.csv`, and Central serves that CSV with the entity label as the choice label. Today the label is always the farm code (`team_code`), so enumerators see a bare code such as `154`.
 
 We want the label to read `ID: 154 / Name: Elvia Vasquez` when the team has a farmer name available, and to keep today's behaviour (label = farm code) otherwise.
 
-### How the label is set today
+### How the label is set and read today
 
-| Path | Code | Label sent to Central |
+| Path | Code | Label |
 |---|---|---|
-| Excel/CSV import | `OdkFarmEntityService::bulkCreateFarms()` (`'label' => $row['teamCode']`) | `team_code` |
-| Manual create | `createFarm()` → `OdkLinkService::createOdkEntity(..., $teamCode, ...)` | `team_code` |
-| Manual edit | `updateFarm()` → `updateOdkEntity(..., $teamCode, ...)` | `team_code` |
-| Sync from Central | `syncLocalFarm()` | reads label **back** as `team_code` when adopting a new entity |
+| Excel/CSV import | `OdkFarmEntityService::bulkCreateFarms()`, `'label' => $row['teamCode']` | pushed as `team_code` |
+| Manual create | `createFarm()` → `createOdkEntity(..., $teamCode, ...)` | pushed as `team_code` |
+| Manual edit | `updateFarm()` → `updateOdkEntity(..., $teamCode, ...)` | pushed as `team_code` |
+| Sync, adopting an unknown entity | `syncLocalFarm()`, new-row branch | label is read **back** as `team_code` |
+| Sync, existing farm | `syncLocalFarm()`, last block: `if ($label !== null && $farmEntity->team_code !== $label) update team_code = $label` | label is read **back** as `team_code` |
 
-The last row is the catch: `syncLocalFarm()` assumes label == team_code (comment at `OdkFarmEntityService.php` ~L1006). If we only change what is pushed, every later sync that adopts a new entity would store the whole `ID: ... / Name: ...` string as its `team_code`. The sync must be fixed in the same change.
+Both sync rows assume label == team_code. The second one runs for **every existing farm on every refresh**, so changing only what we push would overwrite every farm's local `team_code` with `ID: 154 / Name: ...` the next time the farm list loads. The sync must be fixed in the same change, in both branches.
 
 ## Decisions (agreed with Dan, 2026-10-29)
 
@@ -32,71 +37,106 @@ The last row is the catch: `syncLocalFarm()` assumes label == team_code (comment
 
 ### Where the "name property" is remembered
 
-`updateFarm()` and `createFarm()` (manual forms) also push a label, so they need to know which entity property holds the name. Import-form choices are not kept anywhere today, so we need to persist one setting per team.
+`createFarm()` / `updateFarm()` (manual forms) also push a label, so they need to know which entity property holds the name. Import-form choices are not kept anywhere today, so we persist one setting per team.
 
-- Add a nullable column `farm_name_property` to `teams` (host migration), holding the **sanitized ODK property name** (the key in the entity data, as produced by `reconcileProperties()`), not the spreadsheet header.
-- Set by the import when a name column is chosen; null means "label = team_code".
-- If a later import chooses a different name column from the stored one, the stored value is overwritten and the user is told in the import form helper text that existing labels are not changed until they run the backfill command (or the farms are edited).
+- Add a nullable column `farm_name_property` to `teams` (host migration), holding the **sanitized ODK property name**, i.e. the value `reconcileProperties()` returns for the name column, not the spreadsheet header. This matters: a header such as `name` is a banned ODK property name and is stored as e.g. `name_farm_entities_5`.
+- Set by the import when a name column is chosen. Null means "label = team_code" everywhere.
+- A later import that picks a different name column overwrites the setting. Helper text on the form says existing labels only change when the backfill command is run.
+- An import with no name column leaves the setting alone and labels its rows with the farm code only.
 
-> Alternative considered: store it on the `Dataset`. Rejected for now because the dataset is created lazily in `ensureDataset()` and `Team` already owns the other per-team ODK settings. Revisit if the package should own this.
+> `ensureDataset()` is already one Dataset per team (`farm_entities_{team_id}`), so storing this on the Dataset would also work. A `teams` column is still preferred: `DatasetVariable.description` is the identifier/property tag and has already caused a stale-tag bug (see `docs/change-logs/farm-entities-simplify-and-gps-sync.md`), so it should not carry more meaning.
 
 ### Label builder
 
-Add one public method on `OdkFarmEntityService`:
+One public method on `OdkFarmEntityService`, the only place that knows the format:
 
 ```php
 public function buildFarmLabel(string $teamCode, ?string $name): string
 ```
 
-Returns `"ID: {$teamCode} / Name: {$name}"` when `$name` is non-blank after trimming, otherwise `$teamCode`. It is the only place that knows the format.
+Trims the name and collapses internal whitespace/newlines to single spaces. Non-blank → `"ID: {$teamCode} / Name: {$name}"`, otherwise `$teamCode`.
 
-### Name column in stored data
+### The name is stored as an identifier
 
-The name column is also stored as an ordinary entity property (so the Edit form shows it and the backfill can read it from Central). It is excluded from the identifier/property checkbox lists (like the farm code column) and added to the properties automatically by the import. The property is registered through the normal `reconcileProperties()` path.
+The name column is stored as an ordinary entity property tagged **`identifier`**, not `property`. The import form already tells users that identifiers are the columns that must not be shared outside the project for data protection, and a farmer name is exactly that. The column is hidden from the identifier/property checkbox lists (like the farm code column) and added to the identifiers by `FarmEntityImport::collection()`. Because it is a normal property, the Edit form shows it, `FarmInfoModuleBuilder` includes it in the form's farm note, and the backfill can read it from Central.
 
 ### Sync fix (`syncLocalFarm()`)
 
-When adopting an entity that does not exist locally, read `team_code` from the entity's **`team_code` property** (already pushed by `createFarm()`, `updateFarm()` and `bulkCreateFarms()`), and only fall back to the label, then the uuid, if the property is missing (entities registered directly in Enketo). This keeps existing behaviour for entities that have no `team_code` property and makes the new label format safe.
+Apply in **both** branches (adopt new, and the existing-farm `team_code` update at the end):
+
+- If the team has `farm_name_property` set, take `team_code` from the entity's **`team_code` property**; if that is missing or blank, fall back to the label.
+- If the team has no `farm_name_property`, keep today's behaviour exactly (team_code follows the label).
+
+Gating on the team setting means no existing team changes behaviour until it opts in, and the existing "label edited directly in Central updates team_code" behaviour is preserved for them. For opted-in teams the `team_code` property is the source of truth, and label edits made directly in Central no longer flow back; that is the unavoidable cost of a composite label.
+
+### Backfill command
+
+`odk:backfill-farm-labels`, following the existing convention in `BackfillTemplateSettings` (dry run by default, `--apply` writes):
+
+```
+php artisan odk:backfill-farm-labels {--team=* } {--name-property=} {--apply}
+```
+
+- Teams: `--team` ids, default all teams that have an ODK project and a local farm dataset.
+- `--name-property` must be a sanitized variable name that exists in the team's local `Dataset` variables (validated; otherwise the team is reported and skipped). If given it is saved to `teams.farm_name_property`, and in dry-run only reported. Without it the team's existing setting is used; a team with neither is skipped.
+- Reads Central's live feed (`getOdkDatasetEntitiesFeed()`), **not** `refreshFromCentral()`, so the backfill never runs the sync code. Entities are matched to local farms by `odk_uuid`.
+- For each entity with a non-blank value in the name property: code = `team_code` property, else the local `FarmEntity.team_code`; compute `buildFarmLabel()`; skip if it equals the current label. Entities with no name value keep their label.
+- Update uses `updateOdkEntity()` with `data = [nameProperty => itsCurrentValue]`, a no-op merge. This avoids sending an empty `data`, which PHP serialises as `[]` rather than `{}`, and avoids the package change a label-only PATCH would need. `baseVersion` comes from the feed entity's version (`__system.version`); **verify on staging** that the OData feed includes it, otherwise fetch it per entity with `getOdkEntity()`.
+- Per-entity failures (e.g. 409 version conflict because someone edited meanwhile) are reported and the run continues; re-running is safe because matching labels are skipped. Saves the new `odk_version` locally.
+- Dry run prints a table of `team | farm code | current label | new label`, then totals: `N updated, N unchanged, N skipped (no name), N failed`.
+- Soft-deleted entities are not in the feed and are left alone.
 
 ## Implementation steps
 
-1. **Migration** (host app): add nullable `teams.farm_name_property`. Add to `Team` model if it needs a cast or fillable (models are globally unguarded, so likely nothing).
-2. **Service**
+1. **Migration** (host app): nullable `teams.farm_name_property`.
+2. **Service** (`OdkFarmEntityService`)
    - Add `buildFarmLabel()`.
-   - `bulkCreateFarms()`: accept `name` per row (new key in the prepared rows) and use `buildFarmLabel()` for `'label'`. Persist `farm_name_property` on the team when a name column was used.
-   - `createFarm()` / `updateFarm()`: take the name from the identifiers/properties array using `$team->farm_name_property` and use `buildFarmLabel()`.
-   - `syncLocalFarm()`: read `team_code` from the property first (see above).
+   - `bulkCreateFarms(Team $team, Collection $rows, ?string $sourceName = null, ?string $nameColumn = null)`: rows carry an optional `name`; label from `buildFarmLabel()` when `$nameColumn` is set. The name value is also put in the row's identifiers under the `$nameColumn` key. After `reconcileProperties()`, save `$propertyMap[$nameColumn]` to `teams.farm_name_property`.
+   - `createFarm()` / `updateFarm()`: after building `$data`, read the name as `$data[$team->farm_name_property] ?? null` (for `updateFarm()` after the "clear removed properties" loop, so a cleared name falls back to the code), and pass `buildFarmLabel()` to `createOdkEntity()` / `updateOdkEntity()`.
+   - `syncLocalFarm()`: per the sync fix above, both branches.
 3. **Import**
-   - `FarmEntityImport::collection()`: resolve the optional `farm_name_column`, add `name` to each prepared row, and pull that column out of identifiers/properties if it was also ticked.
-   - Both import forms get a new optional `Select::make('farm_name_column')` after `farm_code_column`, and the identifier/property lists hide the chosen name column (same `disableOptionWhen` pattern as farm code):
+   - `FarmEntityImport::collection()`: resolve optional `farm_name_column` through `$headers` like the farm code column; add `name` to each prepared row and put the column in the identifiers; pass the header as `$nameColumn` to `bulkCreateFarms()`. The whole `$data` array already flows through `QueueFarmEntityImport` and `ImportFarmsAction`, so no plumbing is needed for the new key.
+   - Both import forms get an optional `Select::make('farm_name_column')` after `farm_code_column`, and the identifier/property lists disable the chosen name column (same `disableOptionWhen` pattern as the farm code):
      - `app/Filament/App/Clusters/LocationLevels/Resources/FarmEntityResource/Pages/ImportLocationsAndFarmEntities.php`
      - `app/Filament/Tables/Actions/ImportFarmsAction.php`
-   - Helper text explains the label format and that leaving it empty keeps the farm code as the label.
-4. **Backfill command** `odk:backfill-farm-labels` (modelled on `app/Console/Commands/BackfillTemplateSettings.php`)
-   - Options: `{--team=*}` (default all teams with an ODK project), `{--name-property=}` (sanitized property name; defaults to the team's `farm_name_property`), `{--dry-run}`.
-   - For each team: fetch the live entities, compute the new label with `buildFarmLabel()`, and call `updateOdkEntity()` only when the label differs from Central's current one. Send the entity's existing data unchanged and the current `baseVersion`, then save the new `odk_version`.
-   - Set `teams.farm_name_property` from `--name-property` if given and the team has none.
-   - Idempotent: a second run changes nothing. Prints a per-team summary (updated / skipped / failed) and is safe to re-run after partial failure.
-   - Run `--dry-run` first on staging and review the printed before/after labels.
-5. **Docs:** add a short note to the farm import help text and a change log in `docs/change-logs`.
+   - Helper text: explains the label format, that leaving it empty keeps the farm code as the label, that the name is treated as an identifier, and that farms already imported keep their label until the backfill is run.
+4. **Backfill command** as specified above.
+5. **Docs:** a change log in `docs/change-logs` when done.
 
 ## Tests (Pest)
 
-- `buildFarmLabel()`: name present, null, blank/whitespace, name containing `/`.
-- Import with a name column → entities pushed with `ID: x / Name: y`; without → label is the code; row with empty name → falls back to the code.
-- `teams.farm_name_property` is set by an import that uses a name column and left alone otherwise.
-- `createFarm()` / `updateFarm()` use the stored property; editing the name changes the label.
-- `syncLocalFarm()`: a label of `ID: 154 / Name: Elvia Vasquez` with a `team_code` property of `154` creates a farm with `team_code` `154`; with no property it falls back to the label (existing behaviour).
-- Backfill command: dry run changes nothing; real run updates only mismatched labels; second run is a no-op.
+- `buildFarmLabel()`: name present, null, blank, whitespace/newlines, name containing `/`.
+- Bulk import with a name column → entities pushed with `ID: x / Name: y`, name stored tagged `identifier`, `teams.farm_name_property` holds the sanitized name (including a header literally called `name`). Without a name column → label is the code and the setting is untouched. Empty name cell → that row falls back to the code.
+- Existing `Http::fake` bulk-create order test still passes (rows are still sent in reverse).
+- `createFarm()` / `updateFarm()` with the setting: label is composite; editing or clearing the name changes the label; with no setting: label is the code.
+- `syncLocalFarm()` with the setting: an existing farm whose label is `ID: 154 / Name: ...` and `team_code` property `154` keeps `team_code` `154` (the regression this plan exists to prevent); adopting such an entity creates `team_code` `154`; with the property missing it falls back to the label. Without the setting, the existing `OdkFarmEntityRefreshTest` cases are unchanged (feeds there carry only a label).
+- Backfill: dry run writes nothing; `--apply` updates only mismatched labels and leaves entities with no name alone; a second run is a no-op; `--name-property` not in the dataset is rejected; a failing PATCH is reported and the run continues.
 
 ## Risks and notes
 
-- **Other consumers of the label.** Before implementing, search XLSForm templates and `FarmInfoModuleBuilder` for anything that matches entities on `label` (e.g. `instance_name` or a `pulldata`/entity-lookup calculation). The label is only a display value in ODK Entities, but this must be confirmed.
-- **Entity update conflicts.** `updateOdkEntity()` needs the right `baseVersion`; the backfill must refresh the version from Central, not trust the local `odk_version`.
-- **Mobile cache.** ODK Collect devices only pick up new labels after the next entity list sync.
-- **Name column is optional on purpose.** Teams that do not hold farmer names are unaffected.
+- **Forms matching on label:** checked, nothing does. The form's farm calculations look entities up by `name` (uuid) and read property columns (`instance('Farm_Summary')/root/item[name=${id}]/...`), so a label change does not break them. The new name identifier appears in the farm note automatically the next time the Farm Info module is rebuilt.
+- **Re-importing the same file does not relabel existing farms:** `bulkCreateFarms()` skips rows whose `team_code` already exists. Relabelling existing farms is the backfill's job.
+- **Mobile cache:** ODK Collect devices pick up new labels only after their next entity list sync.
+- **Chunked imports:** `FarmEntityImport` runs per 1000-row chunk, so saving `farm_name_property` happens once per chunk. It is an idempotent write of the same value.
+- **Name column is optional on purpose:** teams without farmer names are unaffected, and so are existing teams until they opt in.
+- **Submodule:** none of the steps touch `packages/filament-odk-link` (the backfill reuses the existing `updateOdkEntity()`), so no submodule commit or pointer bump is needed.
 
 ## Out of scope
 
 - Per-team configurable label templates.
+- A name selector on the manual create/edit farm forms (they follow the team's stored setting).
 - Using a name column from the location (not farm) import.
+
+## Verification notes (2026-11-02)
+
+Changes made to the first draft after checking it against the code:
+
+| # | First draft | Correction |
+|---|---|---|
+| 1 | Sync fix covered only the "adopt new entity" branch | The existing-farm branch (`syncLocalFarm()` last block) also copies label to `team_code` on every refresh; it would have corrupted every farm's `team_code`. Both branches fixed, gated on the team setting. |
+| 2 | Backfill flag `--dry-run` | Repo convention (`odk:backfill-template-settings`) is dry run by default with `--apply`. |
+| 3 | Name stored as a plain property | Stored as `identifier`, matching the form's data-protection wording. |
+| 4 | Setting stored as "the sanitized name" without saying how to get it | Must come from `reconcileProperties()`'s map; a header called `name` is renamed because it is banned in ODK. |
+| 5 | Rejected storing on Dataset because "it is global" | Wrong: the dataset is already per team. Decision unchanged, rationale corrected. |
+| 6 | Backfill would "send the entity's existing data unchanged" | Feed values can be null and an empty `data` serialises as `[]`; sending only the name property's own value is a valid no-op merge and needs no package change. |
+| 7 | Risk "check forms for label matching" left open | Checked: nothing matches on label (see Risks). |

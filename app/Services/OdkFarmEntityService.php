@@ -478,6 +478,31 @@ class OdkFarmEntityService
     }
 
     /**
+     * The entity label ODK Collect and Central show for a farm: "ID: {code} / Name: {name}"
+     * when a name is available, otherwise just the farm code. The only place that knows the
+     * format - see docs/plans/2026-10-29-farm-entity-label-with-name.md.
+     */
+    public function buildFarmLabel(string $teamCode, ?string $name): string
+    {
+        $name = trim((string) preg_replace('/\s+/u', ' ', (string) $name));
+
+        return $name === '' ? $teamCode : "ID: {$teamCode} / Name: {$name}";
+    }
+
+    /**
+     * Label for a farm whose property data (keyed by sanitized property name) is already
+     * built: uses the team's name property if it has one set, else the plain farm code.
+     *
+     * @param  array<string, string>  $data
+     */
+    protected function labelForData(Team $team, string $teamCode, array $data): string
+    {
+        $nameProperty = $team->farm_name_property;
+
+        return $this->buildFarmLabel($teamCode, $nameProperty !== null ? ($data[$nameProperty] ?? null) : null);
+    }
+
+    /**
      * Creates a farm both on ODK Central and locally (structural row only - identifiers/
      * properties are never persisted locally, only read live via getEntityData()).
      *
@@ -526,7 +551,9 @@ class OdkFarmEntityService
             $data[$propertyMap[$key]] = (string) $value;
         }
 
-        return DB::transaction(function () use ($team, $locationId, $teamCode, $entityListName, $data) {
+        $label = $this->labelForData($team, $teamCode, $data);
+
+        return DB::transaction(function () use ($team, $locationId, $teamCode, $label, $entityListName, $data) {
 
             $farmEntity = FarmEntity::create([
                 'owner_id' => $team->id,
@@ -539,7 +566,7 @@ class OdkFarmEntityService
             $odkEntity = $this->odkLinkService->createOdkEntity(
                 $team->odkProject,
                 $entityListName,
-                $teamCode,
+                $label,
                 $data,
             );
 
@@ -561,13 +588,19 @@ class OdkFarmEntityService
      *
      * Each row: locationId (int), teamCode (string), identifiers (array<string, string>),
      * properties (array<string, string>), latitude/longitude (?float), altitude (?int),
-     * accuracy (?float). $rows is deliberately left ungenericized in the docblock -
+     * accuracy (?float), and optionally name (?string, only read when $nameColumn is given).
+     * $rows is deliberately left ungenericized in the docblock -
      * Collection's TValue generic isn't covariant, so parameterizing it here rejects any
      * Collection built via a ->map()/->filter() chain even when the shapes are identical.
      *
+     * $nameColumn is the raw key (spreadsheet header) of the optional farmer name column.
+     * When given, each row's `name` is stored as an identifier under that key, the entity
+     * label becomes "ID: {code} / Name: {name}" (see buildFarmLabel()), and the resulting
+     * property name is remembered on the team so manual create/edit label the same way.
+     *
      * @return Collection<int, FarmEntity>
      */
-    public function bulkCreateFarms(Team $team, Collection $rows, ?string $sourceName = null): Collection
+    public function bulkCreateFarms(Team $team, Collection $rows, ?string $sourceName = null, ?string $nameColumn = null): Collection
     {
         $entityListName = $this->resolveEntityListName($team);
 
@@ -577,6 +610,13 @@ class OdkFarmEntityService
 
         $dataset = $this->ensureDataset($team);
         $this->ensureOdkDataset($team, $dataset, $entityListName);
+
+        if ($nameColumn !== null) {
+            $rows = $rows->map(fn ($row) => [
+                ...$row,
+                'identifiers' => [...$row['identifiers'], $nameColumn => (string) ($row['name'] ?? '')],
+            ]);
+        }
 
         $existingCodes = FarmEntity::where('owner_id', $team->id)->pluck('team_code')->all();
 
@@ -620,9 +660,9 @@ class OdkFarmEntityService
 
         $propertyMap = $this->reconcileProperties($team, $dataset, $entityListName, $keyTypes);
 
-        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex, $sourceName) {
+        return DB::transaction(function () use ($team, $entityListName, $newRows, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex, $sourceName, $nameColumn) {
 
-            $prepared = $newRows->map(function ($row, $index) use ($team, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex) {
+            $prepared = $newRows->map(function ($row, $index) use ($team, $propertyMap, $locationAttributesByLocationId, $geometryByRowIndex, $nameColumn) {
                 $geometry = $geometryByRowIndex[$index];
 
                 $rawData = [
@@ -647,7 +687,11 @@ class OdkFarmEntityService
                     'odk_uuid' => (string) Str::uuid(),
                 ]);
 
-                return ['farmEntity' => $farmEntity, 'uuid' => $farmEntity->odk_uuid, 'label' => $row['teamCode'], 'data' => $data];
+                $label = $nameColumn !== null
+                    ? $this->buildFarmLabel($row['teamCode'], $row['name'] ?? null)
+                    : $row['teamCode'];
+
+                return ['farmEntity' => $farmEntity, 'uuid' => $farmEntity->odk_uuid, 'label' => $label, 'data' => $data];
             });
 
             // Central serves the entity list to forms (select_one_from_file) newest first, so the
@@ -658,6 +702,12 @@ class OdkFarmEntityService
                 $prepared->map(fn ($p) => ['uuid' => $p['uuid'], 'label' => $p['label'], 'data' => $p['data']])->reverse()->values()->all(),
                 $sourceName,
             );
+
+            // Remembered so createFarm()/updateFarm()/the sync treat this team's labels the
+            // same way. The sanitized name (not the header) - a header like `name` is renamed.
+            if ($nameColumn !== null && $team->farm_name_property !== $propertyMap[$nameColumn]) {
+                $team->update(['farm_name_property' => $propertyMap[$nameColumn]]);
+            }
 
             return $prepared->pluck('farmEntity');
         });
@@ -806,7 +856,9 @@ class OdkFarmEntityService
             }
         }
 
-        return DB::transaction(function () use ($farmEntity, $team, $locationId, $teamCode, $entityListName, $data) {
+        $label = $this->labelForData($team, $teamCode, $data);
+
+        return DB::transaction(function () use ($farmEntity, $team, $locationId, $teamCode, $label, $entityListName, $data) {
 
             // NOTE: verify against a live server - baseVersion defaults to 1 if we never
             // recorded one (e.g. a farm adopted from an entity created outside this app).
@@ -814,7 +866,7 @@ class OdkFarmEntityService
                 $team->odkProject,
                 $entityListName,
                 $farmEntity->odk_uuid,
-                $teamCode,
+                $label,
                 $data,
                 $farmEntity->odk_version ?? 1,
             );
@@ -1002,15 +1054,16 @@ class OdkFarmEntityService
         // here instead of re-created.
         $farmEntity = FarmEntity::withTrashed()->firstOrNew(['odk_uuid' => $uuid]);
 
+        $teamCode = $this->sourceTeamCode($team, $label, $values);
+
         if (! $farmEntity->exists) {
             // team_code mirrors label bidirectionally - createFarm()/updateFarm() push
             // team_code to Central as label, so adopting the other direction reads it
-            // back from label too, not from a same-named property (which may not even
-            // exist for entities registered directly in Enketo).
+            // back from label too (see sourceTeamCode() for the one exception).
             $farmEntity->fill([
                 'owner_id' => $team->id,
                 'location_id' => $this->resolveLocationFromAttributes($team, $values),
-                'team_code' => (string) ($label ?? $uuid),
+                'team_code' => (string) ($teamCode ?? $uuid),
             ])->save();
 
             return;
@@ -1037,10 +1090,97 @@ class OdkFarmEntityService
             }
         }
 
-        if ($label !== null && $farmEntity->team_code !== $label) {
+        if ($teamCode !== null && $farmEntity->team_code !== $teamCode) {
             // Keeps team_code in sync if the label was ever changed directly on Central
             // (e.g. via Central's own UI) rather than through this app.
-            $farmEntity->update(['team_code' => $label]);
+            $farmEntity->update(['team_code' => $teamCode]);
         }
+    }
+
+    /**
+     * One-time relabelling of a team's existing farms to "ID: {code} / Name: {name}", reading
+     * each farm's name from $nameProperty on Central's live feed (never via refreshFromCentral(),
+     * so the sync code is not involved). Entities with no value in $nameProperty are left alone,
+     * as are those already labelled correctly, so a re-run only touches what is left. The update
+     * sends the name property's own current value as `data`: a no-op merge that avoids sending an
+     * empty `data` (which PHP would serialise as `[]`, not `{}`). With $apply false nothing is
+     * written and the status of a farm that would change is 'update'.
+     *
+     * @return array<int, array{uuid: string, code: string, current: ?string, new: ?string, status: 'update'|'updated'|'unchanged'|'no_name'|'failed', error?: string}>
+     */
+    public function relabelFarms(Team $team, string $nameProperty, bool $apply): array
+    {
+        $entityListName = $this->resolveEntityListName($team);
+        $odkProject = $team->odkProject()->first();
+
+        if ($entityListName === null || $odkProject === null) {
+            return [];
+        }
+
+        $localCodes = FarmEntity::where('owner_id', $team->id)->pluck('team_code', 'odk_uuid');
+        $results = [];
+
+        foreach ($this->odkLinkService->getOdkDatasetEntitiesFeed($odkProject, $entityListName) as $row) {
+            $uuid = $row['__id'] ?? null;
+
+            if (! $uuid) {
+                continue;
+            }
+
+            $current = $row['label'] ?? null;
+            $name = $row[$nameProperty] ?? null;
+            $teamCode = $row['team_code'] ?? null;
+            $code = (string) (is_scalar($teamCode) && (string) $teamCode !== '' ? $teamCode : ($localCodes[$uuid] ?? $current ?? $uuid));
+
+            $result = ['uuid' => $uuid, 'code' => $code, 'current' => $current, 'new' => null, 'status' => 'no_name'];
+
+            if (is_scalar($name) && trim((string) $name) !== '') {
+                $new = $this->buildFarmLabel($code, (string) $name);
+                $result['new'] = $new;
+                $result['status'] = $new === $current ? 'unchanged' : 'update';
+            }
+
+            if ($result['status'] === 'update' && $apply) {
+                try {
+                    $baseVersion = $row['__system']['version']
+                        ?? $this->odkLinkService->getOdkEntity($odkProject, $entityListName, $uuid)['currentVersion']['version']
+                        ?? 1;
+
+                    $odkEntity = $this->odkLinkService->updateOdkEntity($odkProject, $entityListName, $uuid, $result['new'], [$nameProperty => (string) $name], (int) $baseVersion);
+
+                    FarmEntity::where('odk_uuid', $uuid)->update(['odk_version' => $odkEntity['currentVersion']['version'] ?? ((int) $baseVersion + 1)]);
+
+                    $result['status'] = 'updated';
+                } catch (\Throwable $exception) {
+                    $result['status'] = 'failed';
+                    $result['error'] = $exception->getMessage();
+                }
+            }
+
+            $results[] = $result;
+        }
+
+        return $results;
+    }
+
+    /**
+     * Where a farm's team_code is read back from. Normally the label. A team that labels its
+     * farms "ID: {code} / Name: {name}" (farm_name_property set) has a label that is no longer
+     * the code, so for it the entity's own `team_code` property is the source of truth, with the
+     * label as the fallback for entities that lack the property (e.g. registered in Enketo).
+     *
+     * @param  array<string, string>  $values
+     */
+    protected function sourceTeamCode(Team $team, ?string $label, array $values): ?string
+    {
+        if ($team->farm_name_property !== null) {
+            $code = $values['team_code'] ?? null;
+
+            if (is_scalar($code) && (string) $code !== '') {
+                return (string) $code;
+            }
+        }
+
+        return $label;
     }
 }

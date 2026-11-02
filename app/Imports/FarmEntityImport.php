@@ -64,8 +64,12 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         $locationLevel = LocationLevel::find($this->data['location_level_id']);
         $locationCodeColumn = $headers[$this->data['location_code_column']];
 
-        $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
-        $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
+        $nameColumn = $this->nameColumn();
+
+        // The name column is stored as an identifier by bulkCreateFarms(), so it is dropped from
+        // the generic lists here in case it was also ticked in one of them.
+        $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier])->reject(fn ($column) => $column === $nameColumn);
+        $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property])->reject(fn ($column) => $column === $nameColumn);
 
         $gpsColumnsByName = $this->gpsColumnsByName();
 
@@ -85,7 +89,7 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
         $team = Team::findOrFail($this->data['owner_id']);
 
         $preparedRows = $rows
-            ->map(function ($row) use ($team, $farmCodeColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns, $latitudeColumn, $longitudeColumn, $altitudeColumn, $accuracyColumn, $toFloat, $toInt) {
+            ->map(function ($row) use ($team, $farmCodeColumn, $nameColumn, $locationLevel, $locationCodeColumn, $identifierColumns, $propertyColumns, $latitudeColumn, $longitudeColumn, $altitudeColumn, $accuracyColumn, $toFloat, $toInt) {
                 $location = Location::where('code', $row[$locationCodeColumn])
                     ->where('location_level_id', $locationLevel->id)
                     ->where('owner_id', $team->id)
@@ -94,6 +98,7 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
                 return [
                     'locationId' => $location?->id,
                     'teamCode' => (string) $row[$farmCodeColumn],
+                    'name' => $nameColumn !== null ? (string) $row[$nameColumn] : null,
                     'identifiers' => $identifierColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
                     'properties' => $propertyColumns->mapWithKeys(fn ($column) => [(string) $column => (string) $row[$column]])->all(),
                     'latitude' => $latitudeColumn !== null ? $toFloat($row[$latitudeColumn]) : null,
@@ -110,7 +115,17 @@ class FarmEntityImport implements ShouldQueue, SkipsEmptyRows, ToCollection, Wit
 
         $sourceName = isset($this->data['upload']) ? basename($this->data['upload']) : null;
 
-        return app(OdkFarmEntityService::class)->bulkCreateFarms($team, $preparedRows, $sourceName)->all();
+        return app(OdkFarmEntityService::class)->bulkCreateFarms($team, $preparedRows, $sourceName, $nameColumn)->all();
+    }
+
+    /**
+     * The header of the optional farmer name column, or null when the user did not pick one.
+     */
+    private function nameColumn(): ?string
+    {
+        $index = $this->data['farm_name_column'] ?? null;
+
+        return $index === null || $index === '' ? null : ($this->data['header_columns'][$index] ?? null);
     }
 
     public function rules(): array
