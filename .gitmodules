@@ -13,3 +13,6 @@
 [submodule "packages/groundswell_analysis"]
 	path = packages/groundswell_analysis
 	url = git@github.com:stats4sd/groundswell_monitor.git
+[submodule "packages/groundswell_analysis_standalone"]
+	path = packages/groundswell_analysis_standalone
+	url = git@github.com:stats4sd/groundswell_analysis_standalone.git
