@@ -2,6 +2,7 @@
 
 use App\Models\Team;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
@@ -148,6 +149,180 @@ describe('R2: module versions of another template', function () {
             ->assertSuccessful();
 
         expect((bool) $this->xlsform->refresh()->draft_needs_update)->toBeFalse();
+    });
+
+});
+
+describe('R3: versions', function () {
+
+    function repairTestModule(XlsformTemplate $template, string $name, int $defaultOrder, int $rowCount = 0): XlsformModule
+    {
+        $module = XlsformModule::forceCreate([
+            'xlsform_template_id' => $template->id,
+            'label' => $name,
+            'name' => $name,
+            'default_order' => $defaultOrder,
+        ]);
+
+        $version = $module->defaultXlsformVersion;
+
+        for ($rowNumber = 1; $rowNumber <= $rowCount; $rowNumber++) {
+            DB::table('survey_rows')->insert([
+                'xlsform_module_version_id' => $version->id,
+                'row_number' => $rowNumber,
+                'name' => "{$name}_q{$rowNumber}",
+                'type' => 'text',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return $module;
+    }
+
+    function repairTestForm(XlsformTemplate $template, Team $team, array $orderPerVersionId): Xlsform
+    {
+        $formId = DB::table('xlsforms')->insertGetId([
+            'xlsform_template_id' => $template->id,
+            'owner_id' => $team->id,
+            'has_latest_template' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        foreach ($orderPerVersionId as $versionId => $order) {
+            DB::table('selected_xlsform_module_versions')->insert([
+                'xlsform_id' => $formId,
+                'xlsform_module_version_id' => $versionId,
+                'order' => $order,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return Xlsform::withoutGlobalScopes()->find($formId);
+    }
+
+    beforeEach(function () {
+        $this->template = repairTestTemplate('Women\'s Form');
+        $this->metadata = repairTestModule($this->template, 'metadata', 1, 2);
+        $this->introduction = repairTestModule($this->template, 'introduction', 2, 3);
+        $this->locations = repairTestModule($this->template, 'locations', 3, 2);
+    });
+
+    test('a dry run lists an emptied clone and changes nothing', function () {
+        $clone = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->introduction->id,
+            'owner_id' => $this->team->id,
+            'name' => 'introduction - Team',
+        ]);
+        $xlsform = repairTestForm($this->template, $this->team, [
+            $this->metadata->defaultXlsformVersion->id => 1,
+            $clone->id => 2,
+            $this->locations->defaultXlsformVersion->id => 3,
+        ]);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions')
+            ->expectsOutputToContain("Version {$clone->id} (introduction - Team)")
+            ->assertSuccessful();
+
+        expect(XlsformModuleVersion::find($clone->id))->not->toBeNull()
+            ->and($xlsform->xlsformModuleVersions()->pluck('xlsform_module_versions.id')->all())->toContain($clone->id)
+            ->and((bool) $xlsform->refresh()->draft_needs_update)->toBeFalse();
+    });
+
+    test('--apply switches the forms from an emptied clone back to the global version at the same position and deletes the clone', function () {
+        $clone = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->introduction->id,
+            'owner_id' => $this->team->id,
+            'name' => 'introduction - Team',
+        ]);
+        $xlsform = repairTestForm($this->template, $this->team, [
+            $this->metadata->defaultXlsformVersion->id => 1,
+            $clone->id => 2,
+            $this->locations->defaultXlsformVersion->id => 3,
+        ]);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions --apply')->assertSuccessful();
+
+        $selected = $xlsform->xlsformModuleVersions()->get();
+
+        expect(XlsformModuleVersion::find($clone->id))->toBeNull()
+            ->and($selected->pluck('name')->all())->toBe(['Global metadata', 'Global introduction', 'Global locations'])
+            ->and($selected->pluck('pivot.order')->all())->toBe([1, 2, 3])
+            ->and((bool) $xlsform->refresh()->draft_needs_update)->toBeTrue();
+    });
+
+    test('a clone that still has rows is left alone', function () {
+        $clone = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->introduction->id,
+            'owner_id' => $this->team->id,
+            'name' => 'introduction - Team',
+        ]);
+        DB::table('survey_rows')->insert([
+            'xlsform_module_version_id' => $clone->id,
+            'row_number' => 1,
+            'name' => 'kept',
+            'type' => 'text',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        repairTestForm($this->template, $this->team, [$clone->id => 2]);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions --apply')
+            ->expectsOutputToContain('No team-owned module version has lost its survey rows.')
+            ->assertSuccessful();
+
+        expect(XlsformModuleVersion::find($clone->id))->not->toBeNull();
+    });
+
+    test('--apply rebuilds an emptied Local locations version and marks the team\'s forms of that template', function () {
+        $localLocations = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->locations->id,
+            'owner_id' => $this->team->id,
+            'name' => 'Local locations',
+        ]);
+        $xlsform = repairTestForm($this->template, $this->team, [$this->metadata->defaultXlsformVersion->id => 1]);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions --apply')->assertSuccessful();
+
+        expect($localLocations->surveyRows()->count())->toBeGreaterThan(0)
+            ->and((bool) $xlsform->refresh()->draft_needs_update)->toBeTrue();
+    });
+
+    test('an emptied Local version of a module no builder knows is reported and not changed', function () {
+        $other = repairTestModule($this->template, 'other', 4, 2);
+        $localOther = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $other->id,
+            'owner_id' => $this->team->id,
+            'name' => 'Local other',
+        ]);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions --apply')
+            ->expectsOutputToContain('no builder knows module "other"')
+            ->assertSuccessful();
+
+        expect($localOther->surveyRows()->count())->toBe(0);
+    });
+
+    test('--apply attaches a module the form is missing at its position in the template', function () {
+        $xlsform = repairTestForm($this->template, $this->team, [
+            $this->metadata->defaultXlsformVersion->id => 1,
+            $this->locations->defaultXlsformVersion->id => 2,
+        ]);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions')
+            ->expectsOutputToContain('is missing: introduction')
+            ->assertSuccessful();
+
+        expect($xlsform->xlsformModuleVersions()->count())->toBe(2);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions --apply')->assertSuccessful();
+
+        $selected = $xlsform->xlsformModuleVersions()->get();
+
+        expect($selected->pluck('name')->all())->toBe(['Global metadata', 'Global introduction', 'Global locations'])
+            ->and((bool) $xlsform->refresh()->draft_needs_update)->toBeTrue();
     });
 
 });
