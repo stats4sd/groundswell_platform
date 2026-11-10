@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Stats4sd\FilamentOdkLink\Jobs\AddMissingChoiceListStrings;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
@@ -309,6 +310,14 @@ class RepairFormDeployIssues extends Command
                     $xlsform->xlsformModuleVersions()->syncWithoutDetaching([$defaultVersion->id => ['order' => $selection->order]]);
                     $xlsform->updateQuietly(['draft_needs_update' => true]);
                 });
+
+            // Not every database has a foreign key from the selections to the version (the local one did not), so nothing may rely on a cascade.
+            DB::table('selected_xlsform_module_versions')
+                ->where('xlsform_module_version_id', $version->id)
+                ->delete();
+
+            // Through the models, so the language strings of the copied entries (no foreign key either) go with them.
+            $version->choiceLists()->get()->each(fn (ChoiceList $choiceList) => $choiceList->delete());
 
             $version->delete();
         });

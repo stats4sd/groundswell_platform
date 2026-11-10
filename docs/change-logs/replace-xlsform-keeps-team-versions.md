@@ -25,7 +25,7 @@ After Replace XLSForm, creating drafts for the team forms failed on ODK Central 
 ### Repair command (host app)
 - `odk:repair-form-deploy-issues --only=versions` (R3, also part of a run without `--only`; dry run unless `--apply`):
   - Emptied Local locations / Local farm info versions are rebuilt with `LocationsModuleBuilder` / `FarmInfoModuleBuilder`; other Local versions are reported only.
-  - Emptied cloned versions: the team's forms are switched back to the global version at the same position and the copy is deleted (skipped, with a warning, if the copy holds choice entries added by the team). The Informed Consent / HDDS page clones again when the team next opens it.
+  - Emptied cloned versions: the team's forms are switched back to the global version at the same position and the copy is deleted (skipped, with a warning, if the copy holds choice entries added by the team). The copy's selections are removed explicitly (the local MySQL database has no foreign key from `selected_xlsform_module_versions` to the version, so a cascade cannot be relied on; found when R3 left two orphaned selections), and its choice lists are deleted through the models so the language strings of their entries (no foreign key either) go with them. The Informed Consent / HDDS page clones again when the team next opens it.
   - Forms missing a module of their template get it attached with the same insertion logic.
   - Every touched form is flagged `draft_needs_update`.
 

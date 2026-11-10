@@ -253,6 +253,44 @@ describe('R3: versions', function () {
             ->and((bool) $xlsform->refresh()->draft_needs_update)->toBeTrue();
     });
 
+    test('--apply removes the selections of the copy itself instead of relying on a foreign key', function () {
+        $clone = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->introduction->id,
+            'owner_id' => $this->team->id,
+            'name' => 'introduction - Team',
+        ]);
+        repairTestForm($this->template, $this->team, [$clone->id => 2]);
+
+        $selectionsLeftWhenDeleted = null;
+        XlsformModuleVersion::deleting(function (XlsformModuleVersion $version) use ($clone, &$selectionsLeftWhenDeleted) {
+            if ($version->id === $clone->id) {
+                $selectionsLeftWhenDeleted = DB::table('selected_xlsform_module_versions')->where('xlsform_module_version_id', $clone->id)->count();
+            }
+        });
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions --apply')->assertSuccessful();
+
+        expect($selectionsLeftWhenDeleted)->toBe(0)
+            ->and(DB::table('selected_xlsform_module_versions')->where('xlsform_module_version_id', $clone->id)->count())->toBe(0);
+    });
+
+    test('--apply removes the choice lists of the copy together with the language strings of their entries', function () {
+        $clone = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->introduction->id,
+            'owner_id' => $this->team->id,
+            'name' => 'introduction - Team',
+        ]);
+        $copiedList = ChoiceList::forceCreate(['xlsform_module_version_id' => $clone->id, 'list_name' => 'copied_list']);
+        $copiedEntry = repairTestEntry($copiedList, 'copied_entry', label: 'Copied label');
+        repairTestForm($this->template, $this->team, [$clone->id => 2]);
+
+        $this->artisan('odk:repair-form-deploy-issues --only=versions --apply')->assertSuccessful();
+
+        expect(DB::table('choice_lists')->where('id', $copiedList->id)->exists())->toBeFalse()
+            ->and(DB::table('choice_list_entries')->where('id', $copiedEntry->id)->exists())->toBeFalse()
+            ->and(DB::table('language_strings')->where('linked_entry_type', ChoiceListEntry::class)->where('linked_entry_id', $copiedEntry->id)->exists())->toBeFalse();
+    });
+
     test('a clone that still has rows is left alone', function () {
         $clone = XlsformModuleVersion::forceCreate([
             'xlsform_module_id' => $this->introduction->id,
