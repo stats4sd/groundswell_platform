@@ -54,5 +54,7 @@ Restored a copy of the staging database locally (no pending migrations; the ODK 
 ## Deployed to staging (2026-11-10)
 Deployed with no new migrations, then R3 (dry run, `--apply`, second dry run). The dry run matched the rehearsal on the staging copy: 12 emptied cloned versions reset, 14 Local versions rebuilt for teams 1 and 3, and five Local versions of the deleted team 2 skipped with a warning. The check SQL afterwards: no orphaned selections, no form missing a module, and only the four `Local Context` versions and the five versions of team 2 without rows. Initial Pilot updated all three forms of the team (QR codes shown), and a single-form Publish from Admin Panel > Teams > Xlsforms for the Guatemala - ARGIDIVI team published all three forms to ODK Central; they open in Enketo.
 
+The host app change is merged to `dev` (PR #75). The submodule branch `hotfix-replace-xlsform` is merged into `staging-hotfix-20261026` of `stats4sd/filament-odk-link` (PR #162, a merge commit, so `253ebc5` is on that branch and the pointer in this repo stays valid; it is not merged into the submodule's `dev`, which has been restructured into a monorepo). Its 5 commits (`6ad9f3c f9fc720 f7f5fe5 ea6885f 253ebc5`) go on the list to port to `dev` later.
+
 ## Still to do
 - A Replace XLSForm with the fix in place has not been run on staging yet; check it the next time a template is replaced (the number of team-owned versions without rows must not grow). There is no production environment yet.
