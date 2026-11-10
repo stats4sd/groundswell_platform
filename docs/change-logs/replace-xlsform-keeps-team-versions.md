@@ -1,6 +1,6 @@
 # Change log: "Replace XLSForm" keeps team-owned module versions and adds new modules to team forms
 
-Implements [docs/plans/2026-11-09-prune-stale-rows-on-replace-xlsform.md](../plans/2026-11-09-prune-stale-rows-on-replace-xlsform.md) (Traditional Chinese: [zh-TW](../plans/2026-11-09-prune-stale-rows-on-replace-xlsform.zh-TW.md)).
+Implements [docs/plans/2026-11-09-prune-stale-rows-on-replace-xlsform.md](../plans/2026-11-09-prune-stale-rows-on-replace-xlsform.md).
 
 ## Problem
 
