@@ -153,6 +153,31 @@ test('the paths of global rows are not changed by team clones', function () {
         ->and($this->template->surveyRowsForImport()->where('survey_rows.path', 'like', '%drinks_rpt_grp2/drinks_rpt_grp2%')->exists())->toBeFalse();
 });
 
+test('a form of a deleted team does not stop the sync of the forms after it', function () {
+    $deletedTeam = Team::withoutEvents(fn () => Team::factory()->create());
+    $deletedTeamFormId = DB::table('xlsforms')->insertGetId([
+        'xlsform_template_id' => $this->template->id,
+        'owner_id' => $deletedTeam->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+    $laterFormId = DB::table('xlsforms')->insertGetId([
+        'xlsform_template_id' => $this->template->id,
+        'owner_id' => $this->team->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+    DB::table('xlsform_modules')->where('xlsform_template_id', $this->template->id)->update(['can_be_replaced' => true]);
+    $deletedTeam->delete();
+
+    importIntoTemplate($this->template, 'tests/assets/replace-xlsform-v2.xlsx');
+
+    $moduleCount = $this->template->xlsformModules()->count();
+
+    expect(DB::table('selected_xlsform_module_versions')->where('xlsform_id', $deletedTeamFormId)->count())->toBe($moduleCount)
+        ->and(DB::table('selected_xlsform_module_versions')->where('xlsform_id', $laterFormId)->count())->toBe($moduleCount);
+});
+
 test('after the import the team forms select every module and are flagged for a new draft', function () {
     $form = DB::table('xlsforms')->where('id', $this->formId)->first();
 
