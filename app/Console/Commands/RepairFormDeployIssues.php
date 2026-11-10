@@ -255,6 +255,13 @@ class RepairFormDeployIssues extends Command
             return;
         }
 
+        // The owner is resolved through the Team model, so a deleted (soft-deleted) team is not found: nothing to rebuild for it.
+        if ($version->owner === null) {
+            $this->warn("  team {$version->owner_id} was not found (deleted?): not changed.");
+
+            return;
+        }
+
         $this->line('  rebuild the Local version with '.class_basename($builder).' and mark the team\'s forms of this template for a draft update');
 
         if (! $apply) {

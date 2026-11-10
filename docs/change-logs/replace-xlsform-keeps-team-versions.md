@@ -44,6 +44,8 @@ After Replace XLSForm, creating drafts for the team forms failed on ODK Central 
 ## Verified locally (2026-11-09)
 Restored the pre-Replace dump (and put the three old template files back on disk, since a dump does not contain media files), replaced all three templates with the latest files, then used Initial Pilot: no failed jobs, no emptied team versions, no form missing a module (form 1 order: metadata, introduction, locations, farm info), all three drafts created on ODK Central, and the `path` check returned 0 rows.
 
+## R3 verified on a real damaged database (2026-11-10)
+Reproduced the damage with the previous code (`ea6885f`): replaced the three templates and got 7 emptied team versions and 3 forms missing `introduction`. After switching back to the fix and running R3 `--apply`: no emptied versions, no form missing a module, the clones' forms point at the global `introduction` at the same position, Local versions rebuilt (6/6/6/10/10 rows), a second dry run reports nothing, and Initial Pilot created all three drafts on ODK Central. This run also found that the local `selected_xlsform_module_versions` table has no foreign key to the module version, so R3 now removes the selections itself (see above).
+
 ## Still to do
-- Run R3 on the damaged local database (dry run first) and on staging; run the pre-implementation SQL on staging and production first.
-- Commit in the submodule, then bump the submodule pointer here.
+- Deploy to staging: check `SHOW CREATE TABLE selected_xlsform_module_versions`, run the check SQL, take a database backup, run R3 (dry run first), then Replace each template. There is no production environment yet.

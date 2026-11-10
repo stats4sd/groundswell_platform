@@ -328,6 +328,30 @@ describe('R3: versions', function () {
             ->and((bool) $xlsform->refresh()->draft_needs_update)->toBeTrue();
     });
 
+    test('an emptied Local version of a deleted team is reported and skipped without failing the run', function () {
+        $localLocations = XlsformModuleVersion::forceCreate([
+            'xlsform_module_id' => $this->locations->id,
+            'owner_id' => $this->team->id,
+            'name' => 'Local locations',
+        ]);
+        // a complete form, so the "missing module" repair does not flag it
+        $xlsform = repairTestForm($this->template, $this->team, [
+            $this->metadata->defaultXlsformVersion->id => 1,
+            $this->introduction->defaultXlsformVersion->id => 2,
+            $this->locations->defaultXlsformVersion->id => 3,
+        ]);
+        $this->team->delete();
+
+        foreach (['--only=versions', '--only=versions --apply'] as $options) {
+            $this->artisan("odk:repair-form-deploy-issues {$options}")
+                ->expectsOutputToContain("team {$this->team->id} was not found")
+                ->assertSuccessful();
+        }
+
+        expect($localLocations->surveyRows()->count())->toBe(0)
+            ->and((bool) $xlsform->refresh()->draft_needs_update)->toBeFalse();
+    });
+
     test('an emptied Local version of a module no builder knows is reported and not changed', function () {
         $other = repairTestModule($this->template, 'other', 4, 2);
         $localOther = XlsformModuleVersion::forceCreate([
