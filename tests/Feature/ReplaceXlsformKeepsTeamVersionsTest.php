@@ -3,6 +3,7 @@
 use App\Models\Team;
 use Illuminate\Support\Facades\DB;
 use Stats4sd\FilamentOdkLink\Listeners\HandleXlsformTemplateAdded;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\LanguageString;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\SurveyRow;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
@@ -18,6 +19,18 @@ function importIntoTemplate(XlsformTemplate $template, string $file): void
 function defaultVersionOf(XlsformTemplate $template, string $moduleName): XlsformModuleVersion
 {
     return $template->xlsformModules()->where('name', $moduleName)->firstOrFail()->defaultXlsformVersion;
+}
+
+/** @return array<string, int> id of every global choice entry of the template, keyed by list, name and filter */
+function globalChoiceEntryIds(XlsformTemplate $template): array
+{
+    return $template->choiceListEntriesForImport()
+        ->whereNull('choice_list_entries.owner_id')
+        ->get(['choice_list_entries.id', 'choice_list_entries.choice_list_id', 'choice_list_entries.name', 'choice_list_entries.cascade_filter'])
+        ->mapWithKeys(fn (ChoiceListEntry $entry) => [
+            "{$entry->choice_list_id}|{$entry->name}|{$entry->cascade_filter}" => $entry->id,
+        ])
+        ->all();
 }
 
 function rowCount(XlsformModuleVersion $version): int
@@ -108,7 +121,54 @@ beforeEach(function () {
     $this->drinksCloneRowsBefore = rowCount($this->drinksClone);
     $this->drinksCloneStringsBefore = surveyStringCount($this->drinksClone);
 
+    $this->globalEntriesBefore = globalChoiceEntryIds($this->template);
+
+    $teamLanguageId = DB::table('languages')->insertGetId([
+        'iso_alpha2' => 'xx',
+        'name' => 'Team language',
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+    $this->teamLocaleId = DB::table('locales')->insertGetId([
+        'language_id' => $teamLanguageId,
+        'is_default' => false,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+    $labelTypeId = DB::table('language_string_types')->where('name', 'label')->value('id')
+        ?? DB::table('language_string_types')->insertGetId(['name' => 'label', 'created_at' => now(), 'updated_at' => now()]);
+
+    foreach ($this->globalEntriesBefore as $entryId) {
+        DB::table('language_strings')->insert([
+            'locale_id' => $this->teamLocaleId,
+            'language_string_type_id' => $labelTypeId,
+            'linked_entry_type' => ChoiceListEntry::class,
+            'linked_entry_id' => $entryId,
+            'text' => "TEAM OPTION {$entryId}",
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
     importIntoTemplate($this->template, 'tests/assets/replace-xlsform-v2.xlsx');
+});
+
+test('replacing the file keeps the global choice entries and the team locale strings linked to them', function () {
+    $entriesAfter = globalChoiceEntryIds($this->template);
+    $keptKeys = array_intersect_key($this->globalEntriesBefore, $entriesAfter);
+
+    expect($this->globalEntriesBefore)->not->toBeEmpty()
+        ->and($keptKeys)->not->toBeEmpty()
+        ->and(array_intersect_key($entriesAfter, $keptKeys))->toBe($keptKeys);
+
+    $teamStrings = DB::table('language_strings')
+        ->where('locale_id', $this->teamLocaleId)
+        ->whereIn('linked_entry_id', array_values($keptKeys))
+        ->where('linked_entry_type', ChoiceListEntry::class)
+        ->pluck('text', 'linked_entry_id');
+
+    expect($teamStrings)->toHaveCount(count($keptKeys))
+        ->and($teamStrings[array_values($keptKeys)[0]])->toBe('TEAM OPTION ' . array_values($keptKeys)[0]);
 });
 
 test('replacing the file updates the global rows exactly', function () {
