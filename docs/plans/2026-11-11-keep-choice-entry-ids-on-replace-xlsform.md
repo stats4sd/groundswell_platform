@@ -1,6 +1,6 @@
 # Plan: Keep choice entry ids when "Replace XLSForm" re-imports a template
 
-**Status: Not Started** — drafted 2026-11-11, waiting for Dan's review. Follow-up to [the Replace XLSForm fix](2026-11-09-prune-stale-rows-on-replace-xlsform.md) ([change log](../change-logs/replace-xlsform-keeps-team-versions.md)); that fix is deployed to staging.
+**Status: In Progress** — drafted 2026-11-11, approved and implemented the same day ([change log](../change-logs/keep-choice-entry-ids-on-replace-xlsform.md)). Done: the fix and all listed tests (submodule branch `keep-choice-entry-ids-hotfix-20261111`, host test and pointer bump here). Left: merge the submodule PR into `staging-hotfix-20261026`, merge this PR, deploy to staging, and run the manual verification below; then set this plan to Completed. Follow-up to [the Replace XLSForm fix](2026-11-09-prune-stale-rows-on-replace-xlsform.md) ([change log](../change-logs/replace-xlsform-keeps-team-versions.md)); that fix is deployed to staging.
 
 The fix lives in the `packages/filament-odk-link` submodule (`XlsformTemplateChoicesImport`), with tests in the submodule and in this repo. Implementing it means a commit on a submodule branch started from `staging-hotfix-20261026`, then a submodule pointer bump here. Dan commits.
 
