@@ -1,6 +1,6 @@
 # Plan: fix the choice list entry "name already taken" error when editing an entry
 
-**Status: In Progress.** Implemented and tested locally (regression tests added, full suite passes); waiting for staging verification and the change log.
+**Status: Completed.** Change log: [2026-11-16-fix-choice-list-entry-unique-rule.md](../change-logs/2026-11-16-fix-choice-list-entry-unique-rule.md)
 
 Branch: `fix-choice-list-unique-rule`. Main repo only; no submodule change.
 
