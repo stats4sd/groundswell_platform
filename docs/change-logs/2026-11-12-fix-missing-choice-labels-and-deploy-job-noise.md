@@ -25,3 +25,15 @@ Package: `XlsformChoicesExportTest` (4 new), `ChoiceLabelDiagnosticsTest` (5 new
 - `AddMissingChoiceListStrings` treats blank placeholder rows as labelled, so entries 167-169 never got locale 1-4 labels. The export no longer depends on it, but the data stays incomplete.
 - Duplicate `generateXlsfile` dispatches are not prevented; an atomic `processing` lock risks leaving forms stuck if a job dies.
 - Failed `UpdateXlsformFile` duplicates still write a `failed_jobs` row (only the user notification is suppressed).
+
+## Also changed
+
+- Submodule tests: the `TeamFactory` namespace in `tests/database/Factories/TeamFactory.php` and `tests/Models/Team.php` now matches the lowercase `tests/database` directory. The mismatch broke 24 tests on case-sensitive filesystems (Linux).
+
+## Verified on staging (2026-11-16)
+
+- Local: submodule 252 tests and main repo 389 tests pass.
+- T1: team 6 Global Indicators deploys; the downloaded draft's `choices` sheet has all 7 `who_family` rows labelled in English and Spanish (479 data rows, none blank in both). No new `failed_jobs` rows.
+- T2: dispatching a deploy for form 25 (soft-deleted team 5) adds one `failed_jobs` row (`XlsformOwnerMissingException`), logs `Skipped deploying a form whose owner no longer exists`, sends no notification and does not retry.
+- T4: team 3 Initial Pilot generated 6 drafts with no new `failed_jobs`; its Global Indicators `choices` sheet has no row blank in both languages.
+- T3 (concurrent duplicate dispatch) was not exercised on staging; covered by unit tests.
