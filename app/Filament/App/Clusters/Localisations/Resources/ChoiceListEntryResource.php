@@ -130,10 +130,15 @@ class ChoiceListEntryResource extends Resource
             Hidden::make('choice_list_id')
                 ->formatStateUsing(fn (?ChoiceListEntry $record, ListChoiceListEntries $livewire) => $record ? $record->choiceList->id : $livewire->choiceList->id),
             TextInput::make('name')->label(t('Name'))->required()
-                ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule, Get $get) {
+                ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule, Get $get, ?ChoiceListEntry $record) {
+                    $ownCopyIds = $record
+                        ? app(ChoiceListSiblingService::class)->siblingsOf($record)->modelKeys()
+                        : [];
+
                     return $rule
                         ->whereIn('choice_list_id', static::sameNamedListIds($get('choice_list_id')))
-                        ->where('owner_id', $get('owner_id'));
+                        ->where('owner_id', $get('owner_id'))
+                        ->whereNotIn('id', $ownCopyIds);
                 }),
             Repeater::make('languageStrings')
                 ->label(t('Add Labels for the following languages:'))
