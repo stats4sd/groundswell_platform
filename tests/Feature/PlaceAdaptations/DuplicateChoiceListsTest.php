@@ -208,6 +208,56 @@ test('edit and delete propagate to every copy', function () {
     expect(ChoiceListEntry::where('name', 'amaranth')->count())->toBe(0);
 });
 
+test('edit keeps the name and changes only the label when the entry has copies', function () {
+    livewire(ListChoiceListEntries::class, ['choiceListName' => 'crop_list'])
+        ->callTableAction(CreateAction::class, data: [
+            'name' => 'quinoa',
+            'languageStrings' => labelFormData($this->team, 'Quinoa'),
+        ]);
+
+    $entry = ChoiceListEntry::where('choice_list_id', $this->firstList->id)->where('name', 'quinoa')->first();
+
+    livewire(ListChoiceListEntries::class, ['choiceListName' => 'crop_list'])
+        ->callTableAction(EditAction::class, $entry, data: [
+            'name' => 'quinoa',
+            'languageStrings' => [
+                "record-{$entry->languageStrings()->value('id')}" => labelFormData($this->team, 'Quinoa (red)')[0],
+            ],
+        ])
+        ->assertHasNoTableActionErrors();
+
+    foreach ([$this->firstList, $this->secondList] as $list) {
+        $copy = ChoiceListEntry::where('choice_list_id', $list->id)->where('name', 'quinoa')->first();
+
+        expect($copy->languageStrings()->value('text'))->toBe('Quinoa (red)');
+    }
+});
+
+test('edit rejects a name used by a different entry of the team in another copy', function () {
+    livewire(ListChoiceListEntries::class, ['choiceListName' => 'crop_list'])
+        ->callTableAction(CreateAction::class, data: [
+            'name' => 'quinoa',
+            'languageStrings' => labelFormData($this->team, 'Quinoa'),
+        ]);
+
+    $entry = ChoiceListEntry::where('choice_list_id', $this->firstList->id)->where('name', 'quinoa')->first();
+
+    ChoiceListEntry::create([
+        'choice_list_id' => $this->secondList->id,
+        'owner_id' => $this->team->id,
+        'name' => 'amaranth',
+    ]);
+
+    livewire(ListChoiceListEntries::class, ['choiceListName' => 'crop_list'])
+        ->callTableAction(EditAction::class, $entry, data: [
+            'name' => 'amaranth',
+            'languageStrings' => [
+                "record-{$entry->languageStrings()->value('id')}" => labelFormData($this->team, 'Quinoa')[0],
+            ],
+        ])
+        ->assertHasTableActionErrors(['name' => 'unique']);
+});
+
 describe('choice-lists:sync-removed-entries', function () {
 
     beforeEach(function () {
