@@ -240,3 +240,56 @@ test('a translation file with wrong headers is rejected, removed, and nothing is
     expect($fixture->abkhazianLocale->fresh()->getMedia('xlsform_template_translation_files'))->toHaveCount(0)
         ->and(LanguageString::where('locale_id', $fixture->abkhazianLocale->id)->count())->toBe(0);
 });
+
+test('submitting valid translation files counts every import and leaves nothing processing once they finish', function () {
+    Notification::fake();
+
+    config()->set('filament-odk-link.storage.xlsforms', 'local');
+    Storage::fake('local');
+
+    $fixture = TranslationFixture::make();
+
+    Excel::store(
+        new XlsformTemplateTranslationsExport($fixture->template, $fixture->abkhazianLocale, withExistingStrings: false, owner: $fixture->team),
+        'template.xlsx',
+        'local',
+    );
+
+    $fixture->abkhazianLocale
+        ->addMedia(Storage::disk('local')->path('template.xlsx'))
+        ->preservingOriginal()
+        ->withCustomProperties(['xlsform_template_id' => $fixture->template->id])
+        ->toMediaCollection('xlsform_template_translation_files');
+
+    translationEditForm($fixture)->call('submit');
+
+    expect($fixture->abkhazianLocale->fresh()->processing_count)->toBe(0)
+        ->and($fixture->abkhazianLocale->fresh()->status)->not->toBe('Processing');
+});
+
+test('when an import cannot be queued the count is given back and the user is told', function () {
+    Notification::fake();
+
+    config()->set('filament-odk-link.storage.xlsforms', 'local');
+    Storage::fake('local');
+
+    $fixture = TranslationFixture::make();
+
+    Excel::store(
+        new XlsformTemplateTranslationsExport($fixture->template, $fixture->abkhazianLocale, withExistingStrings: false, owner: $fixture->team),
+        'template.xlsx',
+        'local',
+    );
+
+    $fixture->abkhazianLocale
+        ->addMedia(Storage::disk('local')->path('template.xlsx'))
+        ->preservingOriginal()
+        ->withCustomProperties(['xlsform_template_id' => $fixture->template->id])
+        ->toMediaCollection('xlsform_template_translation_files');
+
+    Excel::shouldReceive('queueImport')->andThrow(new RuntimeException('queue is down'));
+
+    translationEditForm($fixture)->call('submit')->assertNotified();
+
+    expect($fixture->abkhazianLocale->fresh()->processing_count)->toBe(0);
+});

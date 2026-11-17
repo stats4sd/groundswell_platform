@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Events\LanguageImportIsComplete;
 use App\Models\User;
+use App\Services\LocaleImportCounter;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -33,10 +34,6 @@ class NotifyUserThatLanguageImportIsFailed implements ShouldQueue
      */
     public function handle(): void
     {
-        // check if this is the last import for this Locale...
-        $this->locale->processing_count--;
-        $this->locale->save();
-
         Notification::make()
             ->title('Translation Import Failed')
             ->body(new HtmlString(
@@ -51,10 +48,14 @@ class NotifyUserThatLanguageImportIsFailed implements ShouldQueue
             ->broadcast($this->user);
 
         LanguageImportIsComplete::dispatch($this->locale->id, $this->xlsformTemplate->id, $this->user->id);
+
+        app(LocaleImportCounter::class)->finished($this->locale);
     }
 
     public function failed(?Throwable $exception = null): void
     {
+        app(LocaleImportCounter::class)->finished($this->locale);
+
         $this->notifyJobFailure(
             "Translation import failed: {$this->xlsformTemplate->title} {$this->locale->description}",
             $exception,
