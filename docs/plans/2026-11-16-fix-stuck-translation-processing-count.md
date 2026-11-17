@@ -1,6 +1,6 @@
 # Plan: fix the translation "Processing" status getting stuck
 
-**Status: In Progress.** Implemented and tested locally (full suite passes); waiting for staging verification and the change log.
+**Status: Completed.** Change log: [2026-11-16-fix-stuck-translation-processing-count.md](../change-logs/2026-11-16-fix-stuck-translation-processing-count.md)
 
 Branch: `fix-processing-count`. Main repo only; no submodule change.
 
