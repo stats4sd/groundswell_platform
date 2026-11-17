@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Events\LanguageImportIsComplete;
 use App\Models\User;
+use App\Services\LocaleImportCounter;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -32,11 +33,6 @@ class NotifyUserThatLanguageImportIsComplete implements ShouldQueue
      */
     public function handle(): void
     {
-
-        // check if this is the last import for this Locale...
-        $this->locale->processing_count--;
-        $this->locale->save();
-
         // mark xlsform_module_versions as no longer needing a locale update
         $this->xlsformTemplate->xlsform_default_module_versions->each(function (XlsformModuleVersion $xlsformModuleVersion) {
             $xlsformModuleVersion->locales()
@@ -60,10 +56,15 @@ class NotifyUserThatLanguageImportIsComplete implements ShouldQueue
             ->send();
 
         LanguageImportIsComplete::dispatch($this->locale->id, $this->xlsformTemplate->id);
+
+        // released last, so an import that fails part-way is released once, by failed(), and a retry never releases twice.
+        app(LocaleImportCounter::class)->finished($this->locale);
     }
 
     public function failed(?Throwable $exception = null): void
     {
+        app(LocaleImportCounter::class)->finished($this->locale);
+
         $this->notifyJobFailure(
             "Translation import could not be finalised: {$this->xlsformTemplate->title} {$this->locale->description}",
             $exception,

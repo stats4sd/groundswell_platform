@@ -5,6 +5,7 @@ namespace App\Livewire\SurveyLanguages;
 use App\Imports\TranslationUploadInspector;
 use App\Imports\XlsformTemplateLanguageImport;
 use App\Jobs\NotifyUserThatLanguageImportIsComplete;
+use App\Services\LocaleImportCounter;
 use App\Models\Team;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -118,6 +119,8 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
         $this->locale->refresh();
 
+        $imports = [];
+
         foreach ($this->xlsformTemplates() as $xlsformTemplate) {
             $file = $this->locale->getMedia('xlsform_template_translation_files', function (Media $media) use ($xlsformTemplate) {
                 return isset($media->custom_properties['xlsform_template_id']) && $media->custom_properties['xlsform_template_id'] === $xlsformTemplate->id;
@@ -143,19 +146,39 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
                 continue;
             }
 
-            $this->locale->processing_count++;
-            $this->locale->save();
-
-            Excel::queueImport(new XlsformTemplateLanguageImport(
-                $this->locale,
-                $xlsformTemplate,
-                auth()->user(),
-                $inspector->textColumnIndex($this->locale),
-            ), $file->getPath())
-                ->chain([
-                    new NotifyUserThatLanguageImportIsComplete($this->locale, $xlsformTemplate, request()->user()),
-                ]);
+            $imports[] = [$xlsformTemplate, $file, $inspector];
         }
+
+        // count every import before queueing any, so a fast worker can never finish one before it has been counted.
+        $counter = app(LocaleImportCounter::class);
+        $counter->started($this->locale, count($imports));
+
+        foreach ($imports as [$xlsformTemplate, $file, $inspector]) {
+            try {
+                Excel::queueImport(new XlsformTemplateLanguageImport(
+                    $this->locale,
+                    $xlsformTemplate,
+                    auth()->user(),
+                    $inspector->textColumnIndex($this->locale),
+                ), $file->getPath())
+                    ->chain([
+                        new NotifyUserThatLanguageImportIsComplete($this->locale, $xlsformTemplate, request()->user()),
+                    ]);
+            } catch (Throwable $exception) {
+                report($exception);
+
+                $counter->finished($this->locale);
+
+                Notification::make()
+                    ->danger()
+                    ->title(t('The translation file could not be processed'))
+                    ->body(t('The import could not be started. Please try again, or contact support if the problem persists.'))
+                    ->persistent()
+                    ->send();
+            }
+        }
+
+        $this->locale->refresh();
 
         $this->dispatch('closeModal');
     }
