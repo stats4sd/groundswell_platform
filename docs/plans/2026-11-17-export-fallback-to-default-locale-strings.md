@@ -1,6 +1,6 @@
 # Plan: fall back to the default locale's text when a team locale has none
 
-**Status: In Progress.** Implemented in the submodule and tested locally (submodule and main suites pass); waiting for the submodule PR, staging verification and the change log.
+**Status: Completed.** Change log: [2026-11-17-export-fallback-to-default-locale-strings.md](../change-logs/2026-11-17-export-fallback-to-default-locale-strings.md)
 
 Branches: main repo `fix-export` (plan, change log, submodule bump); submodule `packages/filament-odk-link` (code and tests), PR base `staging-hotfix-20261026`.
 
