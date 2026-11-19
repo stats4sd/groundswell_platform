@@ -1,6 +1,6 @@
 # Plan: limit the translation file to the module versions the team's form uses
 
-**Status: Not Started.**
+**Status: In Progress.** Code and tests are written and pass locally (main suite 410 passed, package suite 268 passed). Left: Dan's manual check with the before/after files, deployment to staging, the staging verification below, then the change log.
 
 Branches: main repo (plan, change log, submodule bump); submodule `packages/filament-odk-link` (code and tests), PR base `staging-hotfix-20261026`.
 
