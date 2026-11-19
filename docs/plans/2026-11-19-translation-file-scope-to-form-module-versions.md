@@ -1,6 +1,6 @@
 # Plan: limit the translation file to the module versions the team's form uses
 
-**Status: In Progress.** Code and tests are written and pass locally (main suite 410 passed, package suite 268 passed). Left: Dan's manual check with the before/after files, deployment to staging, the staging verification below, then the change log.
+**Status: Completed.** Implemented, tested (main 410 passed, package 268 passed) and verified on staging on 2026-11-19. Change log: [2026-11-19-translation-file-scope-to-form-module-versions.md](../change-logs/2026-11-19-translation-file-scope-to-form-module-versions.md).
 
 Branches: main repo (plan, change log, submodule bump); submodule `packages/filament-odk-link` (code and tests), PR base `staging-hotfix-20261026`.
 
