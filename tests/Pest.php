@@ -4,8 +4,11 @@ use App\Models\Team;
 use App\Models\TeamMembership;
 use App\Models\User;
 use Filament\Facades\Filament;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Jobs\ExtendedQueueable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
@@ -92,7 +95,6 @@ function createLocationModules(int $count = 1): void
     });
 }
 
-
 pest()->beforeEach(function () {
     app(PermissionRegistrar::class)->forgetCachedPermissions();
 })->in('Feature');
@@ -147,4 +149,18 @@ function createProgramAdmin(Program $program): User
     $user->save();
 
     return $user;
+}
+
+/**
+ * Stands in for the queued workbook export (the real one needs MySQL JSON functions). Like the real export job,
+ * it appends to its chain instead of replacing it.
+ */
+function fakeWorkbookExportQueue(): void
+{
+    Excel::shouldReceive('queue')->andReturnUsing(fn () => new PendingDispatch(new class
+    {
+        use ExtendedQueueable;
+
+        public function handle(): void {}
+    }));
 }

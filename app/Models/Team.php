@@ -354,23 +354,30 @@ class Team extends FilamentTeamManagementTeam implements HasMedia, WithXlsforms
         $this->saveQuietly();
     }
 
-    public function deployDraftForms(): void
+    /**
+     * Claim every form whose test version is outdated, so only one update can run for them at a time.
+     *
+     * @return Collection<int, Xlsform>
+     */
+    public function claimDraftForms(): Collection
     {
-        // if no team forms need a draft update; abort.
+        return $this->freshXlsforms()
+            ->filter(fn (Xlsform $xlsform): bool => $xlsform->draftIsOutdated())
+            ->filter(fn (Xlsform $xlsform): bool => $xlsform->claimForDeployment())
+            ->values();
+    }
 
-        $xlsformsToUpdate = $this->xlsforms->filter(fn (Xlsform $xlsform) => $xlsform->draft_needs_update);
-
-        if ($xlsformsToUpdate->count() === 0) {
-            return;
-        }
-
-        $this->localiseXlsforms(); // create the local versions of the locations and farm info modules
-
-        $xlsformsToUpdate->each(function (Xlsform $xlsform) {
-
-            $xlsform->localiseModules(); // replace the global versions with the local versions in the Xlsforms.
-            $xlsform->deployDraft();
-        });
+    /**
+     * The team's forms read fresh from the database, without the tenant scope (it does not apply in queued jobs).
+     *
+     * @return Collection<int, Xlsform>
+     */
+    public function freshXlsforms(): Collection
+    {
+        return Xlsform::withoutGlobalScopes()
+            ->where('owner_id', $this->getKey())
+            ->orderBy('id')
+            ->get();
     }
 
     /**

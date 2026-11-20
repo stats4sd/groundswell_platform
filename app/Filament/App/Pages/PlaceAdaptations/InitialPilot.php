@@ -5,6 +5,7 @@ namespace App\Filament\App\Pages\PlaceAdaptations;
 use Filament\Support\Enums\Width;
 use App\Filament\App\Pages\SurveyDashboard;
 use App\Filament\Shared\WithCompletionStatusBar;
+use App\Jobs\DeployTeamDraftForms;
 use App\Models\Team;
 use App\Services\HelperService;
 use Filament\Actions\Action;
@@ -20,11 +21,15 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Livewire\Attributes\On;
-use Stats4sd\FilamentOdkLink\Events\XlsformDraftWasDeployed;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
+use Throwable;
 
+/**
+ * @property-read Collection<int, Xlsform> $xlsforms
+ */
 class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
 {
     use InteractsWithTable;
@@ -52,21 +57,132 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
 
     public Team $team;
 
-    /** @var Collection<Xlsform> */
-    public Collection $xlsforms;
+    /** @var array<int, int> */
+    #[Locked]
+    public array $activeFormIds = [];
 
     public function mount(): void
     {
         $this->team = HelperService::getCurrentOwner();
-        $this->xlsforms = $this->team->xlsforms()->get();
-
-        $this->team->deployDraftForms();
+        $this->activeFormIds = $this->activeFormIdsNow();
     }
 
-    #[On('echo:xlsforms,.FilamentOdkLink.XlsformDraftWasDeployed')]
-    public function handleXlsformDraftWasDeployed($event): void
+    /** @return Collection<int, Xlsform> */
+    #[Computed]
+    public function xlsforms(): Collection
     {
-        $this->xlsforms->find($event['xlsformId'])->refresh();
+        return $this->team->freshXlsforms();
+    }
+
+    /**
+     * Polled while a form is being updated: tells the user when a form they were waiting for is ready.
+     */
+    public function refreshForms(): void
+    {
+        unset($this->xlsforms);
+
+        $activeIds = $this->activeFormIdsNow();
+        $finishedIds = array_diff($this->activeFormIds, $activeIds);
+
+        foreach ($this->xlsforms->whereIn('id', $finishedIds) as $xlsform) {
+            if ($xlsform->draftState() === Xlsform::DRAFT_STATE_CURRENT) {
+                Notification::make()
+                    ->title(t('Test form updated'))
+                    ->body($xlsform->title)
+                    ->success()
+                    ->send();
+            }
+        }
+
+        $this->activeFormIds = $activeIds;
+    }
+
+    /** @return array<int, int> */
+    private function activeFormIdsNow(): array
+    {
+        return $this->xlsforms
+            ->filter(fn (Xlsform $xlsform): bool => $xlsform->hasActiveClaim())
+            ->pluck('id')
+            ->values()
+            ->all();
+    }
+
+    private function canStartUpdate(): bool
+    {
+        return $this->updateBlockedReason() === null;
+    }
+
+    private function updateBlockedReason(): ?string
+    {
+        if ($this->xlsforms->contains(fn (Xlsform $xlsform): bool => $xlsform->hasActiveClaim())) {
+            return t('A form is still updating. Please wait until it has finished.');
+        }
+
+        if (! $this->xlsforms->contains(fn (Xlsform $xlsform): bool => $xlsform->draftIsOutdated())) {
+            return t('The test forms are up to date.');
+        }
+
+        return null;
+    }
+
+    private function updateTestForms(): void
+    {
+        if (! auth()->user()->can('maintain initial pilot')) {
+            abort(403);
+        }
+
+        unset($this->xlsforms);
+
+        $blockedReason = $this->updateBlockedReason();
+
+        if ($blockedReason !== null) {
+            Notification::make()
+                ->title(t('The test forms were not updated'))
+                ->body($blockedReason)
+                ->warning()
+                ->send();
+
+            return;
+        }
+
+        $claimedForms = $this->team->claimDraftForms();
+
+        if ($claimedForms->isEmpty()) {
+            Notification::make()
+                ->title(t('The test forms were not updated'))
+                ->body(t('Another update has just started. Please wait until it has finished.'))
+                ->warning()
+                ->send();
+
+            return;
+        }
+
+        $claimedIds = $claimedForms->pluck('id')->all();
+
+        try {
+            DeployTeamDraftForms::dispatch($this->team, $claimedIds, auth()->user());
+        } catch (Throwable $exception) {
+            $claimedForms->each(fn (Xlsform $xlsform) => $xlsform->releaseClaim(needsUpdate: true));
+
+            report($exception);
+
+            Notification::make()
+                ->title(t('The test forms could not be updated'))
+                ->body(t('The update could not be started. Please try again in a moment.'))
+                ->danger()
+                ->send();
+
+            return;
+        }
+
+        $this->activeFormIds = array_values(array_unique([...$this->activeFormIds, ...$claimedIds]));
+        unset($this->xlsforms);
+
+        Notification::make()
+            ->title(t('Updating the test forms'))
+            ->body(t('This may take a few minutes. You can leave this page; the update will continue.'))
+            ->success()
+            ->send();
     }
 
     public function getBreadcrumbs(): array
@@ -85,7 +201,18 @@ class InitialPilot extends Page implements HasTable, HasInfolists, HasActions
 
     protected function getHeaderActions(): array
     {
-        return [];
+        return [
+            Action::make('update-test-forms')
+                ->label(fn () => t('Update test forms'))
+                ->icon('heroicon-o-arrow-path')
+                ->visible(fn () => auth()->user()->can('maintain initial pilot'))
+                ->disabled(fn () => ! $this->canStartUpdate())
+                ->tooltip(fn () => $this->updateBlockedReason())
+                ->requiresConfirmation()
+                ->modalHeading(fn () => t('Update test forms'))
+                ->modalDescription(fn () => t('The test forms will be rebuilt with the latest changes. Test submissions on the current test forms will be reset.'))
+                ->action(fn () => $this->updateTestForms()),
+        ];
     }
 
     public function getRecord(): Team
