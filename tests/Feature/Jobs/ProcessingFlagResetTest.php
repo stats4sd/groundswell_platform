@@ -36,6 +36,7 @@ function createProcessingXlsform(): Xlsform
         'owner_id' => $team->id,
         'title' => 'Stuck Form',
         'processing' => true,
+        'draft_claimed_at' => now(),
     ]));
 }
 
