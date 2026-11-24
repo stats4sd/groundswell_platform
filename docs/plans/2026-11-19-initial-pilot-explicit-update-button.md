@@ -1,6 +1,6 @@
 # Plan: explicit "Update test forms" button on Initial Pilot
 
-**Status: In Progress.** Written 2026-11-19, reviewed four times against the code the same day. Implemented and tested locally on 2026-11-20 (main 460 passed); change log: [2026-11-19-initial-pilot-explicit-update-button.md](../change-logs/2026-11-19-initial-pilot-explicit-update-button.md). Left to do: Dan commits the submodule and main repo, deploys with `php artisan migrate`, verifies on staging (section 8), then this plan is marked Completed. The package has no `docs/` folder, so no package plan or change log was added.
+**Status: Completed.** Written 2026-11-19, reviewed four times against the code the same day. Implemented 2026-11-20 and tested locally (main 460 passed, package 268 passed). Dan checked every item of the verification list on the local site on 2026-11-24 (section 8) and all behaved as expected. Change log: [2026-11-19-initial-pilot-explicit-update-button.md](../change-logs/2026-11-19-initial-pilot-explicit-update-button.md). Still to do when deploying: run `php artisan migrate`, restart Horizon, and repeat the checks once on staging. The package has no `docs/` folder, so no package plan or change log was added.
 
 Branches: main repo (page, job, notification, tests, migration copy, submodule bump); submodule `packages/filament-odk-link` (claim, snapshot, jobs, migration), PR base `staging-hotfix-20261026`.
 
