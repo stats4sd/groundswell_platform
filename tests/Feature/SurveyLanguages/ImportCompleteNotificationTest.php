@@ -34,6 +34,20 @@ test('the import complete notification links to Initial Pilot and says the test 
     expect(collect($notification->getActions())->map(fn ($action) => $action->getUrl())->all())->toBe([$expectedUrl]);
 });
 
+test('the import complete notification is also kept in the notification bell', function () {
+    Event::fake();
+    $fixture = TranslationFixture::make();
+    $user = createAppUser($fixture->team);
+
+    (new NotifyUserThatLanguageImportIsComplete($fixture->abkhazianLocale, $fixture->template, $user))->handle();
+
+    $stored = DB::table('notifications')->where('notifiable_id', $user->id)->first();
+
+    expect($stored)->not->toBeNull();
+    expect(json_decode($stored->data, true)['title'])->toBe('Translation Import Complete');
+    expect(json_decode($stored->data, true)['actions'][0]['url'])->toBe(InitialPilot::getUrl(panel: 'app', tenant: $fixture->team));
+});
+
 test('the notification has no link when the team has no form for the template', function () {
     Event::fake();
     $fixture = TranslationFixture::make();

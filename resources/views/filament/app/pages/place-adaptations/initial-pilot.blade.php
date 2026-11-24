@@ -106,7 +106,7 @@
                             </div>
                         @endif
 
-                        <div class="text-center mt-8 p-4 grid md:grid-cols-2 grid-cols-1 justify-around align-items-center space-x-0 md:space-x-8 md:space-y-0 space-y-4">
+                        <div class="text-center mt-8 p-4 grid md:grid-cols-2 grid-cols-1 justify-around align-items-center" style="gap: 1rem 2rem;">
                             @foreach($this->xlsforms as $xlsform)
 
                                 @php($formState = $xlsform->draftState())

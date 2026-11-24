@@ -70,6 +70,7 @@ class NotifyUserThatLanguageImportIsComplete implements ShouldQueue
         }
 
         $notification
+            ->sendToDatabase($this->user, isEventDispatched: true)
             ->broadcast($this->user)
             ->send();
 
