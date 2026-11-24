@@ -3,8 +3,11 @@
 namespace App\Jobs;
 
 use App\Events\LanguageImportIsComplete;
+use App\Filament\App\Pages\PlaceAdaptations\InitialPilot;
+use App\Models\Team;
 use App\Models\User;
 use App\Services\LocaleImportCounter;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -48,10 +51,26 @@ class NotifyUserThatLanguageImportIsComplete implements ShouldQueue
             $xlsform->save();
         }
 
-        Notification::make()
+        $notification = Notification::make()
             ->title('Translation Import Complete')
             ->body("The import for the translations of {$this->xlsformTemplate->title} {$this->locale->description} is complete.")
-            ->success()
+            ->success();
+
+        $team = $this->locale->creator;
+
+        if ($xlsform && $team instanceof Team) {
+            $notification
+                ->body("The import for the translations of {$this->xlsformTemplate->title} {$this->locale->description} is complete. To use the new translations in the test forms, open Initial Pilot and click \"Update test forms\".")
+                ->actions([
+                    // no Filament tenant is set inside a queued job, so getUrl() cannot infer it
+                    Action::make('open_initial_pilot')
+                        ->label('Open Initial Pilot')
+                        ->url(InitialPilot::getUrl(panel: 'app', tenant: $team)),
+                ]);
+        }
+
+        $notification
+            ->sendToDatabase($this->user, isEventDispatched: true)
             ->broadcast($this->user)
             ->send();
 
