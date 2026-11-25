@@ -1,6 +1,6 @@
 # Plan: fix blank default-language cells in the translation files
 
-**Status: Not Started.** Reviewed twice against the code on 2026-11-25 (see "Review notes" at the end). Nothing implemented yet.
+**Status: In Progress.** PR 1 (items 4 and 6) is implemented in the working tree and passes locally (main suite 472 passed including the architecture tests, package suite 268 passed); it is not committed and not yet verified on staging. Left: PR 2 (items 1 and 2), the data steps (items 3 and 5) after PR 1 and 2 are deployed, staging verification, the change log. Reviewed four times against the code on 2026-11-25 (see "Review notes" at the end).
 
 Branches: main repo (plan, change log, tests, submodule bump); submodule `packages/filament-odk-link` (code and its own tests), PR base `staging-hotfix-20261026`. One PR per item group (see "Order of work").
 
@@ -99,7 +99,7 @@ Known limit: an entry that has a default string in one default locale (say Engli
 
 `submit()` becomes two steps, and nothing is saved or queued before the warning is answered.
 
-1. Permission check and `$this->form->getState()` as today.
+1. Permission check and `$this->form->validate()`. Not `getState()`: `Schema::getState()` calls `saveRelationships()` itself (found while implementing; a test showed the media was stored before the warning), which would attach the file before the user answered. `validate()` checks the form and stores nothing.
 2. Pending uploads: per template, the `TemporaryUploadedFile` values in `$this->data["upload_for_template_{id}"]` (they exist until `saveRelationships()` stores them; `BaseFileUpload` keeps them in the raw state).
 3. Inspect each pending temp file with `TranslationUploadInspector`. Do not pass the Livewire temp file straight in: `TemporaryUploadedFile::getRealPath()` is `storage->path()`, which only works when the Livewire temp disk is local (`LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK` may point elsewhere in production). Write `$file->get()` to a temporary local file, inspect that path, and delete it afterwards (the Spatie upload field reads the file the same way). On errors: notify, delete the temp file, remove it from the state, continue with the other uploads. (Nothing is attached to the locale, so no media has to be deleted.)
 4. For the valid ones, count the cells that would erase a translation: the text cell is blank (trimmed) and the database holds a non-blank (trimmed) string for that entry, string type and locale. End rows are not counted. One query per template, in chunks of ids. Nothing is written.
@@ -161,10 +161,10 @@ First review changed: donor selection must require default strings; default-only
 
 Second review added: `LanguageString::text` stores `' '` for null; existing edit-form tests pre-attach media and must change; the confirmation is inline (no modals component in the view); end-row id set on import is lazy and not serialized; the repair command writes its own backup file; forms already deployed need a redeploy after the repair; cleanup criteria use "non-default locale" and no id filter; donors checked on the clone for disagreement; `surveyRowsForTranslation()` has no other callers.
 
-## Open decisions (for Dan before the data steps)
+## Decisions on the open points (Dan, 2026-11-25)
 
-1. Should `--apply` of the repair set `draft_needs_update = true` on the forms that select the repaired module versions? Proposed yes: it is the only signal teams get that the generated form changed, and it is cheap. No effect on forms whose teams have their own text for these entries, except the flag itself.
-2. The 35 entries (2 lists) in a non-default version of template 1 that lack default strings are outside the repair. They are team clone versions with team strings only. Leave them (proposed), or extend the repair to them after checking their donors.
+1. `--apply` of the repair sets `draft_needs_update = true` on the forms that select the repaired module versions (yes). It is the only signal teams get that the generated form changed, and it is cheap.
+2. The 35 entries (2 lists) in a non-default version of template 1 that lack default strings stay outside the repair (leave them for now).
 
 ## Fourth review (2026-11-25)
 

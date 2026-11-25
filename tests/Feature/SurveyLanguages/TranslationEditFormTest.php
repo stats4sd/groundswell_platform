@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\SurveyLanguages\TeamTranslationReviewEditForm;
 use Filament\Actions\Testing\TestAction;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -11,24 +10,6 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\LanguageString;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
 use Tests\Support\ArrayUpload;
 use Tests\Support\TranslationFixture;
-
-use function Pest\Laravel\actingAs;
-use function Pest\Livewire\livewire;
-
-function translationEditForm(TranslationFixture $fixture, ?Locale $locale = null)
-{
-    $user = createAppUser($fixture->team);
-    $user->givePermissionTo('maintain survey translations');
-
-    actingAs($user);
-    withAppTenant($fixture->team);
-
-    return livewire(TeamTranslationReviewEditForm::class, [
-        'locale' => $locale ?? $fixture->abkhazianLocale,
-        'team' => $fixture->team,
-        'canMaintain' => true,
-    ]);
-}
 
 function attachTranslationUpload(TranslationFixture $fixture, Locale $locale): void
 {
@@ -105,13 +86,7 @@ test('submitting an exported template filled in by a translator imports the corr
 
     IOFactory::createWriter($spreadsheet, 'Xlsx')->save($path);
 
-    $fixture->abkhazianLocale
-        ->addMedia($path)
-        ->preservingOriginal()
-        ->withCustomProperties(['xlsform_template_id' => $fixture->template->id])
-        ->toMediaCollection('xlsform_template_translation_files');
-
-    translationEditForm($fixture)->call('submit');
+    uploadTranslationFile(translationEditForm($fixture), $fixture->template, $path)->call('submit');
 
     $importedTexts = LanguageString::where('locale_id', $fixture->abkhazianLocale->id)->pluck('text');
 
@@ -229,13 +204,9 @@ test('a translation file with wrong headers is rejected, removed, and nothing is
 
     Excel::store(new ArrayUpload([['wrong', 'headers', 'entirely']]), 'bad-upload.xlsx', 'local');
 
-    $fixture->abkhazianLocale
-        ->addMedia(Storage::disk('local')->path('bad-upload.xlsx'))
-        ->preservingOriginal()
-        ->withCustomProperties(['xlsform_template_id' => $fixture->template->id])
-        ->toMediaCollection('xlsform_template_translation_files');
-
-    translationEditForm($fixture)->call('submit')->assertNotified();
+    uploadTranslationFile(translationEditForm($fixture), $fixture->template, Storage::disk('local')->path('bad-upload.xlsx'))
+        ->call('submit')
+        ->assertNotified();
 
     expect($fixture->abkhazianLocale->fresh()->getMedia('xlsform_template_translation_files'))->toHaveCount(0)
         ->and(LanguageString::where('locale_id', $fixture->abkhazianLocale->id)->count())->toBe(0);
@@ -255,13 +226,8 @@ test('submitting valid translation files counts every import and leaves nothing 
         'local',
     );
 
-    $fixture->abkhazianLocale
-        ->addMedia(Storage::disk('local')->path('template.xlsx'))
-        ->preservingOriginal()
-        ->withCustomProperties(['xlsform_template_id' => $fixture->template->id])
-        ->toMediaCollection('xlsform_template_translation_files');
-
-    translationEditForm($fixture)->call('submit');
+    uploadTranslationFile(translationEditForm($fixture), $fixture->template, Storage::disk('local')->path('template.xlsx'))
+        ->call('submit');
 
     expect($fixture->abkhazianLocale->fresh()->processing_count)->toBe(0)
         ->and($fixture->abkhazianLocale->fresh()->status)->not->toBe('Processing');
@@ -281,15 +247,11 @@ test('when an import cannot be queued the count is given back and the user is to
         'local',
     );
 
-    $fixture->abkhazianLocale
-        ->addMedia(Storage::disk('local')->path('template.xlsx'))
-        ->preservingOriginal()
-        ->withCustomProperties(['xlsform_template_id' => $fixture->template->id])
-        ->toMediaCollection('xlsform_template_translation_files');
+    $component = uploadTranslationFile(translationEditForm($fixture), $fixture->template, Storage::disk('local')->path('template.xlsx'));
 
     Excel::shouldReceive('queueImport')->andThrow(new RuntimeException('queue is down'));
 
-    translationEditForm($fixture)->call('submit')->assertNotified();
+    $component->call('submit')->assertNotified();
 
     expect($fixture->abkhazianLocale->fresh()->processing_count)->toBe(0);
 });
