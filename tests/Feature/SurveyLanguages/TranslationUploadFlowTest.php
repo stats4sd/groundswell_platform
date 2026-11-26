@@ -296,3 +296,33 @@ test('a rejected file is removed from the form and nothing is saved for it', fun
         ->and(translationMediaCount($fixture))->toBe(0)
         ->and($component->instance()->overwriteWarnings)->toBe([]);
 });
+
+test('a rejected replacement keeps the file that was attached before, even when it was removed in the form', function () {
+    $fixture = TranslationFixture::make();
+
+    $goodPath = translationFileFromExport($fixture, $fixture->template, false, fn () => null);
+
+    $fixture->abkhazianLocale
+        ->addMedia($goodPath)
+        ->preservingOriginal()
+        ->withCustomProperties(['xlsform_template_id' => $fixture->template->id])
+        ->toMediaCollection('xlsform_template_translation_files');
+
+    $keptMedia = $fixture->abkhazianLocale->fresh()->getMedia('xlsform_template_translation_files')->first();
+
+    Excel::store(new ArrayUpload([['wrong', 'headers', 'entirely']]), 'bad.xlsx', 'local');
+
+    $stateKey = "data.upload_for_template_{$fixture->template->id}";
+
+    $component = translationEditForm($fixture)
+        ->set($stateKey, []);
+
+    uploadTranslationFile($component, $fixture->template, Storage::disk('local')->path('bad.xlsx'))
+        ->call('submit');
+
+    $remainingMedia = $fixture->abkhazianLocale->fresh()->getMedia('xlsform_template_translation_files');
+
+    expect($remainingMedia)->toHaveCount(1)
+        ->and($remainingMedia->first()->id)->toBe($keptMedia->id)
+        ->and(array_keys($component->instance()->data["upload_for_template_{$fixture->template->id}"]))->toBe([$keptMedia->uuid]);
+});

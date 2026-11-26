@@ -12,19 +12,19 @@
                 @endforeach
             </ul>
 
-            <p>{{ t("Continue to replace the existing translations with the blank cells, or cancel to choose a different file.") }}</p>
+            <p>{{ t("Continue to replace the existing translations with the blank cells, or go back to choose a different file.") }}</p>
 
             <div class="mt-3 flex justify-end">
                 <button
                     class="buttonb"
-                    wire:click="cancelOverwrite"
+                    wire:click.prevent="cancelOverwrite"
                     wire:loading.attr="disabled"
                     wire:target="confirmOverwrite"
                 >{{ t("Go back") }}</button>
 
                 <button
                     class="buttona"
-                    wire:click="confirmOverwrite"
+                    wire:click.prevent="confirmOverwrite"
                     wire:loading.attr="disabled"
                     wire:target="confirmOverwrite"
                 >{{ t("Continue") }}</button>
@@ -57,7 +57,7 @@
 
             <button
                 class="buttona disabled:bg-gray-200! disabled:text-gray-600! disabled:cursor-not-allowed"
-                wire:click="submit"
+                wire:click.prevent="submit"
                 wire:loading.attr="disabled"
                 wire:target="duplicate,submit"
                 @disabled(! $canSave || $overwriteWarnings !== [])

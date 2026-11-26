@@ -190,6 +190,8 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
 
                 unset($this->data[$stateKey][$uuid]);
 
+                $this->keepExistingUploadFor($xlsformTemplate);
+
                 Notification::make()
                     ->danger()
                     ->title(t('The translation file could not be processed'))
@@ -204,6 +206,19 @@ class TeamTranslationReviewEditForm extends Component implements HasActions, Has
         }
 
         return $blankCount;
+    }
+
+    private function keepExistingUploadFor(XlsformTemplate $xlsformTemplate): void
+    {
+        $stateKey = "upload_for_template_{$xlsformTemplate->id}";
+
+        $existingFiles = $this->locale->getMedia('xlsform_template_translation_files', function (Media $media) use ($xlsformTemplate) {
+            return isset($media->custom_properties['xlsform_template_id']) && $media->custom_properties['xlsform_template_id'] === $xlsformTemplate->id;
+        });
+
+        foreach ($existingFiles as $existingFile) {
+            $this->data[$stateKey][$existingFile->uuid] = $existingFile->uuid;
+        }
     }
 
     /** @return array{errors: array<int, string>, blankCount: int} */
