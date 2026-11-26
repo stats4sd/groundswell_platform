@@ -1,6 +1,6 @@
 # Plan: fix blank default-language cells in the translation files
 
-**Status: In Progress.** PR 1 (items 4 and 6) is implemented in the working tree and passes locally (main suite 472 passed including the architecture tests, package suite 268 passed); it is not committed and not yet verified on staging. Left: PR 2 (items 1 and 2), the data steps (items 3 and 5) after PR 1 and 2 are deployed, staging verification, the change log. Reviewed four times against the code on 2026-11-25 (see "Review notes" at the end).
+**Status: In Progress.** PR 1 (items 4 and 6) is committed and pushed and passed local browser testing (8 scenarios); not yet verified on staging. PR 2 (items 1 and 2) is implemented in the working tree: package suite 277 passed, main suite 474 passed; a rolled-back run of the improved job on the staging clone took the entries without default strings from 138 to 0 (552 default strings created, no team-locale string created). Left: PR 3 (items 3 and 5: the repair commands), deployment of PR 1 to 3 to staging, running the data steps, staging verification, the change log. Reviewed four times against the code on 2026-11-25 (see "Review notes" at the end).
 
 Branches: main repo (plan, change log, tests, submodule bump); submodule `packages/filament-odk-link` (code and its own tests), PR base `staging-hotfix-20261026`. One PR per item group (see "Order of work").
 
