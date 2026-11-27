@@ -1,20 +1,29 @@
 <?php
 
+use App\Livewire\SurveyLanguages\TeamTranslationReviewEditForm;
 use App\Models\Team;
 use App\Models\TeamMembership;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Livewire\Features\SupportTesting\Testable;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Jobs\ExtendedQueueable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 use Stats4sd\FilamentTeamManagement\Models\Program;
+use Tests\Support\TranslationFixture;
 use Tests\TestCase;
+
+use function Pest\Laravel\actingAs;
+use function Pest\Livewire\livewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -163,4 +172,27 @@ function fakeWorkbookExportQueue(): void
 
         public function handle(): void {}
     }));
+}
+
+function translationEditForm(TranslationFixture $fixture, ?Locale $locale = null): Testable
+{
+    $user = createAppUser($fixture->team);
+    $user->givePermissionTo('maintain survey translations');
+
+    actingAs($user);
+    withAppTenant($fixture->team);
+
+    return livewire(TeamTranslationReviewEditForm::class, [
+        'locale' => $locale ?? $fixture->abkhazianLocale,
+        'team' => $fixture->team,
+        'canMaintain' => true,
+    ]);
+}
+
+function uploadTranslationFile(Testable $component, XlsformTemplate $template, string $path): Testable
+{
+    $upload = UploadedFile::fake()->createWithContent('translations.xlsx', file_get_contents($path));
+    $upload->mimeType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+    return $component->set("data.upload_for_template_{$template->id}.".Str::uuid(), $upload);
 }

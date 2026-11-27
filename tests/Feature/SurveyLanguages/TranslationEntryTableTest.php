@@ -2,6 +2,7 @@
 
 use App\Livewire\SurveyLanguages\TeamTranslationEntry;
 use App\Models\Team;
+use Filament\Actions\Testing\TestAction;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
 use Tests\Support\TranslationFixture;
 
@@ -40,4 +41,25 @@ test('teams only see default locales and locales they created themselves', funct
     ])
         ->assertCanSeeTableRecords([$fixture->abkhazianLocale, $defaultAbkhazianLocale])
         ->assertCanNotSeeTableRecords([$otherTeamsLocale]);
+});
+
+test('the closeModal event from the edit form closes the view and edit modal', function () {
+    $fixture = TranslationFixture::make();
+
+    actingAs(createAppUser($fixture->team));
+    withAppTenant($fixture->team);
+
+    $language = $fixture->team->languages->firstWhere('iso_alpha2', 'ab');
+
+    $component = livewire(TeamTranslationEntry::class, [
+        'language' => $language,
+        'team' => $fixture->team,
+        'expanded' => true,
+    ])->mountAction(TestAction::make('view-edit')->table($fixture->abkhazianLocale));
+
+    expect($component->instance()->mountedActions)->not->toBe([]);
+
+    $component->call('closeModal');
+
+    expect($component->instance()->mountedActions)->toBe([]);
 });

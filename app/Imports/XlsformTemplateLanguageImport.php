@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
@@ -29,6 +30,8 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 class XlsformTemplateLanguageImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithCalculatedFormulas, WithChunkReading, WithEvents, WithStrictNullComparison, WithUpserts, WithValidation
 {
     protected Collection $languageStringTypes;
+
+    private ?SupportCollection $groupEndRowIds = null;
 
     public function __construct(
         public Locale $locale,
@@ -84,7 +87,18 @@ class XlsformTemplateLanguageImport implements ShouldQueue, SkipsEmptyRows, ToMo
     {
         // skip when entity id or name is null;
         // or when first col is 'row type' (that is the header)
-        return $row[2] === '' || $row[3] === '' || $row[0] === 'row type';
+        if ($row[2] === '' || $row[3] === '' || $row[0] === 'row type') {
+            return true;
+        }
+
+        // the label of an end group or end repeat row is never used by the form, so files that still list them are ignored for those rows
+        return $row[0] === 'survey' && $this->groupEndRowIds()->contains((int) $row[2]);
+    }
+
+    /** @return SupportCollection<int, int> */
+    private function groupEndRowIds(): SupportCollection
+    {
+        return $this->groupEndRowIds ??= $this->xlsformTemplate->surveyRows()->groupEnds()->pluck('survey_rows.id');
     }
 
     public function chunkSize(): int

@@ -6,6 +6,10 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\LanguageString;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\SurveyRow;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\LanguageStringType;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
 
@@ -70,6 +74,61 @@ class TranslationUploadInspector
         }
 
         return $errors;
+    }
+
+    // Cells that would erase a translation: the text cell is blank while the locale already holds text for that entry and string type.
+    public function blankOverExistingCount(Locale $locale, XlsformTemplate $template): int
+    {
+        $textColumnIndex = $this->textColumnIndex($locale);
+
+        if ($textColumnIndex === null) {
+            return 0;
+        }
+
+        $groupEndRowIds = $template->surveyRows()->groupEnds()->pluck('survey_rows.id');
+        $languageStringTypeIds = LanguageStringType::pluck('id', 'name');
+
+        $blankCells = $this->rows
+            ->filter(fn (Collection $row) => filled($row[2] ?? null) && filled($row[3] ?? null))
+            ->filter(fn (Collection $row) => in_array($row[0] ?? null, ['survey', 'choices'], true))
+            ->filter(fn (Collection $row) => trim((string) ($row[$textColumnIndex] ?? '')) === '')
+            ->reject(fn (Collection $row) => $row[0] === 'survey' && $groupEndRowIds->contains((int) $row[2]))
+            ->filter(fn (Collection $row) => $languageStringTypeIds->has($row[4] ?? null))
+            ->map(fn (Collection $row) => [
+                'class' => $row[0] === 'survey' ? SurveyRow::class : ChoiceListEntry::class,
+                'entryId' => (int) $row[2],
+                'typeId' => (int) $languageStringTypeIds[$row[4]],
+            ])
+            ->unique(fn (array $cell) => "{$cell['class']}|{$cell['entryId']}|{$cell['typeId']}");
+
+        return $blankCells
+            ->groupBy('class')
+            ->sum(fn (Collection $cells, string $class) => $cells
+                ->pluck('entryId')
+                ->unique()
+                ->chunk(500)
+                ->sum(fn (Collection $entryIds) => $this->existingTextCount($locale, $class, $entryIds, $cells)));
+    }
+
+    /**
+     * @param  Collection<int, int>  $entryIds
+     * @param  Collection<int, array{class: string, entryId: int, typeId: int}>  $cells
+     */
+    private function existingTextCount(Locale $locale, string $class, Collection $entryIds, Collection $cells): int
+    {
+        $existingKeys = LanguageString::query()
+            ->where('locale_id', $locale->id)
+            ->where('linked_entry_type', $class)
+            ->whereIn('linked_entry_id', $entryIds->values())
+            ->whereRaw("TRIM(language_strings.text) <> ''")
+            ->get(['linked_entry_id', 'language_string_type_id'])
+            ->map(fn (LanguageString $languageString) => "{$languageString->linked_entry_id}|{$languageString->language_string_type_id}")
+            ->flip();
+
+        return $cells
+            ->filter(fn (array $cell) => $entryIds->contains($cell['entryId']))
+            ->filter(fn (array $cell) => $existingKeys->has("{$cell['entryId']}|{$cell['typeId']}"))
+            ->count();
     }
 
     private function unknownRows(XlsformTemplate $template): Collection

@@ -2,12 +2,18 @@
 
 use App\Models\Team;
 use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\LanguageString;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\SurveyRow;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Language;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\LanguageStringType;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformLanguages\Locale;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformTemplate;
@@ -60,6 +66,7 @@ function repairTestEntry(ChoiceList $list, string $name, ?Team $owner = null, ?s
 
 beforeEach(function () {
     Http::fake();
+    Storage::fake('local');
     $this->team = Team::factory()->create();
     $this->actingAs(createSuperAdmin());
     Filament::setCurrentPanel(Filament::getPanel('admin'));
@@ -391,4 +398,179 @@ describe('R3: versions', function () {
 
 test('--only rejects an unknown value', function () {
     $this->artisan('odk:repair-form-deploy-issues --only=everything')->assertFailed();
+});
+
+function repairTestLocale(string $isoAlpha2, bool $isDefault): Locale
+{
+    return Locale::withoutEvents(fn () => Locale::forceCreate([
+        'language_id' => Language::where('iso_alpha2', $isoAlpha2)->firstOrFail()->id,
+        'is_default' => $isDefault,
+    ]));
+}
+
+function repairTestString(Model $entry, Locale $locale, string $text): LanguageString
+{
+    return $entry->languageStrings()->create([
+        'locale_id' => $locale->id,
+        'language_string_type_id' => LanguageStringType::where('name', 'label')->firstOrFail()->id,
+        'text' => $text,
+    ]);
+}
+
+describe('R1: default-locale strings', function () {
+
+    beforeEach(function () {
+        Storage::fake('local');
+
+        $this->defaultLocale = repairTestLocale('en', true);
+        $this->teamLocale = repairTestLocale('es', false);
+
+        $template = repairTestTemplate('Global Indicators');
+
+        $donorList = repairTestList($template, 'first', 'yes_no');
+        $this->brokenList = repairTestList($template, 'second', 'yes_no');
+        $cloneList = repairTestList($template, 'third', 'yes_no');
+
+        XlsformModuleVersion::whereKey($cloneList->xlsform_module_version_id)->update(['is_default' => false]);
+
+        $donorYes = repairTestEntry($donorList, 'yes');
+        $this->brokenYes = repairTestEntry($this->brokenList, 'yes');
+        $this->cloneYes = repairTestEntry($cloneList, 'yes');
+
+        repairTestString($donorYes, $this->defaultLocale, 'Yes');
+        repairTestString($donorYes, $this->teamLocale, 'Si (donor team text)');
+        repairTestString($this->brokenYes, $this->teamLocale, 'Si (own team text)');
+        repairTestString($this->cloneYes, $this->teamLocale, 'Si (clone team text)');
+
+        $makeForm = fn (int $versionId) => tap(Xlsform::withoutEvents(fn () => Xlsform::forceCreate([
+            'xlsform_template_id' => $template->id,
+            'owner_id' => $this->team->id,
+            'title' => 'Form '.$versionId,
+            'draft_needs_update' => false,
+        ])), fn (Xlsform $xlsform) => $xlsform->xlsformModuleVersions()->attach($versionId, ['order' => 1]));
+
+        $this->formUsingBrokenList = $makeForm($this->brokenList->xlsform_module_version_id);
+        $this->formUsingDonorOnly = $makeForm($donorList->xlsform_module_version_id);
+    });
+
+    test('a dry run reports the entries without default-locale strings and changes nothing', function () {
+        $this->artisan('odk:repair-form-deploy-issues --only=labels')
+            ->expectsOutputToContain('1 list(s) with 1 global entries without default-locale strings')
+            ->expectsOutputToContain('1 more global entries')
+            ->assertSuccessful();
+
+        expect($this->brokenYes->refresh()->languageStrings->pluck('text')->all())->toBe(['Si (own team text)'])
+            ->and((bool) $this->formUsingBrokenList->refresh()->draft_needs_update)->toBeFalse()
+            ->and(Storage::disk('local')->allFiles('repair-backups'))->toBe([]);
+    });
+
+    test('--apply gives the entry the default strings, keeps its team strings and marks only the forms that use it', function () {
+        $this->artisan('odk:repair-form-deploy-issues --only=labels --apply')->assertSuccessful();
+
+        $strings = $this->brokenYes->refresh()->languageStrings->mapWithKeys(fn ($string) => [$string->locale_id => $string->text]);
+
+        expect($strings->all())->toBe([
+            $this->teamLocale->id => 'Si (own team text)',
+            $this->defaultLocale->id => 'Yes',
+        ])
+            ->and((bool) $this->formUsingBrokenList->refresh()->draft_needs_update)->toBeTrue()
+            ->and((bool) $this->formUsingDonorOnly->refresh()->draft_needs_update)->toBeFalse()
+            ->and($this->cloneYes->refresh()->languageStrings->pluck('text')->all())->toBe(['Si (clone team text)']);
+    });
+
+    test('--apply writes a log that lists the repaired entries, and a second run changes nothing', function () {
+        $this->artisan('odk:repair-form-deploy-issues --only=labels --apply')->assertSuccessful();
+
+        $logs = Storage::disk('local')->allFiles('repair-backups');
+
+        expect($logs)->toHaveCount(1)
+            ->and(json_decode(Storage::disk('local')->get($logs[0]), true)['repaired_entry_ids'])->toBe([$this->brokenYes->id]);
+
+        $stringCount = DB::table('language_strings')->count();
+
+        $this->artisan('odk:repair-form-deploy-issues --only=labels --apply')->assertSuccessful();
+
+        expect(DB::table('language_strings')->count())->toBe($stringCount)
+            ->and(Storage::disk('local')->allFiles('repair-backups'))->toHaveCount(1);
+    });
+
+});
+
+describe('R4: team strings of end group rows', function () {
+
+    beforeEach(function () {
+        Storage::fake('local');
+
+        $this->defaultLocale = repairTestLocale('en', true);
+        $this->firstTeamLocale = repairTestLocale('es', false);
+        $this->secondTeamLocale = repairTestLocale('fr', false);
+
+        $versionId = repairTestList(repairTestTemplate('Women'), 'main', 'yes_no')->xlsform_module_version_id;
+
+        $makeRow = fn (string $name, string $type) => Model::withoutEvents(fn () => SurveyRow::create([
+            'xlsform_module_version_id' => $versionId,
+            'row_number' => 1,
+            'name' => $name,
+            'type' => $type,
+        ]));
+
+        $leftover = $makeRow('section_a', 'end group');
+        repairTestString($leftover, $this->firstTeamLocale, 'Junk');
+        repairTestString($leftover, $this->secondTeamLocale, '');
+
+        repairTestString($makeRow('section_b', 'end_group'), $this->firstTeamLocale, 'Junk');
+        repairTestString($makeRow('section_c', 'end repeat'), $this->firstTeamLocale, 'Junk');
+
+        $locationEnd = $makeRow('location2', 'end group');
+        repairTestString($locationEnd, $this->defaultLocale, 'Location');
+        repairTestString($locationEnd, $this->firstTeamLocale, 'Ubicacion');
+
+        repairTestString($makeRow('end', 'end'), $this->firstTeamLocale, 'Metadata text');
+        repairTestString($makeRow('section_d', 'begin group'), $this->firstTeamLocale, 'Real title');
+
+        $this->stringCount = fn () => DB::table('language_strings')->count();
+        $this->before = ($this->stringCount)();
+    });
+
+    test('a dry run counts the leftover strings per locale and deletes nothing', function () {
+        $this->artisan('odk:repair-form-deploy-issues --only=ends')
+            ->expectsOutputToContain('Total: 4 string(s).')
+            ->expectsOutputToContain('--only=ends --apply --expect=4')
+            ->assertSuccessful();
+
+        expect(($this->stringCount)())->toBe($this->before);
+    });
+
+    test('--apply without --expect deletes nothing', function () {
+        $this->artisan('odk:repair-form-deploy-issues --only=ends --apply')->assertFailed();
+
+        expect(($this->stringCount)())->toBe($this->before);
+    });
+
+    test('--apply with a count that differs from the dry run deletes nothing', function () {
+        $this->artisan('odk:repair-form-deploy-issues --only=ends --apply --expect=5')->assertFailed();
+
+        expect(($this->stringCount)())->toBe($this->before)
+            ->and(Storage::disk('local')->allFiles('repair-backups'))->toBe([]);
+    });
+
+    test('--apply with the right count deletes only the leftovers and writes a backup of them', function () {
+        $this->artisan('odk:repair-form-deploy-issues --only=ends --apply --expect=4')->assertSuccessful();
+
+        $remainingTexts = LanguageString::pluck('text')->all();
+        $backups = Storage::disk('local')->allFiles('repair-backups');
+
+        expect(($this->stringCount)())->toBe($this->before - 4)
+            ->and($remainingTexts)->toContain('Location', 'Ubicacion', 'Metadata text', 'Real title')
+            ->and($remainingTexts)->not->toContain('Junk')
+            ->and($backups)->toHaveCount(1)
+            ->and(json_decode(Storage::disk('local')->get($backups[0]), true))->toHaveCount(4);
+    });
+
+    test('a full run never touches the end row strings', function () {
+        $this->artisan('odk:repair-form-deploy-issues --apply')->assertSuccessful();
+
+        expect(($this->stringCount)())->toBe($this->before);
+    });
+
 });

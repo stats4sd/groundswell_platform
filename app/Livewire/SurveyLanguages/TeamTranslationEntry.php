@@ -154,7 +154,10 @@ class TeamTranslationEntry extends Component implements HasActions, HasForms, Ha
     }
 
     #[On('closeModal')]
-    public function closeModal() {}
+    public function closeModal(): void
+    {
+        $this->unmountAction();
+    }
 
     #[On('echo:xlsforms,LanguageImportIsComplete')]
     public function refreshLocales(): void
