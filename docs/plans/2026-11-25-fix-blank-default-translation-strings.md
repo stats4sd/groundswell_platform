@@ -1,6 +1,6 @@
 # Plan: fix blank default-language cells in the translation files
 
-**Status: In Progress.** PR 1 (items 4 and 6), PR 2 (items 1 and 2) are committed and pushed; PR 1 passed local browser testing (8 scenarios). PR 3 (items 3 and 5: the repair commands) is implemented in the working tree: main suite 482 passed, phpstan and pint clean; dry runs on the staging clone report exactly the expected numbers for R1 (template 2: 17 lists / 126 entries, template 3: 4 / 12, 35 more entries outside the default versions reported and left alone). Left: commit PR 3, deploy PR 1 to 3 to staging, run the data steps there, staging verification, the change log. Reviewed four times against the code on 2026-11-25 (see "Review notes" at the end).
+**Status: Completed.** PR 1 to 3 were deployed to staging and the data steps (R1, R4) and the UI and ODK checks passed on 2026-11-27. Change log: [docs/change-logs/2026-11-27-fix-blank-default-translation-strings.md](../change-logs/2026-11-27-fix-blank-default-translation-strings.md). Reviewed four times against the code on 2026-11-25 (see "Review notes" at the end).
 
 Branches: main repo (plan, change log, tests, submodule bump); submodule `packages/filament-odk-link` (code and its own tests), PR base `staging-hotfix-20261026`. One PR per item group (see "Order of work").
 
