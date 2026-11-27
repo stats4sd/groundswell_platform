@@ -5,11 +5,15 @@ namespace App\Console\Commands;
 use App\Services\XlsformModules\FarmInfoModuleBuilder;
 use App\Services\XlsformModules\LocationsModuleBuilder;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Stats4sd\FilamentOdkLink\Jobs\AddMissingChoiceListStrings;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceList;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\ChoiceListEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\LanguageString;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\SurveyRow;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModule;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\XlsformModuleVersion;
@@ -21,16 +25,17 @@ class RepairFormDeployIssues extends Command
 {
     protected $signature = 'odk:repair-form-deploy-issues
         {--apply : Write the changes. Without it the command only reports what it would do}
-        {--only= : Run a single repair: "labels" (R1), "modules" (R2) or "versions" (R3)}';
+        {--only= : Run a single repair: "labels" (R1), "modules" (R2), "versions" (R3) or "ends" (R4, which is never part of a full run)}
+        {--expect= : With --only=ends --apply: the number of strings the dry run reported. Nothing is deleted when the count differs}';
 
-    protected $description = 'Refill missing choice labels (R1), remove module versions that belong to another template from forms (R2), and repair emptied team module versions and missing modules (R3)';
+    protected $description = 'Refill missing choice labels (R1), remove module versions that belong to another template from forms (R2), repair emptied team module versions and missing modules (R3), and remove the team strings of end group rows (R4)';
 
     public function handle(): int
     {
         $only = $this->option('only');
 
-        if ($only !== null && ! in_array($only, ['labels', 'modules', 'versions'], true)) {
-            $this->error('--only must be "labels", "modules" or "versions".');
+        if ($only !== null && ! in_array($only, ['labels', 'modules', 'versions', 'ends'], true)) {
+            $this->error('--only must be "labels", "modules", "versions" or "ends".');
 
             return self::FAILURE;
         }
@@ -53,51 +58,161 @@ class RepairFormDeployIssues extends Command
             $this->repairVersions($apply);
         }
 
+        if ($only === 'ends' && ! $this->repairEndRows($apply)) {
+            return self::FAILURE;
+        }
+
         $this->comment('Done.');
 
         return self::SUCCESS;
     }
 
-    // R1: AddMissingChoiceListStrings copies labels into same-named lists whose entries have none.
+    // R1: AddMissingChoiceListStrings copies labels into same-named lists whose entries have none, and the default-locale
+    // strings into global entries that kept only their team strings.
     private function repairLabels(bool $apply): void
     {
         $this->newLine();
-        $this->info('R1: global choice entries without any label');
+        $this->info('R1: global choice entries without any label or without default-locale strings');
 
         XlsformTemplate::all()->each(function (XlsformTemplate $template) use ($apply) {
-            $before = $this->unlabelledGlobalEntriesByList($template);
+            $unlabelled = $this->unlabelledGlobalEntries($template);
+            $withoutDefault = $this->globalEntriesWithoutDefaultStrings($template);
 
-            $this->line("Template {$template->id} ({$template->title}): {$before->count()} list(s) with unlabelled global entries");
+            $unlabelledByList = $this->countByList($unlabelled);
+            $withoutDefaultByList = $this->countByList($withoutDefault);
 
-            if ($before->isEmpty()) {
+            $this->line("Template {$template->id} ({$template->title}): {$unlabelledByList->count()} list(s) with unlabelled global entries");
+
+            if ($unlabelledByList->isNotEmpty()) {
+                $this->table(['choice_list_id', 'list_name', 'unlabelled entries'], $unlabelledByList->values()->all());
+            }
+
+            $this->line("Template {$template->id} ({$template->title}): {$withoutDefaultByList->count()} list(s) with {$withoutDefault->count()} global entries without default-locale strings");
+
+            if ($withoutDefaultByList->isNotEmpty()) {
+                $this->table(['choice_list_id', 'list_name', 'entries without default strings'], $withoutDefaultByList->values()->all());
+            }
+
+            $outsideDefaultVersions = $this->globalEntriesWithoutDefaultStringsOutsideDefaultVersions($template);
+
+            if ($outsideDefaultVersions->isNotEmpty()) {
+                $this->warn("  {$outsideDefaultVersions->count()} more global entries in {$this->countByList($outsideDefaultVersions)->count()} list(s) of versions that are not default versions also lack default-locale strings: not changed.");
+            }
+
+            if (! $apply || ($unlabelled->isEmpty() && $withoutDefault->isEmpty())) {
                 return;
             }
 
-            $this->table(['choice_list_id', 'list_name', 'unlabelled entries'], $before->values()->all());
-
-            if (! $apply) {
-                return;
-            }
-
-            AddMissingChoiceListStrings::dispatchSync($template);
-
-            $after = $this->unlabelledGlobalEntriesByList($template);
-
-            $this->line("  after: {$after->count()} list(s) still have unlabelled global entries (no labelled same-named list to copy from)");
+            $this->applyLabelRepair($template, $unlabelled->pluck('id')->merge($withoutDefault->pluck('id'))->unique()->values());
         });
     }
 
-    /** @return Collection<int|string, array{int, mixed, int<0, max>}> [choice list id, list name, count], keyed by choice list id */
-    private function unlabelledGlobalEntriesByList(XlsformTemplate $template): Collection
+    /** @param Collection<int, int> $entryIdsBefore */
+    private function applyLabelRepair(XlsformTemplate $template, Collection $entryIdsBefore): void
+    {
+        $startedAt = now();
+
+        AddMissingChoiceListStrings::dispatchSync($template);
+
+        $unlabelledAfter = $this->unlabelledGlobalEntries($template);
+        $withoutDefaultAfter = $this->globalEntriesWithoutDefaultStrings($template);
+
+        $this->line("  after: {$this->countByList($unlabelledAfter)->count()} list(s) still have unlabelled global entries (no labelled same-named list to copy from)");
+        $this->line("  after: {$withoutDefaultAfter->count()} global entries still have no default-locale strings (no same-named list to copy from)");
+
+        $repairedEntryIds = $entryIdsBefore
+            ->diff($unlabelledAfter->pluck('id')->merge($withoutDefaultAfter->pluck('id')))
+            ->values();
+
+        $formCount = $this->markFormsForDraftUpdate($repairedEntryIds);
+
+        $this->line("  {$repairedEntryIds->count()} entries repaired; {$formCount} form(s) marked for a draft update.");
+
+        $logPath = 'repair-backups/choice-label-repair-template-'.$template->id.'-'.$startedAt->format('Ymd-His').'.json';
+
+        Storage::disk('local')->put($logPath, json_encode([
+            'started_at' => $startedAt->toDateTimeString(),
+            'template_id' => $template->id,
+            'repaired_entry_ids' => $repairedEntryIds->all(),
+            'undo' => 'delete the language_strings created at or after started_at that belong to these choice list entries',
+        ], JSON_PRETTY_PRINT));
+
+        $this->line('  log for an undo: '.Storage::disk('local')->path($logPath));
+    }
+
+    /** @return Collection<int, ChoiceListEntry> global entries of the template's lists that have no string at all */
+    private function unlabelledGlobalEntries(XlsformTemplate $template): Collection
     {
         return ChoiceListEntry::withoutGlobalScopes()
             ->with('choiceList:id,list_name')
             ->whereNull('owner_id')
             ->whereIn('choice_list_id', $template->choiceLists()->select('choice_lists.id'))
             ->whereDoesntHave('languageStrings')
-            ->get()
+            ->get();
+    }
+
+    /** @return Collection<int, ChoiceListEntry> global entries of default module versions that have no default-locale string */
+    private function globalEntriesWithoutDefaultStrings(XlsformTemplate $template): Collection
+    {
+        return ChoiceListEntry::withoutGlobalScopes()
+            ->with('choiceList:id,list_name')
+            ->whereNull('owner_id')
+            ->whereIn('choice_list_id', $template->choiceListsForImport()->select('choice_lists.id'))
+            ->whereDoesntHave('languageStrings', fn (Builder $query) => $query->whereHas('locale', fn (Builder $locale) => $locale->where('is_default', true)))
+            ->get();
+    }
+
+    /** @return Collection<int, ChoiceListEntry> the same, for versions that are not default versions (reported only) */
+    private function globalEntriesWithoutDefaultStringsOutsideDefaultVersions(XlsformTemplate $template): Collection
+    {
+        return ChoiceListEntry::withoutGlobalScopes()
+            ->with('choiceList:id,list_name')
+            ->whereNull('owner_id')
+            ->whereIn('choice_list_id', $template->choiceLists()->where('xlsform_module_versions.is_default', false)->select('choice_lists.id'))
+            ->whereDoesntHave('languageStrings', fn (Builder $query) => $query->whereHas('locale', fn (Builder $locale) => $locale->where('is_default', true)))
+            ->get();
+    }
+
+    /**
+     * @param  Collection<int, ChoiceListEntry>  $entries
+     * @return Collection<(int|string), array{int, string, int}> [choice list id, list name, count], keyed by choice list id
+     */
+    private function countByList(Collection $entries): Collection
+    {
+        return $entries
             ->groupBy('choice_list_id')
-            ->map(fn (Collection $entries, int $choiceListId) => [$choiceListId, $entries->first()->choiceList->list_name, $entries->count()]);
+            ->map(fn (Collection $listEntries, int $choiceListId) => [$choiceListId, $listEntries->first()->choiceList->list_name, $listEntries->count()]);
+    }
+
+    // A choice entry saved through the model flags the drafts of its forms; the language strings written here do not,
+    // so the forms that use a repaired entry are flagged by hand and the teams see that their form changed.
+    /** @param Collection<int, int> $entryIds */
+    private function markFormsForDraftUpdate(Collection $entryIds): int
+    {
+        if ($entryIds->isEmpty()) {
+            return 0;
+        }
+
+        $versionIds = $entryIds
+            ->chunk(500)
+            ->flatMap(fn (Collection $chunk) => DB::table('choice_list_entries as entry')
+                ->join('choice_lists as list', 'list.id', '=', 'entry.choice_list_id')
+                ->whereIn('entry.id', $chunk->all())
+                ->pluck('list.xlsform_module_version_id'))
+            ->unique()
+            ->values();
+
+        $formIds = DB::table('selected_xlsform_module_versions')
+            ->whereIn('xlsform_module_version_id', $versionIds->all())
+            ->distinct()
+            ->pluck('xlsform_id');
+
+        Xlsform::withoutGlobalScopes()
+            ->whereIn('id', $formIds->all())
+            ->get()
+            ->each(fn (Xlsform $xlsform) => $xlsform->updateQuietly(['draft_needs_update' => true]));
+
+        return $formIds->count();
     }
 
     // R2: detach selected module versions whose module belongs to a different template than the form,
@@ -366,5 +481,80 @@ class RepairFormDeployIssues extends Command
             });
 
         $this->line($changed === 0 ? 'No form is missing a module of its template.' : "{$changed} form(s) ".($apply ? 'repaired.' : 'would be repaired.'));
+    }
+
+    // R4: end group and end repeat rows are never used by a form, but the translation file listed them and an old import
+    // copied the begin group's title onto them. Strings of a team locale on an end row that has no default-locale string
+    // are leftovers; the end rows that do have default text (for example "location2") are left alone.
+    private function repairEndRows(bool $apply): bool
+    {
+        $this->newLine();
+        $this->info('R4: team-locale strings of end group and end repeat rows without a default-locale string');
+
+        $perLocale = $this->endRowTeamStrings()
+            ->select('locale_id', DB::raw('count(*) as total'))
+            ->groupBy('locale_id')
+            ->orderBy('locale_id')
+            ->pluck('total', 'locale_id');
+
+        $total = (int) $perLocale->sum();
+
+        $this->table(['locale_id', 'strings'], $perLocale->map(fn (int $count, int $localeId) => [$localeId, $count])->values()->all());
+        $this->line("Total: {$total} string(s).");
+
+        if (! $apply) {
+            $this->line("To delete them run: php artisan odk:repair-form-deploy-issues --only=ends --apply --expect={$total}");
+
+            return true;
+        }
+
+        $expected = $this->option('expect');
+
+        if ($expected === null || ! ctype_digit((string) $expected)) {
+            $this->error('--apply with --only=ends needs --expect=N, the number the dry run reported.');
+
+            return false;
+        }
+
+        if ((int) $expected !== $total) {
+            $this->error("--expect={$expected} but {$total} string(s) match: nothing was deleted. Check the data, then run the dry run again.");
+
+            return false;
+        }
+
+        if ($total === 0) {
+            $this->line('Nothing to delete.');
+
+            return true;
+        }
+
+        $strings = $this->endRowTeamStrings()->orderBy('id')->get();
+
+        $backupPath = 'repair-backups/end-row-strings-'.now()->format('Ymd-His').'.json';
+
+        Storage::disk('local')->put($backupPath, json_encode($strings->map->getAttributes()->all(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        $this->line('Backup of the rows (restore by inserting them again): '.Storage::disk('local')->path($backupPath));
+
+        DB::transaction(function () use ($strings) {
+            $strings->pluck('id')->chunk(500)->each(fn (Collection $ids) => LanguageString::whereIn('id', $ids->all())->delete());
+        });
+
+        $this->line("Deleted {$strings->count()} string(s).");
+
+        return true;
+    }
+
+    /** @return Builder<LanguageString> */
+    private function endRowTeamStrings(): Builder
+    {
+        $endRowsWithoutDefaultText = SurveyRow::groupEnds()
+            ->whereDoesntHave('languageStrings', fn (Builder $query) => $query->whereHas('locale', fn (Builder $locale) => $locale->where('is_default', true)))
+            ->select('survey_rows.id');
+
+        return LanguageString::query()
+            ->where('linked_entry_type', (new SurveyRow)->getMorphClass())
+            ->whereIn('linked_entry_id', $endRowsWithoutDefaultText)
+            ->whereHas('locale', fn (Builder $locale) => $locale->where('is_default', false));
     }
 }
