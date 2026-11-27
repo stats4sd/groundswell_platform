@@ -66,6 +66,7 @@ function repairTestEntry(ChoiceList $list, string $name, ?Team $owner = null, ?s
 
 beforeEach(function () {
     Http::fake();
+    Storage::fake('local');
     $this->team = Team::factory()->create();
     $this->actingAs(createSuperAdmin());
     Filament::setCurrentPanel(Filament::getPanel('admin'));
